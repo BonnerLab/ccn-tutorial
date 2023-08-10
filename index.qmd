@@ -1,0 +1,69 @@
+---
+title: "A High-Dimensional View of Neuroscience"
+subtitle: "Tutorial session at [Cognitive Computational Neuroscience 2023](https://2023.ccneuro.org/kt3.php)"
+abstract: |
+    Advances in technology enable us to record neural responses to many thousands of stimuli from a huge number of channels (e.g. fMRI in humans, two-photon imaging in mice, neuropixel probes in monkeys). Given the unprecedented scale of these data -- collected with incredible effort at enormous expense -- what computational tools can we use to study neural representations in high dimensions? What theoretical insights can we gain about the nature of neural representations from large-scale datasets?
+
+abstract-title: Motivation
+affiliations:
+  - id: jhu
+    name: Bonner Lab | Johns Hopkins University
+    url: https://cogsci.jhu.edu/
+  - id: psl
+    name: École normale supérieure  # TODO verify
+    url: https://www.ens.psl.eu/en/ens
+
+author:
+  - name: Atlas Kazemian
+    url: https://akazemian.github.io/personal_profile/
+    email: akazemi3@jh.edu
+    orcid: 0000-0001-7699-2964
+    affiliation:
+      - ref: jhu
+  - name: Raj Magesh Gauthaman
+    url: https://cogsci.jhu.edu/directory/raj-gauthaman/  # TODO update
+    email: rgautha1@jh.edu
+    orcid: 0000-0001-7121-1532
+    affiliation:
+      - ref: jhu
+  - name: Zirui Chen
+    url: https://cogsci.jhu.edu/directory/zirui-chen/  # TODO update
+    email: zchen160@jh.edu
+    orcid: 0000-0003-3666-1719
+    affiliation:
+      - ref: jhu
+  - name: Florentin Guth
+    url: TODO  # TODO update
+    email: TODO@TODO  # TODO update
+    orcid: 0000-0000-0000-0000  # TODO update
+    affiliation:
+      - ref: psl
+  - name: Michael Bonner
+    url: https://bonnerlab.org/
+    email: mfbonner@jhu.edu
+    orcid: 0000-0002-4992-674X
+    affiliation:
+      - ref: jhu
+
+format:
+  html:
+    code-tools:
+      source: false
+      toggle: false
+    title-block-style: default
+---
+
+::: {.callout-tip}
+# Don't miss the tutorial!
+Where
+: East Schools
+
+When
+: Saturday, August 26, 2023 @ 10:45 - 12:30
+:::
+
+## Outline
+
+This tutorial is broadly divided into four parts:
+
+1. Introducting PCA

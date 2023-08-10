@@ -1,0 +1,338 @@
+---
+title: Exploring a neural dataset
+subtitle: Revealing the latent structure of fMRI responses to natural scenes
+abstract: Analyzing the Natural Scenes dataset reveals high-dimensional latent structure in neural responses.
+---
+
+::: {.content-visible when-format="html" .callout-tip title="Run this notebook interactively!"}
+Here's a [link to this notebook](https://colab.research.google.com/github/BonnerLab/ccn-tutorial/blob/main/notebooks/exploring_neural_data.ipynb) on Google Colab.
+:::
+
+
+```{python}
+# | code-summary: Import various libraries
+# | output: false
+
+from pathlib import Path
+import requests
+import typing
+import warnings
+
+from loguru import logger
+import numpy as np
+import pandas as pd
+import xarray as xr
+import nibabel as nib
+import nilearn.plotting
+from PIL import Image
+from sklearn.preprocessing import MinMaxScaler
+from sklearn.decomposition import PCA, NMF
+from umap import UMAP
+
+import matplotlib as mpl
+from mpl_toolkits.axes_grid1 import ImageGrid
+from matplotlib import pyplot as plt
+from matplotlib_inline.backend_inline import set_matplotlib_formats
+from matplotlib.offsetbox import OffsetImage, AnnotationBbox
+import seaborn as sns
+from IPython.display import display
+
+from utilities.brain import (
+    load_dataset,
+    average_data_across_repetitions,
+    load_stimuli,
+    plot_brain_map,
+)
+
+```
+
+```{python}
+# | label: defaults
+# | code-summary: Set some visualization defaults
+
+sns.set_theme(
+    context="notebook",
+    style="white",
+    palette="deep",
+)
+set_matplotlib_formats("svg")
+
+pd.set_option("display.max_rows", 5)
+pd.set_option("display.max_columns", 10)
+pd.set_option("display.precision", 3)
+pd.set_option("display.show_dimensions", False)
+
+xr.set_options(display_max_rows=3, display_expand_data=False)
+
+warnings.filterwarnings("ignore")
+```
+
+## The Natural Scenes fMRI Dataset (NSD)
+![](assets/nsd.png)
+
+NSD is the largest fMRI dataset on human vision, with 7T fMRI responses (1.8mm isotropic voxels) obtained from 8 adult participants. The experiment involved a continuous recognition task while participants observed natural scene images from the Microsoft Common Objects in Context (COCO) database (Lin et al., 2014).
+
+Let's load the dataset:
+
+```{python}
+# | code-summary: Load the dataset
+
+data = average_data_across_repetitions(load_dataset(subject=0, roi="general"))
+
+display(data)
+```
+
+This data contains neural responses to 872 images from ~15,000 voxels reliably modulated by the visual stimuli during the NSD experiment.
+
+::: {.callout-note}
+We utilized the NSD single-trial betas, preprocessed in 1.8-mm volume space and denoised using the GLMdenoise technique (version 3; “betas_fithrf_GLMdenoise_RR”). The betas were converted to z-scores within each scanning session, and we computed the average betas for each NSD stimulus across repetitions.
+:::
+
+```{python}
+# | code-summary: Load the stimuli
+
+
+def view_stimuli(stimuli: xr.DataArray, *, n: int = 10) -> None:
+    fig = plt.figure(figsize=(15, 5))
+    image_grid = ImageGrid(
+        fig=fig,
+        rect=(1, 1, 1),
+        nrows_ncols=(1, n),
+        share_all=True,
+    )
+    for i_image in range(n):
+        image_grid[i_image].imshow(stimuli[i_image])
+        image_grid[i_image].axis("off")
+    fig.show()
+
+
+stimuli = load_stimuli()
+view_stimuli(stimuli)
+```
+
+```{python}
+# | code-summary: Utilities to view images
+
+
+def view_images_as_scatterplot(
+    x: np.ndarray, y: np.ndarray, *, stimuli: xr.DataArray
+) -> None:
+    fig, ax = plt.subplots(figsize=(20, 20))
+    for i_stimulus in range(len(stimuli)):
+        image_box = OffsetImage(stimuli[i_stimulus].values, zoom=0.5)
+        image_box.image.axes = ax
+
+        ab = AnnotationBbox(
+            image_box,
+            xy=(x[i_stimulus], y[i_stimulus]),
+            xycoords="data",
+            frameon=False,
+            pad=0,
+        )
+        ax.add_artist(ab)
+
+    ax.set_xlim([x.min(), x.max()])
+    ax.set_ylim([y.min(), y.max()])
+    ax.axis("off")
+    fig.show()
+
+
+def view_images_at_poles(
+    x: np.ndarray,
+    *,
+    stimuli: xr.DataArray,
+    n_images_per_pole: int = 5,
+    label: str | None = None,
+) -> None:
+    indices = np.argsort(x, axis=0)
+
+    fig = plt.figure(figsize=(15, 5))
+    image_grid = ImageGrid(
+        fig=fig,
+        rect=(1, 1, 1),
+        nrows_ncols=(1, 2 * n_images_per_pole + 1),
+        share_all=True,
+    )
+    for i_image in range(n_images_per_pole):
+        image_grid[i_image].imshow(stimuli[indices[i_image]])
+        image_grid[i_image].axis("off")
+        image_grid[-i_image - 1].imshow(stimuli[indices[-i_image - 1]])
+        image_grid[-i_image - 1].axis("off")
+
+    for ax in image_grid:
+        ax.axis("off")
+
+    if label is not None:
+        ax = image_grid[n_images_per_pole]
+        ax.text(
+            0.5,
+            0.5,
+            label,
+            horizontalalignment="center",
+            verticalalignment="center",
+            transform=ax.transAxes,
+        )
+    fig.show()
+
+
+```
+
+### Visualizing PCs by finding extreme images
+
+```{python}
+# | code-summary: View images that have extreme scores on the PCs
+# | fig-column: page
+# | fig-align: center
+
+pca = PCA()
+pca.fit(data)
+
+data_pca = pca.transform(data)
+
+for rank in [1, 2, 3, 10, 50, 100]:
+    view_images_at_poles(data_pca[:, rank - 1], stimuli=stimuli, label=f"rank {rank}")
+```
+
+```{python}
+# | code-summary: Project the neural data onto the first two principal components
+# | fig-column: page
+
+# | fig-align: center
+
+view_images_as_scatterplot(data_pca[:, 0], data_pca[:, 1], stimuli=stimuli)
+```
+
+```{python}
+# | code-summary: View eigenvectors on brain surface
+# | fig-column: page
+# | fig-align: center
+
+
+def view_eigenvector(
+    eigenvector: np.ndarray,
+    *,
+    data: xr.DataArray,
+    label: str | None = None,
+) -> None:
+    fig = plot_brain_map(
+        data=xr.DataArray(
+            name="eigenvector",
+            data=eigenvector,
+            dims=("neuroid",),
+            coords={
+                coord: ("neuroid", data[coord].values) for coord in ("x", "y", "z")
+            },
+            attrs=data.attrs,
+        ),
+        subject=data.attrs["subject"],
+        title=label,
+    )
+    fig.show()
+
+
+# for rank in (1, 2, 5, 10, 50):
+#     view_eigenvector(pca.components_[rank - 1, ...], data=data, label=f"rank {rank}")
+```
+
+::: {.callout-warning}
+# Why airplanes and skies?
+:::
+
+### The neural eigenspectrum
+
+Let's plot the eigenspectrum of the neural responses!
+
+```{python}
+# | code-summary: Visualize the eigenspectrum
+# | fig-align: center
+# | fig-cap: Neural eigenspectra with linear scaling
+
+
+def view_eigenspectrum(pca: PCA, *, log: bool = False) -> None:
+    eigenvalues = pd.DataFrame(pca.explained_variance_, columns=["eigenvalue"]).assign(
+        rank=1 + np.arange(pca.n_components_)
+    )
+
+    fig, ax = plt.subplots(figsize=(6, 6))
+    sns.lineplot(
+        ax=ax,
+        data=eigenvalues,
+        x="rank",
+        y="eigenvalue",
+    )
+    sns.despine(ax=ax)
+    if log:
+        ax.set_xscale("log")
+        ax.set_yscale("log")
+        ax.set_ylim(bottom=1e-2)
+    fig.show()
+
+
+view_eigenspectrum(pca)
+```
+
+On this plot, there appears to be negligible variance after about rank 20. It is a common practice to drop the rest of higher-rank PCs. However, before doing so, let's try visualizing the spectrum on a logarithmic scale for both axes:
+
+```{python}
+# | code-summary: Visualize the eigenspectrum on a logarithmic scale
+# | fig-align: center
+# | fig-cap: Neural eigenspectra with logarithmic scaling
+
+view_eigenspectrum(pca, log=True)
+```
+
+On a log-log scale, the spectrum shows no obvious discontinuity! This suggests that the neural population code has a scale-free structure and its latent dimensionality is likely higher than 20!
+
+What kind of structure is this? We observe that the spectrum is approximately linear on this log-log scale, suggesting that the eigenvalues obey a power law:
+
+$\log{\lambda_\text{rank}} \approx \alpha \log{\left( \text{rank} \right)} + c \implies \lambda_\text{rank} \propto \left( \text{rank} \right)^\alpha$
+
+#### Power laws
+
+Power law
+: A power law is a relationship of the form $f(x) \propto x^{\alpha}$, where $\alpha$ is termed the *index* of the power law, or the *power law exponent*.
+
+Power laws are ubiquitious in nature, arising in all sorts of systems:
+
+- wealth distribution (Pareto principle)
+- word frequencies in natural language (Zipf's law)
+- ferromagnetism (Ising model)
+
+Power laws are *scale-free*: $f(kx) \propto f(x)$.
+
+- bonus: phase transitions at critical power-law exponent
+  - e.g. Curie temperature of ferromagnetic substances
+- bonus: self-organizing systems
+
+### Some nonlinear methods
+
+#### Nonnegative matrix factorization (NMF)
+
+```{python}
+# | code-summary: Compute NMF of neural responses
+# | fig-column: page
+# | fig-align: center
+
+scaler = MinMaxScaler()
+scaler.fit(data)
+
+nmf = NMF(n_components=2, random_state=0)
+data_nmf = nmf.fit_transform(scaler.transform(data))
+
+view_images_as_scatterplot(data_nmf[:, 0], data_nmf[:, 1], stimuli=stimuli)
+
+```
+
+#### Uniform Manifold Approximation & Projection (UMAP)
+
+```{python}
+# | code-summary: Compute UMAP projection of neural responses
+# | fig-column: page
+# | fig-cap: UMAP projection of neural data
+# | fig-align: center
+
+umap = UMAP(n_components=2, metric="euclidean", random_state=0)
+data_umap = umap.fit_transform(data)
+
+view_images_as_scatterplot(data_umap[:, 0], data_umap[:, 1], stimuli=stimuli)
+```

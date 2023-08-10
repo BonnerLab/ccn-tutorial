@@ -1,0 +1,86 @@
+project:
+  type: website
+  preview:
+    port: 4200
+  render:
+    - index.qmd
+    - pages/introducing_pca.qmd
+    # - "*.qmd"
+  output-dir: site
+  execute-dir: project
+  post-render:
+    - scripts/move_notebooks.py
+    - jupyter nbconvert --clear-output --inplace notebooks/*.ipynb
+
+filters:
+  - black-formatter
+
+date: 2023-08-26
+date-modified: last-modified
+date-format: long
+license: "This work is licensed under a Creative Commons Attribution-ShareAlike 4.0 International License."
+abstract-title: Summary
+
+website:
+  title: "CCN 2023 | Tutorial"
+  navbar:
+    background: light
+    search: true
+    collapse-below: md
+    left:
+      - href: index
+        text: Home
+      - href: pages/introducing_pca.qmd
+        text: Introducing PCA
+      # - href: pages/exploring_neural_data
+      #   text: Exploring neural data
+      # - href: pages/dealing_with_noise
+      #   text: Dealing with noise
+      # - href: pages/comparing_representations
+      #   text: Comparing representations
+      # - href: pages/reference
+      #   text: Reference
+    tools:
+      - icon: github
+        href: https://github.com/BonnerLab/ccn-tutorial
+  repo-url: https://github.com/BonnerLab/ccn-tutorial
+  repo-actions: [edit, issue]
+  search:
+    type: textbox
+
+format:
+  html:
+    theme:
+      light: flatly
+      dark: darkly
+    code-block-bg: true
+    highlight-style: atom-one
+    html-math-method: katex
+    smooth-scroll: false
+    toc: true
+    toc-depth: 3
+    toc-title: Contents
+    toc-expand: true
+    code-fold: true
+    code-copy: true
+    code-tools:
+      source: true
+      toggle: true
+      caption: Code blocks
+    fig-align: center
+    fig-format: svg
+    fig-responsive: true
+    notebook-links: true
+    citations-hover: true
+    footnotes-hover: true
+    keep-ipynb: false
+    title-block-banner: true
+  ipynb:
+    code-annotations: none
+
+execute:
+  enabled: true
+  cache: true
+  warning: false
+  error: false
+jupyter: python3

@@ -1,0 +1,212 @@
+---
+title: Comparing high-dimensional representations
+subtitle: Cross-validated methods to separate high-dimensional signal from noise
+abstract: Especially after the advent of high-dimensional neural network models of the brain, there has been an explosion of methods to compare high-dimensional representations, including various forms of linear regression, canonical correlation analysis (CCA), centered kernel alignment (CKA), and non-linear methods too! In this part of the tutorial, we'll describe PLS-SVD -- a method closely related to PCA -- that allows us to measure the similarity between two high-dimensional systems in a manner that is relatively interpretable and extensible for various purposes.
+---
+
+::: {.content-visible when-format="html"}
+::: {.callout-tip title="Run this notebook interactively!"}
+
+Here's a [link to this notebook](https://colab.research.google.com/github/BonnerLab/ccn-tutorial/blob/main/notebooks/comparing_representations.ipynb) on Google Colab.
+:::
+:::
+
+## PLS-SVD
+
+Just as PCA identifies the principal directions of variance of a system, PLS-SVD identifies the principal directions of *shared* variance between *two* systems. Specifically, just as PCA computes the eigendecomposition of the auto-covariance, PLS-SVD computes the singular value decomposition of the cross-covariance:
+
+$X^\top Y = U \Sigma V^\top$.
+
+Here, the left singular vectors $U$ define a rotation of the system $X$ into some latent space, the right singular vectors $V$ define a rotation of system $Y$ into the same latent space, and the singular values $\Sigma$
+
+::: {.callout-note}
+# What happens when $X$ = $Y$?
+
+Note that if $X = Y$, PLS-SVD reduces to PCA:
+:::
+
+
+```{python}
+# | label: imports
+# | code-summary: Import various libraries
+
+from collections.abc import Sequence
+import warnings
+
+import numpy as np
+import pandas as pd
+import xarray as xr
+import torch
+from sklearn.decomposition import TruncatedSVD
+import seaborn as sns
+import matplotlib as mpl
+from matplotlib import pyplot as plt
+from matplotlib_inline.backend_inline import set_matplotlib_formats
+from IPython.display import display
+
+from utilities.brain import (
+    load_dataset,
+    average_data_across_repetitions,
+    load_stimuli,
+    plot_brain_map,
+)
+
+```
+
+```{python}
+# | label: defaults
+# | code-summary: Set some visualization defaults
+
+sns.set_theme(
+    context="notebook",
+    style="white",
+    palette="deep",
+)
+set_matplotlib_formats("svg")
+
+pd.set_option("display.max_rows", 5)
+pd.set_option("display.max_columns", 10)
+pd.set_option("display.precision", 3)
+pd.set_option("display.show_dimensions", False)
+
+xr.set_options(display_max_rows=3, display_expand_data=False)
+
+warnings.filterwarnings("ignore")
+```
+
+```{python}
+# | label: rng
+# | code-summary: Set deterministic random number generator
+
+random_state = 0
+rng = np.random.default_rng(seed=random_state)
+```
+
+```{python}
+# | label: recipe-plssvd
+# | code-summary: A computational recipe for PLS-SVD
+# | code-fold: show
+# | echo: true
+
+
+def svd(
+    x: torch.Tensor,
+    *,
+    truncated: bool,
+    n_components: int,
+    seed: int,
+) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
+    if truncated:
+        torch.manual_seed(seed)
+        u, s, v = torch.pca_lowrank(x, center=False, q=n_components)
+        v_h = v.transpose(-2, -1)
+    else:
+        u, s, v_h = torch.linalg.svd(x, full_matrices=False)
+    u, v_h = svd_flip(u=u, v=v_h)
+    return u, s, v_h.transpose(-2, -1)
+
+
+def svd_flip(*, u: torch.Tensor, v: torch.Tensor) -> tuple[torch.Tensor, torch.Tensor]:
+    max_abs_cols = torch.argmax(torch.abs(u), dim=-2)
+    match u.ndim:
+        case 3:
+            signs = torch.stack(
+                [
+                    torch.sign(u[i_batch, max_abs_cols[i_batch, :], range(u.shape[-1])])
+                    for i_batch in range(u.shape[0])
+                ],
+                dim=0,
+            )
+        case 2:
+            signs = torch.sign(u[..., max_abs_cols, range(u.shape[-1])])
+
+    u *= signs.unsqueeze(-2)
+    v *= signs.unsqueeze(-1)
+
+    return u, v
+
+
+class PLSSVD:
+    def __init__(self) -> None:
+        self.left_mean: np.ndarray
+        self.right_mean: np.ndarray
+        self.left_singular_vectors: np.ndarray
+        self.right_singular_vectors: np.ndarray
+
+    def fit(self, /, x: np.ndarray, y: np.ndarray) -> None:
+        self.left_mean = x.mean(axis=-2)  # <1>
+        self.right_mean = y.mean(axis=-2)  # <1>
+
+        x_centered = x - self.left_mean  # <1>
+        y_centered = y - self.right_mean  # <1>
+
+        n_stimuli = x.shape[-2]
+
+        cross_covariance = (np.swapaxes(x_centered, -1, -2) @ y_centered) / (
+            n_stimuli - 1
+        )  # <2>
+
+        (
+            self.left_singular_vectors,
+            self.singular_values,
+            self.right_singular_vectors,
+        ) = svd(
+            torch.from_numpy(cross_covariance),
+            n_components=min([*x.shape, *y.shape]),
+            truncated=True,
+            seed=random_state,
+        )  # <3>
+
+        n_stimuli = data.shape[-2]
+
+        self.left_singular_vectors = self.left_singular_vectors.cpu().numpy()
+        self.singular_values = self.singular_values.cpu().numpy()
+        self.right_singular_vectors = self.right_singular_vectors.cpu().numpy()
+
+    def transform(self, /, z: np.ndarray, *, direction: str) -> np.ndarray:
+        match direction:
+            case "left":
+                return (z - self.left_mean) @ self.left_singular_vectors  # <4>
+            case "right":
+                return (z - self.right_mean) @ self.right_singular_vectors  # <4>
+            case _:
+                raise ValueError("direction must be 'left' or 'right'")
+
+
+```
+
+1. Center the data matrices $X$ and $Y$.
+2. Compute their cross-covariance $X^\top Y / (n - 1)$.
+3. Compute the [singular value decomposition](reference.qmd#singular-value-decomposition) of the cross-covariance.
+4. To project data from the ambient space ($X$ or $Y$) to the latent space, we must subtract the mean computed in Step 1, and multiply the data by the corresponding singular vectors.
+
+## Comparing brains
+
+In the same way that we can PLS-SVD to estimate the shared variance across presentations of the same stimuli *within* a participant, we can also use it to estimate the shared variance in the neural representations of the same stimuli *across* participants.
+
+We have two data matrices $X \in \mathbb{R}^{N \times P_X}$ and $Y \in \mathbb{R}^{N \times P_Y}$ from two participants. We could directly compute the singular values of their cross-covariance, which would be a direct estimate of the shared variance between these two representations.
+
+However, we run into the same issue as before: the singular values of a matrix are always positive and we won't be able to use the magnitude of the singular value to assess the reliability of the variance along that dimension.
+
+Instead, we can use a cross-validated approach similar to CV-PCA, except that instead of testing generalization across different *presentations* of the stimuli, we can evaluate the reliable shared variance between the two representations across *stimuli*.
+
+Specifically, we can divide the images into two: a training split and a test split. We can compute singular vectors on the training split, and evalute *test* singular values on the test split, analogous to the CV-PCA procedure:
+
+$X_\text{train}^\top Y_\text{train} / (n - 1) = U \Sigma V^\top$
+
+$\Sigma_\text{test} = \left( X_\text{test} U \right) ^\top \left( Y_\text{test} V \right) / (n - 1)$
+
+
+## Comparing brains and DNNs
+
+```{python}
+# | code-summary: Load the datasets
+
+# subject_1 = average_data_across_repetitions(load_dataset(subject=0, roi="general"))
+# subject_2 = average_data_across_repetitions(load_dataset(subject=1, roi="general"))
+# subject_1 = subject_1.sortby("stimulus_id")
+# subject_2 = subject_2.sortby("stimulus_id")
+
+# display(subject_1)
+# display(subject_2)
+```

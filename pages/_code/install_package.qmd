@@ -1,0 +1,7 @@
+```{python}
+# | label: install-package
+# | code-summary: Install all dependencies
+# | eval: false
+
+%pip install git+https://github.com/BonnerLab/ccn-tutorial.git
+```

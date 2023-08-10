@@ -1,0 +1,20 @@
+```{python}
+# | label: defaults
+# | code-summary: Set some visualization defaults
+
+sns.set_theme(
+    context="notebook",
+    style="white",
+    palette="deep",
+)
+set_matplotlib_formats("svg")
+
+pd.set_option("display.max_rows", 5)
+pd.set_option("display.max_columns", 10)
+pd.set_option("display.precision", 3)
+pd.set_option("display.show_dimensions", False)
+
+xr.set_options(display_max_rows=3, display_expand_data=False)
+
+warnings.filterwarnings("ignore")
+```

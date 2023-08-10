@@ -1,0 +1,16 @@
+*.pyc
+
+/src/*.egg-info
+/.mypy_cache
+
+/.venv
+/cache
+
+/.quarto
+/site
+.jupyter_cache
+.vdoc.py
+
+/.quarto/
+
+/scratch

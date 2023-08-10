@@ -1,0 +1,64 @@
+[build-system]
+requires = ["setuptools", "setuptools-scm"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ccn-tutorial"
+description = "A high-dimensional view of computational neuroscience"
+readme = "README.md"
+requires-python = ">=3.10.12"
+license = { file = "LICENSE" }
+authors = [
+  { name = "Atlas Kazemian", email = "akazemi3@jh.edu" },
+  { name = "Florentin Guth", email = "florentin.guth@ens.fr" },
+  { name = "Michael Bonner", email = "mfbonner@jhu.edu" },
+  { name = "Raj Magesh Gauthaman", email = "rgautha1@jh.edu" },
+  { name = "Zirui Chen", email = "zchen160@jh.edu" },
+]
+keywords = [
+  "Bonner Lab",
+  "Conference on Computational Cognitive Neuroscience (CCN) 2023",
+  "dimensionality",
+  "computational neuroscience",
+]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Intended Audience :: Science/Research",
+  "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
+  "Natural Language :: English",
+  "Operating System :: POSIX :: Linux",
+  "Programming Language :: Python :: 3",
+  "Topic :: Scientific/Engineering",
+  "Typing :: Typed",
+]
+urls = { repository = "https://github.com/BonnerLab/ccn-tutorial" }
+dependencies = [
+  "loguru",
+  "more-itertools",
+  "tqdm",
+  "numpy",
+  "pandas",
+  "torch",
+  "xarray",
+  "netCDF4",
+  "scipy",
+  "nilearn",
+  "umap-learn",
+  "Pillow",
+  "matplotlib",
+  "seaborn",
+  "scikit-learn",
+  "nilearn",
+  "ipykernel",
+  "jupyter",
+  "jupyter-cache",
+  "notebook",
+  "ipywidgets",
+]
+dynamic = ["version"]
+
+[project.optional-dependencies]
+dev = ["black", "mypy", "types-requests"]
+
+[tool.black]
+preview = true
