@@ -4,12 +4,20 @@ subtitle: Revealing the latent structure of fMRI responses to natural scenes
 abstract: Analyzing the Natural Scenes dataset reveals high-dimensional latent structure in neural responses.
 ---
 
-::: {.content-visible when-format="html" .callout-tip title="Run this notebook interactively!"}
+::: {.content-visible when-format="html"}
+
+::: {.callout-tip}
+# Run this notebook interactively!
+
 Here's a [link to this notebook](https://colab.research.google.com/github/BonnerLab/ccn-tutorial/blob/main/notebooks/exploring_neural_data.ipynb) on Google Colab.
 :::
 
+:::
+
+{{< include _code/install_package.qmd >}}
 
 ```{python}
+# | label: import_libraries
 # | code-summary: Import various libraries
 # | output: false
 
@@ -46,33 +54,16 @@ from utilities.brain import (
 
 ```
 
-```{python}
-# | label: defaults
-# | code-summary: Set some visualization defaults
+{{< include _code/set_visualization_defaults.qmd >}}
 
-sns.set_theme(
-    context="notebook",
-    style="white",
-    palette="deep",
-)
-set_matplotlib_formats("svg")
-
-pd.set_option("display.max_rows", 5)
-pd.set_option("display.max_columns", 10)
-pd.set_option("display.precision", 3)
-pd.set_option("display.show_dimensions", False)
-
-xr.set_options(display_max_rows=3, display_expand_data=False)
-
-warnings.filterwarnings("ignore")
-```
+{{< include _code/initialize_rng.qmd >}}
 
 ## The Natural Scenes fMRI Dataset (NSD)
 ![](assets/nsd.png)
 
 NSD is the largest fMRI dataset on human vision, with 7T fMRI responses (1.8mm isotropic voxels) obtained from 8 adult participants. The experiment involved a continuous recognition task while participants observed natural scene images from the Microsoft Common Objects in Context (COCO) database (Lin et al., 2014).
 
-Let's load the dataset:
+Let's load the dataset. This data contains neural responses to 872 images from ~15,000 voxels reliably modulated by the visual stimuli during the NSD experiment.
 
 ```{python}
 # | code-summary: Load the dataset
@@ -82,13 +73,14 @@ data = average_data_across_repetitions(load_dataset(subject=0, roi="general"))
 display(data)
 ```
 
-This data contains neural responses to 872 images from ~15,000 voxels reliably modulated by the visual stimuli during the NSD experiment.
-
 ::: {.callout-note}
-We utilized the NSD single-trial betas, preprocessed in 1.8-mm volume space and denoised using the GLMdenoise technique (version 3; “betas_fithrf_GLMdenoise_RR”). The betas were converted to z-scores within each scanning session, and we computed the average betas for each NSD stimulus across repetitions.
+# Some fMRI preprocessing details
+
+We utilized the NSD single-trial betas, preprocessed in 1.8 mm volumetric space and denoised using the GLMdenoise technique (version 3;"betas_fithrf_GLMdenoise_RR"). The betas were converted to Z-scores within each scanning session and averaged across repetitions for each stimulus.
 :::
 
 ```{python}
+# | label: view_stimuli
 # | code-summary: Load the stimuli
 
 
@@ -111,6 +103,7 @@ view_stimuli(stimuli)
 ```
 
 ```{python}
+# | label: image_viewing_utilities
 # | code-summary: Utilities to view images
 
 
@@ -177,9 +170,10 @@ def view_images_at_poles(
 
 ```
 
-### Visualizing PCs by finding extreme images
+### Visualizing principal components
 
 ```{python}
+# | label: extreme_images_pcs
 # | code-summary: View images that have extreme scores on the PCs
 # | fig-column: page
 # | fig-align: center
@@ -196,7 +190,6 @@ for rank in [1, 2, 3, 10, 50, 100]:
 ```{python}
 # | code-summary: Project the neural data onto the first two principal components
 # | fig-column: page
-
 # | fig-align: center
 
 view_images_as_scatterplot(data_pca[:, 0], data_pca[:, 1], stimuli=stimuli)
@@ -233,10 +226,6 @@ def view_eigenvector(
 # for rank in (1, 2, 5, 10, 50):
 #     view_eigenvector(pca.components_[rank - 1, ...], data=data, label=f"rank {rank}")
 ```
-
-::: {.callout-warning}
-# Why airplanes and skies?
-:::
 
 ### The neural eigenspectrum
 
@@ -285,12 +274,11 @@ On a log-log scale, the spectrum shows no obvious discontinuity! This suggests t
 
 What kind of structure is this? We observe that the spectrum is approximately linear on this log-log scale, suggesting that the eigenvalues obey a power law:
 
-$\log{\lambda_\text{rank}} \approx \alpha \log{\left( \text{rank} \right)} + c \implies \lambda_\text{rank} \propto \left( \text{rank} \right)^\alpha$
+$$\log{\lambda_\text{rank}} \approx \alpha \log{\left( \text{rank} \right)} + c \implies \lambda_\text{rank} \propto \left( \text{rank} \right)^\alpha$$
 
 #### Power laws
 
-Power law
-: A power law is a relationship of the form $f(x) \propto x^{\alpha}$, where $\alpha$ is termed the *index* of the power law, or the *power law exponent*.
+A power law is a relationship of the form $f(x) \propto x^{\alpha}$, where $\alpha$ is termed the *index* of the power law, or the *power law exponent*.
 
 Power laws are ubiquitious in nature, arising in all sorts of systems:
 
@@ -316,7 +304,7 @@ Power laws are *scale-free*: $f(kx) \propto f(x)$.
 scaler = MinMaxScaler()
 scaler.fit(data)
 
-nmf = NMF(n_components=2, random_state=0)
+nmf = NMF(n_components=2, random_state=random_state)
 data_nmf = nmf.fit_transform(scaler.transform(data))
 
 view_images_as_scatterplot(data_nmf[:, 0], data_nmf[:, 1], stimuli=stimuli)
@@ -331,7 +319,7 @@ view_images_as_scatterplot(data_nmf[:, 0], data_nmf[:, 1], stimuli=stimuli)
 # | fig-cap: UMAP projection of neural data
 # | fig-align: center
 
-umap = UMAP(n_components=2, metric="euclidean", random_state=0)
+umap = UMAP(n_components=2, metric="euclidean", random_state=random_state)
 data_umap = umap.fit_transform(data)
 
 view_images_as_scatterplot(data_umap[:, 0], data_umap[:, 1], stimuli=stimuli)

@@ -1,0 +1,7 @@
+```{python}
+# | label: initialize_rng
+# | code-summary: Initialize a deterministic random number generator
+
+random_state = 0
+rng = np.random.default_rng(seed=random_state)
+```

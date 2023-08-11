@@ -5,21 +5,23 @@ abstract: PCA is often used to reduce the dimensionality of large data while pre
 ---
 
 ::: {.content-visible when-format="html"}
-::: {.callout-tip title="Run this notebook interactively!"}
+
+::: {.callout-tip}
+# Run this notebook interactively!
 
 Here's a [link to this notebook](https://colab.research.google.com/github/BonnerLab/ccn-tutorial/blob/main/notebooks/introducing_pca.ipynb) on Google Colab.
 :::
-:::
 
+:::
 
 ## A simple experiment
 
-Let's perform an imaginary neuroscience experiment! We'll record voltages from $P = 2$ neurons in visual cortex while the participant passively views $N = 500$ dots of different *colors* and *sizes*.
+Let's perform an imaginary neuroscience experiment! We'll record voltages from $P = 2$ neurons in visual cortex while the participant passively views $N = 1000$ dots of different *colors* and *sizes*.
 
 {{< include _code/install_package.qmd >}}
 
 ```{python}
-# | label: imports
+# | label: import_libraries
 # | code-summary: Import various libraries
 
 from collections.abc import Sequence
@@ -32,28 +34,24 @@ import xarray as xr
 import seaborn as sns
 import matplotlib as mpl
 from matplotlib import pyplot as plt
+from matplotlib.animation import FuncAnimation
 from matplotlib_inline.backend_inline import set_matplotlib_formats
 import ipywidgets as widgets
-from IPython.display import display
+from IPython.display import display, HTML
 
 ```
 
-{{< include _code/visualization_defaults.qmd >}}
+{{< include _code/set_visualization_defaults.qmd >}}
 
-```{python}
-# | label: rng
-# | code-summary: Set deterministic random number generator
-
-random_state = 0
-rng = np.random.default_rng(seed=random_state)
-```
+{{< include _code/initialize_rng.qmd >}}
 
 ### Creating the stimuli
 
-Let's create dots of different *colors* and *sizes*, ensuring that these two latent variables are [uncorrelated](reference.qmd#correlation)).
+Let's create $N = 1000$ dots of different *colors* and *sizes*. From the scatterplot, we can see that the two latent variables are [uncorrelated](reference.qmd#correlation)).
+
 
 ```{python}
-# | label: stimuli
+# | label: create_the_stimuli
 # | code-summary: Create stimulus dots of various colors and sizes
 # | fig-align: center
 
@@ -84,26 +82,26 @@ def view_stimuli(data: pd.DataFrame) -> None:
         legend=False,
     )
     sns.despine(ax=ax, trim=True)
+    fig.tight_layout()
     fig.show()
 
 
-stimuli = create_stimuli(n_stimuli=500, rng=rng)
+stimuli = create_stimuli(n_stimuli=1_000, rng=rng)
 
 view_stimuli(stimuli)
 ```
 
 ### Simulating neural responses
 
-Now, we need to decide how the neurons might respond to these dots. Each neuron could respond to either one or both of the latent features that defines these stimuli. The neuronal responses could also be subject to noise. Hence, we model each neuron’s response as a simple linear combination of the two latent features - color and size - and noise:
+Now, let's simulate some neural data. We need to decide how the $P = 2$ neurons might respond to these $N = 1000$ stimulus dots. Each neuron could respond to either one or both of the latent features that define these stimuli -- $\text{color}$ and $\text{size}$. The neuron's responses could also be subject to noise. Hence, we model each neuron’s response $r_\text{neuron}$ as a simple linear combination of the two latent features with stimulus-independent Gaussian noise $\epsilon$:
 
+$r_{\text{neuron}} \sim \beta_{\text{color}} \left( \text{color} \right) + \beta_{\text{size}} \left( \text{size} \right) + \epsilon$, where $\epsilon \sim \mathcal{N}(\mu_{\text{neuron}}, \sigma_{\text{neuron}}^2)$
 
-$r_{\text{neuron}} = \beta_{\text{color}} \left( \text{color} \right) + \beta_{\text{size}} \left( \text{size} \right) + \epsilon$, where $\epsilon \sim \mathcal{N}(\mu_{\text{neuron}}, \sigma_{\text{neuron}}^2)$
-
-This procedure produces a data matrix $X \in \mathbb{R}^{N \times P}$ containing the $P = 2$ neurons' responses to the $N = 500$ stimuli.
+This procedure produces a data matrix $X \in \mathbb{R}^{N \times P}$ containing the $P = 2$ neurons' responses to the $N = 1000$ stimuli.
 
 ```{python}
-# | label: neuron-responses-simulate
-# | code-summary: Simulate neuron responses
+# | label: simulate_the_neuron_responses
+# | code-summary: Simulate the responses of two neurons to the stimuli
 
 Neuron = NamedTuple(
     "Neuron",
@@ -184,32 +182,50 @@ data = simulate_multiple_neuron_responses(
 display(data)
 ```
 
-We can visualize the responses of each neuron to each dot.
+### Visualizing the neurons
+
+We can visualize the responses of each neuron to each dot. Note that this is a 1-dimensional scatterplot; the spread along the vertical axis is just for visualization purposes.
 
 ```{python}
-# | label: neuron-responses-visualize
-# | code-summary: Visualize neuron responses
+# | label: visualize_neuron_responses
+# | code-summary: Visualize the individual neuron responses
 # | fig-align: center
 
 
-def view_neuron_responses(data: xr.DataArray) -> None:
+def view_individual_responses(data: xr.DataArray, *, coord: str) -> None:
     rng = np.random.default_rng()
     data_ = data.assign_coords(
         {"arbitrary": ("stimulus", rng.random(data.sizes["stimulus"]))}
     )
     min_, max_ = data_.min(), data_.max()
 
-    fig, axes = plt.subplots(nrows=data.sizes["neuron"], figsize=(5, 4))
+    match coord:
+        case "neuron":
+            dim = "neuron"
+            prefix = "neuron"
+            suffix = "response"
+        case "rank":
+            dim = "component"
+            prefix = "principal component"
+            suffix = "score"
+        case _:
+            raise ValueError("coord must be 'neuron' or 'rank'")
 
-    for neuron, ax in zip(data["neuron"].values, axes.flat):
+    dim = data[coord].dims[0]
+    n_features = data.sizes[dim]
+
+    fig, axes = plt.subplots(nrows=n_features, figsize=(7, 2 * n_features))
+
+    for value, ax in zip(data[coord].values, axes.flat):
         sns.scatterplot(
             ax=ax,
             data=(
-                data_.sel(neuron=neuron)
-                .rename(f"neuron {neuron} response (a.u.)")
+                data_
+                .isel({dim: data[coord].values == value})
+                .rename(f"{prefix} {value} {suffix} (a.u.)")
                 .to_dataframe()
             ),
-            x=f"neuron {neuron} response (a.u.)",
+            x=f"{prefix} {value} {suffix} (a.u.)",
             y="arbitrary",
             hue="color",
             size="size",
@@ -221,40 +237,47 @@ def view_neuron_responses(data: xr.DataArray) -> None:
         ax.set_xlim([min_, max_])
         ax.get_yaxis().set_visible(False)
 
-    fig.tight_layout(h_pad=4)
+    fig.tight_layout(h_pad=3)
     fig.show()
 
 
-view_neuron_responses(data)
+view_individual_responses(data, coord="neuron")
 ```
 
-We can also compute the variance in each neuron. The total variance in the data is the sum of their variances.
+We can see that each neuron is tuned to both color *and* size. Additionally, note that the neurons' responses have different variances.
 
 ```{python}
 # | label: variance
-# | code-summary: Compute neuron variances
+# | code-summary: Compute the variance of each neuron's responses
 
 variances = data.var(dim="stimulus", ddof=1).round(3).rename("neuron variances")
 for i_neuron in range(variances.sizes["neuron"]):
-    print(f"variance of neuron {i_neuron + 1} responses: {variances[i_neuron].values}")
-print(f"total variance: {variances.sum().values}")
+    print(f"variance of neuron {i_neuron + 1} responses: {variances[i_neuron].values} (a.u.)^2")
+print(f"total variance: {variances.sum().values} (a.u.)^2")
 ```
 
-Since we only have $P=2$ neurons, we can visualize this data as a scatterplot, which makes their [covariance](reference.qmd#covariance) apparent.
+## Understanding the neural code
+
+### Linear encoding models
+
+### Representational similarity analysis
+
+## Studying the latent dimensions
+
+We have a population of neurons that contain information about the stimulus: that is, from the activity pattern we recorded, we expect to be able to reliably decode the color and size of the dot presented. How is this information encoded in the population activity? Is there a neuron that is sensitive to color and another that is sensitive to size? Or are there neural responses more complicated than this? If so, is there another view of the population code that might be more informative?
+
+### Some geometric intuition
+
+Since we only have $P = 2$ neurons, we can visualize these data as a scatterplot, which makes their [covariance](reference.qmd#covariance) apparent.
 
 ```{python}
 # | label: joint-response
-# | code-summary: Visualize joint neuron responses
+# | code-summary: Visualize both neurons' responses jointly
 # | fig-align: center
 
 
-def view_joint_neuron_responses(
-    data: xr.DataArray, *, ax: mpl.axes.Axes = None
-) -> None:
-    if ax is None:
-        fig, ax = plt.subplots()
-    else:
-        fig = ax.get_figure()
+def view_joint_neuron_responses(data: xr.DataArray) -> None:
+    fig, ax = plt.subplots()
 
     data_ = pd.DataFrame(
         {coord: data[coord].values for coord in ("color", "size")}
@@ -277,37 +300,116 @@ def view_joint_neuron_responses(
     )
     ax.axhline(0, c="gray", ls="--")
     ax.axvline(0, c="gray", ls="--")
+
     ax.axis("square")
     sns.despine(ax=ax, offset=20)
 
-    fig.show()
+    return fig
 
 
-view_joint_neuron_responses(data)
+fig = view_joint_neuron_responses(data)
+
 ```
+
+The organization of these data in this 2-dimensional space suggests an obvious way to change our viewpoint.
 
 ```{python}
-# | label: covariance
-# | code-summary: Compute covariance between neurons
+# | label: visualize_pca_animation
+# | code-summary: Animate the PCA transformation
+# | fig-align: center
 
-covariance = (
-    xr.cov(
-        data.sel(neuron=1),
-        data.sel(neuron=2),
-        dim="stimulus",
+
+def view_pca_animation(
+    data: xr.DataArray,
+    *,
+    durations: dict[str, int] = {
+        "center": 1_000,
+        "rotate": 1_000,
+        "pause": 1_500,
+    },
+    interval: int = 50,
+) -> None:
+    def _compute_2d_rotation_matrix(theta: float) -> np.ndarray:
+        return np.array(
+            [
+                [np.cos(theta), -np.sin(theta)],
+                [np.sin(theta), np.cos(theta)],
+            ]
+        )
+
+    fig = view_joint_neuron_responses(data)
+    ax = fig.get_axes()[0]
+    scatter = ax.get_children()[0]
+    title = fig.suptitle("neuron responses")
+
+    n_frames = {key: value // interval + 1 for key, value in durations.items()}
+
+    x_mean, y_mean = data.mean("stimulus").values
+    delta = np.array([x_mean, y_mean]) / n_frames["center"]
+
+    _, _, v_h = np.linalg.svd(data - data.mean("stimulus"))
+    v = v_h.transpose()
+    theta = np.arccos(v[0, 0])
+    rotation = _compute_2d_rotation_matrix(-theta / n_frames["rotate"])
+
+    transformed = (data - data.mean("stimulus")).values @ v
+
+    radius = max(np.linalg.norm(transformed, axis=-1))
+    limit = max(np.abs(data).max(), np.abs(transformed).max(), radius)
+    ax.set_xlim([-limit, limit])
+    ax.set_ylim([-limit, limit])
+    fig.tight_layout()
+
+    frame_to_retitle_center = 2 * n_frames["pause"]
+    frame_to_start_centering = frame_to_retitle_center + n_frames["pause"]
+    frame_to_stop_centering = frame_to_start_centering + n_frames["center"]
+    frame_to_retitle_rotate = frame_to_stop_centering + n_frames["pause"]
+    frame_to_start_rotating = frame_to_retitle_rotate + n_frames["pause"]
+    frame_to_stop_rotating = frame_to_start_rotating + n_frames["rotate"]
+    frame_to_retitle_transformed = frame_to_stop_rotating + n_frames["pause"]
+    frame_to_end = frame_to_retitle_transformed + 2 * n_frames["pause"]
+
+    def _update(frame: int) -> None:
+        if frame < frame_to_retitle_center:
+            return
+        elif frame == frame_to_retitle_center:
+            title.set_text("center the data")
+            ax.set_xlabel("")
+            ax.set_ylabel("")
+        elif frame < frame_to_start_centering:
+            return
+        elif frame <= frame_to_stop_centering:
+            scatter.set_offsets(scatter.get_offsets() - delta)
+        elif frame == frame_to_retitle_rotate:
+            title.set_text("rotate the data")
+        elif frame < frame_to_start_rotating:
+            return
+        elif frame <= frame_to_stop_rotating:
+            scatter.set_offsets(scatter.get_offsets().data @ rotation)
+        elif frame < frame_to_retitle_transformed:
+            return
+        elif frame == frame_to_retitle_transformed:
+            title.set_text("principal components")
+            ax.set_xlabel("principal component 1")
+            ax.set_ylabel("principal component 2")
+        elif frame <= frame_to_end:
+            return
+
+    animation = FuncAnimation(
+        fig=fig,
+        func=_update,
+        frames=frame_to_end,
+        interval=interval,
+        repeat=True,
+        repeat_delay=2_500,
     )
-    .round(3)
-    .values
-)
+    display(HTML(animation.to_html5_video()))
+    plt.close(fig)
 
-print(f"covariance between neurons: {covariance}")
+
+view_pca_animation(data)
+
 ```
-
-## Analyzing the data with PCA
-
-We have a population of neurons that contain information about the stimulus: that is, from the activity pattern we recorded, we expect to be able to reliably decode the color and size of the dot presented. How is this information encoded in the population activity? Is there a neuron that is sensitive to color and another that is sensitive to size? Or are there neural responses more complicated than this? If so, is there another view of the population code that might be more informative?
-
-### Some geometric intuition
 
 ### The mathematical definition
 
@@ -326,7 +428,7 @@ The columns of $V$ are *eigenvectors* that specify the directions of variance wh
 The original data matrix can be transformed by projecting it onto the eigenvectors: $\tilde{X} = \left(X - \overline{X}\right) V$.
 
 ::: {.callout-note collapse="true"}
-### Viewing PCA as an optimization
+# Viewing PCA as an optimization
 
 PCA can be used to project data into a lower-dimensional space (i.e. $p \le f$) in a way that best preserves the geometry of the data. Specifically, computing a PCA decomposition of $X$ yields a matrix $V \in \mathbb{R}^{f \times p}$ such that $V = \argmin_{V \in \mathbb{U_{f \times p}}} \sum_{i=1}^n \left|| x_i - VV^\top x_i \right||_2$, where $||\cdot||_2$ denotes the $L_2$-norm and $\mathbb{U_{f \times p}}$ denotes the set of orthonormal matrices with shape $f \times p$.
 :::
@@ -380,10 +482,8 @@ Specifically, the eigenvalues $\lambda_i$ of the auto-covariance matrix are rela
 
 ```{python}
 # | label: pca-visualize
-# | code-summary: Visualize the PCA transformation
+# | code-summary: Visualize the transformed data
 # | fig-align: center
-# | fig-column: page
-
 
 def compute_pca(data: xr.DataArray) -> xr.Dataset:
     pca = PCA()
@@ -408,23 +508,6 @@ def compute_pca(data: xr.DataArray) -> xr.Dataset:
         }
         | {coord: (data[coord].dims[0], data[coord].values) for coord in data.coords},
     )
-
-
-def view_eigenspectrum(pca: xr.DataArray) -> None:
-    fig, ax = plt.subplots(figsize=(2, 5))
-    sns.lineplot(
-        ax=ax,
-        data=pca["component"].to_dataframe(),
-        x="rank",
-        y="eigenvalue",
-        marker="s",
-    )
-    ax.set_title("eigenspectrum")
-    ax.set_xticks([1, 2])
-    ax.set_ylim(bottom=0)
-    sns.despine(ax=ax, offset=20)
-
-    fig.show()
 
 
 def view_transformed_data(pca: xr.DataArray) -> None:
@@ -458,54 +541,28 @@ def view_transformed_data(pca: xr.DataArray) -> None:
 
 data_transformed = compute_pca(data)
 view_transformed_data(data_transformed)
-view_eigenspectrum(data_transformed)
 ```
+
+Let's view the data projected onto each of the principal components.
 
 ```{python}
-# | label: pcs-visualize
-# | code-summary: Visualize neuron responses
+# | label: view_principal_components
+# | code-summary: Visualize principal component scores
 # | fig-align: center
 
-
-def view_principal_components(data_transformed: xr.DataArray) -> None:
-    rng = np.random.default_rng()
-    data_ = data_transformed.assign_coords(
-        {"arbitrary": ("stimulus", rng.random(data_transformed.sizes["stimulus"]))}
-    )
-    min_, max_ = data_transformed.min(), data_transformed.max()
-
-    fig, axes = plt.subplots(nrows=data_transformed.sizes["neuron"], figsize=(5, 4))
-
-    for neuron, ax in zip(data["neuron"].values, axes.flat):
-        sns.scatterplot(
-            ax=ax,
-            data=(
-                data_.sel(neuron=neuron)
-                .rename(f"neuron {neuron} response (a.u.)")
-                .to_dataframe()
-            ),
-            x=f"neuron {neuron} response (a.u.)",
-            y="arbitrary",
-            hue="color",
-            size="size",
-            palette="flare",
-            legend=False,
-        )
-        sns.despine(ax=ax, left=True, offset=10)
-
-        ax.set_xlim([min_, max_])
-        ax.get_yaxis().set_visible(False)
-
-    fig.tight_layout(h_pad=4)
-    fig.show()
-
-
-view_neuron_responses(data)
+view_individual_responses(data_transformed["score"], coord="rank")
 ```
 
-We can compute the variance along each eigenvector. The total variance along all eigenvectors is the same as the total variance of the original data.
+We can observe that:
 
-Next, let’s consider a case where we are recording from a larger number of neurons. In this case, the dimensionality of our features space is 10. This number is usually referred to as the *ambient dimensionality* of the data. However, we already know that this data contains only 2 useful dimensions (color and size). We refer to these as the *effective dimensions*. In this example, the remaining dimensions, which correspond to noise, have relatively low variance, and we can see a signficant drop in the eigenspectrum after the second eigenvector. However, keep in mind that this is a toy example with idealized data. As we will see, when using standard PCA on real data it may be impossible to identify a clear distinction between meaningful dimensions and noise.
+- the *first* principal component is largely driven by the *size* of the stimulus
+- the *second* principal component is largely driven by the *color* of the stimulus
+
+However, note that these components do not directly correspond to either of the latent variables; rather, each is a mixture of stimulus-dependent signal and noise.
+
+### Analyzing the covariance statistics
+
+We can compute the variance along each eigenvector. The total variance along all eigenvectors is the same as the total variance of the original data.
 
 ```{python}
 # | label: eigenvalues
@@ -518,52 +575,84 @@ for i_neuron in range(eigenvalues.sizes["component"]):
         f" {eigenvalues[i_neuron].values}"
     )
 print(f"total variance: {eigenvalues.sum().values}")
-
-
 ```
-
-### Reducing the dimensionality
-
-
-## Power laws
 
 ```{python}
-def simulate_data_with_specified_spectrum(
-    *,
-    n_stimuli: int,
-    n_features: int,
-    eigenspectrum: np.ndarray,
-    n_components: int = None,
-    seed: int = 0,
-    mean: np.ndarray = None,
-) -> np.ndarray:
-    """
-    Simulate a data matrix while specifying the eigenvalues of its auto-covariance.
+# | label: visualize_eigenspectrum
+# | code-summary: View eigenspectrum
+# | fig-align: center
 
-    We achieve this using the singular value decomposition. First, we generate two random orthonormal matrices `u` and `v` using the QR decompositions of randomly initialized matrices. Then, we compute the singular value spectrum of the
-    """
-    if n_components is None:
-        n_components = min(n_stimuli, n_features)
+def view_eigenspectrum(pca: xr.DataArray) -> None:
+    fig, ax = plt.subplots(figsize=(pca.sizes["component"], 5))
+    sns.lineplot(
+        ax=ax,
+        data=pca["component"].to_dataframe(),
+        x="rank",
+        y="eigenvalue",
+        marker="s",
+    )
+    ax.set_xticks(pca["rank"].values)
+    ax.set_ylim(bottom=0)
+    sns.despine(ax=ax, offset=20)
 
-    rng = np.random.default_rng(seed=seed)
-
-    x = rng.standard_normal((n_stimuli, n_components))
-    y = rng.standard_normal((n_features, n_components))
-    u, _ = np.linalg.qr(x)
-    v, _ = np.linalg.qr(y)
-
-    singular_values = np.sqrt(eigenspectrum * (n_stimuli - 1))
-
-    if mean is None:
-        mean = np.zeros(n_features)
-
-    return u @ np.diag(singular_values) @ v.transpose() + mean
+    fig.show()
 
 
+view_eigenspectrum(data_transformed)
 ```
+
+## More neurons!
+
+Let’s record from more neurons (say $P = 10$)! Here, the *ambient dimensionality* of the feature space is $P = 10$.
+
+```{python}
+# | label: simulate_more_neurons
+# | code-summary: Simulate responses from more neurons
+# | fig-align: center
+
+def _simulate_random_neuron(rng: np.random.Generator) -> Neuron:
+    return Neuron(
+        beta_color=rng.integers(-10, 11),
+        beta_size=rng.integers(-10, 11),
+        std=rng.integers(-10, 11),
+        mean=rng.integers(-10, 11),
+    )
+
+neurons = tuple([_simulate_random_neuron(rng) for _ in range(10)])
+
+big_data = simulate_multiple_neuron_responses(
+    stimuli=stimuli,
+    neurons=neurons,
+    rng=rng,
+)
+
+display(big_data)
+```
+
+```{python}
+# | label: view_principal_components_big
+# | code-summary: Visualize principal component scores
+# | fig-align: center
+
+big_data_transformed = compute_pca(big_data)
+view_individual_responses(big_data_transformed["score"], coord="rank")
+```
+
+```{python}
+# | label: visualize_eigenspectrum_big
+# | code-summary: View eigenspectrum
+# | fig-align: center
+
+view_eigenspectrum(big_data_transformed)
+```
+
+However, we know that this data was generated from exactly *2* latent variables -- *color* and *size*. We refer to these as the *effective dimensions*. In this example, the remaining dimensions, which correspond to noise, have relatively low variance, and we can see a signficant drop in the eigenspectrum after the second eigenvector.
+
+However, keep in mind that this is a toy example with idealized data. As we will see, when using standard PCA on real data it may be impossible to identify a clear distinction between meaningful dimensions and noise.
 
 ::: {.callout-tip}
 # Only need the first few PCs?
+
 Check out [truncated SVD](https://scikit-learn.org/stable/modules/generated/sklearn.decomposition.TruncatedSVD.html)!
 :::
 

@@ -4,8 +4,7 @@ project:
     port: 4200
   render:
     - index.qmd
-    - pages/introducing_pca.qmd
-    # - "*.qmd"
+    - "pages/*.qmd"
   output-dir: site
   execute-dir: project
   post-render:
@@ -24,22 +23,22 @@ abstract-title: Summary
 website:
   title: "CCN 2023 | Tutorial"
   navbar:
-    background: light
+    background: primary
     search: true
     collapse-below: md
     left:
-      - href: index
+      - href: index.qmd
         text: Home
       - href: pages/introducing_pca.qmd
         text: Introducing PCA
-      # - href: pages/exploring_neural_data
-      #   text: Exploring neural data
-      # - href: pages/dealing_with_noise
-      #   text: Dealing with noise
-      # - href: pages/comparing_representations
-      #   text: Comparing representations
-      # - href: pages/reference
-      #   text: Reference
+      - href: pages/exploring_neural_data.qmd
+        text: Exploring neural data
+      - href: pages/dealing_with_noise.qmd
+        text: Dealing with noise
+      - href: pages/comparing_representations.qmd
+        text: Comparing representations
+      - href: pages/reference.qmd
+        text: Reference
     tools:
       - icon: github
         href: https://github.com/BonnerLab/ccn-tutorial
@@ -64,12 +63,14 @@ format:
     code-fold: true
     code-copy: true
     code-tools:
-      source: true
+      source: repo
       toggle: true
       caption: Code blocks
     fig-align: center
     fig-format: svg
     fig-responsive: true
+    fig-width: 7
+    fig-height: 5
     notebook-links: true
     citations-hover: true
     footnotes-hover: true

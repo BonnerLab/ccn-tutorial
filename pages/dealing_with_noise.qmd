@@ -5,23 +5,16 @@ abstract: TODO
 ---
 
 ::: {.content-visible when-format="html"}
-::: {.callout-tip title="Run this notebook interactively!"}
+
+::: {.callout-tip}
+# Run this notebook interactively!
 
 Here's a [link to this notebook](https://colab.research.google.com/github/BonnerLab/ccn-tutorial/blob/main/notebooks/dealing_with_noise.ipynb) on Google Colab.
 :::
+
 :::
 
-::: {.content-visible when-format="ipynb"}
-```{python}
-# | eval: false
-
-%pip install git+https://github.com/BonnerLab/ccn-tutorial.git
-```
-:::
-
-## A simple experiment
-
-Let's perform an imaginary neuroscience experiment! We'll record voltages from $P = 2$ neurons in visual cortex while the participant passively views $N = 500$ dots of different *colors* and *sizes*.
+{{< include _code/install_package.qmd >}}
 
 ```{python}
 # | label: imports
@@ -43,35 +36,12 @@ import ipywidgets as widgets
 from IPython.display import display
 
 from utilities.brain import load_dataset
+
 ```
 
-```{python}
-# | label: defaults
-# | code-summary: Set some visualization defaults
+{{< include _code/set_visualization_defaults.qmd >}}
 
-sns.set_theme(
-    context="notebook",
-    style="white",
-    palette="deep",
-)
-set_matplotlib_formats("svg")
-
-pd.set_option("display.max_rows", 5)
-pd.set_option("display.max_columns", 10)
-pd.set_option("display.precision", 3)
-pd.set_option("display.show_dimensions", False)
-
-xr.set_options(display_max_rows=3, display_expand_data=False)
-
-warnings.filterwarnings("ignore")
-```
-
-```{python}
-# | label: rng
-# | code-summary: Set deterministic random number generator
-
-rng = np.random.default_rng(seed=0)
-```
+{{< include _code/initialize_rng.qmd >}}
 
 ## Estimating *reliable* spectra
 
@@ -151,6 +121,7 @@ display(data)
 Note that the data contain fMRI responses to two repetitions of each image.
 
 ```{python}
+
 
 class PLSSVD:
     def __init__(self) -> None:

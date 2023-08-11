@@ -1,6 +1,8 @@
 ```{python}
-# | label: defaults
+# | label: set_visualization_defaults
 # | code-summary: Set some visualization defaults
+
+%matplotlib inline
 
 sns.set_theme(
     context="notebook",
