@@ -501,6 +501,12 @@ The auto-covariance matrix reduces to $X^\top X / (n - 1) = V \left(\frac{\Sigma
 Specifically, the eigenvalues $\lambda_i$ of the auto-covariance matrix are related to the singular values $\sigma_i$ of the data matrix as $\lambda_i = \sigma_i^2 / (N - 1)$, while the eigenvectors of the auto-covariance matrix are exactly the right singular vectors $V$ of the data matrix $X$.
 :::
 
+::: {.callout-tip collapse="true"}
+# Only need the first few PCs?
+
+Check out [truncated SVD](https://scikit-learn.org/stable/modules/generated/sklearn.decomposition.TruncatedSVD.html)!
+:::
+
 ```{python}
 # | label: pca-visualize
 # | code-summary: Visualize the transformed data
@@ -663,7 +669,7 @@ Based on the spectrum, several approaches are used to quantify the latent dimens
 
 #### Rank of the covariance matrix
 
-The *rank* of the covariance matrix -- equal to the number of nonzero eigenvalues -- would be the latent dimensionality in the ideal setting where the data has zero noise. In real data, the rank is typically equal to the ambient dimensionality, since there is typically some variance along every dimension.
+The *rank* of the covariance matrix -- equal to the number of *nonzero* eigenvalues -- would be the latent dimensionality in the ideal setting where the data has zero noise. In real data, the rank is typically equal to the ambient dimensionality, since there is typically some variance along every dimension.
 
 #### Setting an arbitrary variance threshold
 
@@ -685,11 +691,15 @@ $$\text{effective dimensionality}(\lambda_1, \dots \lambda_n) = \dfrac{\left( \s
 
 However, keep in mind that this is a toy example with idealized data. As we will see, when using standard PCA on real data it may be impossible to identify a clear distinction between meaningful dimensions and noise.
 
-::: {.callout-tip}
-# Only need the first few PCs?
+## Preprocessing your data
 
-Check out [truncated SVD](https://scikit-learn.org/stable/modules/generated/sklearn.decomposition.TruncatedSVD.html)!
-:::
+A standard preprocessing step before PCA is to Z-score your input features $X$ -- ensuring that they have zero mean and unit variance:
+
+$$Z = \dfrac{X - \mu}{\sigma}$$
+
+Why is this useful? Often, PCA is applied to data where the features are fundamentally different from each other. For example, we might have a dataset where the features of interest are the prices of cars (in dollars) and their masses (in kilograms). Since these two features have different units, the variances of the features are not directly comparable -- there's no obvious way to numerically compare a variance of ($20,000)^2^ in price and a variance of (1,000 kg)^2^ in mass. Even if the features being compared are all the same, if they are in different units -- say euros, dollars, and cents -- the raw variances of the data matrix are meaningless.
+
+Since PCA implicitly assumes that the variances along each dimension are comparable, we can Z-score each of our features before applying PCA to ensure that they are on a common scale. Note, however, that this transformation reduces the information in the system -- it is possible that the variances of the features are informative.
 
 [^definition-eigendecomposition]: The eigendecomposition of a symmetric matrix $X \in \mathbb{R}^{n \times n}$ involves rewriting it as the product of three matrices $X = V \Lambda V^\top$, where $V \in \mathbb{n \times n}$ is orthonormal and $\Lambda \in \mathbb{n \times n}$ is diagonal with non-negative entries.
 
