@@ -7,7 +7,6 @@ local function ensureHtmlDeps()
 		scripts = {
 			{ path = "resources/js/add-code-files.js", afterBody = true },
 		},
-		stylesheets = { "resources/css/add-code-files.css" },
 	})
 end
 
