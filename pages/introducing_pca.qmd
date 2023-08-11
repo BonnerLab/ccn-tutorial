@@ -24,7 +24,7 @@ Let's perform an imaginary neuroscience experiment! We'll record voltages from $
 # | label: import_libraries
 # | code-summary: Import various libraries
 
-from collections.abc import Sequence
+from collections.abc import Sequence, Callable
 import warnings
 from typing import NamedTuple
 
@@ -69,7 +69,7 @@ def create_stimuli(
     ).set_index(1 + np.arange(n_stimuli))
 
 
-def view_stimuli(data: pd.DataFrame) -> None:
+def view_stimuli(data: pd.DataFrame) -> mpl.figure.Figure:
     fig, ax = plt.subplots()
     sns.scatterplot(
         ax=ax,
@@ -83,7 +83,9 @@ def view_stimuli(data: pd.DataFrame) -> None:
     )
     sns.despine(ax=ax, trim=True)
     fig.tight_layout()
-    fig.show()
+    plt.close(fig)
+
+    return fig
 
 
 stimuli = create_stimuli(n_stimuli=1_000, rng=rng)
@@ -192,40 +194,34 @@ We can visualize the responses of each neuron to each dot. Note that this is a 1
 # | fig-align: center
 
 
-def view_individual_responses(data: xr.DataArray, *, coord: str) -> None:
+def view_individual_scatter(
+    data: xr.DataArray,
+    *,
+    coord: str,
+    dim: str,
+    template_func: Callable[[int], str]
+) -> mpl.figure.Figure:
     rng = np.random.default_rng()
     data_ = data.assign_coords(
         {"arbitrary": ("stimulus", rng.random(data.sizes["stimulus"]))}
     )
     min_, max_ = data_.min(), data_.max()
 
-    match coord:
-        case "neuron":
-            dim = "neuron"
-            prefix = "neuron"
-            suffix = "response"
-        case "rank":
-            dim = "component"
-            prefix = "principal component"
-            suffix = "score"
-        case _:
-            raise ValueError("coord must be 'neuron' or 'rank'")
-
-    dim = data[coord].dims[0]
     n_features = data.sizes[dim]
 
     fig, axes = plt.subplots(nrows=n_features, figsize=(7, 2 * n_features))
 
-    for value, ax in zip(data[coord].values, axes.flat):
+    for index, ax in zip(data[coord].values, axes.flat):
+        label = template_func(index)
         sns.scatterplot(
             ax=ax,
             data=(
                 data_
-                .isel({dim: data[coord].values == value})
-                .rename(f"{prefix} {value} {suffix} (a.u.)")
+                .isel({dim: data[coord].values == index})
+                .rename(label)
                 .to_dataframe()
             ),
-            x=f"{prefix} {value} {suffix} (a.u.)",
+            x=label,
             y="arbitrary",
             hue="color",
             size="size",
@@ -238,10 +234,18 @@ def view_individual_responses(data: xr.DataArray, *, coord: str) -> None:
         ax.get_yaxis().set_visible(False)
 
     fig.tight_layout(h_pad=3)
-    fig.show()
+    plt.close(fig)
+
+    return fig
 
 
-view_individual_responses(data, coord="neuron")
+view_individual_scatter(
+    data,
+    coord="neuron",
+    dim="neuron",
+    template_func=lambda x: f"neuron {x} response",
+)
+
 ```
 
 We can see that each neuron is tuned to both color *and* size. Additionally, note that the neurons' responses have different variances.
@@ -252,8 +256,8 @@ We can see that each neuron is tuned to both color *and* size. Additionally, not
 
 variances = data.var(dim="stimulus", ddof=1).round(3).rename("neuron variances")
 for i_neuron in range(variances.sizes["neuron"]):
-    print(f"variance of neuron {i_neuron + 1} responses: {variances[i_neuron].values} (a.u.)^2")
-print(f"total variance: {variances.sum().values} (a.u.)^2")
+    print(f"variance of neuron {i_neuron + 1} responses: {variances[i_neuron].values}")
+print(f"total variance: {variances.sum().values}")
 ```
 
 ## Understanding the neural code
@@ -276,23 +280,30 @@ Since we only have $P = 2$ neurons, we can visualize these data as a scatterplot
 # | fig-align: center
 
 
-def view_joint_neuron_responses(data: xr.DataArray) -> None:
+def view_joint_scatter(
+    data: xr.DataArray,
+    *,
+    coord: str,
+    dim: str,
+    template_func: Callable[[int], str]
+) -> mpl.figure.Figure:
     fig, ax = plt.subplots()
 
     data_ = pd.DataFrame(
-        {coord: data[coord].values for coord in ("color", "size")}
+        {coord_: data[coord_].values for coord_ in ("color", "size")}
         | {
-            f"neuron {neuron} response (a.u.)": data.sel(neuron=neuron).to_dataframe()[
-                "neuron responses"
-            ]
-            for neuron in (1, 2)
+            template_func(index): (
+                data.isel({dim: index - 1}).to_dataframe()[coord]
+            )
+            for index in (1, 2)
         }
     )
+
     sns.scatterplot(
         ax=ax,
         data=data_,
-        x="neuron 1 response (a.u.)",
-        y="neuron 2 response (a.u.)",
+        x=template_func(1),
+        y=template_func(2),
         hue="color",
         size="size",
         legend=False,
@@ -301,14 +312,19 @@ def view_joint_neuron_responses(data: xr.DataArray) -> None:
     ax.axhline(0, c="gray", ls="--")
     ax.axvline(0, c="gray", ls="--")
 
-    ax.axis("square")
+    ax.set_aspect("equal", "box")
     sns.despine(ax=ax, offset=20)
+    plt.close(fig)
 
     return fig
 
 
-fig = view_joint_neuron_responses(data)
-
+view_joint_scatter(
+    data,
+    coord="neuron responses",
+    dim="neuron",
+    template_func=lambda x: f"neuron {x} response",
+)
 ```
 
 The organization of these data in this 2-dimensional space suggests an obvious way to change our viewpoint.
@@ -319,7 +335,7 @@ The organization of these data in this 2-dimensional space suggests an obvious w
 # | fig-align: center
 
 
-def view_pca_animation(
+def animate_pca_transformation(
     data: xr.DataArray,
     *,
     durations: dict[str, int] = {
@@ -328,7 +344,7 @@ def view_pca_animation(
         "pause": 1_500,
     },
     interval: int = 50,
-) -> None:
+) -> str:
     def _compute_2d_rotation_matrix(theta: float) -> np.ndarray:
         return np.array(
             [
@@ -337,7 +353,12 @@ def view_pca_animation(
             ]
         )
 
-    fig = view_joint_neuron_responses(data)
+    fig = view_joint_scatter(
+        data,
+        coord="neuron responses",
+        dim="neuron",
+        template_func=lambda x: f"neuron {x} response",
+    )
     ax = fig.get_axes()[0]
     scatter = ax.get_children()[0]
     title = fig.suptitle("neuron responses")
@@ -403,11 +424,11 @@ def view_pca_animation(
         repeat=True,
         repeat_delay=2_500,
     )
-    display(HTML(animation.to_html5_video()))
     plt.close(fig)
+    return animation.to_html5_video()
 
 
-view_pca_animation(data)
+display(HTML(animate_pca_transformation(data)))
 
 ```
 
@@ -510,37 +531,13 @@ def compute_pca(data: xr.DataArray) -> xr.Dataset:
     )
 
 
-def view_transformed_data(pca: xr.DataArray) -> None:
-    data_ = pd.DataFrame(
-        {coord: pca[coord].values for coord in ("color", "size")}
-        | {
-            f"principal component {rank}": (
-                pca["score"].sel(component=rank - 1).to_dataframe()["score"]
-            )
-            for rank in (1, 2)
-        }
-    )
-    fig, ax = plt.subplots()
-    sns.scatterplot(
-        ax=ax,
-        data=data_,
-        x="principal component 1",
-        y="principal component 2",
-        hue="color",
-        size="size",
-        palette="flare",
-        legend=False,
-    )
-    ax.axis("square")
-    ax.axhline(0, c="gray", ls="--")
-    ax.axvline(0, c="gray", ls="--")
-    sns.despine(ax=ax, offset=20)
-
-    fig.show()
-
-
-data_transformed = compute_pca(data)
-view_transformed_data(data_transformed)
+pca = compute_pca(data)
+view_joint_scatter(
+    pca["score"],
+    coord="score",
+    dim="component",
+    template_func=lambda x: f"principal component {x}",
+)
 ```
 
 Let's view the data projected onto each of the principal components.
@@ -550,7 +547,12 @@ Let's view the data projected onto each of the principal components.
 # | code-summary: Visualize principal component scores
 # | fig-align: center
 
-view_individual_responses(data_transformed["score"], coord="rank")
+view_individual_scatter(
+    pca["score"],
+    coord="rank",
+    dim="component",
+    template_func=lambda x: f"principal component {x}",
+)
 ```
 
 We can observe that:
@@ -568,7 +570,7 @@ We can compute the variance along each eigenvector. The total variance along all
 # | label: eigenvalues
 # | code-summary: Display eigenvalues
 
-eigenvalues = data_transformed["eigenvalue"].round(3)
+eigenvalues = pca["eigenvalue"].round(3)
 for i_neuron in range(eigenvalues.sizes["component"]):
     print(
         f"variance along eigenvector {i_neuron + 1} (eigenvalue {i_neuron + 1}):"
@@ -582,7 +584,7 @@ print(f"total variance: {eigenvalues.sum().values}")
 # | code-summary: View eigenspectrum
 # | fig-align: center
 
-def view_eigenspectrum(pca: xr.DataArray) -> None:
+def view_eigenspectrum(pca: xr.DataArray) -> mpl.figure.Figure:
     fig, ax = plt.subplots(figsize=(pca.sizes["component"], 5))
     sns.lineplot(
         ax=ax,
@@ -594,11 +596,12 @@ def view_eigenspectrum(pca: xr.DataArray) -> None:
     ax.set_xticks(pca["rank"].values)
     ax.set_ylim(bottom=0)
     sns.despine(ax=ax, offset=20)
+    plt.close(fig)
 
-    fig.show()
+    return fig
 
 
-view_eigenspectrum(data_transformed)
+view_eigenspectrum(pca)
 ```
 
 ## More neurons!
@@ -634,8 +637,14 @@ display(big_data)
 # | code-summary: Visualize principal component scores
 # | fig-align: center
 
-big_data_transformed = compute_pca(big_data)
-view_individual_responses(big_data_transformed["score"], coord="rank")
+big_pca = compute_pca(big_data)
+
+view_individual_scatter(
+    big_pca["score"],
+    coord="rank",
+    dim="component",
+    template_func=lambda x: f"principal component {x}",
+)
 ```
 
 ```{python}
@@ -643,7 +652,7 @@ view_individual_responses(big_data_transformed["score"], coord="rank")
 # | code-summary: View eigenspectrum
 # | fig-align: center
 
-view_eigenspectrum(big_data_transformed)
+view_eigenspectrum(big_pca)
 ```
 
 However, we know that this data was generated from exactly *2* latent variables -- *color* and *size*. We refer to these as the *effective dimensions*. In this example, the remaining dimensions, which correspond to noise, have relatively low variance, and we can see a signficant drop in the eigenspectrum after the second eigenvector.

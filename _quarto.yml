@@ -8,7 +8,8 @@ project:
   output-dir: site
   execute-dir: project
   post-render:
-    - scripts/move_notebooks.py
+    - scripts/move_jupyter_notebooks.py
+    - scripts/standardize_jupyter_notebook_cell_ids.py
     - jupyter nbconvert --clear-output --inplace notebooks/*.ipynb
 
 filters:
