@@ -1,0 +1,1435 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.308">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2023-08-26">
+
+<title>CCN 2023 | Tutorial - Dealing with noisy data</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark.min.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "textbox",
+  "limit": 20,
+  "keyboard-shortcut": [
+    null
+  ],
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+  <script>window.backupDefine = window.define; window.define = undefined;</script><script src="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.js"></script>
+  <script>document.addEventListener("DOMContentLoaded", function () {
+ var mathElements = document.getElementsByClassName("math");
+ var macros = [];
+ for (var i = 0; i < mathElements.length; i++) {
+  var texText = mathElements[i].firstChild;
+  if (mathElements[i].tagName == "SPAN") {
+   katex.render(texText.data, mathElements[i], {
+    displayMode: mathElements[i].classList.contains('display'),
+    throwOnError: false,
+    macros: macros,
+    fleqn: false
+   });
+}}});
+  </script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.css">
+
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-md navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">CCN 2023 | Tutorial</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../index.html" rel="" target="">
+ <span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../pages/introducing_pca.html" rel="" target="">
+ <span class="menu-text">Introducing PCA</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../pages/exploring_neural_data.html" rel="" target="">
+ <span class="menu-text">Exploring neural data</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link active" href="../pages/dealing_with_noise.html" rel="" target="" aria-current="page">
+ <span class="menu-text">Dealing with noise</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../pages/comparing_representations.html" rel="" target="">
+ <span class="menu-text">Comparing representations</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../pages/reference.html" rel="" target="">
+ <span class="menu-text">Reference</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+          <div class="quarto-navbar-tools">
+    <a href="https://github.com/BonnerLab/ccn-tutorial" rel="" title="" class="quarto-navigation-tool px-1" aria-label=""><i class="bi bi-github"></i></a>
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <div class="quarto-title-block"><div><h1 class="title">Dealing with noisy data</h1><button type="button" class="btn code-tools-button dropdown-toggle" id="quarto-code-tools-menu" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi"></i> Code blocks</button><ul class="dropdown-menu dropdown-menu-end" aria-labelelledby="quarto-code-tools-menu"><li><a id="quarto-show-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Show All Code</a></li><li><a id="quarto-hide-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Hide All Code</a></li><li><hr class="dropdown-divider"></li><li><a id="quarto-view-source" class="dropdown-item" href="javascript:void(0)" role="button" data-quarto-source-url="https://github.com/BonnerLab/ccn-tutorial/blob/main/pages/dealing_with_noise.qmd">View Source</a></li></ul></div></div>
+            <p class="subtitle lead">Cross-validated methods to separate high-dimensional signal from noise</p>
+                      </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">August 26, 2023</p>
+      </div>
+    </div>
+    
+      <div>
+      <div class="quarto-title-meta-heading">Modified</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date-modified">August 10, 2023</p>
+      </div>
+    </div>
+      
+    </div>
+    
+  <div>
+    <div class="abstract">
+      <div class="block-title">Summary</div>
+      TODO
+    </div>
+  </div>
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="99">
+    <h2 id="toc-title">Contents</h2>
+   
+  <ul>
+  <li><a href="#estimating-reliable-spectra" id="toc-estimating-reliable-spectra" class="nav-link active" data-scroll-target="#estimating-reliable-spectra">Estimating <em>reliable</em> spectra</a>
+  <ul class="collapse">
+  <li><a href="#the-covariance-of-a-random-matrix-has-non-zero-eigenvalues" id="toc-the-covariance-of-a-random-matrix-has-non-zero-eigenvalues" class="nav-link" data-scroll-target="#the-covariance-of-a-random-matrix-has-non-zero-eigenvalues">The covariance of a random matrix has non-zero eigenvalues!</a></li>
+  <li><a href="#cross-validated-pca" id="toc-cross-validated-pca" class="nav-link" data-scroll-target="#cross-validated-pca">Cross-validated PCA</a></li>
+  </ul></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/BonnerLab/ccn-tutorial/edit/main/pages/dealing_with_noise.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/BonnerLab/ccn-tutorial/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div><div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="dealing_with_noise.ipynb" download="dealing_with_noise.ipynb"><i class="bi bi-journal-code"></i>Jupyter</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Run this notebook interactively!
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Here’s a <a href="https://colab.research.google.com/github/BonnerLab/ccn-tutorial/blob/main/notebooks/dealing_with_noise.ipynb">link to this notebook</a> on Google Colab.</p>
+</div>
+</div>
+<div id="install_package" class="cell" data-execution_count="2">
+<details>
+<summary>Install all required dependencies</summary>
+<div class="sourceCode cell-code" id="install_package"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="install_package-1"><a href="#install_package-1" aria-hidden="true" tabindex="-1"></a><span class="op">%</span>pip install git<span class="op">+</span>https:<span class="op">//</span>github.com<span class="op">/</span>BonnerLab<span class="op">/</span>ccn<span class="op">-</span>tutorial.git</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div id="imports" class="cell" data-execution_count="3">
+<details>
+<summary>Import various libraries</summary>
+<div class="sourceCode cell-code" id="imports"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="imports-1"><a href="#imports-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> collections.abc <span class="im">import</span> Sequence</span>
+<span id="imports-2"><a href="#imports-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> functools</span>
+<span id="imports-3"><a href="#imports-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> warnings</span>
+<span id="imports-4"><a href="#imports-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> typing <span class="im">import</span> NamedTuple</span>
+<span id="imports-5"><a href="#imports-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="imports-6"><a href="#imports-6" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="imports-7"><a href="#imports-7" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="imports-8"><a href="#imports-8" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> xarray <span class="im">as</span> xr</span>
+<span id="imports-9"><a href="#imports-9" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
+<span id="imports-10"><a href="#imports-10" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib <span class="im">as</span> mpl</span>
+<span id="imports-11"><a href="#imports-11" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> matplotlib <span class="im">import</span> pyplot <span class="im">as</span> plt</span>
+<span id="imports-12"><a href="#imports-12" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> matplotlib_inline.backend_inline <span class="im">import</span> set_matplotlib_formats</span>
+<span id="imports-13"><a href="#imports-13" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> ipywidgets <span class="im">as</span> widgets</span>
+<span id="imports-14"><a href="#imports-14" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> IPython.display <span class="im">import</span> display</span>
+<span id="imports-15"><a href="#imports-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="imports-16"><a href="#imports-16" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> utilities.brain <span class="im">import</span> load_dataset</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div id="set_visualization_defaults" class="cell" data-execution_count="4">
+<details>
+<summary>Set some visualization defaults</summary>
+<div class="sourceCode cell-code" id="set_visualization_defaults"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="set_visualization_defaults-1"><a href="#set_visualization_defaults-1" aria-hidden="true" tabindex="-1"></a><span class="op">%</span>matplotlib inline</span>
+<span id="set_visualization_defaults-2"><a href="#set_visualization_defaults-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="set_visualization_defaults-3"><a href="#set_visualization_defaults-3" aria-hidden="true" tabindex="-1"></a>sns.set_theme(</span>
+<span id="set_visualization_defaults-4"><a href="#set_visualization_defaults-4" aria-hidden="true" tabindex="-1"></a>    context<span class="op">=</span><span class="st">"notebook"</span>,</span>
+<span id="set_visualization_defaults-5"><a href="#set_visualization_defaults-5" aria-hidden="true" tabindex="-1"></a>    style<span class="op">=</span><span class="st">"white"</span>,</span>
+<span id="set_visualization_defaults-6"><a href="#set_visualization_defaults-6" aria-hidden="true" tabindex="-1"></a>    palette<span class="op">=</span><span class="st">"deep"</span>,</span>
+<span id="set_visualization_defaults-7"><a href="#set_visualization_defaults-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="set_visualization_defaults-8"><a href="#set_visualization_defaults-8" aria-hidden="true" tabindex="-1"></a>set_matplotlib_formats(<span class="st">"svg"</span>)</span>
+<span id="set_visualization_defaults-9"><a href="#set_visualization_defaults-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="set_visualization_defaults-10"><a href="#set_visualization_defaults-10" aria-hidden="true" tabindex="-1"></a>pd.set_option(<span class="st">"display.max_rows"</span>, <span class="dv">5</span>)</span>
+<span id="set_visualization_defaults-11"><a href="#set_visualization_defaults-11" aria-hidden="true" tabindex="-1"></a>pd.set_option(<span class="st">"display.max_columns"</span>, <span class="dv">10</span>)</span>
+<span id="set_visualization_defaults-12"><a href="#set_visualization_defaults-12" aria-hidden="true" tabindex="-1"></a>pd.set_option(<span class="st">"display.precision"</span>, <span class="dv">3</span>)</span>
+<span id="set_visualization_defaults-13"><a href="#set_visualization_defaults-13" aria-hidden="true" tabindex="-1"></a>pd.set_option(<span class="st">"display.show_dimensions"</span>, <span class="va">False</span>)</span>
+<span id="set_visualization_defaults-14"><a href="#set_visualization_defaults-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="set_visualization_defaults-15"><a href="#set_visualization_defaults-15" aria-hidden="true" tabindex="-1"></a>xr.set_options(display_max_rows<span class="op">=</span><span class="dv">3</span>, display_expand_data<span class="op">=</span><span class="va">False</span>)</span>
+<span id="set_visualization_defaults-16"><a href="#set_visualization_defaults-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="set_visualization_defaults-17"><a href="#set_visualization_defaults-17" aria-hidden="true" tabindex="-1"></a>warnings.filterwarnings(<span class="st">"ignore"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div id="initialize_rng" class="cell" data-execution_count="5">
+<details>
+<summary>Initialize a deterministic random number generator</summary>
+<div class="sourceCode cell-code" id="initialize_rng"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="initialize_rng-1"><a href="#initialize_rng-1" aria-hidden="true" tabindex="-1"></a>random_state <span class="op">=</span> <span class="dv">0</span></span>
+<span id="initialize_rng-2"><a href="#initialize_rng-2" aria-hidden="true" tabindex="-1"></a>rng <span class="op">=</span> np.random.default_rng(seed<span class="op">=</span>random_state)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<section id="estimating-reliable-spectra" class="level2">
+<h2 class="anchored" data-anchor-id="estimating-reliable-spectra">Estimating <em>reliable</em> spectra</h2>
+<section id="the-covariance-of-a-random-matrix-has-non-zero-eigenvalues" class="level3">
+<h3 class="anchored" data-anchor-id="the-covariance-of-a-random-matrix-has-non-zero-eigenvalues">The covariance of a random matrix has non-zero eigenvalues!</h3>
+<p>Even random matrices have some covariance structure that result in non-zero eigenvalues (distributed as Marchenko-Pastur). This makes it difficult to infer anything about the reliability/significance of the dimension from the magnitude of the eigenvalue – especially when the eigenvalues are “close to zero” – which is the typical approach in the field.</p>
+<div id="e2a694f6" class="cell" data-execution_count="6">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="e2a694f6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="e2a694f6-1"><a href="#e2a694f6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> simulate_marchenko_pastur(</span>
+<span id="e2a694f6-2"><a href="#e2a694f6-2" aria-hidden="true" tabindex="-1"></a>    n_stimuli: <span class="bu">int</span> <span class="op">=</span> <span class="dv">500</span>,</span>
+<span id="e2a694f6-3"><a href="#e2a694f6-3" aria-hidden="true" tabindex="-1"></a>    n_neurons: <span class="bu">int</span> <span class="op">=</span> <span class="dv">500</span>,</span>
+<span id="e2a694f6-4"><a href="#e2a694f6-4" aria-hidden="true" tabindex="-1"></a>    n_repetitions: <span class="bu">int</span> <span class="op">=</span> <span class="dv">50</span>,</span>
+<span id="e2a694f6-5"><a href="#e2a694f6-5" aria-hidden="true" tabindex="-1"></a>) <span class="op">-&gt;</span> np.ndarray:</span>
+<span id="e2a694f6-6"><a href="#e2a694f6-6" aria-hidden="true" tabindex="-1"></a>    data <span class="op">=</span> rng.standard_normal((n_repetitions, n_stimuli, n_neurons))</span>
+<span id="e2a694f6-7"><a href="#e2a694f6-7" aria-hidden="true" tabindex="-1"></a>    data <span class="op">-=</span> data.mean(axis<span class="op">=-</span><span class="dv">2</span>, keepdims<span class="op">=</span><span class="va">True</span>)</span>
+<span id="e2a694f6-8"><a href="#e2a694f6-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="e2a694f6-9"><a href="#e2a694f6-9" aria-hidden="true" tabindex="-1"></a>    singular_values <span class="op">=</span> np.linalg.svd(data, compute_uv<span class="op">=</span><span class="va">False</span>)</span>
+<span id="e2a694f6-10"><a href="#e2a694f6-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> (</span>
+<span id="e2a694f6-11"><a href="#e2a694f6-11" aria-hidden="true" tabindex="-1"></a>        xr.DataArray(</span>
+<span id="e2a694f6-12"><a href="#e2a694f6-12" aria-hidden="true" tabindex="-1"></a>            name<span class="op">=</span><span class="st">"eigenvalue"</span>,</span>
+<span id="e2a694f6-13"><a href="#e2a694f6-13" aria-hidden="true" tabindex="-1"></a>            data<span class="op">=</span>singular_values<span class="op">**</span><span class="dv">2</span> <span class="op">/</span> (n_stimuli <span class="op">-</span> <span class="dv">1</span>),</span>
+<span id="e2a694f6-14"><a href="#e2a694f6-14" aria-hidden="true" tabindex="-1"></a>            dims<span class="op">=</span>(<span class="st">"repetition"</span>, <span class="st">"rank"</span>),</span>
+<span id="e2a694f6-15"><a href="#e2a694f6-15" aria-hidden="true" tabindex="-1"></a>            coords<span class="op">=</span>{<span class="st">"rank"</span>: (<span class="st">"rank"</span>, <span class="dv">1</span> <span class="op">+</span> np.arange(singular_values.shape[<span class="op">-</span><span class="dv">1</span>]))},</span>
+<span id="e2a694f6-16"><a href="#e2a694f6-16" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="e2a694f6-17"><a href="#e2a694f6-17" aria-hidden="true" tabindex="-1"></a>        .to_dataframe()</span>
+<span id="e2a694f6-18"><a href="#e2a694f6-18" aria-hidden="true" tabindex="-1"></a>        .reset_index()</span>
+<span id="e2a694f6-19"><a href="#e2a694f6-19" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="e2a694f6-20"><a href="#e2a694f6-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="e2a694f6-21"><a href="#e2a694f6-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="e2a694f6-22"><a href="#e2a694f6-22" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> view_marchenko_pastur(eigenvalues: xr.DataArray, <span class="op">*</span>, log: <span class="bu">bool</span> <span class="op">=</span> <span class="va">False</span>) <span class="op">-&gt;</span> <span class="va">None</span>:</span>
+<span id="e2a694f6-23"><a href="#e2a694f6-23" aria-hidden="true" tabindex="-1"></a>    fig, ax <span class="op">=</span> plt.subplots()</span>
+<span id="e2a694f6-24"><a href="#e2a694f6-24" aria-hidden="true" tabindex="-1"></a>    sns.lineplot(</span>
+<span id="e2a694f6-25"><a href="#e2a694f6-25" aria-hidden="true" tabindex="-1"></a>        ax<span class="op">=</span>ax,</span>
+<span id="e2a694f6-26"><a href="#e2a694f6-26" aria-hidden="true" tabindex="-1"></a>        data<span class="op">=</span>eigenvalues,</span>
+<span id="e2a694f6-27"><a href="#e2a694f6-27" aria-hidden="true" tabindex="-1"></a>        x<span class="op">=</span><span class="st">"rank"</span>,</span>
+<span id="e2a694f6-28"><a href="#e2a694f6-28" aria-hidden="true" tabindex="-1"></a>        y<span class="op">=</span><span class="st">"eigenvalue"</span>,</span>
+<span id="e2a694f6-29"><a href="#e2a694f6-29" aria-hidden="true" tabindex="-1"></a>        estimator<span class="op">=</span><span class="st">"mean"</span>,</span>
+<span id="e2a694f6-30"><a href="#e2a694f6-30" aria-hidden="true" tabindex="-1"></a>        errorbar<span class="op">=</span><span class="st">"sd"</span>,</span>
+<span id="e2a694f6-31"><a href="#e2a694f6-31" aria-hidden="true" tabindex="-1"></a>        err_style<span class="op">=</span><span class="st">"band"</span>,</span>
+<span id="e2a694f6-32"><a href="#e2a694f6-32" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="e2a694f6-33"><a href="#e2a694f6-33" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> log:</span>
+<span id="e2a694f6-34"><a href="#e2a694f6-34" aria-hidden="true" tabindex="-1"></a>        ax.set_xscale(<span class="st">"log"</span>)</span>
+<span id="e2a694f6-35"><a href="#e2a694f6-35" aria-hidden="true" tabindex="-1"></a>        ax.set_yscale(<span class="st">"log"</span>)</span>
+<span id="e2a694f6-36"><a href="#e2a694f6-36" aria-hidden="true" tabindex="-1"></a>        ax.set_ylim(bottom<span class="op">=</span><span class="fl">1e-2</span>)</span>
+<span id="e2a694f6-37"><a href="#e2a694f6-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="e2a694f6-38"><a href="#e2a694f6-38" aria-hidden="true" tabindex="-1"></a>    sns.despine(ax<span class="op">=</span>ax, offset<span class="op">=</span><span class="dv">20</span>)</span>
+<span id="e2a694f6-39"><a href="#e2a694f6-39" aria-hidden="true" tabindex="-1"></a>    fig.show()</span>
+<span id="e2a694f6-40"><a href="#e2a694f6-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="e2a694f6-41"><a href="#e2a694f6-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="e2a694f6-42"><a href="#e2a694f6-42" aria-hidden="true" tabindex="-1"></a>eigenvalues <span class="op">=</span> simulate_marchenko_pastur()</span>
+<span id="e2a694f6-43"><a href="#e2a694f6-43" aria-hidden="true" tabindex="-1"></a>view_marchenko_pastur(eigenvalues)</span>
+<span id="e2a694f6-44"><a href="#e2a694f6-44" aria-hidden="true" tabindex="-1"></a>view_marchenko_pastur(eigenvalues, log<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+<p><img src="dealing_with_noise_files/figure-html/cell-6-output-1.svg" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="dealing_with_noise_files/figure-html/cell-6-output-2.svg" class="img-fluid"></p>
+</div>
+</div>
+</section>
+<section id="cross-validated-pca" class="level3">
+<h3 class="anchored" data-anchor-id="cross-validated-pca">Cross-validated PCA</h3>
+<p>In a whole-brain calcium-imaging study where mice viewed 2,800 natural images while neural responses were recorded, Stringer et al.&nbsp;(2021) developed cross-validated PCA (CV-PCA) as a method to reliably estimate the covariance structure of the neural responses. Since each image was viewed twice, these repetitions could be used as train/test splits to estimate covariance eigenvalues. Specifically, eigenvectors are computed on a training set of data, and <em>cross-validated</em> eigenvalues are computed by computing the covariance between two independent sets of data:</p>
+<p><span class="math inline">X_\text{train}^\top X_\text{train} / (n - 1) = V \Lambda V^\top</span></p>
+<p><span class="math inline">\Lambda_\text{test} = \left( X_\text{train} V \right) ^\top \left( X_\text{test} V \right) / (n - 1)</span></p>
+<p>These cross-validated eigenvalues represent the covariance reliably shared across two presentations of the visual stimulus – which is a quantity we are interested in as neuroscientists: what is the “stable” part of the visual representation of a natural image? Notably, these “eigenvalues” need not be positive: if there is no shared covariance between the two systems at a rank, the expected value of the eigenvalue is <span class="math inline">0</span>.</p>
+<p>Let’s apply CV-PCA to our fMRI data to see what it looks like!</p>
+<div id="0442b0e4" class="cell" data-execution_count="7">
+<details>
+<summary>Load the dataset</summary>
+<div class="sourceCode cell-code" id="0442b0e4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="0442b0e4-1"><a href="#0442b0e4-1" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> load_dataset(subject<span class="op">=</span><span class="dv">0</span>, roi<span class="op">=</span><span class="st">"general"</span>)</span>
+<span id="0442b0e4-2"><a href="#0442b0e4-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="0442b0e4-3"><a href="#0442b0e4-3" aria-hidden="true" tabindex="-1"></a>display(data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+<div><svg style="position: absolute; width: 0; height: 0; overflow: hidden">
+<defs>
+<symbol id="icon-database" viewbox="0 0 32 32">
+<path d="M16 0c-8.837 0-16 2.239-16 5v4c0 2.761 7.163 5 16 5s16-2.239 16-5v-4c0-2.761-7.163-5-16-5z"></path>
+<path d="M16 17c-8.837 0-16-2.239-16-5v6c0 2.761 7.163 5 16 5s16-2.239 16-5v-6c0 2.761-7.163 5-16 5z"></path>
+<path d="M16 26c-8.837 0-16-2.239-16-5v6c0 2.761 7.163 5 16 5s16-2.239 16-5v-6c0 2.761-7.163 5-16 5z"></path>
+</symbol>
+<symbol id="icon-file-text2" viewbox="0 0 32 32">
+<path d="M28.681 7.159c-0.694-0.947-1.662-2.053-2.724-3.116s-2.169-2.030-3.116-2.724c-1.612-1.182-2.393-1.319-2.841-1.319h-15.5c-1.378 0-2.5 1.121-2.5 2.5v27c0 1.378 1.122 2.5 2.5 2.5h23c1.378 0 2.5-1.122 2.5-2.5v-19.5c0-0.448-0.137-1.23-1.319-2.841zM24.543 5.457c0.959 0.959 1.712 1.825 2.268 2.543h-4.811v-4.811c0.718 0.556 1.584 1.309 2.543 2.268zM28 29.5c0 0.271-0.229 0.5-0.5 0.5h-23c-0.271 0-0.5-0.229-0.5-0.5v-27c0-0.271 0.229-0.5 0.5-0.5 0 0 15.499-0 15.5 0v7c0 0.552 0.448 1 1 1h7v19.5z"></path>
+<path d="M23 26h-14c-0.552 0-1-0.448-1-1s0.448-1 1-1h14c0.552 0 1 0.448 1 1s-0.448 1-1 1z"></path>
+<path d="M23 22h-14c-0.552 0-1-0.448-1-1s0.448-1 1-1h14c0.552 0 1 0.448 1 1s-0.448 1-1 1z"></path>
+<path d="M23 18h-14c-0.552 0-1-0.448-1-1s0.448-1 1-1h14c0.552 0 1 0.448 1 1s-0.448 1-1 1z"></path>
+</symbol>
+</defs>
+</svg>
+<style>/* CSS stylesheet for displaying xarray objects in jupyterlab.
+ *
+ */
+
+:root {
+  --xr-font-color0: var(--jp-content-font-color0, rgba(0, 0, 0, 1));
+  --xr-font-color2: var(--jp-content-font-color2, rgba(0, 0, 0, 0.54));
+  --xr-font-color3: var(--jp-content-font-color3, rgba(0, 0, 0, 0.38));
+  --xr-border-color: var(--jp-border-color2, #e0e0e0);
+  --xr-disabled-color: var(--jp-layout-color3, #bdbdbd);
+  --xr-background-color: var(--jp-layout-color0, white);
+  --xr-background-color-row-even: var(--jp-layout-color1, white);
+  --xr-background-color-row-odd: var(--jp-layout-color2, #eeeeee);
+}
+
+html[theme=dark],
+body[data-theme=dark],
+body.vscode-dark {
+  --xr-font-color0: rgba(255, 255, 255, 1);
+  --xr-font-color2: rgba(255, 255, 255, 0.54);
+  --xr-font-color3: rgba(255, 255, 255, 0.38);
+  --xr-border-color: #1F1F1F;
+  --xr-disabled-color: #515151;
+  --xr-background-color: #111111;
+  --xr-background-color-row-even: #111111;
+  --xr-background-color-row-odd: #313131;
+}
+
+.xr-wrap {
+  display: block !important;
+  min-width: 300px;
+  max-width: 700px;
+}
+
+.xr-text-repr-fallback {
+  /* fallback to plain text repr when CSS is not injected (untrusted notebook) */
+  display: none;
+}
+
+.xr-header {
+  padding-top: 6px;
+  padding-bottom: 6px;
+  margin-bottom: 4px;
+  border-bottom: solid 1px var(--xr-border-color);
+}
+
+.xr-header > div,
+.xr-header > ul {
+  display: inline;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.xr-obj-type,
+.xr-array-name {
+  margin-left: 2px;
+  margin-right: 10px;
+}
+
+.xr-obj-type {
+  color: var(--xr-font-color2);
+}
+
+.xr-sections {
+  padding-left: 0 !important;
+  display: grid;
+  grid-template-columns: 150px auto auto 1fr 20px 20px;
+}
+
+.xr-section-item {
+  display: contents;
+}
+
+.xr-section-item input {
+  display: none;
+}
+
+.xr-section-item input + label {
+  color: var(--xr-disabled-color);
+}
+
+.xr-section-item input:enabled + label {
+  cursor: pointer;
+  color: var(--xr-font-color2);
+}
+
+.xr-section-item input:enabled + label:hover {
+  color: var(--xr-font-color0);
+}
+
+.xr-section-summary {
+  grid-column: 1;
+  color: var(--xr-font-color2);
+  font-weight: 500;
+}
+
+.xr-section-summary > span {
+  display: inline-block;
+  padding-left: 0.5em;
+}
+
+.xr-section-summary-in:disabled + label {
+  color: var(--xr-font-color2);
+}
+
+.xr-section-summary-in + label:before {
+  display: inline-block;
+  content: '►';
+  font-size: 11px;
+  width: 15px;
+  text-align: center;
+}
+
+.xr-section-summary-in:disabled + label:before {
+  color: var(--xr-disabled-color);
+}
+
+.xr-section-summary-in:checked + label:before {
+  content: '▼';
+}
+
+.xr-section-summary-in:checked + label > span {
+  display: none;
+}
+
+.xr-section-summary,
+.xr-section-inline-details {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+.xr-section-inline-details {
+  grid-column: 2 / -1;
+}
+
+.xr-section-details {
+  display: none;
+  grid-column: 1 / -1;
+  margin-bottom: 5px;
+}
+
+.xr-section-summary-in:checked ~ .xr-section-details {
+  display: contents;
+}
+
+.xr-array-wrap {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: 20px auto;
+}
+
+.xr-array-wrap > label {
+  grid-column: 1;
+  vertical-align: top;
+}
+
+.xr-preview {
+  color: var(--xr-font-color3);
+}
+
+.xr-array-preview,
+.xr-array-data {
+  padding: 0 5px !important;
+  grid-column: 2;
+}
+
+.xr-array-data,
+.xr-array-in:checked ~ .xr-array-preview {
+  display: none;
+}
+
+.xr-array-in:checked ~ .xr-array-data,
+.xr-array-preview {
+  display: inline-block;
+}
+
+.xr-dim-list {
+  display: inline-block !important;
+  list-style: none;
+  padding: 0 !important;
+  margin: 0;
+}
+
+.xr-dim-list li {
+  display: inline-block;
+  padding: 0;
+  margin: 0;
+}
+
+.xr-dim-list:before {
+  content: '(';
+}
+
+.xr-dim-list:after {
+  content: ')';
+}
+
+.xr-dim-list li:not(:last-child):after {
+  content: ',';
+  padding-right: 5px;
+}
+
+.xr-has-index {
+  font-weight: bold;
+}
+
+.xr-var-list,
+.xr-var-item {
+  display: contents;
+}
+
+.xr-var-item > div,
+.xr-var-item label,
+.xr-var-item > .xr-var-name span {
+  background-color: var(--xr-background-color-row-even);
+  margin-bottom: 0;
+}
+
+.xr-var-item > .xr-var-name:hover span {
+  padding-right: 5px;
+}
+
+.xr-var-list > li:nth-child(odd) > div,
+.xr-var-list > li:nth-child(odd) > label,
+.xr-var-list > li:nth-child(odd) > .xr-var-name span {
+  background-color: var(--xr-background-color-row-odd);
+}
+
+.xr-var-name {
+  grid-column: 1;
+}
+
+.xr-var-dims {
+  grid-column: 2;
+}
+
+.xr-var-dtype {
+  grid-column: 3;
+  text-align: right;
+  color: var(--xr-font-color2);
+}
+
+.xr-var-preview {
+  grid-column: 4;
+}
+
+.xr-index-preview {
+  grid-column: 2 / 5;
+  color: var(--xr-font-color2);
+}
+
+.xr-var-name,
+.xr-var-dims,
+.xr-var-dtype,
+.xr-preview,
+.xr-attrs dt {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding-right: 10px;
+}
+
+.xr-var-name:hover,
+.xr-var-dims:hover,
+.xr-var-dtype:hover,
+.xr-attrs dt:hover {
+  overflow: visible;
+  width: auto;
+  z-index: 1;
+}
+
+.xr-var-attrs,
+.xr-var-data,
+.xr-index-data {
+  display: none;
+  background-color: var(--xr-background-color) !important;
+  padding-bottom: 5px !important;
+}
+
+.xr-var-attrs-in:checked ~ .xr-var-attrs,
+.xr-var-data-in:checked ~ .xr-var-data,
+.xr-index-data-in:checked ~ .xr-index-data {
+  display: block;
+}
+
+.xr-var-data > table {
+  float: right;
+}
+
+.xr-var-name span,
+.xr-var-data,
+.xr-index-name div,
+.xr-index-data,
+.xr-attrs {
+  padding-left: 25px !important;
+}
+
+.xr-attrs,
+.xr-var-attrs,
+.xr-var-data,
+.xr-index-data {
+  grid-column: 1 / -1;
+}
+
+dl.xr-attrs {
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: 125px auto;
+}
+
+.xr-attrs dt,
+.xr-attrs dd {
+  padding: 0;
+  margin: 0;
+  float: left;
+  padding-right: 10px;
+  width: auto;
+}
+
+.xr-attrs dt {
+  font-weight: normal;
+  grid-column: 1;
+}
+
+.xr-attrs dt:hover span {
+  display: inline-block;
+  background: var(--xr-background-color);
+  padding-right: 10px;
+}
+
+.xr-attrs dd {
+  grid-column: 2;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+.xr-icon-database,
+.xr-icon-file-text2,
+.xr-no-icon {
+  display: inline-block;
+  vertical-align: middle;
+  width: 1em;
+  height: 1.5em !important;
+  stroke-width: 0;
+  stroke: currentColor;
+  fill: currentColor;
+}
+</style><pre class="xr-text-repr-fallback">&lt;xarray.DataArray 'fMRI betas' (presentation: 1400, neuroid: 15724)&gt;
+[22013600 values with dtype=float32]
+Coordinates: (3/8)
+    x            (neuroid) uint8 ...
+    y            (neuroid) uint8 ...
+    ...           ...
+    rep_id       (presentation) uint8 ...
+Dimensions without coordinates: presentation, neuroid
+Attributes: (3/7)
+    resolution:     1pt8mm
+    preprocessing:  fithrf_GLMdenoise_RR
+    ...             ...
+    citation:       Allen, E.J., St-Yves, G., Wu, Y. et al. A massive 7T fMRI...</pre><div class="xr-wrap" style="display:none"><div class="xr-header"><div class="xr-obj-type">xarray.DataArray</div><div class="xr-array-name">'fMRI betas'</div><ul class="xr-dim-list"><li><span>presentation</span>: 1400</li><li><span>neuroid</span>: 15724</li></ul></div><ul class="xr-sections"><li class="xr-section-item"><div class="xr-array-wrap"><input id="section-6c080abd-8aab-40ac-aca5-27bc956bbd49" class="xr-array-in" type="checkbox"><label for="section-6c080abd-8aab-40ac-aca5-27bc956bbd49" title="Show/hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-array-preview xr-preview"><span>...</span></div><div class="xr-array-data"><pre>[22013600 values with dtype=float32]</pre></div></div></li><li class="xr-section-item"><input id="section-aba85c5b-8beb-4ce2-b837-8e5d3047853f" class="xr-section-summary-in" type="checkbox" checked=""><label for="section-aba85c5b-8beb-4ce2-b837-8e5d3047853f" class="xr-section-summary">Coordinates: <span>(8)</span></label><div class="xr-section-inline-details"></div><div class="xr-section-details"><ul class="xr-var-list"><li class="xr-var-item"><div class="xr-var-name"><span>x</span></div><div class="xr-var-dims">(neuroid)</div><div class="xr-var-dtype">uint8</div><div class="xr-var-preview xr-preview">...</div><input id="attrs-5e1c3c7c-7876-463b-b3e4-38c4c7591693" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-5e1c3c7c-7876-463b-b3e4-38c4c7591693" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-ee24ccae-2507-4f17-a83f-0ab23f732b0c" class="xr-var-data-in" type="checkbox"><label for="data-ee24ccae-2507-4f17-a83f-0ab23f732b0c" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>[15724 values with dtype=uint8]</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span>y</span></div><div class="xr-var-dims">(neuroid)</div><div class="xr-var-dtype">uint8</div><div class="xr-var-preview xr-preview">...</div><input id="attrs-df3965be-11fa-442b-a615-23779f078149" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-df3965be-11fa-442b-a615-23779f078149" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-f61fc5c6-b635-4b13-83b1-52beaa144851" class="xr-var-data-in" type="checkbox"><label for="data-f61fc5c6-b635-4b13-83b1-52beaa144851" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>[15724 values with dtype=uint8]</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span>z</span></div><div class="xr-var-dims">(neuroid)</div><div class="xr-var-dtype">uint8</div><div class="xr-var-preview xr-preview">...</div><input id="attrs-8b21cea2-f33b-4bc5-8df3-deb060ae34b9" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-8b21cea2-f33b-4bc5-8df3-deb060ae34b9" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-d3f5e4aa-7610-45d6-b659-76b83bc00d47" class="xr-var-data-in" type="checkbox"><label for="data-d3f5e4aa-7610-45d6-b659-76b83bc00d47" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>[15724 values with dtype=uint8]</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span>stimulus_id</span></div><div class="xr-var-dims">(presentation)</div><div class="xr-var-dtype">object</div><div class="xr-var-preview xr-preview">...</div><input id="attrs-91053208-f638-40a8-831a-4e64e5a5b80f" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-91053208-f638-40a8-831a-4e64e5a5b80f" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-8773af20-27bd-475e-8738-60018720adbf" class="xr-var-data-in" type="checkbox"><label for="data-8773af20-27bd-475e-8738-60018720adbf" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>[1400 values with dtype=object]</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span>session_id</span></div><div class="xr-var-dims">(presentation)</div><div class="xr-var-dtype">uint8</div><div class="xr-var-preview xr-preview">...</div><input id="attrs-91ef20d8-52c3-43a6-8cdc-c82224ee75b2" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-91ef20d8-52c3-43a6-8cdc-c82224ee75b2" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-a8332981-6da2-4aa3-9f76-6248b12c5e05" class="xr-var-data-in" type="checkbox"><label for="data-a8332981-6da2-4aa3-9f76-6248b12c5e05" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>[1400 values with dtype=uint8]</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span>trial</span></div><div class="xr-var-dims">(presentation)</div><div class="xr-var-dtype">uint16</div><div class="xr-var-preview xr-preview">...</div><input id="attrs-0ff6ac34-59c7-4ddb-91fa-fb210fa0165e" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-0ff6ac34-59c7-4ddb-91fa-fb210fa0165e" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-4491b658-350f-4527-9f1e-99897418677f" class="xr-var-data-in" type="checkbox"><label for="data-4491b658-350f-4527-9f1e-99897418677f" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>[1400 values with dtype=uint16]</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span>run_id</span></div><div class="xr-var-dims">(presentation)</div><div class="xr-var-dtype">uint8</div><div class="xr-var-preview xr-preview">...</div><input id="attrs-ed6045b8-19b8-40b9-b4ab-9c6db46840fd" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-ed6045b8-19b8-40b9-b4ab-9c6db46840fd" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-4b5bdb63-2db7-472d-b8aa-d5b28bc67bbf" class="xr-var-data-in" type="checkbox"><label for="data-4b5bdb63-2db7-472d-b8aa-d5b28bc67bbf" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>[1400 values with dtype=uint8]</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span>rep_id</span></div><div class="xr-var-dims">(presentation)</div><div class="xr-var-dtype">uint8</div><div class="xr-var-preview xr-preview">...</div><input id="attrs-ce5026a4-c0ab-4c6f-b4d1-b77f266ddf92" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-ce5026a4-c0ab-4c6f-b4d1-b77f266ddf92" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-bed233f3-6c1d-458a-aebc-50dd61b0e435" class="xr-var-data-in" type="checkbox"><label for="data-bed233f3-6c1d-458a-aebc-50dd61b0e435" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>[1400 values with dtype=uint8]</pre></div></li></ul></div></li><li class="xr-section-item"><input id="section-f69b75f7-ee27-449e-87ba-93d1be6953ef" class="xr-section-summary-in" type="checkbox" disabled=""><label for="section-f69b75f7-ee27-449e-87ba-93d1be6953ef" class="xr-section-summary" title="Expand/collapse section">Indexes: <span>(0)</span></label><div class="xr-section-inline-details"></div><div class="xr-section-details"><ul class="xr-var-list"></ul></div></li><li class="xr-section-item"><input id="section-7a7e59d8-d9a9-4b31-9285-a89b2f3f22a6" class="xr-section-summary-in" type="checkbox" checked=""><label for="section-7a7e59d8-d9a9-4b31-9285-a89b2f3f22a6" class="xr-section-summary">Attributes: <span>(7)</span></label><div class="xr-section-inline-details"></div><div class="xr-section-details"><dl class="xr-attrs"><dt><span>resolution :</span></dt><dd>1pt8mm</dd><dt><span>preprocessing :</span></dt><dd>fithrf_GLMdenoise_RR</dd><dt><span>z_score :</span></dt><dd>True</dd><dt><span>roi :</span></dt><dd>general</dd><dt><span>subject :</span></dt><dd>0</dd><dt><span>brain shape :</span></dt><dd>[ 81 104  83]</dd><dt><span>citation :</span></dt><dd>Allen, E.J., St-Yves, G., Wu, Y. et al. A massive 7T fMRI dataset to bridge cognitive neuroscience and artificial intelligence. Nat Neurosci 25, 116-126 (2022). https://doi.org/10.1038/s41593-021-00962-x</dd></dl></div></li></ul></div></div>
+</div>
+</div>
+<p>Note that the data contain fMRI responses to two repetitions of each image.</p>
+<div id="e659107a" class="cell" data-execution_count="8">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="e659107a"><pre class="sourceCode python code-annotation-code code-with-copy"><code class="sourceCode python"><span id="e659107a-1"><a href="#e659107a-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> PLSSVD:</span>
+<span id="e659107a-2"><a href="#e659107a-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>) <span class="op">-&gt;</span> <span class="va">None</span>:</span>
+<span id="e659107a-3"><a href="#e659107a-3" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.left_mean: np.ndarray</span>
+<span id="e659107a-4"><a href="#e659107a-4" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.right_mean: np.ndarray</span>
+<span id="e659107a-5"><a href="#e659107a-5" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.left_singular_vectors: np.ndarray</span>
+<span id="e659107a-6"><a href="#e659107a-6" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.right_singular_vectors: np.ndarray</span>
+<span id="e659107a-7"><a href="#e659107a-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="e659107a-8"><a href="#e659107a-8" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> fit(<span class="va">self</span>, <span class="op">/</span>, x: np.ndarray, y: np.ndarray) <span class="op">-&gt;</span> <span class="va">None</span>:</span>
+<span id="e659107a-9"><a href="#e659107a-9" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.left_mean <span class="op">=</span> x.mean(axis<span class="op">=-</span><span class="dv">2</span>)</span>
+<span id="e659107a-10"><a href="#e659107a-10" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.right_mean <span class="op">=</span> y.mean(axis<span class="op">=-</span><span class="dv">2</span>)</span>
+<span id="e659107a-11"><a href="#e659107a-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="e659107a-12"><a href="#e659107a-12" aria-hidden="true" tabindex="-1"></a>        x_centered <span class="op">=</span> x <span class="op">-</span> <span class="va">self</span>.left_mean</span>
+<span id="e659107a-13"><a href="#e659107a-13" aria-hidden="true" tabindex="-1"></a>        y_centered <span class="op">=</span> y <span class="op">-</span> <span class="va">self</span>.right_mean</span>
+<span id="e659107a-14"><a href="#e659107a-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="e659107a-15"><a href="#e659107a-15" aria-hidden="true" tabindex="-1"></a>        n_stimuli <span class="op">=</span> x.shape[<span class="op">-</span><span class="dv">2</span>]</span>
+<span id="e659107a-16"><a href="#e659107a-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="e659107a-17"><a href="#e659107a-17" aria-hidden="true" tabindex="-1"></a>        cross_covariance <span class="op">=</span> (np.swapaxes(x_centered, <span class="op">-</span><span class="dv">1</span>, <span class="op">-</span><span class="dv">2</span>) <span class="op">@</span> y_centered) <span class="op">/</span> (</span>
+<span id="e659107a-18"><a href="#e659107a-18" aria-hidden="true" tabindex="-1"></a>            n_stimuli <span class="op">-</span> <span class="dv">1</span></span>
+<span id="e659107a-19"><a href="#e659107a-19" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="e659107a-20"><a href="#e659107a-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="e659107a-21"><a href="#e659107a-21" aria-hidden="true" tabindex="-1"></a>        (</span>
+<span id="e659107a-22"><a href="#e659107a-22" aria-hidden="true" tabindex="-1"></a>            <span class="va">self</span>.left_singular_vectors,</span>
+<span id="e659107a-23"><a href="#e659107a-23" aria-hidden="true" tabindex="-1"></a>            <span class="va">self</span>.singular_values,</span>
+<span id="e659107a-24"><a href="#e659107a-24" aria-hidden="true" tabindex="-1"></a>            <span class="va">self</span>.right_singular_vectors,</span>
+<span id="e659107a-25"><a href="#e659107a-25" aria-hidden="true" tabindex="-1"></a>        ) <span class="op">=</span> svd(</span>
+<span id="e659107a-26"><a href="#e659107a-26" aria-hidden="true" tabindex="-1"></a>            torch.from_numpy(cross_covariance),</span>
+<span id="e659107a-27"><a href="#e659107a-27" aria-hidden="true" tabindex="-1"></a>            n_components<span class="op">=</span><span class="bu">min</span>([<span class="op">*</span>x.shape, <span class="op">*</span>y.shape]),</span>
+<span id="e659107a-28"><a href="#e659107a-28" aria-hidden="true" tabindex="-1"></a>            truncated<span class="op">=</span><span class="va">True</span>,</span>
+<span id="e659107a-29"><a href="#e659107a-29" aria-hidden="true" tabindex="-1"></a>            seed<span class="op">=</span>random_state,</span>
+<span id="e659107a-30"><a href="#e659107a-30" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="e659107a-31"><a href="#e659107a-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="e659107a-32"><a href="#e659107a-32" aria-hidden="true" tabindex="-1"></a>        n_stimuli <span class="op">=</span> data.shape[<span class="op">-</span><span class="dv">2</span>]</span>
+<span id="e659107a-33"><a href="#e659107a-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="e659107a-34"><a href="#e659107a-34" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.left_singular_vectors <span class="op">=</span> <span class="va">self</span>.left_singular_vectors.cpu().numpy()</span>
+<span id="e659107a-35"><a href="#e659107a-35" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.singular_values <span class="op">=</span> <span class="va">self</span>.singular_values.cpu().numpy()</span>
+<span id="e659107a-36"><a href="#e659107a-36" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.right_singular_vectors <span class="op">=</span> <span class="va">self</span>.right_singular_vectors.cpu().numpy()</span>
+<span id="e659107a-37"><a href="#e659107a-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="e659107a-38"><a href="#e659107a-38" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> transform(<span class="va">self</span>, <span class="op">/</span>, z: np.ndarray, <span class="op">*</span>, direction: <span class="bu">str</span>) <span class="op">-&gt;</span> np.ndarray:</span>
+<span id="e659107a-39"><a href="#e659107a-39" aria-hidden="true" tabindex="-1"></a>        <span class="cf">match</span> direction:</span>
+<span id="e659107a-40"><a href="#e659107a-40" aria-hidden="true" tabindex="-1"></a>            <span class="cf">case</span> <span class="st">"left"</span>:</span>
+<span id="e659107a-41"><a href="#e659107a-41" aria-hidden="true" tabindex="-1"></a>                <span class="cf">return</span> (z <span class="op">-</span> <span class="va">self</span>.left_mean) <span class="op">@</span> <span class="va">self</span>.left_singular_vectors</span>
+<span id="e659107a-42"><a href="#e659107a-42" aria-hidden="true" tabindex="-1"></a>            <span class="cf">case</span> <span class="st">"right"</span>:</span>
+<span id="e659107a-43"><a href="#e659107a-43" aria-hidden="true" tabindex="-1"></a>                <span class="cf">return</span> (z <span class="op">-</span> <span class="va">self</span>.right_mean) <span class="op">@</span> <span class="va">self</span>.right_singular_vectors</span>
+<span id="e659107a-44"><a href="#e659107a-44" aria-hidden="true" tabindex="-1"></a>            <span class="cf">case</span> _:</span>
+<span id="e659107a-45"><a href="#e659107a-45" aria-hidden="true" tabindex="-1"></a>                <span class="cf">raise</span> <span class="pp">ValueError</span>(<span class="st">"direction must be 'left' or 'right'"</span>)</span>
+<span id="e659107a-46"><a href="#e659107a-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="e659107a-47"><a href="#e659107a-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="e659107a-48"><a href="#e659107a-48" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> bin_logarithmically(</span>
+<span id="e659107a-49"><a href="#e659107a-49" aria-hidden="true" tabindex="-1"></a>    data: Sequence[<span class="bu">int</span> <span class="op">|</span> <span class="bu">float</span>],</span>
+<span id="e659107a-50"><a href="#e659107a-50" aria-hidden="true" tabindex="-1"></a>    <span class="op">*</span>,</span>
+<span id="e659107a-51"><a href="#e659107a-51" aria-hidden="true" tabindex="-1"></a>    base: <span class="bu">int</span> <span class="op">=</span> <span class="dv">10</span>,</span>
+<span id="e659107a-52"><a href="#e659107a-52" aria-hidden="true" tabindex="-1"></a>    points_per_bin: <span class="bu">int</span>,</span>
+<span id="e659107a-53"><a href="#e659107a-53" aria-hidden="true" tabindex="-1"></a>    min_: <span class="bu">int</span> <span class="op">|</span> <span class="bu">float</span>,</span>
+<span id="e659107a-54"><a href="#e659107a-54" aria-hidden="true" tabindex="-1"></a>    max_: <span class="bu">int</span> <span class="op">|</span> <span class="bu">float</span>,</span>
+<span id="e659107a-55"><a href="#e659107a-55" aria-hidden="true" tabindex="-1"></a>) <span class="op">-&gt;</span> Sequence[<span class="bu">float</span>]:</span>
+<span id="e659107a-56"><a href="#e659107a-56" aria-hidden="true" tabindex="-1"></a>    n <span class="op">=</span> points_per_bin <span class="op">*</span> <span class="bu">int</span>(np.ceil((np.log(max_) <span class="op">-</span> np.log(min_)) <span class="op">/</span> (np.log(base))))</span>
+<span id="e659107a-57"><a href="#e659107a-57" aria-hidden="true" tabindex="-1"></a>    bin_edges <span class="op">=</span> np.geomspace(min_, max_, num<span class="op">=</span>n)</span>
+<span id="e659107a-58"><a href="#e659107a-58" aria-hidden="true" tabindex="-1"></a>    bin_centers <span class="op">=</span> np.exp(np.log(bin_edges)[:<span class="op">-</span><span class="dv">1</span>] <span class="op">+</span> np.diff(np.log(bin_edges)) <span class="op">/</span> <span class="dv">2</span>)</span>
+<span id="e659107a-59"><a href="#e659107a-59" aria-hidden="true" tabindex="-1"></a></span>
+<span id="e659107a-60"><a href="#e659107a-60" aria-hidden="true" tabindex="-1"></a>    bin_edges[<span class="op">-</span><span class="dv">1</span>] <span class="op">=</span> np.inf</span>
+<span id="e659107a-61"><a href="#e659107a-61" aria-hidden="true" tabindex="-1"></a>    labels <span class="op">=</span> bin_centers[np.digitize(data, bin_edges) <span class="op">-</span> <span class="dv">1</span>]</span>
+<span id="e659107a-62"><a href="#e659107a-62" aria-hidden="true" tabindex="-1"></a></span>
+<span id="e659107a-63"><a href="#e659107a-63" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> labels</span>
+<span id="e659107a-64"><a href="#e659107a-64" aria-hidden="true" tabindex="-1"></a></span>
+<span id="e659107a-65"><a href="#e659107a-65" aria-hidden="true" tabindex="-1"></a></span>
+<span id="e659107a-66"><a href="#e659107a-66" aria-hidden="true" tabindex="-1"></a><span class="co"># data_repetition_1 = data.isel({"presentation": data["rep_id"] == 0})</span></span>
+<span id="e659107a-67"><a href="#e659107a-67" aria-hidden="true" tabindex="-1"></a><span class="co"># data_repetition_2 = data.isel({"presentation": data["rep_id"] == 1})</span></span>
+<span id="e659107a-68"><a href="#e659107a-68" aria-hidden="true" tabindex="-1"></a><span class="co"># data_repetition_1 = data_repetition_1.sortby("stimulus_id")</span></span>
+<span id="e659107a-69"><a href="#e659107a-69" aria-hidden="true" tabindex="-1"></a><span class="co"># data_repetition_2 = data_repetition_2.sortby("stimulus_id")</span></span>
+<span id="e659107a-70"><a href="#e659107a-70" aria-hidden="true" tabindex="-1"></a><span class="co"># assert np.array_equal(</span></span>
+<span id="e659107a-71"><a href="#e659107a-71" aria-hidden="true" tabindex="-1"></a><span class="co">#     data_repetition_1["stimulus_id"].values, data_repetition_2["stimulus_id"].values</span></span>
+<span id="e659107a-72"><a href="#e659107a-72" aria-hidden="true" tabindex="-1"></a><span class="co"># )</span></span>
+<span id="e659107a-73"><a href="#e659107a-73" aria-hidden="true" tabindex="-1"></a></span>
+<span id="e659107a-74"><a href="#e659107a-74" aria-hidden="true" tabindex="-1"></a><span class="co"># plssvd = PLSSVD()</span></span>
+<span id="e659107a-75"><a href="#e659107a-75" aria-hidden="true" tabindex="-1"></a><span class="co"># plssvd.fit(</span></span>
+<span id="e659107a-76"><a href="#e659107a-76" aria-hidden="true" tabindex="-1"></a><span class="co">#     data_repetition_1.values,</span></span>
+<span id="e659107a-77"><a href="#e659107a-77" aria-hidden="true" tabindex="-1"></a><span class="co">#     data_repetition_1.values,</span></span>
+<span id="e659107a-78"><a href="#e659107a-78" aria-hidden="true" tabindex="-1"></a><span class="co"># )</span></span>
+<span id="e659107a-79"><a href="#e659107a-79" aria-hidden="true" tabindex="-1"></a><span class="co"># rep_1_transformed = plssvd.transform(data_repetition_1.values, direction="left")</span></span>
+<span id="e659107a-80"><a href="#e659107a-80" aria-hidden="true" tabindex="-1"></a><span class="co"># rep_2_transformed = plssvd.transform(data_repetition_2.values, direction="right")</span></span>
+<span id="e659107a-81"><a href="#e659107a-81" aria-hidden="true" tabindex="-1"></a></span>
+<span id="e659107a-82"><a href="#e659107a-82" aria-hidden="true" tabindex="-1"></a></span>
+<span id="e659107a-83"><a href="#e659107a-83" aria-hidden="true" tabindex="-1"></a><span class="co"># n_neurons_1 = rep_1_transformed.shape[-1]</span></span>
+<span id="e659107a-84"><a href="#e659107a-84" aria-hidden="true" tabindex="-1"></a><span class="co"># cv_spectrum = np.diag(</span></span>
+<span id="e659107a-85"><a href="#e659107a-85" aria-hidden="true" tabindex="-1"></a><span class="co">#     np.cov(rep_1_transformed, rep_2_transformed, rowvar=False)[</span></span>
+<span id="e659107a-86"><a href="#e659107a-86" aria-hidden="true" tabindex="-1"></a><span class="co">#         :n_neurons_1, n_neurons_1:</span></span>
+<span id="e659107a-87"><a href="#e659107a-87" aria-hidden="true" tabindex="-1"></a><span class="co">#     ]</span></span>
+<span id="e659107a-88"><a href="#e659107a-88" aria-hidden="true" tabindex="-1"></a><span class="co"># )</span></span>
+<span id="e659107a-89"><a href="#e659107a-89" aria-hidden="true" tabindex="-1"></a><span class="co"># cv_spectrum = pd.DataFrame(</span></span>
+<span id="e659107a-90"><a href="#e659107a-90" aria-hidden="true" tabindex="-1"></a><span class="co">#     cv_spectrum, columns=["cross-validated singular value"]</span></span>
+<span id="e659107a-91"><a href="#e659107a-91" aria-hidden="true" tabindex="-1"></a><span class="co"># ).assign(rank=np.arange(len(cv_spectrum)) + 1)</span></span>
+<span id="e659107a-92"><a href="#e659107a-92" aria-hidden="true" tabindex="-1"></a><span class="co"># cv_spectrum = cv_spectrum.assign(</span></span>
+<span id="e659107a-93"><a href="#e659107a-93" aria-hidden="true" tabindex="-1"></a><span class="co">#     bin=bin_logarithmically(</span></span>
+<span id="e659107a-94"><a href="#e659107a-94" aria-hidden="true" tabindex="-1"></a><span class="co">#         cv_spectrum["cross-validated singular value"],</span></span>
+<span id="e659107a-95"><a href="#e659107a-95" aria-hidden="true" tabindex="-1"></a><span class="co">#         points_per_bin=5,</span></span>
+<span id="e659107a-96"><a href="#e659107a-96" aria-hidden="true" tabindex="-1"></a><span class="co">#         min_=1,</span></span>
+<span id="e659107a-97"><a href="#e659107a-97" aria-hidden="true" tabindex="-1"></a><span class="co">#         max_=10_000,</span></span>
+<span id="e659107a-98"><a href="#e659107a-98" aria-hidden="true" tabindex="-1"></a><span class="co">#     )</span></span>
+<span id="e659107a-99"><a href="#e659107a-99" aria-hidden="true" tabindex="-1"></a><span class="co"># )</span></span>
+<span id="e659107a-100"><a href="#e659107a-100" aria-hidden="true" tabindex="-1"></a></span>
+<span id="e659107a-101"><a href="#e659107a-101" aria-hidden="true" tabindex="-1"></a><span class="co"># fig, ax = plt.subplots()</span></span>
+<span id="e659107a-102"><a href="#e659107a-102" aria-hidden="true" tabindex="-1"></a><span class="co"># sns.lineplot(ax=ax, data=cv_spectrum, x="rank", y="cross-validated singular value")</span></span>
+<span id="e659107a-103"><a href="#e659107a-103" aria-hidden="true" tabindex="-1"></a><span class="co"># sns.despine(ax=ax, offset=20)</span></span>
+<span id="e659107a-104"><a href="#e659107a-104" aria-hidden="true" tabindex="-1"></a></span>
+<span id="e659107a-105"><a href="#e659107a-105" aria-hidden="true" tabindex="-1"></a><span class="co"># fig, ax = plt.subplots()</span></span>
+<span id="e659107a-106"><a href="#e659107a-106" aria-hidden="true" tabindex="-1"></a><span class="co"># sns.lineplot(ax=ax, data=cv_spectrum, x="rank", y="cross-validated singular value")</span></span>
+<span id="e659107a-107"><a href="#e659107a-107" aria-hidden="true" tabindex="-1"></a><span class="co"># ax.set_xscale("log")</span></span>
+<span id="e659107a-108"><a href="#e659107a-108" aria-hidden="true" tabindex="-1"></a><span class="co"># ax.set_yscale("log")</span></span>
+<span id="e659107a-109"><a href="#e659107a-109" aria-hidden="true" tabindex="-1"></a><span class="co"># ax.set_ylim(bottom=1e-3)</span></span>
+<span id="e659107a-110"><a href="#e659107a-110" aria-hidden="true" tabindex="-1"></a><span class="co"># sns.despine(ax=ax, offset=20)</span></span>
+<span id="e659107a-111"><a href="#e659107a-111" aria-hidden="true" tabindex="-1"></a></span>
+<span id="e659107a-112"><a href="#e659107a-112" aria-hidden="true" tabindex="-1"></a><span class="co"># fig, ax = plt.subplots()</span></span>
+<span id="e659107a-113"><a href="#e659107a-113" aria-hidden="true" tabindex="-1"></a><span class="co"># sns.lineplot(</span></span>
+<span id="e659107a-114"><a href="#e659107a-114" aria-hidden="true" tabindex="-1"></a><span class="co">#     ax=ax,</span></span>
+<span id="e659107a-115"><a href="#e659107a-115" aria-hidden="true" tabindex="-1"></a><span class="co">#     data=cv_spectrum.groupby("bin").mean().rename(columns={"bin": "rank"}),</span></span>
+<span id="e659107a-116"><a href="#e659107a-116" aria-hidden="true" tabindex="-1"></a><span class="co">#     x="rank",</span></span>
+<span id="e659107a-117"><a href="#e659107a-117" aria-hidden="true" tabindex="-1"></a><span class="co">#     y="cross-validated singular value",</span></span>
+<span id="e659107a-118"><a href="#e659107a-118" aria-hidden="true" tabindex="-1"></a><span class="co">#     ls=None,</span></span>
+<span id="e659107a-119"><a href="#e659107a-119" aria-hidden="true" tabindex="-1"></a><span class="co">#     marker="o",</span></span>
+<span id="e659107a-120"><a href="#e659107a-120" aria-hidden="true" tabindex="-1"></a><span class="co"># )</span></span>
+<span id="e659107a-121"><a href="#e659107a-121" aria-hidden="true" tabindex="-1"></a><span class="co"># ax.set_xscale("log")</span></span>
+<span id="e659107a-122"><a href="#e659107a-122" aria-hidden="true" tabindex="-1"></a><span class="co"># ax.set_yscale("log")</span></span>
+<span id="e659107a-123"><a href="#e659107a-123" aria-hidden="true" tabindex="-1"></a><span class="co"># sns.despine(ax=ax, offset=20)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+
+
+</section>
+</section>
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>This work is licensed under a Creative Commons Attribution-ShareAlike 4.0 International License.</div></div></section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const disableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'prefetch';
+    }
+  }
+  const enableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'stylesheet';
+    }
+  }
+  const manageTransitions = (selector, allowTransitions) => {
+    const els = window.document.querySelectorAll(selector);
+    for (let i=0; i < els.length; i++) {
+      const el = els[i];
+      if (allowTransitions) {
+        el.classList.remove('notransition');
+      } else {
+        el.classList.add('notransition');
+      }
+    }
+  }
+  const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+    const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+    const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+    let newTheme = '';
+    if(darkModeDefault) {
+      newTheme = isAlternate ? baseTheme : alternateTheme;
+    } else {
+      newTheme = isAlternate ? alternateTheme : baseTheme;
+    }
+    const changeGiscusTheme = () => {
+      // From: https://github.com/giscus/giscus/issues/336
+      const sendMessage = (message) => {
+        const iframe = document.querySelector('iframe.giscus-frame');
+        if (!iframe) return;
+        iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+      }
+      sendMessage({
+        setConfig: {
+          theme: newTheme
+        }
+      });
+    }
+    const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+    if (isGiscussLoaded) {
+      changeGiscusTheme();
+    }
+  }
+  const toggleColorMode = (alternate) => {
+    // Switch the stylesheets
+    const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+    manageTransitions('#quarto-margin-sidebar .nav-link', false);
+    if (alternate) {
+      enableStylesheet(alternateStylesheets);
+      for (const sheetNode of alternateStylesheets) {
+        if (sheetNode.id === "quarto-bootstrap") {
+          toggleBodyColorMode(sheetNode);
+        }
+      }
+    } else {
+      disableStylesheet(alternateStylesheets);
+      toggleBodyColorPrimary();
+    }
+    manageTransitions('#quarto-margin-sidebar .nav-link', true);
+    // Switch the toggles
+    const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+    for (let i=0; i < toggles.length; i++) {
+      const toggle = toggles[i];
+      if (toggle) {
+        if (alternate) {
+          toggle.classList.add("alternate");     
+        } else {
+          toggle.classList.remove("alternate");
+        }
+      }
+    }
+    // Hack to workaround the fact that safari doesn't
+    // properly recolor the scrollbar when toggling (#1455)
+    if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+      manageTransitions("body", false);
+      window.scrollTo(0, 1);
+      setTimeout(() => {
+        window.scrollTo(0, 0);
+        manageTransitions("body", true);
+      }, 40);  
+    }
+  }
+  const isFileUrl = () => { 
+    return window.location.protocol === 'file:';
+  }
+  const hasAlternateSentinel = () => {  
+    let styleSentinel = getColorSchemeSentinel();
+    if (styleSentinel !== null) {
+      return styleSentinel === "alternate";
+    } else {
+      return false;
+    }
+  }
+  const setStyleSentinel = (alternate) => {
+    const value = alternate ? "alternate" : "default";
+    if (!isFileUrl()) {
+      window.localStorage.setItem("quarto-color-scheme", value);
+    } else {
+      localAlternateSentinel = value;
+    }
+  }
+  const getColorSchemeSentinel = () => {
+    if (!isFileUrl()) {
+      const storageValue = window.localStorage.getItem("quarto-color-scheme");
+      return storageValue != null ? storageValue : localAlternateSentinel;
+    } else {
+      return localAlternateSentinel;
+    }
+  }
+  const darkModeDefault = false;
+  let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+  // Dark / light mode switch
+  window.quartoToggleColorScheme = () => {
+    // Read the current dark / light value 
+    let toAlternate = !hasAlternateSentinel();
+    toggleColorMode(toAlternate);
+    setStyleSentinel(toAlternate);
+    toggleGiscusIfUsed(toAlternate, darkModeDefault);
+  };
+  // Ensure there is a toggle, if there isn't float one in the top right
+  if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+    const a = window.document.createElement('a');
+    a.classList.add('top-right');
+    a.classList.add('quarto-color-scheme-toggle');
+    a.href = "";
+    a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+    const i = window.document.createElement("i");
+    i.classList.add('bi');
+    a.appendChild(i);
+    window.document.body.appendChild(a);
+  }
+  // Switch to dark mode if need be
+  if (hasAlternateSentinel()) {
+    toggleColorMode(true);
+  } else {
+    toggleColorMode(false);
+  }
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  const viewSource = window.document.getElementById('quarto-view-source') ||
+                     window.document.getElementById('quarto-code-tools-source');
+  if (viewSource) {
+    const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+    viewSource.addEventListener("click", function(e) {
+      if (sourceUrl) {
+        // rstudio viewer pane
+        if (/\bcapabilities=\b/.test(window.location)) {
+          window.open(sourceUrl);
+        } else {
+          window.location.href = sourceUrl;
+        }
+      } else {
+        const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+        modal.show();
+      }
+      return false;
+    });
+  }
+  function toggleCodeHandler(show) {
+    return function(e) {
+      const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
+      for (let i=0; i<detailsSrc.length; i++) {
+        const details = detailsSrc[i].parentElement;
+        if (show) {
+          details.open = true;
+        } else {
+          details.removeAttribute("open");
+        }
+      }
+      const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+      const fromCls = show ? "hidden" : "unhidden";
+      const toCls = show ? "unhidden" : "hidden";
+      for (let i=0; i<cellCodeDivs.length; i++) {
+        const codeDiv = cellCodeDivs[i];
+        if (codeDiv.classList.contains(fromCls)) {
+          codeDiv.classList.remove(fromCls);
+          codeDiv.classList.add(toCls);
+        } 
+      }
+      return false;
+    }
+  }
+  const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+  if (hideAllCode) {
+    hideAllCode.addEventListener("click", toggleCodeHandler(false));
+  }
+  const showAllCode = window.document.getElementById("quarto-show-all-code");
+  if (showAllCode) {
+    showAllCode.addEventListener("click", toggleCodeHandler(true));
+  }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        for (let i = 0; i < 2; i++) {
+          container.appendChild(note.children[i].cloneNode(true));
+        }
+        return container.innerHTML
+      } else {
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      return note.innerHTML;
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        console.log("RESIZE");
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

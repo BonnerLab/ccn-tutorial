@@ -1,0 +1,964 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.308">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2023-08-26">
+
+<title>CCN 2023 | Tutorial - Comparing high-dimensional representations</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark.min.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "textbox",
+  "limit": 20,
+  "keyboard-shortcut": [
+    null
+  ],
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script>window.backupDefine = window.define; window.define = undefined;</script><script src="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.js"></script>
+  <script>document.addEventListener("DOMContentLoaded", function () {
+ var mathElements = document.getElementsByClassName("math");
+ var macros = [];
+ for (var i = 0; i < mathElements.length; i++) {
+  var texText = mathElements[i].firstChild;
+  if (mathElements[i].tagName == "SPAN") {
+   katex.render(texText.data, mathElements[i], {
+    displayMode: mathElements[i].classList.contains('display'),
+    throwOnError: false,
+    macros: macros,
+    fleqn: false
+   });
+}}});
+  </script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.css">
+
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-md navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">CCN 2023 | Tutorial</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../index.html" rel="" target="">
+ <span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../pages/introducing_pca.html" rel="" target="">
+ <span class="menu-text">Introducing PCA</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../pages/exploring_neural_data.html" rel="" target="">
+ <span class="menu-text">Exploring neural data</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../pages/dealing_with_noise.html" rel="" target="">
+ <span class="menu-text">Dealing with noise</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link active" href="../pages/comparing_representations.html" rel="" target="" aria-current="page">
+ <span class="menu-text">Comparing representations</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../pages/reference.html" rel="" target="">
+ <span class="menu-text">Reference</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+          <div class="quarto-navbar-tools">
+    <a href="https://github.com/BonnerLab/ccn-tutorial" rel="" title="" class="quarto-navigation-tool px-1" aria-label=""><i class="bi bi-github"></i></a>
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <div class="quarto-title-block"><div><h1 class="title">Comparing high-dimensional representations</h1><button type="button" class="btn code-tools-button dropdown-toggle" id="quarto-code-tools-menu" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi"></i> Code blocks</button><ul class="dropdown-menu dropdown-menu-end" aria-labelelledby="quarto-code-tools-menu"><li><a id="quarto-show-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Show All Code</a></li><li><a id="quarto-hide-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Hide All Code</a></li><li><hr class="dropdown-divider"></li><li><a id="quarto-view-source" class="dropdown-item" href="javascript:void(0)" role="button" data-quarto-source-url="https://github.com/BonnerLab/ccn-tutorial/blob/main/pages/comparing_representations.qmd">View Source</a></li></ul></div></div>
+            <p class="subtitle lead">Cross-validated methods to separate high-dimensional signal from noise</p>
+                      </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">August 26, 2023</p>
+      </div>
+    </div>
+    
+      <div>
+      <div class="quarto-title-meta-heading">Modified</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date-modified">August 10, 2023</p>
+      </div>
+    </div>
+      
+    </div>
+    
+  <div>
+    <div class="abstract">
+      <div class="block-title">Summary</div>
+      Especially after the advent of high-dimensional neural network models of the brain, there has been an explosion of methods to compare high-dimensional representations, including various forms of linear regression, canonical correlation analysis (CCA), centered kernel alignment (CKA), and non-linear methods too! In this part of the tutorial, we’ll describe PLS-SVD – a method closely related to PCA – that allows us to measure the similarity between two high-dimensional systems in a manner that is relatively interpretable and extensible for various purposes.
+    </div>
+  </div>
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="99">
+    <h2 id="toc-title">Contents</h2>
+   
+  <ul>
+  <li><a href="#pls-svd" id="toc-pls-svd" class="nav-link active" data-scroll-target="#pls-svd">PLS-SVD</a></li>
+  <li><a href="#comparing-brains" id="toc-comparing-brains" class="nav-link" data-scroll-target="#comparing-brains">Comparing brains</a></li>
+  <li><a href="#comparing-brains-and-dnns" id="toc-comparing-brains-and-dnns" class="nav-link" data-scroll-target="#comparing-brains-and-dnns">Comparing brains and DNNs</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/BonnerLab/ccn-tutorial/edit/main/pages/comparing_representations.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/BonnerLab/ccn-tutorial/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div><div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="comparing_representations.ipynb" download="comparing_representations.ipynb"><i class="bi bi-journal-code"></i>Jupyter</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Run this notebook interactively!
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Here’s a <a href="https://colab.research.google.com/github/BonnerLab/ccn-tutorial/blob/main/notebooks/comparing_representations.ipynb">link to this notebook</a> on Google Colab.</p>
+</div>
+</div>
+<section id="pls-svd" class="level2">
+<h2 class="anchored" data-anchor-id="pls-svd">PLS-SVD</h2>
+<p>Just as PCA identifies the principal directions of variance of a system, PLS-SVD identifies the principal directions of <em>shared</em> variance between <em>two</em> systems. Specifically, just as PCA computes the eigendecomposition of the auto-covariance, PLS-SVD computes the singular value decomposition of the cross-covariance:</p>
+<p><span class="math inline">X^\top Y = U \Sigma V^\top</span>.</p>
+<p>Here, the left singular vectors <span class="math inline">U</span> define a rotation of the system <span class="math inline">X</span> into some latent space, the right singular vectors <span class="math inline">V</span> define a rotation of system <span class="math inline">Y</span> into the same latent space, and the singular values <span class="math inline">\Sigma</span></p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+What happens when <span class="math inline">X</span> = <span class="math inline">Y</span>?
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Note that if <span class="math inline">X = Y</span>, PLS-SVD reduces to PCA:</p>
+</div>
+</div>
+<div id="install_package" class="cell" data-execution_count="2">
+<details>
+<summary>Install all required dependencies</summary>
+<div class="sourceCode cell-code" id="install_package"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="install_package-1"><a href="#install_package-1" aria-hidden="true" tabindex="-1"></a><span class="op">%</span>pip install git<span class="op">+</span>https:<span class="op">//</span>github.com<span class="op">/</span>BonnerLab<span class="op">/</span>ccn<span class="op">-</span>tutorial.git</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div id="imports" class="cell" data-execution_count="3">
+<details>
+<summary>Import various libraries</summary>
+<div class="sourceCode cell-code" id="imports"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="imports-1"><a href="#imports-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> collections.abc <span class="im">import</span> Sequence</span>
+<span id="imports-2"><a href="#imports-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> warnings</span>
+<span id="imports-3"><a href="#imports-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="imports-4"><a href="#imports-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="imports-5"><a href="#imports-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="imports-6"><a href="#imports-6" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> xarray <span class="im">as</span> xr</span>
+<span id="imports-7"><a href="#imports-7" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch</span>
+<span id="imports-8"><a href="#imports-8" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.decomposition <span class="im">import</span> TruncatedSVD</span>
+<span id="imports-9"><a href="#imports-9" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
+<span id="imports-10"><a href="#imports-10" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib <span class="im">as</span> mpl</span>
+<span id="imports-11"><a href="#imports-11" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> matplotlib <span class="im">import</span> pyplot <span class="im">as</span> plt</span>
+<span id="imports-12"><a href="#imports-12" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> matplotlib_inline.backend_inline <span class="im">import</span> set_matplotlib_formats</span>
+<span id="imports-13"><a href="#imports-13" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> IPython.display <span class="im">import</span> display</span>
+<span id="imports-14"><a href="#imports-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="imports-15"><a href="#imports-15" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> utilities.brain <span class="im">import</span> (</span>
+<span id="imports-16"><a href="#imports-16" aria-hidden="true" tabindex="-1"></a>    load_dataset,</span>
+<span id="imports-17"><a href="#imports-17" aria-hidden="true" tabindex="-1"></a>    average_data_across_repetitions,</span>
+<span id="imports-18"><a href="#imports-18" aria-hidden="true" tabindex="-1"></a>    load_stimuli,</span>
+<span id="imports-19"><a href="#imports-19" aria-hidden="true" tabindex="-1"></a>    plot_brain_map,</span>
+<span id="imports-20"><a href="#imports-20" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="imports-21"><a href="#imports-21" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> utilities.computation <span class="im">import</span> svd</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div id="set_visualization_defaults" class="cell" data-execution_count="4">
+<details>
+<summary>Set some visualization defaults</summary>
+<div class="sourceCode cell-code" id="set_visualization_defaults"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="set_visualization_defaults-1"><a href="#set_visualization_defaults-1" aria-hidden="true" tabindex="-1"></a><span class="op">%</span>matplotlib inline</span>
+<span id="set_visualization_defaults-2"><a href="#set_visualization_defaults-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="set_visualization_defaults-3"><a href="#set_visualization_defaults-3" aria-hidden="true" tabindex="-1"></a>sns.set_theme(</span>
+<span id="set_visualization_defaults-4"><a href="#set_visualization_defaults-4" aria-hidden="true" tabindex="-1"></a>    context<span class="op">=</span><span class="st">"notebook"</span>,</span>
+<span id="set_visualization_defaults-5"><a href="#set_visualization_defaults-5" aria-hidden="true" tabindex="-1"></a>    style<span class="op">=</span><span class="st">"white"</span>,</span>
+<span id="set_visualization_defaults-6"><a href="#set_visualization_defaults-6" aria-hidden="true" tabindex="-1"></a>    palette<span class="op">=</span><span class="st">"deep"</span>,</span>
+<span id="set_visualization_defaults-7"><a href="#set_visualization_defaults-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="set_visualization_defaults-8"><a href="#set_visualization_defaults-8" aria-hidden="true" tabindex="-1"></a>set_matplotlib_formats(<span class="st">"svg"</span>)</span>
+<span id="set_visualization_defaults-9"><a href="#set_visualization_defaults-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="set_visualization_defaults-10"><a href="#set_visualization_defaults-10" aria-hidden="true" tabindex="-1"></a>pd.set_option(<span class="st">"display.max_rows"</span>, <span class="dv">5</span>)</span>
+<span id="set_visualization_defaults-11"><a href="#set_visualization_defaults-11" aria-hidden="true" tabindex="-1"></a>pd.set_option(<span class="st">"display.max_columns"</span>, <span class="dv">10</span>)</span>
+<span id="set_visualization_defaults-12"><a href="#set_visualization_defaults-12" aria-hidden="true" tabindex="-1"></a>pd.set_option(<span class="st">"display.precision"</span>, <span class="dv">3</span>)</span>
+<span id="set_visualization_defaults-13"><a href="#set_visualization_defaults-13" aria-hidden="true" tabindex="-1"></a>pd.set_option(<span class="st">"display.show_dimensions"</span>, <span class="va">False</span>)</span>
+<span id="set_visualization_defaults-14"><a href="#set_visualization_defaults-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="set_visualization_defaults-15"><a href="#set_visualization_defaults-15" aria-hidden="true" tabindex="-1"></a>xr.set_options(display_max_rows<span class="op">=</span><span class="dv">3</span>, display_expand_data<span class="op">=</span><span class="va">False</span>)</span>
+<span id="set_visualization_defaults-16"><a href="#set_visualization_defaults-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="set_visualization_defaults-17"><a href="#set_visualization_defaults-17" aria-hidden="true" tabindex="-1"></a>warnings.filterwarnings(<span class="st">"ignore"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div id="initialize_rng" class="cell" data-execution_count="5">
+<details>
+<summary>Initialize a deterministic random number generator</summary>
+<div class="sourceCode cell-code" id="initialize_rng"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="initialize_rng-1"><a href="#initialize_rng-1" aria-hidden="true" tabindex="-1"></a>random_state <span class="op">=</span> <span class="dv">0</span></span>
+<span id="initialize_rng-2"><a href="#initialize_rng-2" aria-hidden="true" tabindex="-1"></a>rng <span class="op">=</span> np.random.default_rng(seed<span class="op">=</span>random_state)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div id="recipe-plssvd" class="cell" data-execution_count="6">
+<details open="">
+<summary>A computational recipe for PLS-SVD</summary>
+<div class="sourceCode cell-code" id="recipe-plssvd"><pre class="sourceCode python code-annotation-code code-with-copy code-annotated"><code class="sourceCode python"><span id="recipe-plssvd-1"><a href="#recipe-plssvd-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> PLSSVD:</span>
+<span id="recipe-plssvd-2"><a href="#recipe-plssvd-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>) <span class="op">-&gt;</span> <span class="va">None</span>:</span>
+<span id="recipe-plssvd-3"><a href="#recipe-plssvd-3" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.left_mean: np.ndarray</span>
+<span id="recipe-plssvd-4"><a href="#recipe-plssvd-4" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.right_mean: np.ndarray</span>
+<span id="recipe-plssvd-5"><a href="#recipe-plssvd-5" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.left_singular_vectors: np.ndarray</span>
+<span id="recipe-plssvd-6"><a href="#recipe-plssvd-6" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.right_singular_vectors: np.ndarray</span>
+<span id="recipe-plssvd-7"><a href="#recipe-plssvd-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="recipe-plssvd-8"><a href="#recipe-plssvd-8" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> fit(<span class="va">self</span>, <span class="op">/</span>, x: np.ndarray, y: np.ndarray) <span class="op">-&gt;</span> <span class="va">None</span>:</span>
+<a class="code-annotation-anchor" data-target-cell="recipe-plssvd" data-target-annotation="1" onclick="event.preventDefault();">1</a><span id="recipe-plssvd-9" class="code-annotation-target"><a href="#recipe-plssvd-9" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.left_mean <span class="op">=</span> x.mean(axis<span class="op">=-</span><span class="dv">2</span>)</span>
+<span id="recipe-plssvd-10"><a href="#recipe-plssvd-10" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.right_mean <span class="op">=</span> y.mean(axis<span class="op">=-</span><span class="dv">2</span>)</span>
+<span id="recipe-plssvd-11"><a href="#recipe-plssvd-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="recipe-plssvd-12"><a href="#recipe-plssvd-12" aria-hidden="true" tabindex="-1"></a>        x_centered <span class="op">=</span> x <span class="op">-</span> <span class="va">self</span>.left_mean</span>
+<span id="recipe-plssvd-13"><a href="#recipe-plssvd-13" aria-hidden="true" tabindex="-1"></a>        y_centered <span class="op">=</span> y <span class="op">-</span> <span class="va">self</span>.right_mean</span>
+<span id="recipe-plssvd-14"><a href="#recipe-plssvd-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="recipe-plssvd-15"><a href="#recipe-plssvd-15" aria-hidden="true" tabindex="-1"></a>        n_stimuli <span class="op">=</span> x.shape[<span class="op">-</span><span class="dv">2</span>]</span>
+<span id="recipe-plssvd-16"><a href="#recipe-plssvd-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="recipe-plssvd-17"><a href="#recipe-plssvd-17" aria-hidden="true" tabindex="-1"></a>        cross_covariance <span class="op">=</span> (np.swapaxes(x_centered, <span class="op">-</span><span class="dv">1</span>, <span class="op">-</span><span class="dv">2</span>) <span class="op">@</span> y_centered) <span class="op">/</span> (</span>
+<span id="recipe-plssvd-18"><a href="#recipe-plssvd-18" aria-hidden="true" tabindex="-1"></a>            n_stimuli <span class="op">-</span> <span class="dv">1</span></span>
+<a class="code-annotation-anchor" data-target-cell="recipe-plssvd" data-target-annotation="2" onclick="event.preventDefault();">2</a><span id="recipe-plssvd-19" class="code-annotation-target"><a href="#recipe-plssvd-19" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="recipe-plssvd-20"><a href="#recipe-plssvd-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="recipe-plssvd-21"><a href="#recipe-plssvd-21" aria-hidden="true" tabindex="-1"></a>        (</span>
+<span id="recipe-plssvd-22"><a href="#recipe-plssvd-22" aria-hidden="true" tabindex="-1"></a>            <span class="va">self</span>.left_singular_vectors,</span>
+<span id="recipe-plssvd-23"><a href="#recipe-plssvd-23" aria-hidden="true" tabindex="-1"></a>            <span class="va">self</span>.singular_values,</span>
+<span id="recipe-plssvd-24"><a href="#recipe-plssvd-24" aria-hidden="true" tabindex="-1"></a>            <span class="va">self</span>.right_singular_vectors,</span>
+<span id="recipe-plssvd-25"><a href="#recipe-plssvd-25" aria-hidden="true" tabindex="-1"></a>        ) <span class="op">=</span> svd(</span>
+<span id="recipe-plssvd-26"><a href="#recipe-plssvd-26" aria-hidden="true" tabindex="-1"></a>            torch.from_numpy(cross_covariance),</span>
+<span id="recipe-plssvd-27"><a href="#recipe-plssvd-27" aria-hidden="true" tabindex="-1"></a>            n_components<span class="op">=</span><span class="bu">min</span>([<span class="op">*</span>x.shape, <span class="op">*</span>y.shape]),</span>
+<span id="recipe-plssvd-28"><a href="#recipe-plssvd-28" aria-hidden="true" tabindex="-1"></a>            truncated<span class="op">=</span><span class="va">True</span>,</span>
+<span id="recipe-plssvd-29"><a href="#recipe-plssvd-29" aria-hidden="true" tabindex="-1"></a>            seed<span class="op">=</span>random_state,</span>
+<a class="code-annotation-anchor" data-target-cell="recipe-plssvd" data-target-annotation="3" onclick="event.preventDefault();">3</a><span id="recipe-plssvd-30" class="code-annotation-target"><a href="#recipe-plssvd-30" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="recipe-plssvd-31"><a href="#recipe-plssvd-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="recipe-plssvd-32"><a href="#recipe-plssvd-32" aria-hidden="true" tabindex="-1"></a>        n_stimuli <span class="op">=</span> data.shape[<span class="op">-</span><span class="dv">2</span>]</span>
+<span id="recipe-plssvd-33"><a href="#recipe-plssvd-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="recipe-plssvd-34"><a href="#recipe-plssvd-34" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.left_singular_vectors <span class="op">=</span> <span class="va">self</span>.left_singular_vectors.cpu().numpy()</span>
+<span id="recipe-plssvd-35"><a href="#recipe-plssvd-35" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.singular_values <span class="op">=</span> <span class="va">self</span>.singular_values.cpu().numpy()</span>
+<span id="recipe-plssvd-36"><a href="#recipe-plssvd-36" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.right_singular_vectors <span class="op">=</span> <span class="va">self</span>.right_singular_vectors.cpu().numpy()</span>
+<span id="recipe-plssvd-37"><a href="#recipe-plssvd-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="recipe-plssvd-38"><a href="#recipe-plssvd-38" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> transform(<span class="va">self</span>, <span class="op">/</span>, z: np.ndarray, <span class="op">*</span>, direction: <span class="bu">str</span>) <span class="op">-&gt;</span> np.ndarray:</span>
+<span id="recipe-plssvd-39"><a href="#recipe-plssvd-39" aria-hidden="true" tabindex="-1"></a>        <span class="cf">match</span> direction:</span>
+<span id="recipe-plssvd-40"><a href="#recipe-plssvd-40" aria-hidden="true" tabindex="-1"></a>            <span class="cf">case</span> <span class="st">"left"</span>:</span>
+<a class="code-annotation-anchor" data-target-cell="recipe-plssvd" data-target-annotation="4" onclick="event.preventDefault();">4</a><span id="recipe-plssvd-41" class="code-annotation-target"><a href="#recipe-plssvd-41" aria-hidden="true" tabindex="-1"></a>                <span class="cf">return</span> (z <span class="op">-</span> <span class="va">self</span>.left_mean) <span class="op">@</span> <span class="va">self</span>.left_singular_vectors</span>
+<span id="recipe-plssvd-42"><a href="#recipe-plssvd-42" aria-hidden="true" tabindex="-1"></a>            <span class="cf">case</span> <span class="st">"right"</span>:</span>
+<span id="recipe-plssvd-43"><a href="#recipe-plssvd-43" aria-hidden="true" tabindex="-1"></a>                <span class="cf">return</span> (z <span class="op">-</span> <span class="va">self</span>.right_mean) <span class="op">@</span> <span class="va">self</span>.right_singular_vectors</span>
+<span id="recipe-plssvd-44"><a href="#recipe-plssvd-44" aria-hidden="true" tabindex="-1"></a>            <span class="cf">case</span> _:</span>
+<span id="recipe-plssvd-45"><a href="#recipe-plssvd-45" aria-hidden="true" tabindex="-1"></a>                <span class="cf">raise</span> <span class="pp">ValueError</span>(<span class="st">"direction must be 'left' or 'right'"</span>)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-annotation">
+<dl class="code-annotation-container-grid">
+<dt data-target-cell="recipe-plssvd" data-target-annotation="1">1</dt>
+<dd>
+<span data-code-cell="recipe-plssvd" data-code-lines="9,10,12,13" data-code-annotation="1">Center the data matrices <span class="math inline">X</span> and <span class="math inline">Y</span>.</span>
+</dd>
+<dt data-target-cell="recipe-plssvd" data-target-annotation="2">2</dt>
+<dd>
+<span data-code-cell="recipe-plssvd" data-code-lines="19" data-code-annotation="2">Compute their cross-covariance <span class="math inline">X^\top Y / (n - 1)</span>.</span>
+</dd>
+<dt data-target-cell="recipe-plssvd" data-target-annotation="3">3</dt>
+<dd>
+<span data-code-cell="recipe-plssvd" data-code-lines="30" data-code-annotation="3">Compute the <a href="../pages/reference.html#singular-value-decomposition">singular value decomposition</a> of the cross-covariance.</span>
+</dd>
+<dt data-target-cell="recipe-plssvd" data-target-annotation="4">4</dt>
+<dd>
+<span data-code-cell="recipe-plssvd" data-code-lines="41,43" data-code-annotation="4">To project data from the ambient space (<span class="math inline">X</span> or <span class="math inline">Y</span>) to the latent space, we must subtract the mean computed in Step 1, and multiply the data by the corresponding singular vectors.</span>
+</dd>
+</dl>
+</div>
+</div>
+</section>
+<section id="comparing-brains" class="level2">
+<h2 class="anchored" data-anchor-id="comparing-brains">Comparing brains</h2>
+<p>In the same way that we can PLS-SVD to estimate the shared variance across presentations of the same stimuli <em>within</em> a participant, we can also use it to estimate the shared variance in the neural representations of the same stimuli <em>across</em> participants.</p>
+<p>We have two data matrices <span class="math inline">X \in \mathbb{R}^{N \times P_X}</span> and <span class="math inline">Y \in \mathbb{R}^{N \times P_Y}</span> from two participants. We could directly compute the singular values of their cross-covariance, which would be a direct estimate of the shared variance between these two representations.</p>
+<p>However, we run into the same issue as before: the singular values of a matrix are always positive and we won’t be able to use the magnitude of the singular value to assess the reliability of the variance along that dimension.</p>
+<p>Instead, we can use a cross-validated approach similar to CV-PCA, except that instead of testing generalization across different <em>presentations</em> of the stimuli, we can evaluate the reliable shared variance between the two representations across <em>stimuli</em>.</p>
+<p>Specifically, we can divide the images into two: a training split and a test split. We can compute singular vectors on the training split, and evalute <em>test</em> singular values on the test split, analogous to the CV-PCA procedure:</p>
+<p><span class="math inline">X_\text{train}^\top Y_\text{train} / (n - 1) = U \Sigma V^\top</span></p>
+<p><span class="math inline">\Sigma_\text{test} = \left( X_\text{test} U \right) ^\top \left( Y_\text{test} V \right) / (n - 1)</span></p>
+</section>
+<section id="comparing-brains-and-dnns" class="level2">
+<h2 class="anchored" data-anchor-id="comparing-brains-and-dnns">Comparing brains and DNNs</h2>
+<div id="5ffafedc" class="cell" data-execution_count="7">
+<details>
+<summary>Load the datasets</summary>
+<div class="sourceCode cell-code" id="5ffafedc"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="5ffafedc-1"><a href="#5ffafedc-1" aria-hidden="true" tabindex="-1"></a><span class="co"># subject_1 = average_data_across_repetitions(load_dataset(subject=0, roi="general"))</span></span>
+<span id="5ffafedc-2"><a href="#5ffafedc-2" aria-hidden="true" tabindex="-1"></a><span class="co"># subject_2 = average_data_across_repetitions(load_dataset(subject=1, roi="general"))</span></span>
+<span id="5ffafedc-3"><a href="#5ffafedc-3" aria-hidden="true" tabindex="-1"></a><span class="co"># subject_1 = subject_1.sortby("stimulus_id")</span></span>
+<span id="5ffafedc-4"><a href="#5ffafedc-4" aria-hidden="true" tabindex="-1"></a><span class="co"># subject_2 = subject_2.sortby("stimulus_id")</span></span>
+<span id="5ffafedc-5"><a href="#5ffafedc-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="5ffafedc-6"><a href="#5ffafedc-6" aria-hidden="true" tabindex="-1"></a><span class="co"># display(subject_1)</span></span>
+<span id="5ffafedc-7"><a href="#5ffafedc-7" aria-hidden="true" tabindex="-1"></a><span class="co"># display(subject_2)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+
+
+</section>
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>This work is licensed under a Creative Commons Attribution-ShareAlike 4.0 International License.</div></div></section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const disableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'prefetch';
+    }
+  }
+  const enableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'stylesheet';
+    }
+  }
+  const manageTransitions = (selector, allowTransitions) => {
+    const els = window.document.querySelectorAll(selector);
+    for (let i=0; i < els.length; i++) {
+      const el = els[i];
+      if (allowTransitions) {
+        el.classList.remove('notransition');
+      } else {
+        el.classList.add('notransition');
+      }
+    }
+  }
+  const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+    const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+    const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+    let newTheme = '';
+    if(darkModeDefault) {
+      newTheme = isAlternate ? baseTheme : alternateTheme;
+    } else {
+      newTheme = isAlternate ? alternateTheme : baseTheme;
+    }
+    const changeGiscusTheme = () => {
+      // From: https://github.com/giscus/giscus/issues/336
+      const sendMessage = (message) => {
+        const iframe = document.querySelector('iframe.giscus-frame');
+        if (!iframe) return;
+        iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+      }
+      sendMessage({
+        setConfig: {
+          theme: newTheme
+        }
+      });
+    }
+    const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+    if (isGiscussLoaded) {
+      changeGiscusTheme();
+    }
+  }
+  const toggleColorMode = (alternate) => {
+    // Switch the stylesheets
+    const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+    manageTransitions('#quarto-margin-sidebar .nav-link', false);
+    if (alternate) {
+      enableStylesheet(alternateStylesheets);
+      for (const sheetNode of alternateStylesheets) {
+        if (sheetNode.id === "quarto-bootstrap") {
+          toggleBodyColorMode(sheetNode);
+        }
+      }
+    } else {
+      disableStylesheet(alternateStylesheets);
+      toggleBodyColorPrimary();
+    }
+    manageTransitions('#quarto-margin-sidebar .nav-link', true);
+    // Switch the toggles
+    const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+    for (let i=0; i < toggles.length; i++) {
+      const toggle = toggles[i];
+      if (toggle) {
+        if (alternate) {
+          toggle.classList.add("alternate");     
+        } else {
+          toggle.classList.remove("alternate");
+        }
+      }
+    }
+    // Hack to workaround the fact that safari doesn't
+    // properly recolor the scrollbar when toggling (#1455)
+    if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+      manageTransitions("body", false);
+      window.scrollTo(0, 1);
+      setTimeout(() => {
+        window.scrollTo(0, 0);
+        manageTransitions("body", true);
+      }, 40);  
+    }
+  }
+  const isFileUrl = () => { 
+    return window.location.protocol === 'file:';
+  }
+  const hasAlternateSentinel = () => {  
+    let styleSentinel = getColorSchemeSentinel();
+    if (styleSentinel !== null) {
+      return styleSentinel === "alternate";
+    } else {
+      return false;
+    }
+  }
+  const setStyleSentinel = (alternate) => {
+    const value = alternate ? "alternate" : "default";
+    if (!isFileUrl()) {
+      window.localStorage.setItem("quarto-color-scheme", value);
+    } else {
+      localAlternateSentinel = value;
+    }
+  }
+  const getColorSchemeSentinel = () => {
+    if (!isFileUrl()) {
+      const storageValue = window.localStorage.getItem("quarto-color-scheme");
+      return storageValue != null ? storageValue : localAlternateSentinel;
+    } else {
+      return localAlternateSentinel;
+    }
+  }
+  const darkModeDefault = false;
+  let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+  // Dark / light mode switch
+  window.quartoToggleColorScheme = () => {
+    // Read the current dark / light value 
+    let toAlternate = !hasAlternateSentinel();
+    toggleColorMode(toAlternate);
+    setStyleSentinel(toAlternate);
+    toggleGiscusIfUsed(toAlternate, darkModeDefault);
+  };
+  // Ensure there is a toggle, if there isn't float one in the top right
+  if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+    const a = window.document.createElement('a');
+    a.classList.add('top-right');
+    a.classList.add('quarto-color-scheme-toggle');
+    a.href = "";
+    a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+    const i = window.document.createElement("i");
+    i.classList.add('bi');
+    a.appendChild(i);
+    window.document.body.appendChild(a);
+  }
+  // Switch to dark mode if need be
+  if (hasAlternateSentinel()) {
+    toggleColorMode(true);
+  } else {
+    toggleColorMode(false);
+  }
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  const viewSource = window.document.getElementById('quarto-view-source') ||
+                     window.document.getElementById('quarto-code-tools-source');
+  if (viewSource) {
+    const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+    viewSource.addEventListener("click", function(e) {
+      if (sourceUrl) {
+        // rstudio viewer pane
+        if (/\bcapabilities=\b/.test(window.location)) {
+          window.open(sourceUrl);
+        } else {
+          window.location.href = sourceUrl;
+        }
+      } else {
+        const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+        modal.show();
+      }
+      return false;
+    });
+  }
+  function toggleCodeHandler(show) {
+    return function(e) {
+      const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
+      for (let i=0; i<detailsSrc.length; i++) {
+        const details = detailsSrc[i].parentElement;
+        if (show) {
+          details.open = true;
+        } else {
+          details.removeAttribute("open");
+        }
+      }
+      const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+      const fromCls = show ? "hidden" : "unhidden";
+      const toCls = show ? "unhidden" : "hidden";
+      for (let i=0; i<cellCodeDivs.length; i++) {
+        const codeDiv = cellCodeDivs[i];
+        if (codeDiv.classList.contains(fromCls)) {
+          codeDiv.classList.remove(fromCls);
+          codeDiv.classList.add(toCls);
+        } 
+      }
+      return false;
+    }
+  }
+  const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+  if (hideAllCode) {
+    hideAllCode.addEventListener("click", toggleCodeHandler(false));
+  }
+  const showAllCode = window.document.getElementById("quarto-show-all-code");
+  if (showAllCode) {
+    showAllCode.addEventListener("click", toggleCodeHandler(true));
+  }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        for (let i = 0; i < 2; i++) {
+          container.appendChild(note.children[i].cloneNode(true));
+        }
+        return container.innerHTML
+      } else {
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      return note.innerHTML;
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        console.log("RESIZE");
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
