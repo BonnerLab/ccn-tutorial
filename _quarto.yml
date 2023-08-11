@@ -14,6 +14,7 @@ project:
 
 filters:
   - black-formatter
+  - include-code-files
 
 date: 2023-08-26
 date-modified: last-modified
