@@ -648,6 +648,32 @@ view_eigenspectrum(big_data_transformed)
 
 However, we know that this data was generated from exactly *2* latent variables -- *color* and *size*. We refer to these as the *effective dimensions*. In this example, the remaining dimensions, which correspond to noise, have relatively low variance, and we can see a signficant drop in the eigenspectrum after the second eigenvector.
 
+### Quantifying dimensionality
+
+Based on the spectrum, several approaches are used to quantify the latent dimensionality of a dataset:
+
+#### Rank of the covariance matrix
+
+The *rank* of the covariance matrix -- equal to the number of nonzero eigenvalues -- would be the latent dimensionality in the ideal setting where the data has zero noise. In real data, the rank is typically equal to the ambient dimensionality, since there is typically some variance along every dimension.
+
+#### Setting an arbitrary variance threshold
+
+Though not typically used today, another approach is to set an arbitrary threshold on the variance (historically recommended as $1$ for normalized data); only dimensions with variance above that threshold are considered useful.
+
+#### Setting an arbitrary *cumulative* variance threshold
+
+A very commonly used method is to set a threshold based on the cumulative variance of the data: the number of dimensions required to exceed, say $80\%$ of the variance, is taken as the latent dimensionality.
+
+#### Eyeballing the "knee" of the spectrum
+
+When the number of latent dimensions is low, eigenspectra often have a sharp discontinuity (the "knee"), where a small number of dimensions have high-variance and the remainder have much have lower variance. The latent dimensionality is then taken to be the number of dimensions above the threshold, determined by eye.
+
+#### Computing a summary statistic over the entire spectrum
+
+A metric such as *effective dimensionality* summarizes the spectrum using an entropy-like measure, taking into account variances along all the dimensions:
+
+$$\text{effective dimensionality}(\lambda_1, \dots \lambda_n) = \dfrac{\left( \sum_{i=1}^n \lambda_i \right)^2}{\sum_{i=1}^n \lambda_i^2}$$
+
 However, keep in mind that this is a toy example with idealized data. As we will see, when using standard PCA on real data it may be impossible to identify a clear distinction between meaningful dimensions and noise.
 
 ::: {.callout-tip}
