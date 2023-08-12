@@ -104,6 +104,8 @@ stimuli = load_stimuli()
 view_stimuli(stimuli)
 ```
 
+### Visualizing principal components
+
 ```{python}
 # | label: image_viewing_utilities
 # | code-summary: Utilities to view images
@@ -171,8 +173,6 @@ def view_images_at_poles(
 
 
 ```
-
-### Visualizing principal components
 
 ```{python}
 # | label: extreme_images_pcs
@@ -284,8 +284,8 @@ A power law is a relationship of the form $f(x) \propto x^{\alpha}$, where $\alp
 
 Power laws are ubiquitious in nature, arising in all sorts of systems:
 
-- wealth distribution (Pareto principle)
 - word frequencies in natural language (Zipf's law)
+- wealth distribution (Pareto principle)
 - ferromagnetism (Ising model)
 
 Power laws are *scale-free*: $f(kx) \propto f(x)$.
