@@ -82,6 +82,8 @@ We utilized the NSD single-trial betas, preprocessed in 1.8 mm volumetric space 
 ```{python}
 # | label: view_stimuli
 # | code-summary: Load the stimuli
+# | fig-column: page
+# | fig-align: center
 
 
 def view_stimuli(stimuli: xr.DataArray, *, n: int = 10) -> None:

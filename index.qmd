@@ -66,4 +66,4 @@ When
 
 This tutorial is broadly divided into four parts:
 
-1. Introducting PCA
+1. Introducing PCA

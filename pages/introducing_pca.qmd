@@ -49,7 +49,6 @@ from IPython.display import display, HTML
 
 Let's create $N = 1000$ dots of different *colors* and *sizes*. From the scatterplot, we can see that the two latent variables are [uncorrelated](reference.qmd#correlation)).
 
-
 ```{python}
 # | label: create_the_stimuli
 # | code-summary: Create stimulus dots of various colors and sizes
@@ -99,76 +98,51 @@ Now, let's simulate some neural data. We need to decide how the $P = 2$ neurons 
 
 $r_{\text{neuron}} \sim \beta_{\text{color}} \left( \text{color} \right) + \beta_{\text{size}} \left( \text{size} \right) + \epsilon$, where $\epsilon \sim \mathcal{N}(\mu_{\text{neuron}}, \sigma_{\text{neuron}}^2)$
 
+```{python}
+# | label: utility_Neuron
+# | code-filename: Define the parameters controlling neuron responses
+# | code-fold: show
+# | add-from: ../src/utilities/toy_example/neurons.py
+# | source-lang: python
+# | start-line: 8
+# | end-line: 14
+#
+```
+
+```{python}
+# | label: utility_simulate_neuron_responses
+# | code-filename: (Function) Simulate neuron responses
+# | code-fold: show
+# | add-from: ../src/utilities/toy_example/neurons.py
+# | source-lang: python
+# | start-line: 17
+# | end-line: 31
+#
+```
+
+```{python}
+# | label: function_simulate_multiple_neuron_responses
+# | code-filename: (Function) Simulate multiple neurons' responses
+# | add-from: ../src/utilities/toy_example/neurons.py
+# | source-lang: python
+# | start-line: 34
+# | end-line: 68
+#
+```
+
 This procedure produces a data matrix $X \in \mathbb{R}^{N \times P}$ containing the $P = 2$ neurons' responses to the $N = 1000$ stimuli.
+
+```{python}
+# | label: import_utility_functions
+# | include: false
+
+from utilities.toy_example.neurons import Neuron, simulate_multiple_neuron_responses
+```
 
 ```{python}
 # | label: simulate_the_neuron_responses
 # | code-summary: Simulate the responses of two neurons to the stimuli
-
-Neuron = NamedTuple(
-    "Neuron",
-    beta_color=float,
-    beta_size=float,
-    mean=float,
-    std=float,
-)
-
-
-def simulate_neuron_responses(
-    stimuli: pd.DataFrame,
-    neuron: Neuron,
-    *,
-    rng: np.random.Generator,
-) -> np.ndarray:
-    def z_score(x: np.ndarray) -> np.ndarray:
-        return (x - x.mean()) / x.std()
-
-    return (
-        neuron.beta_color * z_score(stimuli["color"])
-        + neuron.beta_size * z_score(stimuli["size"])
-        + neuron.std * rng.standard_normal(size=(len(stimuli),))
-        + neuron.mean
-    )
-
-
-def simulate_multiple_neuron_responses(
-    *,
-    stimuli: pd.DataFrame,
-    neurons: Sequence[Neuron],
-    rng: np.random.Generator,
-) -> xr.DataArray:
-    data = []
-    for i_neuron, neuron in enumerate(neurons):
-        data.append(
-            xr.DataArray(
-                data=simulate_neuron_responses(
-                    stimuli=stimuli,
-                    neuron=neuron,
-                    rng=rng,
-                ),
-                dims=("stimulus",),
-                coords={
-                    column: ("stimulus", values)
-                    for column, values in stimuli.reset_index(names="stimulus").items()
-                },
-            )
-            .expand_dims({"neuron": [i_neuron + 1]})
-            .assign_coords(
-                {
-                    field: ("neuron", [float(value)])
-                    for field, value in neuron._asdict().items()
-                }
-            )
-        )
-
-    data = (
-        xr.concat(data, dim="neuron")
-        .rename("neuron responses")
-        .transpose("stimulus", "neuron")
-    )
-
-    return data
-
+# | code-fold: show
 
 neurons = (
     Neuron(beta_color=3, beta_size=-2, std=1, mean=7),
@@ -341,7 +315,7 @@ def animate_pca_transformation(
     durations: dict[str, int] = {
         "center": 1_000,
         "rotate": 1_000,
-        "pause": 1_500,
+        "pause": 500,
     },
     interval: int = 50,
 ) -> str:
@@ -394,7 +368,7 @@ def animate_pca_transformation(
         if frame < frame_to_retitle_center:
             return
         elif frame == frame_to_retitle_center:
-            title.set_text("center the data")
+            title.set_text("step 1 of 2: center the data")
             ax.set_xlabel("")
             ax.set_ylabel("")
         elif frame < frame_to_start_centering:
@@ -402,7 +376,7 @@ def animate_pca_transformation(
         elif frame <= frame_to_stop_centering:
             scatter.set_offsets(scatter.get_offsets() - delta)
         elif frame == frame_to_retitle_rotate:
-            title.set_text("rotate the data")
+            title.set_text("step 2 of 2: rotate the data")
         elif frame < frame_to_start_rotating:
             return
         elif frame <= frame_to_stop_rotating:
@@ -422,7 +396,7 @@ def animate_pca_transformation(
         frames=frame_to_end,
         interval=interval,
         repeat=True,
-        repeat_delay=2_500,
+        repeat_delay=2_000,
     )
     plt.close(fig)
     return animation.to_html5_video()
@@ -444,9 +418,26 @@ $$
 \end{align}
 $$
 
+![Computing the auto-covariance, where $X$ is centered (i.e. $X - \overline{X}$)](assets/autocovariance.svg){height=50mm}
+
+![Computing the eigendecomposition of the auto-covariance](assets/eigendecomposition.svg){height=50mm}
+
 The columns of $V$ are *eigenvectors* that specify the directions of variance while the corresponding diagonal elements of $\Lambda$ are *eigenvalues* that specify the amount of variance along the eigenvector[^proof-eigenvalue-covariance].
 
-The original data matrix can be transformed by projecting it onto the eigenvectors: $\tilde{X} = \left(X - \overline{X}\right) V$.
+The original data matrix can be transformed by projecting it onto the eigenvectors: $\widetilde{X} = \left(X - \overline{X}\right) V$.
+
+![Transforming the original data matrix](assets/projection.svg){height=50mm}
+
+#### Some terminology
+
+Ambient space
+: The neural representation of each stimulus $i \in {1, \dots, N}$ can be captured by a vector of activations $X_i \in \mathbb{R}^P$. This vector space is typically called the *ambient space* -- the space where the raw data lives.
+
+Loadings
+: The eigenvectors of the covariance matrix are often called *loadings*
+
+Scores
+:
 
 ::: {.callout-note collapse="true"}
 # Viewing PCA as an optimization
@@ -454,13 +445,12 @@ The original data matrix can be transformed by projecting it onto the eigenvecto
 PCA can be used to project data into a lower-dimensional space (i.e. $p \le f$) in a way that best preserves the geometry of the data. Specifically, computing a PCA decomposition of $X$ yields a matrix $V \in \mathbb{R}^{f \times p}$ such that $V = \argmin_{V \in \mathbb{U_{f \times p}}} \sum_{i=1}^n \left|| x_i - VV^\top x_i \right||_2$, where $||\cdot||_2$ denotes the $L_2$-norm and $\mathbb{U_{f \times p}}$ denotes the set of orthonormal matrices with shape $f \times p$.
 :::
 
-### Transforming the data
+### A computational recipe
 
 ```{python}
 # | label: recipe-pca
 # | code-summary: A computational recipe for PCA
 # | code-fold: show
-# | echo: true
 
 
 class PCA:
@@ -507,6 +497,8 @@ Specifically, the eigenvalues $\lambda_i$ of the auto-covariance matrix are rela
 Check out [truncated SVD](https://scikit-learn.org/stable/modules/generated/sklearn.decomposition.TruncatedSVD.html)!
 :::
 
+### Inspecting the eigenvectors
+
 ```{python}
 # | label: pca-visualize
 # | code-summary: Visualize the transformed data
@@ -538,6 +530,7 @@ def compute_pca(data: xr.DataArray) -> xr.Dataset:
 
 
 pca = compute_pca(data)
+display(pca["score"])
 view_joint_scatter(
     pca["score"],
     coord="score",
@@ -545,6 +538,8 @@ view_joint_scatter(
     template_func=lambda x: f"principal component {x}",
 )
 ```
+
+### Interpreting the transformed data
 
 Let's view the data projected onto each of the principal components.
 
@@ -566,7 +561,9 @@ We can observe that:
 - the *first* principal component is largely driven by the *size* of the stimulus
 - the *second* principal component is largely driven by the *color* of the stimulus
 
+::: {.callout-important collapse="false"}
 However, note that these components do not directly correspond to either of the latent variables; rather, each is a mixture of stimulus-dependent signal and noise.
+:::
 
 ### Analyzing the covariance statistics
 
@@ -693,13 +690,21 @@ However, keep in mind that this is a toy example with idealized data. As we will
 
 ## Preprocessing your data
 
-A standard preprocessing step before PCA is to Z-score your input features $X$ -- ensuring that they have zero mean and unit variance:
+Before PCA, it's often recommended to preprocess your data by Z-scoring each of your input features $X$ -- ensuring that they have zero mean and unit variance:
 
 $$Z = \dfrac{X - \mu}{\sigma}$$
 
-Why is this useful? Often, PCA is applied to data where the features are fundamentally different from each other. For example, we might have a dataset where the features of interest are the prices of cars (in dollars) and their masses (in kilograms). Since these two features have different units, the variances of the features are not directly comparable -- there's no obvious way to numerically compare a variance of ($20,000)^2^ in price and a variance of (1,000 kg)^2^ in mass. Even if the features being compared are all the same, if they are in different units -- say euros, dollars, and cents -- the raw variances of the data matrix are meaningless.
+::: {.callout-important collapse="false"}
+# When should you Z-score your data?
 
-Since PCA implicitly assumes that the variances along each dimension are comparable, we can Z-score each of our features before applying PCA to ensure that they are on a common scale. Note, however, that this transformation reduces the information in the system -- it is possible that the variances of the features are informative.
+Often, PCA is applied to data where the features are fundamentally different from each other. For example, we might have a dataset where the features of interest are the prices of cars (in dollars) and their masses (in kilograms). Since these two features have different units, the variances of the features are not directly comparable -- there's no obvious way to numerically compare a variance of ($20,000)^2^ in price and a variance of (1,000 kg)^2^ in mass. Even if the features being compared are all the same, if they are in different units -- say euros, dollars, and cents -- the raw variances of the data matrix are meaningless.
+
+Since PCA implicitly assumes that the variances along each dimension are comparable, we can Z-score each of our features before applying PCA to ensure that they are on a common scale.
+
+Note, however, that this transformation reduces the information in the system -- it is possible that the variances of the features are informative.
+:::
+
+## What if the stimulus features covary?
 
 [^definition-eigendecomposition]: The eigendecomposition of a symmetric matrix $X \in \mathbb{R}^{n \times n}$ involves rewriting it as the product of three matrices $X = V \Lambda V^\top$, where $V \in \mathbb{n \times n}$ is orthonormal and $\Lambda \in \mathbb{n \times n}$ is diagonal with non-negative entries.
 
@@ -709,12 +714,12 @@ Since PCA implicitly assumes that the variances along each dimension are compara
 
     This is an $f \times f$ matrix where the $(i, j)$-th element measures how much neuron $i$ covaries with neuron $j$. If the covariance is positive, they tend to have similar activation: a stimulus that activates one neuron will tend to activate the other. If the covariance is negative, the neurons will have dissimilar activation: a stimulus that activates one neuron will likely not activate the other.
 
-[^proof-eigenvalue-covariance]: Let's compute the auto-covariance of the projected data $\tilde{X}$:
+[^proof-eigenvalue-covariance]: Let's compute the auto-covariance of the projected data $\widetilde{X}$:
 
     $$
     \begin{align}
-        \text{cov}(\tilde{X})
-        &= \left(\dfrac{1}{n - 1}\right) \tilde{X}^\top \tilde{X}\\
+        \text{cov}(\widetilde{X})
+        &= \left(\dfrac{1}{n - 1}\right) \widetilde{X}^\top \widetilde{X}\\
         &= \left(\dfrac{1}{n - 1}\right) \left((X - \overline{X})V\right)^\top \left((X - \overline{X})V\right)\\
         &= \left(\dfrac{1}{n - 1}\right) V^\top (X - \overline{X})^\top (X - \overline{X})V\\
         &= V^\top \left(\dfrac{1}{n - 1}\right) (X - \overline{X})^\top (X - \overline{X})V\\
