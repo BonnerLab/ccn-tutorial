@@ -54,6 +54,11 @@ format:
     theme:
       light: flatly
       dark: darkly
+    grid:
+      sidebar-width: 300px
+      body-width: 800px
+      margin-width: 300px
+      gutter-width: 3em
     code-block-bg: true
     highlight-style: atom-one
     html-math-method: katex
