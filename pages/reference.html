@@ -89,7 +89,7 @@ ul.task-list li input[type="checkbox"] {
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
-    <nav class="navbar navbar-expand-md navbar-dark ">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
     <a class="navbar-brand" href="../index.html">
@@ -158,7 +158,7 @@ ul.task-list li input[type="checkbox"] {
       <div>
       <div class="quarto-title-meta-heading">Modified</div>
       <div class="quarto-title-meta-contents">
-        <p class="date-modified">August 10, 2023</p>
+        <p class="date-modified">August 12, 2023</p>
       </div>
     </div>
       
@@ -175,23 +175,23 @@ ul.task-list li input[type="checkbox"] {
 <!-- sidebar -->
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="99">
+        <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="1">
     <h2 id="toc-title">Contents</h2>
    
   <ul>
   <li><a href="#the-basics" id="toc-the-basics" class="nav-link active" data-scroll-target="#the-basics">The basics</a>
-  <ul class="collapse">
+  <ul>
   <li><a href="#scalar" id="toc-scalar" class="nav-link" data-scroll-target="#scalar">Scalar</a></li>
   <li><a href="#vector" id="toc-vector" class="nav-link" data-scroll-target="#vector">Vector</a></li>
   <li><a href="#matrix" id="toc-matrix" class="nav-link" data-scroll-target="#matrix">Matrix</a></li>
   </ul></li>
   <li><a href="#matrix-decompositions" id="toc-matrix-decompositions" class="nav-link" data-scroll-target="#matrix-decompositions">Matrix decompositions</a>
-  <ul class="collapse">
+  <ul>
   <li><a href="#singular-value-decomposition" id="toc-singular-value-decomposition" class="nav-link" data-scroll-target="#singular-value-decomposition">Singular value decomposition</a></li>
   <li><a href="#eigendecomposition" id="toc-eigendecomposition" class="nav-link" data-scroll-target="#eigendecomposition">Eigendecomposition</a></li>
   </ul></li>
   <li><a href="#covariance" id="toc-covariance" class="nav-link" data-scroll-target="#covariance">Covariance</a>
-  <ul class="collapse">
+  <ul>
   <li><a href="#auto-covariance" id="toc-auto-covariance" class="nav-link" data-scroll-target="#auto-covariance">Auto-covariance</a></li>
   <li><a href="#cross-covariance" id="toc-cross-covariance" class="nav-link" data-scroll-target="#cross-covariance">Cross-covariance</a></li>
   </ul></li>
@@ -238,11 +238,19 @@ ul.task-list li input[type="checkbox"] {
 <h2 class="anchored" data-anchor-id="matrix-decompositions">Matrix decompositions</h2>
 <section id="singular-value-decomposition" class="level3">
 <h3 class="anchored" data-anchor-id="singular-value-decomposition">Singular value decomposition</h3>
-<p>The singular value decomposition (SVD) involves rewriting a matrix <span class="math inline">X \in \mathbb{R}^{m \times n}</span> as the product of three matrices <span class="math inline">X = U \Sigma V^\top</span>, where: - <span class="math inline">U \in \mathbb{R}^{m \times m}</span> and <span class="math inline">V \in \mathbb{R}^{n \times n}</span> are orthonormal matrices - <span class="math inline">\Sigma \in \mathbb{R}^{m \times n}</span> is zero everywhere except potentially on its main diagonal.</p>
+<p>The singular value decomposition (SVD) involves rewriting a matrix <span class="math inline">X \in \mathbb{R}^{m \times n}</span> as the product of three matrices <span class="math inline">X = U \Sigma V^\top</span>, where</p>
+<ul>
+<li><span class="math inline">U \in \mathbb{R}^{m \times m}</span> and <span class="math inline">V \in \mathbb{R}^{n \times n}</span> are orthonormal matrices and</li>
+<li><span class="math inline">\Sigma \in \mathbb{R}^{m \times n}</span> is zero everywhere except potentially on its main diagonal.</li>
+</ul>
 </section>
 <section id="eigendecomposition" class="level3">
 <h3 class="anchored" data-anchor-id="eigendecomposition">Eigendecomposition</h3>
-<p>The eigendecomposition of a symmetric matrix <span class="math inline">X \in \mathbb{R}^{n \times n}</span> involves rewriting it as the product of three matrices <span class="math inline">X = V \Lambda V^\top</span>, where <span class="math inline">V \in \mathbb{n \times n}</span> is orthonormal and <span class="math inline">\Lambda \in \mathbb{n \times n}</span> is diagonal with non-negative entries.</p>
+<p>The eigendecomposition of a symmetric matrix <span class="math inline">X \in \mathbb{R}^{n \times n}</span> involves rewriting it as the product of three matrices <span class="math inline">X = V \Lambda V^\top</span>, where</p>
+<ul>
+<li><span class="math inline">V \in \mathbb{n \times n}</span> is orthonormal and</li>
+<li><span class="math inline">\Lambda \in \mathbb{n \times n}</span> is diagonal with non-negative entries.</li>
+</ul>
 </section>
 </section>
 <section id="covariance" class="level2">

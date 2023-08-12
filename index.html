@@ -74,11 +74,11 @@ ul.task-list li input[type="checkbox"] {
 
 </head>
 
-<body class="nav-fixed">
+<body class="nav-fixed fullcontent">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
-    <nav class="navbar navbar-expand-md navbar-dark ">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
     <a class="navbar-brand" href="./index.html">
@@ -218,22 +218,17 @@ ul.task-list li input[type="checkbox"] {
   </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="99">
-    <h2 id="toc-title">Contents</h2>
-   
-  <ul>
-  <li><a href="#outline" id="toc-outline" class="nav-link active" data-scroll-target="#outline">Outline</a></li>
-  </ul>
-<div class="toc-actions"><ul><li><a href="https://github.com/BonnerLab/ccn-tutorial/edit/main/index.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/BonnerLab/ccn-tutorial/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
-    </div>
+    
 <!-- main -->
 <main class="content quarto-banner-title-block" id="quarto-document-content">
 
 
 
 
-<div class="callout callout-style-default callout-tip callout-titled">
+<section id="welcome" class="level2">
+<h2 class="anchored" data-anchor-id="welcome">Welcome!</h2>
+<p>This site contains material for a <a href="https://2023.ccneuro.org/kt3.php">tutorial</a> presented at the conference on <a href="https://2023.ccneuro.org/">Cognitive Computational Neuroscience 2023</a>.</p>
+<div class="callout callout-style-default callout-important callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
@@ -255,17 +250,60 @@ Saturday, August 26, 2023 @ 10:45 - 12:30
 </dl>
 </div>
 </div>
+</section>
 <section id="outline" class="level2">
 <h2 class="anchored" data-anchor-id="outline">Outline</h2>
 <p>This tutorial is broadly divided into four parts:</p>
 <ol type="1">
-<li>Introducing PCA</li>
+<li>An introduction to PCA [<a href="https://bonnerlab.github.io/ccn-tutorial/pages/introducing_pca.html">website</a>, <a href="https://colab.research.google.com/github/BonnerLab/ccn-tutorial/blob/main/notebooks/introducing_pca.ipynb">Colab</a>, <a href="https://bonnerlab.github.io/ccn-tutorial/pages/introducing_pca.ipynb">download</a>]</li>
+<li>Exploring a neural dataset [<a href="https://bonnerlab.github.io/ccn-tutorial/pages/exploring_neural_data.html">website</a>, <a href="https://colab.research.google.com/github/BonnerLab/ccn-tutorial/blob/main/notebooks/exploring_neural_data.ipynb">Colab</a>, <a href="https://bonnerlab.github.io/ccn-tutorial/pages/exploring_neural_data.ipynb">download</a>]</li>
+<li>Dealing with noisy data [<a href="https://bonnerlab.github.io/ccn-tutorial/pages/dealing_with_noise.html">website</a>, <a href="https://colab.research.google.com/github/BonnerLab/ccn-tutorial/blob/main/notebooks/dealing_with_noise.ipynb">Colab</a>, <a href="https://bonnerlab.github.io/ccn-tutorial/pages/dealing_with_noise.ipynb">download</a>]</li>
+<li>Comparing high-dimensional representations [<a href="https://bonnerlab.github.io/ccn-tutorial/pages/comparing_representations.html">website</a>, <a href="https://colab.research.google.com/github/BonnerLab/ccn-tutorial/blob/main/notebooks/comparing_representations.ipynb">Colab</a>, <a href="https://bonnerlab.github.io/ccn-tutorial/pages/comparing_representations.ipynb">download</a>]</li>
 </ol>
-
-
+</section>
+<section id="instructions" class="level2">
+<h2 class="anchored" data-anchor-id="instructions">Instructions</h2>
+<p>The <a href="https://docs.jupyter.org/en/latest/index.html">computational notebooks</a> contain some fun interactive elements and are designed to be run on <a href="https://colab.research.google.com/">Google Colab</a> – just follow the links above!</p>
+<p>If you can’t run the notebooks, don’t worry – just follow along on the website!</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+If you’d prefer to run the notebooks locally…
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Create a <a href="https://packaging.python.org/en/latest/guides/installing-using-pip-and-virtual-environments/#creating-a-virtual-environment">Python virtual environment</a> with <code>Python &gt;=3.10.12</code> to run the notebooks. The required dependencies will be automatically installed when you run the first cell of each notebook.</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Notice a typo? Have some feedback?
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Use the <code>Report an issue</code> button on the sidebar of each page to contact us! Feel free to suggest edits by using the <code>Edit this page</code> button too!</p>
+</div>
+</div>
 </section>
 
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>This work is licensed under a Creative Commons Attribution-ShareAlike 4.0 International License.</div></div></section></div></main> <!-- /main -->
+
+<div id="quarto-appendix" class="default"><section id="acknowledgments" class="level2 appendix"><h2 class="anchored quarto-appendix-heading">Acknowledgments</h2><div class="quarto-appendix-contents">
+
+<p>Thanks to the <a href="http://naturalscenesdataset.org/">Natural Scene Dataset</a> team for letting use a part of the dataset for this tutorial!</p>
+<p>Thanks to the Open Science Foundation for hosting the <a href="https://osf.io/zk265/">data files</a> for this tutorial!</p>
+
+
+</div></section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>This work is licensed under a Creative Commons Attribution-ShareAlike 4.0 International License.</div></div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
@@ -810,4 +848,4 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 
 
 
-</body></html>
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions"><ul><li><a href="https://github.com/BonnerLab/ccn-tutorial/edit/main/index.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/BonnerLab/ccn-tutorial/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div></div></footer></body></html>
