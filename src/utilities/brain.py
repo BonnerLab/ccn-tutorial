@@ -97,11 +97,7 @@ def download_dataset(url: str = OSF_URL) -> Path:
 def load_dataset(*, subject: int, roi: str) -> xr.DataArray:
     filepath = download_dataset()
     return xr.open_dataarray(
-        filepath
-        / "data"
-        / "activations"
-        / f"roi={roi}"
-        / f"subject={subject}.nc"
+        filepath / "data" / "activations" / f"roi={roi}" / f"subject={subject}.nc"
     )
 
 
@@ -138,13 +134,12 @@ def average_data_across_repetitions(data: xr.DataArray) -> xr.DataArray:
         .groupby("stimulus_id")
         .mean()
         .assign_attrs(
-            data.attrs
-            | {"postprocessing": "averaged across first two repetitions"}
+            data.attrs | {"postprocessing": "averaged across first two repetitions"}
         ),
         groupby_coord="stimulus_id",
         groupby_dim="presentation",
     ).transpose("presentation", "neuroid")
- 
+
 
 def reshape_dataarray_to_brain(data: xr.DataArray, *, mni: bool = False) -> np.ndarray:
     if mni:
@@ -184,7 +179,6 @@ def plot_brain_map(
 
 
 def convert_array_to_mni(data: xr.DataArray, *, subject: int) -> xr.DataArray:
-    
     data_ = reshape_dataarray_to_brain(data)
 
     transformation = load_transformation(subject=subject)
