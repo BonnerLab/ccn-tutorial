@@ -27,7 +27,6 @@ website:
   navbar:
     background: primary
     search: true
-    collapse-below: md
     left:
       - href: index.qmd
         text: Home
@@ -64,9 +63,9 @@ format:
     html-math-method: katex
     smooth-scroll: false
     toc: true
-    toc-depth: 3
+    toc-depth: 4
     toc-title: Contents
-    toc-expand: true
+    toc-expand: 1
     code-fold: true
     code-copy: true
     code-tools:

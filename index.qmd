@@ -51,10 +51,16 @@ format:
       source: false
       toggle: false
     title-block-style: default
+    toc: false
 ---
 
-::: {.callout-tip}
+## Welcome!
+
+This site contains material for a [tutorial](https://2023.ccneuro.org/kt3.php) presented at the conference on [Cognitive Computational Neuroscience 2023](https://2023.ccneuro.org/).
+
+::: {.callout-important}
 # Don't miss the tutorial!
+
 Where
 : East Schools
 
@@ -66,4 +72,31 @@ When
 
 This tutorial is broadly divided into four parts:
 
-1. Introducing PCA
+1. An introduction to PCA [[website](https://bonnerlab.github.io/ccn-tutorial/pages/introducing_pca.html), [Colab](https://colab.research.google.com/github/BonnerLab/ccn-tutorial/blob/main/notebooks/introducing_pca.ipynb), [download](https://bonnerlab.github.io/ccn-tutorial/pages/introducing_pca.ipynb)]
+2. Exploring a neural dataset [[website](https://bonnerlab.github.io/ccn-tutorial/pages/exploring_neural_data.html), [Colab](https://colab.research.google.com/github/BonnerLab/ccn-tutorial/blob/main/notebooks/exploring_neural_data.ipynb), [download](https://bonnerlab.github.io/ccn-tutorial/pages/exploring_neural_data.ipynb)]
+3. Dealing with noisy data [[website](https://bonnerlab.github.io/ccn-tutorial/pages/dealing_with_noise.html), [Colab](https://colab.research.google.com/github/BonnerLab/ccn-tutorial/blob/main/notebooks/dealing_with_noise.ipynb), [download](https://bonnerlab.github.io/ccn-tutorial/pages/dealing_with_noise.ipynb)]
+4. Comparing high-dimensional representations [[website](https://bonnerlab.github.io/ccn-tutorial/pages/comparing_representations.html), [Colab](https://colab.research.google.com/github/BonnerLab/ccn-tutorial/blob/main/notebooks/comparing_representations.ipynb), [download](https://bonnerlab.github.io/ccn-tutorial/pages/comparing_representations.ipynb)]
+
+## Instructions
+
+The [computational notebooks](https://docs.jupyter.org/en/latest/index.html) contain some fun interactive elements and are designed to be run on [Google Colab](https://colab.research.google.com/) -- just follow the links above!
+
+If you can't run the notebooks, don't worry -- just follow along on the website!
+
+::: {.callout-note collapse="true"}
+# If you'd prefer to run the notebooks locally...
+
+Create a [Python virtual environment](https://packaging.python.org/en/latest/guides/installing-using-pip-and-virtual-environments/#creating-a-virtual-environment) with `Python >=3.10.12` to run the notebooks. The required dependencies will be automatically installed when you run the first cell of each notebook.
+:::
+
+::: {.callout-tip}
+# Notice a typo? Have some feedback?
+
+Use the `Report an issue` button on the sidebar of each page to contact us! Feel free to suggest edits by using the `Edit this page` button too!
+:::
+
+## Acknowledgments {.appendix}
+
+Thanks to the [Natural Scene Dataset](http://naturalscenesdataset.org/) team for letting use a part of the dataset for this tutorial!
+
+Thanks to the Open Science Foundation for hosting the [data files](https://osf.io/zk265/) for this tutorial!

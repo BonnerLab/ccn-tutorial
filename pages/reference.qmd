@@ -38,13 +38,17 @@ An $m \times n$ matrix is a collection of
 
 ### Singular value decomposition
 
-The singular value decomposition (SVD) involves rewriting a matrix $X \in \mathbb{R}^{m \times n}$ as the product of three matrices $X = U \Sigma V^\top$, where:
-- $U \in \mathbb{R}^{m \times m}$ and $V \in \mathbb{R}^{n \times n}$ are orthonormal matrices
+The singular value decomposition (SVD) involves rewriting a matrix $X \in \mathbb{R}^{m \times n}$ as the product of three matrices $X = U \Sigma V^\top$, where
+
+- $U \in \mathbb{R}^{m \times m}$ and $V \in \mathbb{R}^{n \times n}$ are orthonormal matrices and
 - $\Sigma \in \mathbb{R}^{m \times n}$ is zero everywhere except potentially on its main diagonal.
 
 ### Eigendecomposition
 
-The eigendecomposition of a symmetric matrix $X \in \mathbb{R}^{n \times n}$ involves rewriting it as the product of three matrices $X = V \Lambda V^\top$, where $V \in \mathbb{n \times n}$ is orthonormal and $\Lambda \in \mathbb{n \times n}$ is diagonal with non-negative entries.
+The eigendecomposition of a symmetric matrix $X \in \mathbb{R}^{n \times n}$ involves rewriting it as the product of three matrices $X = V \Lambda V^\top$, where
+
+- $V \in \mathbb{n \times n}$ is orthonormal and
+- $\Lambda \in \mathbb{n \times n}$ is diagonal with non-negative entries.
 
 ## Covariance
 
