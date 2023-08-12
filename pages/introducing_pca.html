@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-US" xml:lang="en-US"><head>
 
 <meta charset="utf-8">
 <meta name="generator" content="quarto-1.4.315">
@@ -70,12 +70,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../site_libs/bootstrap/bootstrap-dark.min.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -167,7 +165,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           </div> <!-- /navcollapse -->
           <div class="quarto-navbar-tools">
     <a href="https://github.com/BonnerLab/ccn-tutorial" title="" class="quarto-navigation-tool px-1" aria-label=""><i class="bi bi-github"></i></a>
-  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
 </div>
       </div> <!-- /container-fluid -->
     </nav>
@@ -195,7 +192,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <div>
       <div class="quarto-title-meta-heading">Modified</div>
       <div class="quarto-title-meta-contents">
-        <p class="date-modified">August 11, 2023</p>
+        <p class="date-modified">August 12, 2023</p>
       </div>
     </div>
       
@@ -256,7 +253,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="toc-actions"><ul><li><a href="https://github.com/BonnerLab/ccn-tutorial/edit/main/pages/introducing_pca.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/BonnerLab/ccn-tutorial/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div><div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="introducing_pca.ipynb" download="introducing_pca.ipynb"><i class="bi bi-journal-code"></i>Jupyter</a></li></ul></div></nav>
     </div>
 <!-- main -->
-<main class="content quarto-banner-title-block" id="quarto-document-content">
+<main class="content quarto-banner-title-block page-columns page-full" id="quarto-document-content">
 
 
 
@@ -277,13 +274,13 @@ Run this notebook interactively!
 <section id="a-simple-experiment" class="level2">
 <h2 class="anchored" data-anchor-id="a-simple-experiment">A simple experiment</h2>
 <p>Let’s perform an imaginary neuroscience experiment! We’ll record voltages from <span class="math inline">P = 2</span> neurons in visual cortex while the participant passively views <span class="math inline">N = 1000</span> dots of different <em>colors</em> and <em>sizes</em>.</p>
-<div id="install_package" class="cell" data-execution_count="1">
+<div id="install_package" class="cell" data-execution_count="2">
 <details>
 <summary>Install all required dependencies</summary>
 <div class="sourceCode cell-code" id="install_package"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="install_package-1"><a href="#install_package-1" aria-hidden="true" tabindex="-1"></a><span class="op">%</span>pip install git<span class="op">+</span>https:<span class="op">//</span>github.com<span class="op">/</span>BonnerLab<span class="op">/</span>ccn<span class="op">-</span>tutorial.git</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="import_libraries" class="cell" data-execution_count="2">
+<div id="import_libraries" class="cell" data-execution_count="3">
 <details>
 <summary>Import various libraries</summary>
 <div class="sourceCode cell-code" id="import_libraries"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="import_libraries-1"><a href="#import_libraries-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> collections.abc <span class="im">import</span> Sequence, Callable</span>
@@ -302,7 +299,7 @@ Run this notebook interactively!
 <span id="import_libraries-14"><a href="#import_libraries-14" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> IPython.display <span class="im">import</span> display, HTML</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="set_visualization_defaults" class="cell" data-execution_count="3">
+<div id="set_visualization_defaults" class="cell" data-execution_count="4">
 <details>
 <summary>Set some visualization defaults</summary>
 <div class="sourceCode cell-code" id="set_visualization_defaults"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="set_visualization_defaults-1"><a href="#set_visualization_defaults-1" aria-hidden="true" tabindex="-1"></a><span class="op">%</span>matplotlib inline</span>
@@ -324,7 +321,7 @@ Run this notebook interactively!
 <span id="set_visualization_defaults-17"><a href="#set_visualization_defaults-17" aria-hidden="true" tabindex="-1"></a>warnings.filterwarnings(<span class="st">"ignore"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="initialize_rng" class="cell" data-execution_count="4">
+<div id="initialize_rng" class="cell" data-execution_count="5">
 <details>
 <summary>Initialize a deterministic random number generator</summary>
 <div class="sourceCode cell-code" id="initialize_rng"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="initialize_rng-1"><a href="#initialize_rng-1" aria-hidden="true" tabindex="-1"></a>random_state <span class="op">=</span> <span class="dv">0</span></span>
@@ -334,7 +331,7 @@ Run this notebook interactively!
 <section id="creating-the-stimuli" class="level3">
 <h3 class="anchored" data-anchor-id="creating-the-stimuli">Creating the stimuli</h3>
 <p>Let’s create <span class="math inline">N = 1000</span> dots of different <em>colors</em> and <em>sizes</em>. From the scatterplot, we can see that the two latent variables are <a href="../pages/reference.html#correlation">uncorrelated</a>).</p>
-<div id="cell-create_the_stimuli" class="cell" data-execution_count="5">
+<div id="cell-create_the_stimuli" class="cell" data-execution_count="6">
 <details>
 <summary>Create stimulus dots of various colors and sizes</summary>
 <div class="sourceCode cell-code" id="cell-create_the_stimuli"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cell-create_the_stimuli-1"><a href="#cell-create_the_stimuli-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> create_stimuli(</span>
@@ -373,7 +370,7 @@ Run this notebook interactively!
 <span id="cell-create_the_stimuli-34"><a href="#cell-create_the_stimuli-34" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cell-create_the_stimuli-35"><a href="#cell-create_the_stimuli-35" aria-hidden="true" tabindex="-1"></a>view_stimuli(stimuli)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output cell-output-display" data-execution_count="4">
+<div class="cell-output cell-output-display" data-execution_count="46">
 <div id="create_the_stimuli" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="introducing_pca_files/figure-html/create_the_stimuli-output-1.svg" class="img-fluid figure-img"></p>
@@ -386,7 +383,7 @@ Run this notebook interactively!
 <h3 class="anchored" data-anchor-id="simulating-neural-responses">Simulating neural responses</h3>
 <p>Now, let’s simulate some neural data. We need to decide how the <span class="math inline">P = 2</span> neurons might respond to these <span class="math inline">N = 1000</span> stimulus dots. Each neuron could respond to either one or both of the latent features that define these stimuli – <span class="math inline">\text{color}</span> and <span class="math inline">\text{size}</span>. The neuron’s responses could also be subject to noise. Hence, we model each neuron’s response <span class="math inline">r_\text{neuron}</span> as a simple linear combination of the two latent features with stimulus-independent Gaussian noise <span class="math inline">\epsilon</span>:</p>
 <p><span class="math inline">r_{\text{neuron}} \sim \beta_{\text{color}} \left( \text{color} \right) + \beta_{\text{size}} \left( \text{size} \right) + \epsilon</span>, where <span class="math inline">\epsilon \sim \mathcal{N}(\mu_{\text{neuron}}, \sigma_{\text{neuron}}^2)</span></p>
-<div id="utility_neuron" class="cell" data-add-from="../src/utilities/toy_example/neurons.py" data-code-filename="Define the parameters controlling neuron responses" data-end-line="14" data-source-lang="python" data-start-line="8" data-execution_count="6">
+<div id="utility_neuron" class="cell" data-add-from="../src/utilities/toy_example/neurons.py" data-code-filename="Define the parameters controlling neuron responses" data-end-line="14" data-source-lang="python" data-start-line="8" data-execution_count="7">
 <details open="">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="utility_neuron" data-startfrom="8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python" style="counter-reset: source-line 7;"><span id="utility_neuron-8"><a href="#utility_neuron-8" aria-hidden="true" tabindex="-1"></a>Neuron <span class="op">=</span> NamedTuple(</span>
@@ -398,7 +395,7 @@ Run this notebook interactively!
 <span id="utility_neuron-14"><a href="#utility_neuron-14" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="utility_simulate_neuron_responses" class="cell" data-add-from="../src/utilities/toy_example/neurons.py" data-code-filename="(Function) Simulate neuron responses" data-end-line="31" data-source-lang="python" data-start-line="17" data-execution_count="7">
+<div id="utility_simulate_neuron_responses" class="cell" data-add-from="../src/utilities/toy_example/neurons.py" data-code-filename="(Function) Simulate neuron responses" data-end-line="31" data-source-lang="python" data-start-line="17" data-execution_count="8">
 <details open="">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="utility_simulate_neuron_responses" data-startfrom="17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python" style="counter-reset: source-line 16;"><span id="utility_simulate_neuron_responses-17"><a href="#utility_simulate_neuron_responses-17" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> simulate_neuron_responses(</span>
@@ -418,7 +415,7 @@ Run this notebook interactively!
 <span id="utility_simulate_neuron_responses-31"><a href="#utility_simulate_neuron_responses-31" aria-hidden="true" tabindex="-1"></a>    )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="function_simulate_multiple_neuron_responses" class="cell" data-add-from="../src/utilities/toy_example/neurons.py" data-code-filename="(Function) Simulate multiple neurons' responses" data-end-line="68" data-source-lang="python" data-start-line="34" data-execution_count="8">
+<div id="function_simulate_multiple_neuron_responses" class="cell" data-add-from="../src/utilities/toy_example/neurons.py" data-code-filename="(Function) Simulate multiple neurons' responses" data-end-line="68" data-source-lang="python" data-start-line="34" data-execution_count="9">
 <details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="function_simulate_multiple_neuron_responses" data-startfrom="34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python" style="counter-reset: source-line 33;"><span id="function_simulate_multiple_neuron_responses-34"><a href="#function_simulate_multiple_neuron_responses-34" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> simulate_multiple_neuron_responses(</span>
@@ -459,7 +456,7 @@ Run this notebook interactively!
 </details>
 </div>
 <p>This procedure produces a data matrix <span class="math inline">X \in \mathbb{R}^{N \times P}</span> containing the <span class="math inline">P = 2</span> neurons’ responses to the <span class="math inline">N = 1000</span> stimuli.</p>
-<div id="cell-simulate_the_neuron_responses" class="cell" data-execution_count="10">
+<div id="cell-simulate_the_neuron_responses" class="cell" data-execution_count="11">
 <details open="">
 <summary>Simulate the responses of two neurons to the stimuli</summary>
 <div class="sourceCode cell-code" id="cell-simulate_the_neuron_responses"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cell-simulate_the_neuron_responses-1"><a href="#cell-simulate_the_neuron_responses-1" aria-hidden="true" tabindex="-1"></a>neurons <span class="op">=</span> (</span>
@@ -845,13 +842,13 @@ Coordinates: (3/8)
   * neuron      (neuron) int64 1 2
   * stimulus    (stimulus) int64 1 2 3 4 5 6 7 ... 994 995 996 997 998 999 1000
     ...          ...
-    std         (neuron) float64 1.0 3.0</pre><div class="xr-wrap" style="display:none"><div class="xr-header"><div class="xr-obj-type">xarray.DataArray</div><div class="xr-array-name">'neuron responses'</div><ul class="xr-dim-list"><li><span class="xr-has-index">stimulus</span>: 1000</li><li><span class="xr-has-index">neuron</span>: 2</li></ul></div><ul class="xr-sections"><li class="xr-section-item"><div class="xr-array-wrap"><input id="section-5fb8ac92-ce74-4f2a-9ce4-57031ad0e0a3" class="xr-array-in" type="checkbox"><label for="section-5fb8ac92-ce74-4f2a-9ce4-57031ad0e0a3" title="Show/hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-array-preview xr-preview"><span>12.97 -15.39 1.005 3.224 1.226 ... -6.32 5.488 -16.32 6.215 -9.989</span></div><div class="xr-array-data"><pre>array([[ 12.96533678, -15.38921968],
+    std         (neuron) float64 1.0 3.0</pre><div class="xr-wrap" style="display:none"><div class="xr-header"><div class="xr-obj-type">xarray.DataArray</div><div class="xr-array-name">'neuron responses'</div><ul class="xr-dim-list"><li><span class="xr-has-index">stimulus</span>: 1000</li><li><span class="xr-has-index">neuron</span>: 2</li></ul></div><ul class="xr-sections"><li class="xr-section-item"><div class="xr-array-wrap"><input id="section-da3b4231-dd17-445b-a388-97ff22e537ee" class="xr-array-in" type="checkbox"><label for="section-da3b4231-dd17-445b-a388-97ff22e537ee" title="Show/hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-array-preview xr-preview"><span>12.97 -15.39 1.005 3.224 1.226 ... -6.32 5.488 -16.32 6.215 -9.989</span></div><div class="xr-array-data"><pre>array([[ 12.96533678, -15.38921968],
        [  1.00523852,   3.22448895],
        [  1.2258057 ,   2.43055775],
        ...,
        [  6.02810356,  -6.32031526],
        [  5.48782478, -16.32351293],
-       [  6.21490603,  -9.98853112]])</pre></div></div></li><li class="xr-section-item"><input id="section-7905e5f1-6e79-4551-8eeb-d7a1af133c20" class="xr-section-summary-in" type="checkbox" checked=""><label for="section-7905e5f1-6e79-4551-8eeb-d7a1af133c20" class="xr-section-summary">Coordinates: <span>(8)</span></label><div class="xr-section-inline-details"></div><div class="xr-section-details"><ul class="xr-var-list"><li class="xr-var-item"><div class="xr-var-name"><span class="xr-has-index">neuron</span></div><div class="xr-var-dims">(neuron)</div><div class="xr-var-dtype">int64</div><div class="xr-var-preview xr-preview">1 2</div><input id="attrs-4a562aa8-d510-4650-ac10-282d12d371af" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-4a562aa8-d510-4650-ac10-282d12d371af" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-7b7f22a4-db0c-4859-88d5-fd6af6cef824" class="xr-var-data-in" type="checkbox"><label for="data-7b7f22a4-db0c-4859-88d5-fd6af6cef824" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array([1, 2])</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span class="xr-has-index">stimulus</span></div><div class="xr-var-dims">(stimulus)</div><div class="xr-var-dtype">int64</div><div class="xr-var-preview xr-preview">1 2 3 4 5 ... 996 997 998 999 1000</div><input id="attrs-f754589a-de0f-4ca1-a130-279a24a89315" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-f754589a-de0f-4ca1-a130-279a24a89315" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-f8460c53-625a-4cab-9185-5efec6e197db" class="xr-var-data-in" type="checkbox"><label for="data-f8460c53-625a-4cab-9185-5efec6e197db" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array([   1,    2,    3, ...,  998,  999, 1000])</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span>color</span></div><div class="xr-var-dims">(stimulus)</div><div class="xr-var-dtype">float64</div><div class="xr-var-preview xr-preview">0.637 0.2698 ... 0.1649 0.38</div><input id="attrs-5bb7ef4e-e46e-466e-b52d-9e49a57471d8" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-5bb7ef4e-e46e-466e-b52d-9e49a57471d8" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-be0bd342-4b3f-424d-96af-17c03f3643a4" class="xr-var-data-in" type="checkbox"><label for="data-be0bd342-4b3f-424d-96af-17c03f3643a4" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array([6.36961687e-01, 2.69786714e-01, 4.09735239e-02, 1.65276355e-02,
+       [  6.21490603,  -9.98853112]])</pre></div></div></li><li class="xr-section-item"><input id="section-512f81b0-9cc7-4bac-bc5a-69a1b6b23f1b" class="xr-section-summary-in" type="checkbox" checked=""><label for="section-512f81b0-9cc7-4bac-bc5a-69a1b6b23f1b" class="xr-section-summary">Coordinates: <span>(8)</span></label><div class="xr-section-inline-details"></div><div class="xr-section-details"><ul class="xr-var-list"><li class="xr-var-item"><div class="xr-var-name"><span class="xr-has-index">neuron</span></div><div class="xr-var-dims">(neuron)</div><div class="xr-var-dtype">int64</div><div class="xr-var-preview xr-preview">1 2</div><input id="attrs-922db62c-f2c5-4fac-a696-34096f576191" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-922db62c-f2c5-4fac-a696-34096f576191" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-e4040f47-4358-41d3-9e8c-88fc6d0cf473" class="xr-var-data-in" type="checkbox"><label for="data-e4040f47-4358-41d3-9e8c-88fc6d0cf473" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array([1, 2])</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span class="xr-has-index">stimulus</span></div><div class="xr-var-dims">(stimulus)</div><div class="xr-var-dtype">int64</div><div class="xr-var-preview xr-preview">1 2 3 4 5 ... 996 997 998 999 1000</div><input id="attrs-0aab3055-470c-4bf4-a03d-2b19110b380b" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-0aab3055-470c-4bf4-a03d-2b19110b380b" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-fa9bbbfa-87f0-4b1e-9f3c-d488a00649c1" class="xr-var-data-in" type="checkbox"><label for="data-fa9bbbfa-87f0-4b1e-9f3c-d488a00649c1" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array([   1,    2,    3, ...,  998,  999, 1000])</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span>color</span></div><div class="xr-var-dims">(stimulus)</div><div class="xr-var-dtype">float64</div><div class="xr-var-preview xr-preview">0.637 0.2698 ... 0.1649 0.38</div><input id="attrs-084a1f7e-7e3b-4225-8391-83e4e458520b" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-084a1f7e-7e3b-4225-8391-83e4e458520b" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-986997d3-22ae-46d1-a0df-af0ab7443654" class="xr-var-data-in" type="checkbox"><label for="data-986997d3-22ae-46d1-a0df-af0ab7443654" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array([6.36961687e-01, 2.69786714e-01, 4.09735239e-02, 1.65276355e-02,
        8.13270239e-01, 9.12755577e-01, 6.06635776e-01, 7.29496561e-01,
        5.43624991e-01, 9.35072424e-01, 8.15853554e-01, 2.73850017e-03,
        8.57404277e-01, 3.35855753e-02, 7.29655446e-01, 1.75655621e-01,
@@ -891,7 +888,7 @@ Coordinates: (3/8)
        2.90828834e-01, 7.90127803e-01, 2.74807496e-01, 7.37059356e-02,
        6.83266012e-01, 7.99269956e-01, 6.41767808e-01, 3.44843336e-01,
        5.59773319e-01, 2.15199514e-02, 5.62661656e-01, 8.56801175e-01,
-       7.80532350e-02, 3.83319397e-01, 1.64863718e-01, 3.80007897e-01])</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span>size</span></div><div class="xr-var-dims">(stimulus)</div><div class="xr-var-dtype">float64</div><div class="xr-var-preview xr-preview">0.01301 0.8278 ... 0.08158 0.3216</div><input id="attrs-8f54d525-5b3a-47b0-be5e-edfc4b4b093e" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-8f54d525-5b3a-47b0-be5e-edfc4b4b093e" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-f5a1164b-e831-44b8-9177-4f5d6f37d899" class="xr-var-data-in" type="checkbox"><label for="data-f5a1164b-e831-44b8-9177-4f5d6f37d899" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array([0.01300767, 0.82776292, 0.49624331, 0.43591807, 0.60179472,
+       7.80532350e-02, 3.83319397e-01, 1.64863718e-01, 3.80007897e-01])</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span>size</span></div><div class="xr-var-dims">(stimulus)</div><div class="xr-var-dtype">float64</div><div class="xr-var-preview xr-preview">0.01301 0.8278 ... 0.08158 0.3216</div><input id="attrs-1d92f471-f6b8-482a-b484-5f9f9e1ab00f" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-1d92f471-f6b8-482a-b484-5f9f9e1ab00f" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-3b1092d1-4346-43e9-83b8-ea480c24918b" class="xr-var-data-in" type="checkbox"><label for="data-3b1092d1-4346-43e9-83b8-ea480c24918b" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array([0.01300767, 0.82776292, 0.49624331, 0.43591807, 0.60179472,
        0.8500282 , 0.29126072, 0.26751697, 0.04949421, 0.26639909,
        0.06621185, 0.04155849, 0.55273056, 0.18383489, 0.07425772,
        0.91671474, 0.14873389, 0.09483079, 0.97067806, 0.66696696,
@@ -931,17 +928,17 @@ Coordinates: (3/8)
        0.4665367 , 0.56944602, 0.56209399, 0.54291566, 0.56611634,
        0.41747562, 0.27881285, 0.51812954, 0.12186051, 0.74927137,
        0.95293572, 0.05409649, 0.78232714, 0.22383289, 0.33641135,
-       0.03353818, 0.9690858 , 0.56209561, 0.08158143, 0.32155563])</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span>beta_color</span></div><div class="xr-var-dims">(neuron)</div><div class="xr-var-dtype">float64</div><div class="xr-var-preview xr-preview">3.0 -2.0</div><input id="attrs-3b138d2f-6f10-4c5e-888d-9084321a494a" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-3b138d2f-6f10-4c5e-888d-9084321a494a" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-f19fd275-56d6-4869-abd9-61735c0ad40a" class="xr-var-data-in" type="checkbox"><label for="data-f19fd275-56d6-4869-abd9-61735c0ad40a" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array([ 3., -2.])</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span>beta_size</span></div><div class="xr-var-dims">(neuron)</div><div class="xr-var-dtype">float64</div><div class="xr-var-preview xr-preview">-2.0 5.0</div><input id="attrs-bc78222b-5592-4ac5-bee7-886404539bd8" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-bc78222b-5592-4ac5-bee7-886404539bd8" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-07ba1fc6-705c-4049-ab38-39730774e469" class="xr-var-data-in" type="checkbox"><label for="data-07ba1fc6-705c-4049-ab38-39730774e469" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array([-2.,  5.])</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span>mean</span></div><div class="xr-var-dims">(neuron)</div><div class="xr-var-dtype">float64</div><div class="xr-var-preview xr-preview">7.0 -6.0</div><input id="attrs-c0bf0ca3-f0a4-4198-9c3b-4011c5364859" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-c0bf0ca3-f0a4-4198-9c3b-4011c5364859" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-50cce644-bac2-496c-9d17-a06028aad1f9" class="xr-var-data-in" type="checkbox"><label for="data-50cce644-bac2-496c-9d17-a06028aad1f9" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array([ 7., -6.])</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span>std</span></div><div class="xr-var-dims">(neuron)</div><div class="xr-var-dtype">float64</div><div class="xr-var-preview xr-preview">1.0 3.0</div><input id="attrs-7e7fff1f-2d05-4f54-a528-7577055c35b2" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-7e7fff1f-2d05-4f54-a528-7577055c35b2" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-343f7198-3067-4ce9-a7ba-d54d1d563538" class="xr-var-data-in" type="checkbox"><label for="data-343f7198-3067-4ce9-a7ba-d54d1d563538" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array([1., 3.])</pre></div></li></ul></div></li><li class="xr-section-item"><input id="section-8d36a39e-a811-40b4-9232-44e3db17cb54" class="xr-section-summary-in" type="checkbox"><label for="section-8d36a39e-a811-40b4-9232-44e3db17cb54" class="xr-section-summary">Indexes: <span>(2)</span></label><div class="xr-section-inline-details"></div><div class="xr-section-details"><ul class="xr-var-list"><li class="xr-var-item"><div class="xr-index-name"><div>neuron</div></div><div class="xr-index-preview">PandasIndex</div><div></div><input id="index-ebcbbbe7-1b47-47db-b643-5dea2984740b" class="xr-index-data-in" type="checkbox"><label for="index-ebcbbbe7-1b47-47db-b643-5dea2984740b" title="Show/Hide index repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-index-data"><pre>PandasIndex(Index([1, 2], dtype='int64', name='neuron'))</pre></div></li><li class="xr-var-item"><div class="xr-index-name"><div>stimulus</div></div><div class="xr-index-preview">PandasIndex</div><div></div><input id="index-6c682db6-23e0-4442-a17c-de5abe68539c" class="xr-index-data-in" type="checkbox"><label for="index-6c682db6-23e0-4442-a17c-de5abe68539c" title="Show/Hide index repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-index-data"><pre>PandasIndex(Index([   1,    2,    3,    4,    5,    6,    7,    8,    9,   10,
+       0.03353818, 0.9690858 , 0.56209561, 0.08158143, 0.32155563])</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span>beta_color</span></div><div class="xr-var-dims">(neuron)</div><div class="xr-var-dtype">float64</div><div class="xr-var-preview xr-preview">3.0 -2.0</div><input id="attrs-caefdb0b-a9a3-4352-b884-67fa6adc252e" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-caefdb0b-a9a3-4352-b884-67fa6adc252e" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-d9128a7c-7df8-49d4-af6d-f290fe8a43c3" class="xr-var-data-in" type="checkbox"><label for="data-d9128a7c-7df8-49d4-af6d-f290fe8a43c3" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array([ 3., -2.])</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span>beta_size</span></div><div class="xr-var-dims">(neuron)</div><div class="xr-var-dtype">float64</div><div class="xr-var-preview xr-preview">-2.0 5.0</div><input id="attrs-670909af-3264-4a4f-abd7-8a1d451d59fd" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-670909af-3264-4a4f-abd7-8a1d451d59fd" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-e97e6246-2bfa-4e0c-8934-03c20edd8553" class="xr-var-data-in" type="checkbox"><label for="data-e97e6246-2bfa-4e0c-8934-03c20edd8553" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array([-2.,  5.])</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span>mean</span></div><div class="xr-var-dims">(neuron)</div><div class="xr-var-dtype">float64</div><div class="xr-var-preview xr-preview">7.0 -6.0</div><input id="attrs-139186ce-0866-4746-8679-b90846e94625" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-139186ce-0866-4746-8679-b90846e94625" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-488b3c0d-e757-455e-931a-50473a3033c6" class="xr-var-data-in" type="checkbox"><label for="data-488b3c0d-e757-455e-931a-50473a3033c6" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array([ 7., -6.])</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span>std</span></div><div class="xr-var-dims">(neuron)</div><div class="xr-var-dtype">float64</div><div class="xr-var-preview xr-preview">1.0 3.0</div><input id="attrs-62b3534f-4181-4734-b7e6-4449539a6648" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-62b3534f-4181-4734-b7e6-4449539a6648" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-0e0c7777-6530-4feb-a0d8-9a181817f1d8" class="xr-var-data-in" type="checkbox"><label for="data-0e0c7777-6530-4feb-a0d8-9a181817f1d8" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array([1., 3.])</pre></div></li></ul></div></li><li class="xr-section-item"><input id="section-5314d207-78f6-4de1-a38c-4a3d56dd4430" class="xr-section-summary-in" type="checkbox"><label for="section-5314d207-78f6-4de1-a38c-4a3d56dd4430" class="xr-section-summary">Indexes: <span>(2)</span></label><div class="xr-section-inline-details"></div><div class="xr-section-details"><ul class="xr-var-list"><li class="xr-var-item"><div class="xr-index-name"><div>neuron</div></div><div class="xr-index-preview">PandasIndex</div><div></div><input id="index-7d3c0c8d-10dc-4b77-b373-17f7108f220c" class="xr-index-data-in" type="checkbox"><label for="index-7d3c0c8d-10dc-4b77-b373-17f7108f220c" title="Show/Hide index repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-index-data"><pre>PandasIndex(Index([1, 2], dtype='int64', name='neuron'))</pre></div></li><li class="xr-var-item"><div class="xr-index-name"><div>stimulus</div></div><div class="xr-index-preview">PandasIndex</div><div></div><input id="index-c9d02ddd-edad-45a0-a2b8-3ac933c45032" class="xr-index-data-in" type="checkbox"><label for="index-c9d02ddd-edad-45a0-a2b8-3ac933c45032" title="Show/Hide index repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-index-data"><pre>PandasIndex(Index([   1,    2,    3,    4,    5,    6,    7,    8,    9,   10,
        ...
         991,  992,  993,  994,  995,  996,  997,  998,  999, 1000],
-      dtype='int64', name='stimulus', length=1000))</pre></div></li></ul></div></li><li class="xr-section-item"><input id="section-28e6e540-748c-404c-9cae-4f7be9db9f4d" class="xr-section-summary-in" type="checkbox" disabled=""><label for="section-28e6e540-748c-404c-9cae-4f7be9db9f4d" class="xr-section-summary" title="Expand/collapse section">Attributes: <span>(0)</span></label><div class="xr-section-inline-details"></div><div class="xr-section-details"><dl class="xr-attrs"></dl></div></li></ul></div></div>
+      dtype='int64', name='stimulus', length=1000))</pre></div></li></ul></div></li><li class="xr-section-item"><input id="section-ef5b3325-5903-491c-a639-a36455b75bbd" class="xr-section-summary-in" type="checkbox" disabled=""><label for="section-ef5b3325-5903-491c-a639-a36455b75bbd" class="xr-section-summary" title="Expand/collapse section">Attributes: <span>(0)</span></label><div class="xr-section-inline-details"></div><div class="xr-section-details"><dl class="xr-attrs"></dl></div></li></ul></div></div>
 </div>
 </div>
 </section>
 <section id="visualizing-the-neurons" class="level3">
 <h3 class="anchored" data-anchor-id="visualizing-the-neurons">Visualizing the neurons</h3>
 <p>We can visualize the responses of each neuron to each dot. Note that this is a 1-dimensional scatterplot; the spread along the vertical axis is just for visualization purposes.</p>
-<div id="cell-visualize_neuron_responses" class="cell" data-execution_count="11">
+<div id="cell-visualize_neuron_responses" class="cell" data-execution_count="12">
 <details>
 <summary>Visualize the individual neuron responses</summary>
 <div class="sourceCode cell-code" id="cell-visualize_neuron_responses"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cell-visualize_neuron_responses-1"><a href="#cell-visualize_neuron_responses-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> view_individual_scatter(</span>
@@ -991,7 +988,7 @@ Coordinates: (3/8)
 <span id="cell-visualize_neuron_responses-45"><a href="#cell-visualize_neuron_responses-45" aria-hidden="true" tabindex="-1"></a>    template_func<span class="op">=</span><span class="kw">lambda</span> x: <span class="ss">f"neuron </span><span class="sc">{</span>x<span class="sc">}</span><span class="ss"> response"</span>,</span>
 <span id="cell-visualize_neuron_responses-46"><a href="#cell-visualize_neuron_responses-46" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output cell-output-display" data-execution_count="10">
+<div class="cell-output cell-output-display" data-execution_count="52">
 <div id="visualize_neuron_responses" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="introducing_pca_files/figure-html/visualize_neuron_responses-output-1.svg" class="img-fluid figure-img"></p>
@@ -1000,7 +997,7 @@ Coordinates: (3/8)
 </div>
 </div>
 <p>We can see that each neuron is tuned to both color <em>and</em> size. Additionally, note that the neurons’ responses have different variances.</p>
-<div id="variance" class="cell" data-execution_count="12">
+<div id="variance" class="cell" data-execution_count="13">
 <details>
 <summary>Compute the variance of each neuron’s responses</summary>
 <div class="sourceCode cell-code" id="variance"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="variance-1"><a href="#variance-1" aria-hidden="true" tabindex="-1"></a>variances <span class="op">=</span> data.var(dim<span class="op">=</span><span class="st">"stimulus"</span>, ddof<span class="op">=</span><span class="dv">1</span>).<span class="bu">round</span>(<span class="dv">3</span>).rename(<span class="st">"neuron variances"</span>)</span>
@@ -1025,164 +1022,144 @@ total variance: 52.443</code></pre>
 <h3 class="anchored" data-anchor-id="representational-similarity-analysis">Representational similarity analysis</h3>
 </section>
 </section>
-<section id="studying-the-latent-dimensions" class="level2">
+<section id="studying-the-latent-dimensions" class="level2 page-columns page-full">
 <h2 class="anchored" data-anchor-id="studying-the-latent-dimensions">Studying the latent dimensions</h2>
 <p>We have a population of neurons that contain information about the stimulus: that is, from the activity pattern we recorded, we expect to be able to reliably decode the color and size of the dot presented. How is this information encoded in the population activity? Is there a neuron that is sensitive to color and another that is sensitive to size? Or are there neural responses more complicated than this? If so, is there another view of the population code that might be more informative?</p>
 <section id="some-geometric-intuition" class="level3">
 <h3 class="anchored" data-anchor-id="some-geometric-intuition">Some geometric intuition</h3>
-<p>Since we only have <span class="math inline">P = 2</span> neurons, we can visualize these data as a scatterplot, which makes their <a href="../pages/reference.html#covariance">covariance</a> apparent.</p>
-<div id="cell-joint-response" class="cell" data-execution_count="13">
-<details>
-<summary>Visualize both neurons’ responses jointly</summary>
-<div class="sourceCode cell-code" id="cell-joint-response"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cell-joint-response-1"><a href="#cell-joint-response-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> view_joint_scatter(</span>
-<span id="cell-joint-response-2"><a href="#cell-joint-response-2" aria-hidden="true" tabindex="-1"></a>    data: xr.DataArray, <span class="op">*</span>, coord: <span class="bu">str</span>, dim: <span class="bu">str</span>, template_func: Callable[[<span class="bu">int</span>], <span class="bu">str</span>]</span>
-<span id="cell-joint-response-3"><a href="#cell-joint-response-3" aria-hidden="true" tabindex="-1"></a>) <span class="op">-&gt;</span> mpl.figure.Figure:</span>
-<span id="cell-joint-response-4"><a href="#cell-joint-response-4" aria-hidden="true" tabindex="-1"></a>    fig, ax <span class="op">=</span> plt.subplots()</span>
-<span id="cell-joint-response-5"><a href="#cell-joint-response-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cell-joint-response-6"><a href="#cell-joint-response-6" aria-hidden="true" tabindex="-1"></a>    data_ <span class="op">=</span> pd.DataFrame(</span>
-<span id="cell-joint-response-7"><a href="#cell-joint-response-7" aria-hidden="true" tabindex="-1"></a>        {coord_: data[coord_].values <span class="cf">for</span> coord_ <span class="kw">in</span> (<span class="st">"color"</span>, <span class="st">"size"</span>)}</span>
-<span id="cell-joint-response-8"><a href="#cell-joint-response-8" aria-hidden="true" tabindex="-1"></a>        <span class="op">|</span> {</span>
-<span id="cell-joint-response-9"><a href="#cell-joint-response-9" aria-hidden="true" tabindex="-1"></a>            template_func(index): data.isel({dim: index <span class="op">-</span> <span class="dv">1</span>}).to_dataframe()[coord]</span>
-<span id="cell-joint-response-10"><a href="#cell-joint-response-10" aria-hidden="true" tabindex="-1"></a>            <span class="cf">for</span> index <span class="kw">in</span> (<span class="dv">1</span>, <span class="dv">2</span>)</span>
-<span id="cell-joint-response-11"><a href="#cell-joint-response-11" aria-hidden="true" tabindex="-1"></a>        }</span>
-<span id="cell-joint-response-12"><a href="#cell-joint-response-12" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cell-joint-response-13"><a href="#cell-joint-response-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cell-joint-response-14"><a href="#cell-joint-response-14" aria-hidden="true" tabindex="-1"></a>    sns.scatterplot(</span>
-<span id="cell-joint-response-15"><a href="#cell-joint-response-15" aria-hidden="true" tabindex="-1"></a>        ax<span class="op">=</span>ax,</span>
-<span id="cell-joint-response-16"><a href="#cell-joint-response-16" aria-hidden="true" tabindex="-1"></a>        data<span class="op">=</span>data_,</span>
-<span id="cell-joint-response-17"><a href="#cell-joint-response-17" aria-hidden="true" tabindex="-1"></a>        x<span class="op">=</span>template_func(<span class="dv">1</span>),</span>
-<span id="cell-joint-response-18"><a href="#cell-joint-response-18" aria-hidden="true" tabindex="-1"></a>        y<span class="op">=</span>template_func(<span class="dv">2</span>),</span>
-<span id="cell-joint-response-19"><a href="#cell-joint-response-19" aria-hidden="true" tabindex="-1"></a>        hue<span class="op">=</span><span class="st">"color"</span>,</span>
-<span id="cell-joint-response-20"><a href="#cell-joint-response-20" aria-hidden="true" tabindex="-1"></a>        size<span class="op">=</span><span class="st">"size"</span>,</span>
-<span id="cell-joint-response-21"><a href="#cell-joint-response-21" aria-hidden="true" tabindex="-1"></a>        legend<span class="op">=</span><span class="va">False</span>,</span>
-<span id="cell-joint-response-22"><a href="#cell-joint-response-22" aria-hidden="true" tabindex="-1"></a>        palette<span class="op">=</span><span class="st">"flare"</span>,</span>
-<span id="cell-joint-response-23"><a href="#cell-joint-response-23" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cell-joint-response-24"><a href="#cell-joint-response-24" aria-hidden="true" tabindex="-1"></a>    ax.axhline(<span class="dv">0</span>, c<span class="op">=</span><span class="st">"gray"</span>, ls<span class="op">=</span><span class="st">"--"</span>)</span>
-<span id="cell-joint-response-25"><a href="#cell-joint-response-25" aria-hidden="true" tabindex="-1"></a>    ax.axvline(<span class="dv">0</span>, c<span class="op">=</span><span class="st">"gray"</span>, ls<span class="op">=</span><span class="st">"--"</span>)</span>
-<span id="cell-joint-response-26"><a href="#cell-joint-response-26" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cell-joint-response-27"><a href="#cell-joint-response-27" aria-hidden="true" tabindex="-1"></a>    ax.set_aspect(<span class="st">"equal"</span>, <span class="st">"box"</span>)</span>
-<span id="cell-joint-response-28"><a href="#cell-joint-response-28" aria-hidden="true" tabindex="-1"></a>    sns.despine(ax<span class="op">=</span>ax, offset<span class="op">=</span><span class="dv">20</span>)</span>
-<span id="cell-joint-response-29"><a href="#cell-joint-response-29" aria-hidden="true" tabindex="-1"></a>    plt.close(fig)</span>
-<span id="cell-joint-response-30"><a href="#cell-joint-response-30" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cell-joint-response-31"><a href="#cell-joint-response-31" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> fig</span>
-<span id="cell-joint-response-32"><a href="#cell-joint-response-32" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cell-joint-response-33"><a href="#cell-joint-response-33" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cell-joint-response-34"><a href="#cell-joint-response-34" aria-hidden="true" tabindex="-1"></a>view_joint_scatter(</span>
-<span id="cell-joint-response-35"><a href="#cell-joint-response-35" aria-hidden="true" tabindex="-1"></a>    data,</span>
-<span id="cell-joint-response-36"><a href="#cell-joint-response-36" aria-hidden="true" tabindex="-1"></a>    coord<span class="op">=</span><span class="st">"neuron responses"</span>,</span>
-<span id="cell-joint-response-37"><a href="#cell-joint-response-37" aria-hidden="true" tabindex="-1"></a>    dim<span class="op">=</span><span class="st">"neuron"</span>,</span>
-<span id="cell-joint-response-38"><a href="#cell-joint-response-38" aria-hidden="true" tabindex="-1"></a>    template_func<span class="op">=</span><span class="kw">lambda</span> x: <span class="ss">f"neuron </span><span class="sc">{</span>x<span class="sc">}</span><span class="ss"> response"</span>,</span>
-<span id="cell-joint-response-39"><a href="#cell-joint-response-39" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output cell-output-display" data-execution_count="12">
-<div id="joint-response" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="introducing_pca_files/figure-html/joint-response-output-1.svg" class="img-fluid figure-img"></p>
-</figure>
-</div>
-</div>
-</div>
-<p>The organization of these data in this 2-dimensional space suggests an obvious way to change our viewpoint.</p>
+<p>Since we only have <span class="math inline">P = 2</span> neurons, we can visualize these data as a scatterplot, which makes their <a href="../pages/reference.html#covariance">covariance</a> apparent. The organization of these data in this 2-dimensional space suggests an obvious way to change our viewpoint.</p>
 <div id="cell-visualize_pca_animation" class="cell" data-execution_count="14">
 <details>
 <summary>Animate the PCA transformation</summary>
-<div class="sourceCode cell-code" id="cell-visualize_pca_animation"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cell-visualize_pca_animation-1"><a href="#cell-visualize_pca_animation-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> animate_pca_transformation(</span>
-<span id="cell-visualize_pca_animation-2"><a href="#cell-visualize_pca_animation-2" aria-hidden="true" tabindex="-1"></a>    data: xr.DataArray,</span>
-<span id="cell-visualize_pca_animation-3"><a href="#cell-visualize_pca_animation-3" aria-hidden="true" tabindex="-1"></a>    <span class="op">*</span>,</span>
-<span id="cell-visualize_pca_animation-4"><a href="#cell-visualize_pca_animation-4" aria-hidden="true" tabindex="-1"></a>    durations: <span class="bu">dict</span>[<span class="bu">str</span>, <span class="bu">int</span>] <span class="op">=</span> {</span>
-<span id="cell-visualize_pca_animation-5"><a href="#cell-visualize_pca_animation-5" aria-hidden="true" tabindex="-1"></a>        <span class="st">"center"</span>: <span class="dv">1_000</span>,</span>
-<span id="cell-visualize_pca_animation-6"><a href="#cell-visualize_pca_animation-6" aria-hidden="true" tabindex="-1"></a>        <span class="st">"rotate"</span>: <span class="dv">1_000</span>,</span>
-<span id="cell-visualize_pca_animation-7"><a href="#cell-visualize_pca_animation-7" aria-hidden="true" tabindex="-1"></a>        <span class="st">"pause"</span>: <span class="dv">500</span>,</span>
-<span id="cell-visualize_pca_animation-8"><a href="#cell-visualize_pca_animation-8" aria-hidden="true" tabindex="-1"></a>    },</span>
-<span id="cell-visualize_pca_animation-9"><a href="#cell-visualize_pca_animation-9" aria-hidden="true" tabindex="-1"></a>    interval: <span class="bu">int</span> <span class="op">=</span> <span class="dv">50</span>,</span>
-<span id="cell-visualize_pca_animation-10"><a href="#cell-visualize_pca_animation-10" aria-hidden="true" tabindex="-1"></a>) <span class="op">-&gt;</span> <span class="bu">str</span>:</span>
-<span id="cell-visualize_pca_animation-11"><a href="#cell-visualize_pca_animation-11" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> _compute_2d_rotation_matrix(theta: <span class="bu">float</span>) <span class="op">-&gt;</span> np.ndarray:</span>
-<span id="cell-visualize_pca_animation-12"><a href="#cell-visualize_pca_animation-12" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> np.array(</span>
-<span id="cell-visualize_pca_animation-13"><a href="#cell-visualize_pca_animation-13" aria-hidden="true" tabindex="-1"></a>            [</span>
-<span id="cell-visualize_pca_animation-14"><a href="#cell-visualize_pca_animation-14" aria-hidden="true" tabindex="-1"></a>                [np.cos(theta), <span class="op">-</span>np.sin(theta)],</span>
-<span id="cell-visualize_pca_animation-15"><a href="#cell-visualize_pca_animation-15" aria-hidden="true" tabindex="-1"></a>                [np.sin(theta), np.cos(theta)],</span>
-<span id="cell-visualize_pca_animation-16"><a href="#cell-visualize_pca_animation-16" aria-hidden="true" tabindex="-1"></a>            ]</span>
-<span id="cell-visualize_pca_animation-17"><a href="#cell-visualize_pca_animation-17" aria-hidden="true" tabindex="-1"></a>        )</span>
-<span id="cell-visualize_pca_animation-18"><a href="#cell-visualize_pca_animation-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cell-visualize_pca_animation-19"><a href="#cell-visualize_pca_animation-19" aria-hidden="true" tabindex="-1"></a>    fig <span class="op">=</span> view_joint_scatter(</span>
-<span id="cell-visualize_pca_animation-20"><a href="#cell-visualize_pca_animation-20" aria-hidden="true" tabindex="-1"></a>        data,</span>
-<span id="cell-visualize_pca_animation-21"><a href="#cell-visualize_pca_animation-21" aria-hidden="true" tabindex="-1"></a>        coord<span class="op">=</span><span class="st">"neuron responses"</span>,</span>
-<span id="cell-visualize_pca_animation-22"><a href="#cell-visualize_pca_animation-22" aria-hidden="true" tabindex="-1"></a>        dim<span class="op">=</span><span class="st">"neuron"</span>,</span>
-<span id="cell-visualize_pca_animation-23"><a href="#cell-visualize_pca_animation-23" aria-hidden="true" tabindex="-1"></a>        template_func<span class="op">=</span><span class="kw">lambda</span> x: <span class="ss">f"neuron </span><span class="sc">{</span>x<span class="sc">}</span><span class="ss"> response"</span>,</span>
-<span id="cell-visualize_pca_animation-24"><a href="#cell-visualize_pca_animation-24" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cell-visualize_pca_animation-25"><a href="#cell-visualize_pca_animation-25" aria-hidden="true" tabindex="-1"></a>    ax <span class="op">=</span> fig.get_axes()[<span class="dv">0</span>]</span>
-<span id="cell-visualize_pca_animation-26"><a href="#cell-visualize_pca_animation-26" aria-hidden="true" tabindex="-1"></a>    scatter <span class="op">=</span> ax.get_children()[<span class="dv">0</span>]</span>
-<span id="cell-visualize_pca_animation-27"><a href="#cell-visualize_pca_animation-27" aria-hidden="true" tabindex="-1"></a>    title <span class="op">=</span> fig.suptitle(<span class="st">"neuron responses"</span>)</span>
-<span id="cell-visualize_pca_animation-28"><a href="#cell-visualize_pca_animation-28" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cell-visualize_pca_animation-29"><a href="#cell-visualize_pca_animation-29" aria-hidden="true" tabindex="-1"></a>    n_frames <span class="op">=</span> {key: value <span class="op">//</span> interval <span class="op">+</span> <span class="dv">1</span> <span class="cf">for</span> key, value <span class="kw">in</span> durations.items()}</span>
+<div class="sourceCode cell-code" id="cell-visualize_pca_animation"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cell-visualize_pca_animation-1"><a href="#cell-visualize_pca_animation-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> view_joint_scatter(</span>
+<span id="cell-visualize_pca_animation-2"><a href="#cell-visualize_pca_animation-2" aria-hidden="true" tabindex="-1"></a>    data: xr.DataArray, <span class="op">*</span>, coord: <span class="bu">str</span>, dim: <span class="bu">str</span>, template_func: Callable[[<span class="bu">int</span>], <span class="bu">str</span>]</span>
+<span id="cell-visualize_pca_animation-3"><a href="#cell-visualize_pca_animation-3" aria-hidden="true" tabindex="-1"></a>) <span class="op">-&gt;</span> mpl.figure.Figure:</span>
+<span id="cell-visualize_pca_animation-4"><a href="#cell-visualize_pca_animation-4" aria-hidden="true" tabindex="-1"></a>    fig, ax <span class="op">=</span> plt.subplots()</span>
+<span id="cell-visualize_pca_animation-5"><a href="#cell-visualize_pca_animation-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cell-visualize_pca_animation-6"><a href="#cell-visualize_pca_animation-6" aria-hidden="true" tabindex="-1"></a>    data_ <span class="op">=</span> pd.DataFrame(</span>
+<span id="cell-visualize_pca_animation-7"><a href="#cell-visualize_pca_animation-7" aria-hidden="true" tabindex="-1"></a>        {coord_: data[coord_].values <span class="cf">for</span> coord_ <span class="kw">in</span> (<span class="st">"color"</span>, <span class="st">"size"</span>)}</span>
+<span id="cell-visualize_pca_animation-8"><a href="#cell-visualize_pca_animation-8" aria-hidden="true" tabindex="-1"></a>        <span class="op">|</span> {</span>
+<span id="cell-visualize_pca_animation-9"><a href="#cell-visualize_pca_animation-9" aria-hidden="true" tabindex="-1"></a>            template_func(index): data.isel({dim: index <span class="op">-</span> <span class="dv">1</span>}).to_dataframe()[coord]</span>
+<span id="cell-visualize_pca_animation-10"><a href="#cell-visualize_pca_animation-10" aria-hidden="true" tabindex="-1"></a>            <span class="cf">for</span> index <span class="kw">in</span> (<span class="dv">1</span>, <span class="dv">2</span>)</span>
+<span id="cell-visualize_pca_animation-11"><a href="#cell-visualize_pca_animation-11" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cell-visualize_pca_animation-12"><a href="#cell-visualize_pca_animation-12" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cell-visualize_pca_animation-13"><a href="#cell-visualize_pca_animation-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cell-visualize_pca_animation-14"><a href="#cell-visualize_pca_animation-14" aria-hidden="true" tabindex="-1"></a>    sns.scatterplot(</span>
+<span id="cell-visualize_pca_animation-15"><a href="#cell-visualize_pca_animation-15" aria-hidden="true" tabindex="-1"></a>        ax<span class="op">=</span>ax,</span>
+<span id="cell-visualize_pca_animation-16"><a href="#cell-visualize_pca_animation-16" aria-hidden="true" tabindex="-1"></a>        data<span class="op">=</span>data_,</span>
+<span id="cell-visualize_pca_animation-17"><a href="#cell-visualize_pca_animation-17" aria-hidden="true" tabindex="-1"></a>        x<span class="op">=</span>template_func(<span class="dv">1</span>),</span>
+<span id="cell-visualize_pca_animation-18"><a href="#cell-visualize_pca_animation-18" aria-hidden="true" tabindex="-1"></a>        y<span class="op">=</span>template_func(<span class="dv">2</span>),</span>
+<span id="cell-visualize_pca_animation-19"><a href="#cell-visualize_pca_animation-19" aria-hidden="true" tabindex="-1"></a>        hue<span class="op">=</span><span class="st">"color"</span>,</span>
+<span id="cell-visualize_pca_animation-20"><a href="#cell-visualize_pca_animation-20" aria-hidden="true" tabindex="-1"></a>        size<span class="op">=</span><span class="st">"size"</span>,</span>
+<span id="cell-visualize_pca_animation-21"><a href="#cell-visualize_pca_animation-21" aria-hidden="true" tabindex="-1"></a>        legend<span class="op">=</span><span class="va">False</span>,</span>
+<span id="cell-visualize_pca_animation-22"><a href="#cell-visualize_pca_animation-22" aria-hidden="true" tabindex="-1"></a>        palette<span class="op">=</span><span class="st">"flare"</span>,</span>
+<span id="cell-visualize_pca_animation-23"><a href="#cell-visualize_pca_animation-23" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cell-visualize_pca_animation-24"><a href="#cell-visualize_pca_animation-24" aria-hidden="true" tabindex="-1"></a>    ax.axhline(<span class="dv">0</span>, c<span class="op">=</span><span class="st">"gray"</span>, ls<span class="op">=</span><span class="st">"--"</span>)</span>
+<span id="cell-visualize_pca_animation-25"><a href="#cell-visualize_pca_animation-25" aria-hidden="true" tabindex="-1"></a>    ax.axvline(<span class="dv">0</span>, c<span class="op">=</span><span class="st">"gray"</span>, ls<span class="op">=</span><span class="st">"--"</span>)</span>
+<span id="cell-visualize_pca_animation-26"><a href="#cell-visualize_pca_animation-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cell-visualize_pca_animation-27"><a href="#cell-visualize_pca_animation-27" aria-hidden="true" tabindex="-1"></a>    ax.set_aspect(<span class="st">"equal"</span>, <span class="st">"box"</span>)</span>
+<span id="cell-visualize_pca_animation-28"><a href="#cell-visualize_pca_animation-28" aria-hidden="true" tabindex="-1"></a>    sns.despine(ax<span class="op">=</span>ax, offset<span class="op">=</span><span class="dv">20</span>)</span>
+<span id="cell-visualize_pca_animation-29"><a href="#cell-visualize_pca_animation-29" aria-hidden="true" tabindex="-1"></a>    plt.close(fig)</span>
 <span id="cell-visualize_pca_animation-30"><a href="#cell-visualize_pca_animation-30" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cell-visualize_pca_animation-31"><a href="#cell-visualize_pca_animation-31" aria-hidden="true" tabindex="-1"></a>    x_mean, y_mean <span class="op">=</span> data.mean(<span class="st">"stimulus"</span>).values</span>
-<span id="cell-visualize_pca_animation-32"><a href="#cell-visualize_pca_animation-32" aria-hidden="true" tabindex="-1"></a>    delta <span class="op">=</span> np.array([x_mean, y_mean]) <span class="op">/</span> n_frames[<span class="st">"center"</span>]</span>
+<span id="cell-visualize_pca_animation-31"><a href="#cell-visualize_pca_animation-31" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> fig</span>
+<span id="cell-visualize_pca_animation-32"><a href="#cell-visualize_pca_animation-32" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cell-visualize_pca_animation-33"><a href="#cell-visualize_pca_animation-33" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cell-visualize_pca_animation-34"><a href="#cell-visualize_pca_animation-34" aria-hidden="true" tabindex="-1"></a>    _, _, v_h <span class="op">=</span> np.linalg.svd(data <span class="op">-</span> data.mean(<span class="st">"stimulus"</span>))</span>
-<span id="cell-visualize_pca_animation-35"><a href="#cell-visualize_pca_animation-35" aria-hidden="true" tabindex="-1"></a>    v <span class="op">=</span> v_h.transpose()</span>
-<span id="cell-visualize_pca_animation-36"><a href="#cell-visualize_pca_animation-36" aria-hidden="true" tabindex="-1"></a>    theta <span class="op">=</span> np.arccos(v[<span class="dv">0</span>, <span class="dv">0</span>])</span>
-<span id="cell-visualize_pca_animation-37"><a href="#cell-visualize_pca_animation-37" aria-hidden="true" tabindex="-1"></a>    rotation <span class="op">=</span> _compute_2d_rotation_matrix(<span class="op">-</span>theta <span class="op">/</span> n_frames[<span class="st">"rotate"</span>])</span>
-<span id="cell-visualize_pca_animation-38"><a href="#cell-visualize_pca_animation-38" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cell-visualize_pca_animation-39"><a href="#cell-visualize_pca_animation-39" aria-hidden="true" tabindex="-1"></a>    transformed <span class="op">=</span> (data <span class="op">-</span> data.mean(<span class="st">"stimulus"</span>)).values <span class="op">@</span> v</span>
-<span id="cell-visualize_pca_animation-40"><a href="#cell-visualize_pca_animation-40" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cell-visualize_pca_animation-41"><a href="#cell-visualize_pca_animation-41" aria-hidden="true" tabindex="-1"></a>    radius <span class="op">=</span> <span class="bu">max</span>(np.linalg.norm(transformed, axis<span class="op">=-</span><span class="dv">1</span>))</span>
-<span id="cell-visualize_pca_animation-42"><a href="#cell-visualize_pca_animation-42" aria-hidden="true" tabindex="-1"></a>    limit <span class="op">=</span> <span class="bu">max</span>(np.<span class="bu">abs</span>(data).<span class="bu">max</span>(), np.<span class="bu">abs</span>(transformed).<span class="bu">max</span>(), radius)</span>
-<span id="cell-visualize_pca_animation-43"><a href="#cell-visualize_pca_animation-43" aria-hidden="true" tabindex="-1"></a>    ax.set_xlim([<span class="op">-</span>limit, limit])</span>
-<span id="cell-visualize_pca_animation-44"><a href="#cell-visualize_pca_animation-44" aria-hidden="true" tabindex="-1"></a>    ax.set_ylim([<span class="op">-</span>limit, limit])</span>
-<span id="cell-visualize_pca_animation-45"><a href="#cell-visualize_pca_animation-45" aria-hidden="true" tabindex="-1"></a>    fig.tight_layout()</span>
-<span id="cell-visualize_pca_animation-46"><a href="#cell-visualize_pca_animation-46" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cell-visualize_pca_animation-47"><a href="#cell-visualize_pca_animation-47" aria-hidden="true" tabindex="-1"></a>    frame_to_retitle_center <span class="op">=</span> <span class="dv">2</span> <span class="op">*</span> n_frames[<span class="st">"pause"</span>]</span>
-<span id="cell-visualize_pca_animation-48"><a href="#cell-visualize_pca_animation-48" aria-hidden="true" tabindex="-1"></a>    frame_to_start_centering <span class="op">=</span> frame_to_retitle_center <span class="op">+</span> n_frames[<span class="st">"pause"</span>]</span>
-<span id="cell-visualize_pca_animation-49"><a href="#cell-visualize_pca_animation-49" aria-hidden="true" tabindex="-1"></a>    frame_to_stop_centering <span class="op">=</span> frame_to_start_centering <span class="op">+</span> n_frames[<span class="st">"center"</span>]</span>
-<span id="cell-visualize_pca_animation-50"><a href="#cell-visualize_pca_animation-50" aria-hidden="true" tabindex="-1"></a>    frame_to_retitle_rotate <span class="op">=</span> frame_to_stop_centering <span class="op">+</span> n_frames[<span class="st">"pause"</span>]</span>
-<span id="cell-visualize_pca_animation-51"><a href="#cell-visualize_pca_animation-51" aria-hidden="true" tabindex="-1"></a>    frame_to_start_rotating <span class="op">=</span> frame_to_retitle_rotate <span class="op">+</span> n_frames[<span class="st">"pause"</span>]</span>
-<span id="cell-visualize_pca_animation-52"><a href="#cell-visualize_pca_animation-52" aria-hidden="true" tabindex="-1"></a>    frame_to_stop_rotating <span class="op">=</span> frame_to_start_rotating <span class="op">+</span> n_frames[<span class="st">"rotate"</span>]</span>
-<span id="cell-visualize_pca_animation-53"><a href="#cell-visualize_pca_animation-53" aria-hidden="true" tabindex="-1"></a>    frame_to_retitle_transformed <span class="op">=</span> frame_to_stop_rotating <span class="op">+</span> n_frames[<span class="st">"pause"</span>]</span>
-<span id="cell-visualize_pca_animation-54"><a href="#cell-visualize_pca_animation-54" aria-hidden="true" tabindex="-1"></a>    frame_to_end <span class="op">=</span> frame_to_retitle_transformed <span class="op">+</span> <span class="dv">2</span> <span class="op">*</span> n_frames[<span class="st">"pause"</span>]</span>
-<span id="cell-visualize_pca_animation-55"><a href="#cell-visualize_pca_animation-55" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cell-visualize_pca_animation-56"><a href="#cell-visualize_pca_animation-56" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> _update(frame: <span class="bu">int</span>) <span class="op">-&gt;</span> <span class="va">None</span>:</span>
-<span id="cell-visualize_pca_animation-57"><a href="#cell-visualize_pca_animation-57" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> frame <span class="op">&lt;</span> frame_to_retitle_center:</span>
-<span id="cell-visualize_pca_animation-58"><a href="#cell-visualize_pca_animation-58" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span></span>
-<span id="cell-visualize_pca_animation-59"><a href="#cell-visualize_pca_animation-59" aria-hidden="true" tabindex="-1"></a>        <span class="cf">elif</span> frame <span class="op">==</span> frame_to_retitle_center:</span>
-<span id="cell-visualize_pca_animation-60"><a href="#cell-visualize_pca_animation-60" aria-hidden="true" tabindex="-1"></a>            title.set_text(<span class="st">"step 1 of 2: center the data"</span>)</span>
-<span id="cell-visualize_pca_animation-61"><a href="#cell-visualize_pca_animation-61" aria-hidden="true" tabindex="-1"></a>            ax.set_xlabel(<span class="st">""</span>)</span>
-<span id="cell-visualize_pca_animation-62"><a href="#cell-visualize_pca_animation-62" aria-hidden="true" tabindex="-1"></a>            ax.set_ylabel(<span class="st">""</span>)</span>
-<span id="cell-visualize_pca_animation-63"><a href="#cell-visualize_pca_animation-63" aria-hidden="true" tabindex="-1"></a>        <span class="cf">elif</span> frame <span class="op">&lt;</span> frame_to_start_centering:</span>
-<span id="cell-visualize_pca_animation-64"><a href="#cell-visualize_pca_animation-64" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span></span>
-<span id="cell-visualize_pca_animation-65"><a href="#cell-visualize_pca_animation-65" aria-hidden="true" tabindex="-1"></a>        <span class="cf">elif</span> frame <span class="op">&lt;=</span> frame_to_stop_centering:</span>
-<span id="cell-visualize_pca_animation-66"><a href="#cell-visualize_pca_animation-66" aria-hidden="true" tabindex="-1"></a>            scatter.set_offsets(scatter.get_offsets() <span class="op">-</span> delta)</span>
-<span id="cell-visualize_pca_animation-67"><a href="#cell-visualize_pca_animation-67" aria-hidden="true" tabindex="-1"></a>        <span class="cf">elif</span> frame <span class="op">==</span> frame_to_retitle_rotate:</span>
-<span id="cell-visualize_pca_animation-68"><a href="#cell-visualize_pca_animation-68" aria-hidden="true" tabindex="-1"></a>            title.set_text(<span class="st">"step 2 of 2: rotate the data"</span>)</span>
-<span id="cell-visualize_pca_animation-69"><a href="#cell-visualize_pca_animation-69" aria-hidden="true" tabindex="-1"></a>        <span class="cf">elif</span> frame <span class="op">&lt;</span> frame_to_start_rotating:</span>
-<span id="cell-visualize_pca_animation-70"><a href="#cell-visualize_pca_animation-70" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span></span>
-<span id="cell-visualize_pca_animation-71"><a href="#cell-visualize_pca_animation-71" aria-hidden="true" tabindex="-1"></a>        <span class="cf">elif</span> frame <span class="op">&lt;=</span> frame_to_stop_rotating:</span>
-<span id="cell-visualize_pca_animation-72"><a href="#cell-visualize_pca_animation-72" aria-hidden="true" tabindex="-1"></a>            scatter.set_offsets(scatter.get_offsets().data <span class="op">@</span> rotation)</span>
-<span id="cell-visualize_pca_animation-73"><a href="#cell-visualize_pca_animation-73" aria-hidden="true" tabindex="-1"></a>        <span class="cf">elif</span> frame <span class="op">&lt;</span> frame_to_retitle_transformed:</span>
-<span id="cell-visualize_pca_animation-74"><a href="#cell-visualize_pca_animation-74" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span></span>
-<span id="cell-visualize_pca_animation-75"><a href="#cell-visualize_pca_animation-75" aria-hidden="true" tabindex="-1"></a>        <span class="cf">elif</span> frame <span class="op">==</span> frame_to_retitle_transformed:</span>
-<span id="cell-visualize_pca_animation-76"><a href="#cell-visualize_pca_animation-76" aria-hidden="true" tabindex="-1"></a>            title.set_text(<span class="st">"principal components"</span>)</span>
-<span id="cell-visualize_pca_animation-77"><a href="#cell-visualize_pca_animation-77" aria-hidden="true" tabindex="-1"></a>            ax.set_xlabel(<span class="st">"principal component 1"</span>)</span>
-<span id="cell-visualize_pca_animation-78"><a href="#cell-visualize_pca_animation-78" aria-hidden="true" tabindex="-1"></a>            ax.set_ylabel(<span class="st">"principal component 2"</span>)</span>
-<span id="cell-visualize_pca_animation-79"><a href="#cell-visualize_pca_animation-79" aria-hidden="true" tabindex="-1"></a>        <span class="cf">elif</span> frame <span class="op">&lt;=</span> frame_to_end:</span>
-<span id="cell-visualize_pca_animation-80"><a href="#cell-visualize_pca_animation-80" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span></span>
-<span id="cell-visualize_pca_animation-81"><a href="#cell-visualize_pca_animation-81" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cell-visualize_pca_animation-82"><a href="#cell-visualize_pca_animation-82" aria-hidden="true" tabindex="-1"></a>    animation <span class="op">=</span> FuncAnimation(</span>
-<span id="cell-visualize_pca_animation-83"><a href="#cell-visualize_pca_animation-83" aria-hidden="true" tabindex="-1"></a>        fig<span class="op">=</span>fig,</span>
-<span id="cell-visualize_pca_animation-84"><a href="#cell-visualize_pca_animation-84" aria-hidden="true" tabindex="-1"></a>        func<span class="op">=</span>_update,</span>
-<span id="cell-visualize_pca_animation-85"><a href="#cell-visualize_pca_animation-85" aria-hidden="true" tabindex="-1"></a>        frames<span class="op">=</span>frame_to_end,</span>
-<span id="cell-visualize_pca_animation-86"><a href="#cell-visualize_pca_animation-86" aria-hidden="true" tabindex="-1"></a>        interval<span class="op">=</span>interval,</span>
-<span id="cell-visualize_pca_animation-87"><a href="#cell-visualize_pca_animation-87" aria-hidden="true" tabindex="-1"></a>        repeat<span class="op">=</span><span class="va">True</span>,</span>
-<span id="cell-visualize_pca_animation-88"><a href="#cell-visualize_pca_animation-88" aria-hidden="true" tabindex="-1"></a>        repeat_delay<span class="op">=</span><span class="dv">2_000</span>,</span>
-<span id="cell-visualize_pca_animation-89"><a href="#cell-visualize_pca_animation-89" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cell-visualize_pca_animation-90"><a href="#cell-visualize_pca_animation-90" aria-hidden="true" tabindex="-1"></a>    plt.close(fig)</span>
-<span id="cell-visualize_pca_animation-91"><a href="#cell-visualize_pca_animation-91" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> animation.to_html5_video()</span>
-<span id="cell-visualize_pca_animation-92"><a href="#cell-visualize_pca_animation-92" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cell-visualize_pca_animation-93"><a href="#cell-visualize_pca_animation-93" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cell-visualize_pca_animation-94"><a href="#cell-visualize_pca_animation-94" aria-hidden="true" tabindex="-1"></a>display(HTML(animate_pca_transformation(data)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cell-visualize_pca_animation-34"><a href="#cell-visualize_pca_animation-34" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> animate_pca_transformation(</span>
+<span id="cell-visualize_pca_animation-35"><a href="#cell-visualize_pca_animation-35" aria-hidden="true" tabindex="-1"></a>    data: xr.DataArray,</span>
+<span id="cell-visualize_pca_animation-36"><a href="#cell-visualize_pca_animation-36" aria-hidden="true" tabindex="-1"></a>    <span class="op">*</span>,</span>
+<span id="cell-visualize_pca_animation-37"><a href="#cell-visualize_pca_animation-37" aria-hidden="true" tabindex="-1"></a>    durations: <span class="bu">dict</span>[<span class="bu">str</span>, <span class="bu">int</span>] <span class="op">=</span> {</span>
+<span id="cell-visualize_pca_animation-38"><a href="#cell-visualize_pca_animation-38" aria-hidden="true" tabindex="-1"></a>        <span class="st">"center"</span>: <span class="dv">1_000</span>,</span>
+<span id="cell-visualize_pca_animation-39"><a href="#cell-visualize_pca_animation-39" aria-hidden="true" tabindex="-1"></a>        <span class="st">"rotate"</span>: <span class="dv">1_000</span>,</span>
+<span id="cell-visualize_pca_animation-40"><a href="#cell-visualize_pca_animation-40" aria-hidden="true" tabindex="-1"></a>        <span class="st">"pause"</span>: <span class="dv">500</span>,</span>
+<span id="cell-visualize_pca_animation-41"><a href="#cell-visualize_pca_animation-41" aria-hidden="true" tabindex="-1"></a>    },</span>
+<span id="cell-visualize_pca_animation-42"><a href="#cell-visualize_pca_animation-42" aria-hidden="true" tabindex="-1"></a>    interval: <span class="bu">int</span> <span class="op">=</span> <span class="dv">50</span>,</span>
+<span id="cell-visualize_pca_animation-43"><a href="#cell-visualize_pca_animation-43" aria-hidden="true" tabindex="-1"></a>) <span class="op">-&gt;</span> <span class="bu">str</span>:</span>
+<span id="cell-visualize_pca_animation-44"><a href="#cell-visualize_pca_animation-44" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> _compute_2d_rotation_matrix(theta: <span class="bu">float</span>) <span class="op">-&gt;</span> np.ndarray:</span>
+<span id="cell-visualize_pca_animation-45"><a href="#cell-visualize_pca_animation-45" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> np.array(</span>
+<span id="cell-visualize_pca_animation-46"><a href="#cell-visualize_pca_animation-46" aria-hidden="true" tabindex="-1"></a>            [</span>
+<span id="cell-visualize_pca_animation-47"><a href="#cell-visualize_pca_animation-47" aria-hidden="true" tabindex="-1"></a>                [np.cos(theta), <span class="op">-</span>np.sin(theta)],</span>
+<span id="cell-visualize_pca_animation-48"><a href="#cell-visualize_pca_animation-48" aria-hidden="true" tabindex="-1"></a>                [np.sin(theta), np.cos(theta)],</span>
+<span id="cell-visualize_pca_animation-49"><a href="#cell-visualize_pca_animation-49" aria-hidden="true" tabindex="-1"></a>            ]</span>
+<span id="cell-visualize_pca_animation-50"><a href="#cell-visualize_pca_animation-50" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cell-visualize_pca_animation-51"><a href="#cell-visualize_pca_animation-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cell-visualize_pca_animation-52"><a href="#cell-visualize_pca_animation-52" aria-hidden="true" tabindex="-1"></a>    fig <span class="op">=</span> view_joint_scatter(</span>
+<span id="cell-visualize_pca_animation-53"><a href="#cell-visualize_pca_animation-53" aria-hidden="true" tabindex="-1"></a>        data,</span>
+<span id="cell-visualize_pca_animation-54"><a href="#cell-visualize_pca_animation-54" aria-hidden="true" tabindex="-1"></a>        coord<span class="op">=</span><span class="st">"neuron responses"</span>,</span>
+<span id="cell-visualize_pca_animation-55"><a href="#cell-visualize_pca_animation-55" aria-hidden="true" tabindex="-1"></a>        dim<span class="op">=</span><span class="st">"neuron"</span>,</span>
+<span id="cell-visualize_pca_animation-56"><a href="#cell-visualize_pca_animation-56" aria-hidden="true" tabindex="-1"></a>        template_func<span class="op">=</span><span class="kw">lambda</span> x: <span class="ss">f"neuron </span><span class="sc">{</span>x<span class="sc">}</span><span class="ss"> response"</span>,</span>
+<span id="cell-visualize_pca_animation-57"><a href="#cell-visualize_pca_animation-57" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cell-visualize_pca_animation-58"><a href="#cell-visualize_pca_animation-58" aria-hidden="true" tabindex="-1"></a>    ax <span class="op">=</span> fig.get_axes()[<span class="dv">0</span>]</span>
+<span id="cell-visualize_pca_animation-59"><a href="#cell-visualize_pca_animation-59" aria-hidden="true" tabindex="-1"></a>    scatter <span class="op">=</span> ax.get_children()[<span class="dv">0</span>]</span>
+<span id="cell-visualize_pca_animation-60"><a href="#cell-visualize_pca_animation-60" aria-hidden="true" tabindex="-1"></a>    title <span class="op">=</span> fig.suptitle(<span class="st">"neuron responses"</span>)</span>
+<span id="cell-visualize_pca_animation-61"><a href="#cell-visualize_pca_animation-61" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cell-visualize_pca_animation-62"><a href="#cell-visualize_pca_animation-62" aria-hidden="true" tabindex="-1"></a>    n_frames <span class="op">=</span> {key: value <span class="op">//</span> interval <span class="op">+</span> <span class="dv">1</span> <span class="cf">for</span> key, value <span class="kw">in</span> durations.items()}</span>
+<span id="cell-visualize_pca_animation-63"><a href="#cell-visualize_pca_animation-63" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cell-visualize_pca_animation-64"><a href="#cell-visualize_pca_animation-64" aria-hidden="true" tabindex="-1"></a>    x_mean, y_mean <span class="op">=</span> data.mean(<span class="st">"stimulus"</span>).values</span>
+<span id="cell-visualize_pca_animation-65"><a href="#cell-visualize_pca_animation-65" aria-hidden="true" tabindex="-1"></a>    delta <span class="op">=</span> np.array([x_mean, y_mean]) <span class="op">/</span> n_frames[<span class="st">"center"</span>]</span>
+<span id="cell-visualize_pca_animation-66"><a href="#cell-visualize_pca_animation-66" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cell-visualize_pca_animation-67"><a href="#cell-visualize_pca_animation-67" aria-hidden="true" tabindex="-1"></a>    _, _, v_h <span class="op">=</span> np.linalg.svd(data <span class="op">-</span> data.mean(<span class="st">"stimulus"</span>))</span>
+<span id="cell-visualize_pca_animation-68"><a href="#cell-visualize_pca_animation-68" aria-hidden="true" tabindex="-1"></a>    v <span class="op">=</span> v_h.transpose()</span>
+<span id="cell-visualize_pca_animation-69"><a href="#cell-visualize_pca_animation-69" aria-hidden="true" tabindex="-1"></a>    theta <span class="op">=</span> np.arccos(v[<span class="dv">0</span>, <span class="dv">0</span>])</span>
+<span id="cell-visualize_pca_animation-70"><a href="#cell-visualize_pca_animation-70" aria-hidden="true" tabindex="-1"></a>    rotation <span class="op">=</span> _compute_2d_rotation_matrix(<span class="op">-</span>theta <span class="op">/</span> n_frames[<span class="st">"rotate"</span>])</span>
+<span id="cell-visualize_pca_animation-71"><a href="#cell-visualize_pca_animation-71" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cell-visualize_pca_animation-72"><a href="#cell-visualize_pca_animation-72" aria-hidden="true" tabindex="-1"></a>    transformed <span class="op">=</span> (data <span class="op">-</span> data.mean(<span class="st">"stimulus"</span>)).values <span class="op">@</span> v</span>
+<span id="cell-visualize_pca_animation-73"><a href="#cell-visualize_pca_animation-73" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cell-visualize_pca_animation-74"><a href="#cell-visualize_pca_animation-74" aria-hidden="true" tabindex="-1"></a>    radius <span class="op">=</span> <span class="bu">max</span>(np.linalg.norm(transformed, axis<span class="op">=-</span><span class="dv">1</span>))</span>
+<span id="cell-visualize_pca_animation-75"><a href="#cell-visualize_pca_animation-75" aria-hidden="true" tabindex="-1"></a>    limit <span class="op">=</span> <span class="bu">max</span>(np.<span class="bu">abs</span>(data).<span class="bu">max</span>(), np.<span class="bu">abs</span>(transformed).<span class="bu">max</span>(), radius)</span>
+<span id="cell-visualize_pca_animation-76"><a href="#cell-visualize_pca_animation-76" aria-hidden="true" tabindex="-1"></a>    ax.set_xlim([<span class="op">-</span>limit, limit])</span>
+<span id="cell-visualize_pca_animation-77"><a href="#cell-visualize_pca_animation-77" aria-hidden="true" tabindex="-1"></a>    ax.set_ylim([<span class="op">-</span>limit, limit])</span>
+<span id="cell-visualize_pca_animation-78"><a href="#cell-visualize_pca_animation-78" aria-hidden="true" tabindex="-1"></a>    fig.tight_layout()</span>
+<span id="cell-visualize_pca_animation-79"><a href="#cell-visualize_pca_animation-79" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cell-visualize_pca_animation-80"><a href="#cell-visualize_pca_animation-80" aria-hidden="true" tabindex="-1"></a>    frame_to_retitle_center <span class="op">=</span> <span class="dv">2</span> <span class="op">*</span> n_frames[<span class="st">"pause"</span>]</span>
+<span id="cell-visualize_pca_animation-81"><a href="#cell-visualize_pca_animation-81" aria-hidden="true" tabindex="-1"></a>    frame_to_start_centering <span class="op">=</span> frame_to_retitle_center <span class="op">+</span> n_frames[<span class="st">"pause"</span>]</span>
+<span id="cell-visualize_pca_animation-82"><a href="#cell-visualize_pca_animation-82" aria-hidden="true" tabindex="-1"></a>    frame_to_stop_centering <span class="op">=</span> frame_to_start_centering <span class="op">+</span> n_frames[<span class="st">"center"</span>]</span>
+<span id="cell-visualize_pca_animation-83"><a href="#cell-visualize_pca_animation-83" aria-hidden="true" tabindex="-1"></a>    frame_to_retitle_rotate <span class="op">=</span> frame_to_stop_centering <span class="op">+</span> n_frames[<span class="st">"pause"</span>]</span>
+<span id="cell-visualize_pca_animation-84"><a href="#cell-visualize_pca_animation-84" aria-hidden="true" tabindex="-1"></a>    frame_to_start_rotating <span class="op">=</span> frame_to_retitle_rotate <span class="op">+</span> n_frames[<span class="st">"pause"</span>]</span>
+<span id="cell-visualize_pca_animation-85"><a href="#cell-visualize_pca_animation-85" aria-hidden="true" tabindex="-1"></a>    frame_to_stop_rotating <span class="op">=</span> frame_to_start_rotating <span class="op">+</span> n_frames[<span class="st">"rotate"</span>]</span>
+<span id="cell-visualize_pca_animation-86"><a href="#cell-visualize_pca_animation-86" aria-hidden="true" tabindex="-1"></a>    frame_to_retitle_transformed <span class="op">=</span> frame_to_stop_rotating <span class="op">+</span> n_frames[<span class="st">"pause"</span>]</span>
+<span id="cell-visualize_pca_animation-87"><a href="#cell-visualize_pca_animation-87" aria-hidden="true" tabindex="-1"></a>    frame_to_end <span class="op">=</span> frame_to_retitle_transformed <span class="op">+</span> <span class="dv">2</span> <span class="op">*</span> n_frames[<span class="st">"pause"</span>]</span>
+<span id="cell-visualize_pca_animation-88"><a href="#cell-visualize_pca_animation-88" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cell-visualize_pca_animation-89"><a href="#cell-visualize_pca_animation-89" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> _update(frame: <span class="bu">int</span>) <span class="op">-&gt;</span> <span class="va">None</span>:</span>
+<span id="cell-visualize_pca_animation-90"><a href="#cell-visualize_pca_animation-90" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> frame <span class="op">&lt;</span> frame_to_retitle_center:</span>
+<span id="cell-visualize_pca_animation-91"><a href="#cell-visualize_pca_animation-91" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span></span>
+<span id="cell-visualize_pca_animation-92"><a href="#cell-visualize_pca_animation-92" aria-hidden="true" tabindex="-1"></a>        <span class="cf">elif</span> frame <span class="op">==</span> frame_to_retitle_center:</span>
+<span id="cell-visualize_pca_animation-93"><a href="#cell-visualize_pca_animation-93" aria-hidden="true" tabindex="-1"></a>            title.set_text(<span class="st">"step 1 of 2: center the data"</span>)</span>
+<span id="cell-visualize_pca_animation-94"><a href="#cell-visualize_pca_animation-94" aria-hidden="true" tabindex="-1"></a>            ax.set_xlabel(<span class="st">""</span>)</span>
+<span id="cell-visualize_pca_animation-95"><a href="#cell-visualize_pca_animation-95" aria-hidden="true" tabindex="-1"></a>            ax.set_ylabel(<span class="st">""</span>)</span>
+<span id="cell-visualize_pca_animation-96"><a href="#cell-visualize_pca_animation-96" aria-hidden="true" tabindex="-1"></a>        <span class="cf">elif</span> frame <span class="op">&lt;</span> frame_to_start_centering:</span>
+<span id="cell-visualize_pca_animation-97"><a href="#cell-visualize_pca_animation-97" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span></span>
+<span id="cell-visualize_pca_animation-98"><a href="#cell-visualize_pca_animation-98" aria-hidden="true" tabindex="-1"></a>        <span class="cf">elif</span> frame <span class="op">&lt;=</span> frame_to_stop_centering:</span>
+<span id="cell-visualize_pca_animation-99"><a href="#cell-visualize_pca_animation-99" aria-hidden="true" tabindex="-1"></a>            scatter.set_offsets(scatter.get_offsets() <span class="op">-</span> delta)</span>
+<span id="cell-visualize_pca_animation-100"><a href="#cell-visualize_pca_animation-100" aria-hidden="true" tabindex="-1"></a>        <span class="cf">elif</span> frame <span class="op">==</span> frame_to_retitle_rotate:</span>
+<span id="cell-visualize_pca_animation-101"><a href="#cell-visualize_pca_animation-101" aria-hidden="true" tabindex="-1"></a>            title.set_text(<span class="st">"step 2 of 2: rotate the data"</span>)</span>
+<span id="cell-visualize_pca_animation-102"><a href="#cell-visualize_pca_animation-102" aria-hidden="true" tabindex="-1"></a>        <span class="cf">elif</span> frame <span class="op">&lt;</span> frame_to_start_rotating:</span>
+<span id="cell-visualize_pca_animation-103"><a href="#cell-visualize_pca_animation-103" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span></span>
+<span id="cell-visualize_pca_animation-104"><a href="#cell-visualize_pca_animation-104" aria-hidden="true" tabindex="-1"></a>        <span class="cf">elif</span> frame <span class="op">&lt;=</span> frame_to_stop_rotating:</span>
+<span id="cell-visualize_pca_animation-105"><a href="#cell-visualize_pca_animation-105" aria-hidden="true" tabindex="-1"></a>            scatter.set_offsets(scatter.get_offsets().data <span class="op">@</span> rotation)</span>
+<span id="cell-visualize_pca_animation-106"><a href="#cell-visualize_pca_animation-106" aria-hidden="true" tabindex="-1"></a>        <span class="cf">elif</span> frame <span class="op">&lt;</span> frame_to_retitle_transformed:</span>
+<span id="cell-visualize_pca_animation-107"><a href="#cell-visualize_pca_animation-107" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span></span>
+<span id="cell-visualize_pca_animation-108"><a href="#cell-visualize_pca_animation-108" aria-hidden="true" tabindex="-1"></a>        <span class="cf">elif</span> frame <span class="op">==</span> frame_to_retitle_transformed:</span>
+<span id="cell-visualize_pca_animation-109"><a href="#cell-visualize_pca_animation-109" aria-hidden="true" tabindex="-1"></a>            title.set_text(<span class="st">"principal components"</span>)</span>
+<span id="cell-visualize_pca_animation-110"><a href="#cell-visualize_pca_animation-110" aria-hidden="true" tabindex="-1"></a>            ax.set_xlabel(<span class="st">"principal component 1"</span>)</span>
+<span id="cell-visualize_pca_animation-111"><a href="#cell-visualize_pca_animation-111" aria-hidden="true" tabindex="-1"></a>            ax.set_ylabel(<span class="st">"principal component 2"</span>)</span>
+<span id="cell-visualize_pca_animation-112"><a href="#cell-visualize_pca_animation-112" aria-hidden="true" tabindex="-1"></a>        <span class="cf">elif</span> frame <span class="op">&lt;=</span> frame_to_end:</span>
+<span id="cell-visualize_pca_animation-113"><a href="#cell-visualize_pca_animation-113" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span></span>
+<span id="cell-visualize_pca_animation-114"><a href="#cell-visualize_pca_animation-114" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cell-visualize_pca_animation-115"><a href="#cell-visualize_pca_animation-115" aria-hidden="true" tabindex="-1"></a>    animation <span class="op">=</span> FuncAnimation(</span>
+<span id="cell-visualize_pca_animation-116"><a href="#cell-visualize_pca_animation-116" aria-hidden="true" tabindex="-1"></a>        fig<span class="op">=</span>fig,</span>
+<span id="cell-visualize_pca_animation-117"><a href="#cell-visualize_pca_animation-117" aria-hidden="true" tabindex="-1"></a>        func<span class="op">=</span>_update,</span>
+<span id="cell-visualize_pca_animation-118"><a href="#cell-visualize_pca_animation-118" aria-hidden="true" tabindex="-1"></a>        frames<span class="op">=</span>frame_to_end,</span>
+<span id="cell-visualize_pca_animation-119"><a href="#cell-visualize_pca_animation-119" aria-hidden="true" tabindex="-1"></a>        interval<span class="op">=</span>interval,</span>
+<span id="cell-visualize_pca_animation-120"><a href="#cell-visualize_pca_animation-120" aria-hidden="true" tabindex="-1"></a>        repeat<span class="op">=</span><span class="va">False</span>,</span>
+<span id="cell-visualize_pca_animation-121"><a href="#cell-visualize_pca_animation-121" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cell-visualize_pca_animation-122"><a href="#cell-visualize_pca_animation-122" aria-hidden="true" tabindex="-1"></a>    plt.close(fig)</span>
+<span id="cell-visualize_pca_animation-123"><a href="#cell-visualize_pca_animation-123" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> animation.to_html5_video()</span>
+<span id="cell-visualize_pca_animation-124"><a href="#cell-visualize_pca_animation-124" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cell-visualize_pca_animation-125"><a href="#cell-visualize_pca_animation-125" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cell-visualize_pca_animation-126"><a href="#cell-visualize_pca_animation-126" aria-hidden="true" tabindex="-1"></a>display(HTML(animate_pca_transformation(data)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div id="visualize_pca_animation" class="cell-output cell-output-display">
-<video width="672" height="480" controls="" autoplay="" loop="">
+<video width="672" height="480" controls="" autoplay="">
   <source type="video/mp4" src="data:video/mp4;base64,AAAAIGZ0eXBNNFYgAAACAE00ViBpc29taXNvMmF2YzEAAAAIZnJlZQADGB1tZGF0AAACoQYF//+d
 3EXpvebZSLeWLNgg2SPu73gyNjQgLSBjb3JlIDE2MyAtIEguMjY0L01QRUctNCBBVkMgY29kZWMg
 LSBDb3B5bGVmdCAyMDAzLTIwMjEgLSBodHRwOi8vd3d3LnZpZGVvbGFuLm9yZy94MjY0Lmh0bWwg
@@ -4786,36 +4763,55 @@ AQAAAABMYXZmNTkuMjcuMTAw
 </video>
 </div>
 </div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Click on the animation above to visualize the PCA transformation!</p>
+</div>
+</div>
 </section>
-<section id="the-mathematical-definition" class="level3">
+<section id="the-mathematical-definition" class="level3 page-columns page-full">
 <h3 class="anchored" data-anchor-id="the-mathematical-definition">The mathematical definition</h3>
 <p>Given a data matrix <span class="math inline">X \in \mathbb{R}^{N \times P}</span>, we need to compute the <a href="../pages/reference.html#eigendecomposition">eigendecomposition</a><a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> of its <a href="../pages/reference.html#auto-covariance">auto-covariance</a><a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>:</p>
 <p><span class="math display">
-\begin{align}
+\begin{align*}
     \text{cov}(X)
     &amp;= \left(\dfrac{1}{n - 1}\right) (X - \overline{X})^\top (X - \overline{X})\\
     &amp;= V \Lambda V^\top
-\end{align}
+\end{align*}
 </span></p>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="assets/autocovariance.svg" style="height:50mm" class="figure-img"></p>
+<div class="page-columns page-full">
+<div class="quarto-figure quarto-figure-center page-columns page-full">
+<figure class="figure page-columns page-full">
+<p class="page-columns page-full"><img src="assets/autocovariance.svg" style="height:50mm" class="figure-img column-body-outset"></p>
 <figcaption class="figure-caption">Computing the auto-covariance, where <span class="math inline">X</span> is centered (i.e.&nbsp;<span class="math inline">X - \overline{X}</span>)</figcaption>
 </figure>
 </div>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="assets/eigendecomposition.svg" style="height:50mm" class="figure-img"></p>
+</div>
+<div class="page-columns page-full">
+<div class="quarto-figure quarto-figure-center page-columns page-full">
+<figure class="figure page-columns page-full">
+<p class="page-columns page-full"><img src="assets/eigendecomposition.svg" style="height:50mm" class="figure-img column-body-outset"></p>
 <figcaption class="figure-caption">Computing the eigendecomposition of the auto-covariance</figcaption>
 </figure>
 </div>
+</div>
 <p>The columns of <span class="math inline">V</span> are <em>eigenvectors</em> that specify the directions of variance while the corresponding diagonal elements of <span class="math inline">\Lambda</span> are <em>eigenvalues</em> that specify the amount of variance along the eigenvector<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>.</p>
 <p>The original data matrix can be transformed by projecting it onto the eigenvectors: <span class="math inline">\widetilde{X} = \left(X - \overline{X}\right) V</span>.</p>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="assets/projection.svg" style="height:50mm" class="figure-img"></p>
+<div class="page-columns page-full">
+<div class="quarto-figure quarto-figure-center page-columns page-full">
+<figure class="figure page-columns page-full">
+<p class="page-columns page-full"><img src="assets/projection.svg" style="height:50mm" class="figure-img column-body-outset"></p>
 <figcaption class="figure-caption">Transforming the original data matrix</figcaption>
 </figure>
+</div>
 </div>
 <!-- TODO ### Some terminology
 
@@ -4828,7 +4824,7 @@ Loadings
 Scores
 :  -->
 <div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -4837,7 +4833,7 @@ Viewing PCA as an optimization
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div id="callout-3" class="callout-3-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>PCA can be used to project data into a lower-dimensional space (i.e.&nbsp;<span class="math inline">p \le f</span>) in a way that best preserves the geometry of the data. Specifically, computing a PCA decomposition of <span class="math inline">X</span> yields a matrix <span class="math inline">V \in \mathbb{R}^{f \times p}</span> such that <span class="math inline">V = \argmin_{V \in \mathbb{U_{f \times p}}} \sum_{i=1}^n \left|| x_i - VV^\top x_i \right||_2</span>, where <span class="math inline">||\cdot||_2</span> denotes the <span class="math inline">L_2</span>-norm and <span class="math inline">\mathbb{U_{f \times p}}</span> denotes the set of orthonormal matrices with shape <span class="math inline">f \times p</span>.</p>
 </div>
@@ -4895,7 +4891,7 @@ Viewing PCA as an optimization
 </div>
 </div>
 <div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -4904,7 +4900,7 @@ Why do we compute PCA this way instead of <span class="math inline">\text{eig}(\
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-3" class="callout-3-contents callout-collapse collapse">
+<div id="callout-4" class="callout-4-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>To apply PCA to a data matrix, we might be tempted to use the definition and naively compute its <a href="../pages/reference.html#auto-covariance">auto-covariance</a> followed by an <a href="../pages/reference.html#eigendecomposition">eigendecomposition</a>. However, when the number of neurons <span class="math inline">P</span> is large, this approach is memory-intensive and prone to numerical errors.</p>
 <p>Instead, we can use the <a href="../pages/reference.html#singular-value-decomposition">singular value decomposition</a> (SVD) of <span class="math inline">X</span> to efficiently compute its PCA transformation. Specifically, <span class="math inline">X = U \Sigma V^\top</span> is a singular value decomposition, where <span class="math inline">U</span> and <span class="math inline">V</span> are orthonormal and <span class="math inline">\Sigma</span> is diagonal.</p>
@@ -4914,7 +4910,7 @@ Why do we compute PCA this way instead of <span class="math inline">\text{eig}(\
 </div>
 </div>
 <div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -4923,7 +4919,7 @@ Only need the first few PCs?
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div id="callout-5" class="callout-5-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>Check out <a href="https://scikit-learn.org/stable/modules/generated/sklearn.decomposition.TruncatedSVD.html">truncated SVD</a>!</p>
 </div>
@@ -4962,7 +4958,7 @@ Only need the first few PCs?
 <span id="cell-transforming-the-dataset-24"><a href="#cell-transforming-the-dataset-24" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cell-transforming-the-dataset-25"><a href="#cell-transforming-the-dataset-25" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cell-transforming-the-dataset-26"><a href="#cell-transforming-the-dataset-26" aria-hidden="true" tabindex="-1"></a>pca <span class="op">=</span> compute_pca(data)</span>
-<span id="cell-transforming-the-dataset-27"><a href="#cell-transforming-the-dataset-27" aria-hidden="true" tabindex="-1"></a>display(pca)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cell-transforming-the-dataset-27"><a href="#cell-transforming-the-dataset-27" aria-hidden="true" tabindex="-1"></a>display(pca[<span class="st">"score"</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div id="transforming-the-dataset" class="cell-output cell-output-display">
 <div><svg style="position: absolute; width: 0; height: 0; overflow: hidden">
@@ -5328,17 +5324,20 @@ dl.xr-attrs {
   stroke: currentColor;
   fill: currentColor;
 }
-</style><pre class="xr-text-repr-fallback">&lt;xarray.Dataset&gt;
-Dimensions:      (stimulus: 1000, component: 2, neuron: 2)
-Coordinates: (3/10)
-  * stimulus     (stimulus) int64 1 2 3 4 5 6 7 ... 994 995 996 997 998 999 1000
-  * neuron       (neuron) int64 1 2
-    ...           ...
-    std          (neuron) float64 1.0 3.0
-Dimensions without coordinates: component
-Data variables:
-    score        (stimulus, component) float64 11.19 1.269 ... 3.39 -2.457
-    eigenvector  (component, neuron) float64 0.4354 0.9002 -0.9002 0.4354</pre><div class="xr-wrap" style="display:none"><div class="xr-header"><div class="xr-obj-type">xarray.Dataset</div></div><ul class="xr-sections"><li class="xr-section-item"><input id="section-ab7383b7-ed6c-4d37-8f69-55899f118027" class="xr-section-summary-in" type="checkbox" disabled=""><label for="section-ab7383b7-ed6c-4d37-8f69-55899f118027" class="xr-section-summary" title="Expand/collapse section">Dimensions:</label><div class="xr-section-inline-details"><ul class="xr-dim-list"><li><span class="xr-has-index">stimulus</span>: 1000</li><li><span>component</span>: 2</li><li><span class="xr-has-index">neuron</span>: 2</li></ul></div><div class="xr-section-details"></div></li><li class="xr-section-item"><input id="section-c51e2c40-2b86-4744-abf7-89d42c616f2f" class="xr-section-summary-in" type="checkbox" checked=""><label for="section-c51e2c40-2b86-4744-abf7-89d42c616f2f" class="xr-section-summary">Coordinates: <span>(10)</span></label><div class="xr-section-inline-details"></div><div class="xr-section-details"><ul class="xr-var-list"><li class="xr-var-item"><div class="xr-var-name"><span class="xr-has-index">stimulus</span></div><div class="xr-var-dims">(stimulus)</div><div class="xr-var-dtype">int64</div><div class="xr-var-preview xr-preview">1 2 3 4 5 ... 996 997 998 999 1000</div><input id="attrs-04141323-8dd2-45f7-a0ce-38cd8263cb5f" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-04141323-8dd2-45f7-a0ce-38cd8263cb5f" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-18cf51ef-3ffd-475e-bd09-c587c133a494" class="xr-var-data-in" type="checkbox"><label for="data-18cf51ef-3ffd-475e-bd09-c587c133a494" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array([   1,    2,    3, ...,  998,  999, 1000])</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span class="xr-has-index">neuron</span></div><div class="xr-var-dims">(neuron)</div><div class="xr-var-dtype">int64</div><div class="xr-var-preview xr-preview">1 2</div><input id="attrs-9e702eb3-c4dc-4bfd-aad4-2a48d1f5367d" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-9e702eb3-c4dc-4bfd-aad4-2a48d1f5367d" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-6ee164fd-5f53-430c-b92f-fe6f88b57d2b" class="xr-var-data-in" type="checkbox"><label for="data-6ee164fd-5f53-430c-b92f-fe6f88b57d2b" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array([1, 2])</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span>rank</span></div><div class="xr-var-dims">(component)</div><div class="xr-var-dtype">int64</div><div class="xr-var-preview xr-preview">1 2</div><input id="attrs-ef25e727-ae9d-405a-baa1-2dde1395ef3f" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-ef25e727-ae9d-405a-baa1-2dde1395ef3f" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-5023826c-354b-4165-82d4-3755a1204d57" class="xr-var-data-in" type="checkbox"><label for="data-5023826c-354b-4165-82d4-3755a1204d57" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array([1, 2])</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span>eigenvalue</span></div><div class="xr-var-dims">(component)</div><div class="xr-var-dtype">float64</div><div class="xr-var-preview xr-preview">46.3 6.148</div><input id="attrs-65972824-6bf0-497d-9b23-82afd309076b" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-65972824-6bf0-497d-9b23-82afd309076b" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-745e72b7-6f53-4c1b-a8c5-6c8089316fae" class="xr-var-data-in" type="checkbox"><label for="data-745e72b7-6f53-4c1b-a8c5-6c8089316fae" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array([46.29579973,  6.14792569])</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span>color</span></div><div class="xr-var-dims">(stimulus)</div><div class="xr-var-dtype">float64</div><div class="xr-var-preview xr-preview">0.637 0.2698 ... 0.1649 0.38</div><input id="attrs-491688db-2842-412e-8476-45da2b554b53" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-491688db-2842-412e-8476-45da2b554b53" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-a6bbea04-dd06-43d1-bd30-b4d3fbb34dee" class="xr-var-data-in" type="checkbox"><label for="data-a6bbea04-dd06-43d1-bd30-b4d3fbb34dee" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array([6.36961687e-01, 2.69786714e-01, 4.09735239e-02, 1.65276355e-02,
+</style><pre class="xr-text-repr-fallback">&lt;xarray.DataArray 'score' (stimulus: 1000, component: 2)&gt;
+11.19 1.269 -10.77 -1.394 -9.962 -1.541 ... -1.028 8.777 -5.869 3.39 -2.457
+Coordinates: (3/5)
+  * stimulus    (stimulus) int64 1 2 3 4 5 6 7 ... 994 995 996 997 998 999 1000
+    rank        (component) int64 1 2
+    ...          ...
+    size        (stimulus) float64 0.01301 0.8278 0.4962 ... 0.08158 0.3216
+Dimensions without coordinates: component</pre><div class="xr-wrap" style="display:none"><div class="xr-header"><div class="xr-obj-type">xarray.DataArray</div><div class="xr-array-name">'score'</div><ul class="xr-dim-list"><li><span class="xr-has-index">stimulus</span>: 1000</li><li><span>component</span>: 2</li></ul></div><ul class="xr-sections"><li class="xr-section-item"><div class="xr-array-wrap"><input id="section-e014bd80-55bc-465f-836a-631bc1850c8a" class="xr-array-in" type="checkbox"><label for="section-e014bd80-55bc-465f-836a-631bc1850c8a" title="Show/hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-array-preview xr-preview"><span>11.19 1.269 -10.77 -1.394 -9.962 ... -1.028 8.777 -5.869 3.39 -2.457</span></div><div class="xr-array-data"><pre>array([[ 1.11911792e+01,  1.26889981e+00],
+       [-1.07729551e+01, -1.39397546e+00],
+       [-9.96219137e+00, -1.54107707e+00],
+       ...,
+       [ 6.58127224e-03, -1.02783716e+00],
+       [ 8.77667289e+00, -5.86946476e+00],
+       [ 3.39020249e+00, -2.45675640e+00]])</pre></div></div></li><li class="xr-section-item"><input id="section-89284e62-3ab7-4e6a-ae32-2277a8971f46" class="xr-section-summary-in" type="checkbox" checked=""><label for="section-89284e62-3ab7-4e6a-ae32-2277a8971f46" class="xr-section-summary">Coordinates: <span>(5)</span></label><div class="xr-section-inline-details"></div><div class="xr-section-details"><ul class="xr-var-list"><li class="xr-var-item"><div class="xr-var-name"><span class="xr-has-index">stimulus</span></div><div class="xr-var-dims">(stimulus)</div><div class="xr-var-dtype">int64</div><div class="xr-var-preview xr-preview">1 2 3 4 5 ... 996 997 998 999 1000</div><input id="attrs-4073b9d4-a665-4341-be00-486da47e1271" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-4073b9d4-a665-4341-be00-486da47e1271" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-dd168886-41fb-407e-8d1b-08e944fb2b82" class="xr-var-data-in" type="checkbox"><label for="data-dd168886-41fb-407e-8d1b-08e944fb2b82" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array([   1,    2,    3, ...,  998,  999, 1000])</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span>rank</span></div><div class="xr-var-dims">(component)</div><div class="xr-var-dtype">int64</div><div class="xr-var-preview xr-preview">1 2</div><input id="attrs-610bf18e-afee-469c-bbfb-14a2166c407d" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-610bf18e-afee-469c-bbfb-14a2166c407d" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-8088d96f-51b9-4c1e-bfcb-2492fdfc0967" class="xr-var-data-in" type="checkbox"><label for="data-8088d96f-51b9-4c1e-bfcb-2492fdfc0967" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array([1, 2])</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span>eigenvalue</span></div><div class="xr-var-dims">(component)</div><div class="xr-var-dtype">float64</div><div class="xr-var-preview xr-preview">46.3 6.148</div><input id="attrs-8ea5035e-7c80-4a96-b01d-c3a4ebe4f5b6" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-8ea5035e-7c80-4a96-b01d-c3a4ebe4f5b6" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-e45ec817-e8e7-4507-923c-1b7cd4073daf" class="xr-var-data-in" type="checkbox"><label for="data-e45ec817-e8e7-4507-923c-1b7cd4073daf" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array([46.29579973,  6.14792569])</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span>color</span></div><div class="xr-var-dims">(stimulus)</div><div class="xr-var-dtype">float64</div><div class="xr-var-preview xr-preview">0.637 0.2698 ... 0.1649 0.38</div><input id="attrs-478f02cb-8622-4572-a59d-3f15391a64f2" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-478f02cb-8622-4572-a59d-3f15391a64f2" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-4c208a14-25db-498f-a116-ea7a6c0e4222" class="xr-var-data-in" type="checkbox"><label for="data-4c208a14-25db-498f-a116-ea7a6c0e4222" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array([6.36961687e-01, 2.69786714e-01, 4.09735239e-02, 1.65276355e-02,
        8.13270239e-01, 9.12755577e-01, 6.06635776e-01, 7.29496561e-01,
        5.43624991e-01, 9.35072424e-01, 8.15853554e-01, 2.73850017e-03,
        8.57404277e-01, 3.35855753e-02, 7.29655446e-01, 1.75655621e-01,
@@ -5378,7 +5377,7 @@ Data variables:
        2.90828834e-01, 7.90127803e-01, 2.74807496e-01, 7.37059356e-02,
        6.83266012e-01, 7.99269956e-01, 6.41767808e-01, 3.44843336e-01,
        5.59773319e-01, 2.15199514e-02, 5.62661656e-01, 8.56801175e-01,
-       7.80532350e-02, 3.83319397e-01, 1.64863718e-01, 3.80007897e-01])</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span>size</span></div><div class="xr-var-dims">(stimulus)</div><div class="xr-var-dtype">float64</div><div class="xr-var-preview xr-preview">0.01301 0.8278 ... 0.08158 0.3216</div><input id="attrs-807b0667-7e5b-4a40-8b63-deac5a439c6b" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-807b0667-7e5b-4a40-8b63-deac5a439c6b" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-d14293b1-f93f-4336-a971-fc5341f50c53" class="xr-var-data-in" type="checkbox"><label for="data-d14293b1-f93f-4336-a971-fc5341f50c53" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array([0.01300767, 0.82776292, 0.49624331, 0.43591807, 0.60179472,
+       7.80532350e-02, 3.83319397e-01, 1.64863718e-01, 3.80007897e-01])</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span>size</span></div><div class="xr-var-dims">(stimulus)</div><div class="xr-var-dtype">float64</div><div class="xr-var-preview xr-preview">0.01301 0.8278 ... 0.08158 0.3216</div><input id="attrs-dbd5e3ec-1a3e-4a11-96b5-f3a556c44adc" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-dbd5e3ec-1a3e-4a11-96b5-f3a556c44adc" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-8f526b0e-03e7-4a1e-b9b7-2200364b50a5" class="xr-var-data-in" type="checkbox"><label for="data-8f526b0e-03e7-4a1e-b9b7-2200364b50a5" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array([0.01300767, 0.82776292, 0.49624331, 0.43591807, 0.60179472,
        0.8500282 , 0.29126072, 0.26751697, 0.04949421, 0.26639909,
        0.06621185, 0.04155849, 0.55273056, 0.18383489, 0.07425772,
        0.91671474, 0.14873389, 0.09483079, 0.97067806, 0.66696696,
@@ -5418,22 +5417,397 @@ Data variables:
        0.4665367 , 0.56944602, 0.56209399, 0.54291566, 0.56611634,
        0.41747562, 0.27881285, 0.51812954, 0.12186051, 0.74927137,
        0.95293572, 0.05409649, 0.78232714, 0.22383289, 0.33641135,
-       0.03353818, 0.9690858 , 0.56209561, 0.08158143, 0.32155563])</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span>beta_color</span></div><div class="xr-var-dims">(neuron)</div><div class="xr-var-dtype">float64</div><div class="xr-var-preview xr-preview">3.0 -2.0</div><input id="attrs-53770a8b-8518-4cb1-bb8e-8bb00f88216d" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-53770a8b-8518-4cb1-bb8e-8bb00f88216d" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-5add429f-14c0-429d-b38e-ac358c3331ce" class="xr-var-data-in" type="checkbox"><label for="data-5add429f-14c0-429d-b38e-ac358c3331ce" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array([ 3., -2.])</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span>beta_size</span></div><div class="xr-var-dims">(neuron)</div><div class="xr-var-dtype">float64</div><div class="xr-var-preview xr-preview">-2.0 5.0</div><input id="attrs-3947fee8-eb89-4da9-a8de-00498e5b2e0e" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-3947fee8-eb89-4da9-a8de-00498e5b2e0e" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-032acbd1-1d20-4b85-8382-61d378a20ebb" class="xr-var-data-in" type="checkbox"><label for="data-032acbd1-1d20-4b85-8382-61d378a20ebb" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array([-2.,  5.])</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span>mean</span></div><div class="xr-var-dims">(neuron)</div><div class="xr-var-dtype">float64</div><div class="xr-var-preview xr-preview">7.0 -6.0</div><input id="attrs-9d6962ea-3f17-484a-afb7-62ffc0a02996" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-9d6962ea-3f17-484a-afb7-62ffc0a02996" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-1b12b876-9c5b-4e51-a816-5f992d8da984" class="xr-var-data-in" type="checkbox"><label for="data-1b12b876-9c5b-4e51-a816-5f992d8da984" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array([ 7., -6.])</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span>std</span></div><div class="xr-var-dims">(neuron)</div><div class="xr-var-dtype">float64</div><div class="xr-var-preview xr-preview">1.0 3.0</div><input id="attrs-b08f95dd-c635-44ae-a663-a410385ea4f8" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-b08f95dd-c635-44ae-a663-a410385ea4f8" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-d5c14572-efaf-4cf2-a121-642e37071481" class="xr-var-data-in" type="checkbox"><label for="data-d5c14572-efaf-4cf2-a121-642e37071481" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array([1., 3.])</pre></div></li></ul></div></li><li class="xr-section-item"><input id="section-75163112-6564-42f3-8d8c-3b6788eac63d" class="xr-section-summary-in" type="checkbox" checked=""><label for="section-75163112-6564-42f3-8d8c-3b6788eac63d" class="xr-section-summary">Data variables: <span>(2)</span></label><div class="xr-section-inline-details"></div><div class="xr-section-details"><ul class="xr-var-list"><li class="xr-var-item"><div class="xr-var-name"><span>score</span></div><div class="xr-var-dims">(stimulus, component)</div><div class="xr-var-dtype">float64</div><div class="xr-var-preview xr-preview">11.19 1.269 -10.77 ... 3.39 -2.457</div><input id="attrs-cc0ffe16-7d2a-4b69-bf90-8306aae16f04" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-cc0ffe16-7d2a-4b69-bf90-8306aae16f04" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-fe7e2456-e1e9-4bac-8b4a-898d79bd30a9" class="xr-var-data-in" type="checkbox"><label for="data-fe7e2456-e1e9-4bac-8b4a-898d79bd30a9" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array([[ 1.11911792e+01,  1.26889981e+00],
-       [-1.07729551e+01, -1.39397546e+00],
-       [-9.96219137e+00, -1.54107707e+00],
-       ...,
-       [ 6.58127224e-03, -1.02783716e+00],
-       [ 8.77667289e+00, -5.86946476e+00],
-       [ 3.39020249e+00, -2.45675640e+00]])</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span>eigenvector</span></div><div class="xr-var-dims">(component, neuron)</div><div class="xr-var-dtype">float64</div><div class="xr-var-preview xr-preview">0.4354 0.9002 -0.9002 0.4354</div><input id="attrs-688e4301-44cc-4596-8778-4eae5f7b4851" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-688e4301-44cc-4596-8778-4eae5f7b4851" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-a664f97b-efaa-40be-b8a3-f03d9f126220" class="xr-var-data-in" type="checkbox"><label for="data-a664f97b-efaa-40be-b8a3-f03d9f126220" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array([[ 0.43538525,  0.90024423],
-       [-0.90024423,  0.43538525]])</pre></div></li></ul></div></li><li class="xr-section-item"><input id="section-22b456c0-b24b-4b0c-9e3f-810d559b368e" class="xr-section-summary-in" type="checkbox"><label for="section-22b456c0-b24b-4b0c-9e3f-810d559b368e" class="xr-section-summary">Indexes: <span>(2)</span></label><div class="xr-section-inline-details"></div><div class="xr-section-details"><ul class="xr-var-list"><li class="xr-var-item"><div class="xr-index-name"><div>stimulus</div></div><div class="xr-index-preview">PandasIndex</div><div></div><input id="index-88169185-e094-4489-839b-da37818e1a0a" class="xr-index-data-in" type="checkbox"><label for="index-88169185-e094-4489-839b-da37818e1a0a" title="Show/Hide index repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-index-data"><pre>PandasIndex(Index([   1,    2,    3,    4,    5,    6,    7,    8,    9,   10,
+       0.03353818, 0.9690858 , 0.56209561, 0.08158143, 0.32155563])</pre></div></li></ul></div></li><li class="xr-section-item"><input id="section-e7abe15b-548a-4c79-98ba-ea35b310d741" class="xr-section-summary-in" type="checkbox"><label for="section-e7abe15b-548a-4c79-98ba-ea35b310d741" class="xr-section-summary">Indexes: <span>(1)</span></label><div class="xr-section-inline-details"></div><div class="xr-section-details"><ul class="xr-var-list"><li class="xr-var-item"><div class="xr-index-name"><div>stimulus</div></div><div class="xr-index-preview">PandasIndex</div><div></div><input id="index-48402f8e-971b-4f85-9c85-78e0adb23d65" class="xr-index-data-in" type="checkbox"><label for="index-48402f8e-971b-4f85-9c85-78e0adb23d65" title="Show/Hide index repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-index-data"><pre>PandasIndex(Index([   1,    2,    3,    4,    5,    6,    7,    8,    9,   10,
        ...
         991,  992,  993,  994,  995,  996,  997,  998,  999, 1000],
-      dtype='int64', name='stimulus', length=1000))</pre></div></li><li class="xr-var-item"><div class="xr-index-name"><div>neuron</div></div><div class="xr-index-preview">PandasIndex</div><div></div><input id="index-0ad7e4a0-6f63-499e-9813-a2f02287f5de" class="xr-index-data-in" type="checkbox"><label for="index-0ad7e4a0-6f63-499e-9813-a2f02287f5de" title="Show/Hide index repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-index-data"><pre>PandasIndex(Index([1, 2], dtype='int64', name='neuron'))</pre></div></li></ul></div></li><li class="xr-section-item"><input id="section-5f8f1b8e-2808-4d4f-9e98-8d8cfcfe9796" class="xr-section-summary-in" type="checkbox" disabled=""><label for="section-5f8f1b8e-2808-4d4f-9e98-8d8cfcfe9796" class="xr-section-summary" title="Expand/collapse section">Attributes: <span>(0)</span></label><div class="xr-section-inline-details"></div><div class="xr-section-details"><dl class="xr-attrs"></dl></div></li></ul></div></div>
+      dtype='int64', name='stimulus', length=1000))</pre></div></li></ul></div></li><li class="xr-section-item"><input id="section-537dc621-c816-4673-be2e-a03de33a252a" class="xr-section-summary-in" type="checkbox" disabled=""><label for="section-537dc621-c816-4673-be2e-a03de33a252a" class="xr-section-summary" title="Expand/collapse section">Attributes: <span>(0)</span></label><div class="xr-section-inline-details"></div><div class="xr-section-details"><dl class="xr-attrs"></dl></div></li></ul></div></div>
 </div>
 </div>
 <section id="inspecting-the-eigenvectors" class="level3">
 <h3 class="anchored" data-anchor-id="inspecting-the-eigenvectors">Inspecting the eigenvectors</h3>
-<div id="pca-visualize" class="cell" data-execution_count="17">
+<div id="8231ba31" class="cell" data-execution_count="17">
+<details>
+<summary>Display the eigenvectors</summary>
+<div class="sourceCode cell-code" id="8231ba31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="8231ba31-1"><a href="#8231ba31-1" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> xr.set_options(display_expand_data<span class="op">=</span><span class="va">True</span>):</span>
+<span id="8231ba31-2"><a href="#8231ba31-2" aria-hidden="true" tabindex="-1"></a>    display(pca[<span class="st">"eigenvector"</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+<div><svg style="position: absolute; width: 0; height: 0; overflow: hidden">
+<defs>
+<symbol id="icon-database" viewbox="0 0 32 32">
+<path d="M16 0c-8.837 0-16 2.239-16 5v4c0 2.761 7.163 5 16 5s16-2.239 16-5v-4c0-2.761-7.163-5-16-5z"></path>
+<path d="M16 17c-8.837 0-16-2.239-16-5v6c0 2.761 7.163 5 16 5s16-2.239 16-5v-6c0 2.761-7.163 5-16 5z"></path>
+<path d="M16 26c-8.837 0-16-2.239-16-5v6c0 2.761 7.163 5 16 5s16-2.239 16-5v-6c0 2.761-7.163 5-16 5z"></path>
+</symbol>
+<symbol id="icon-file-text2" viewbox="0 0 32 32">
+<path d="M28.681 7.159c-0.694-0.947-1.662-2.053-2.724-3.116s-2.169-2.030-3.116-2.724c-1.612-1.182-2.393-1.319-2.841-1.319h-15.5c-1.378 0-2.5 1.121-2.5 2.5v27c0 1.378 1.122 2.5 2.5 2.5h23c1.378 0 2.5-1.122 2.5-2.5v-19.5c0-0.448-0.137-1.23-1.319-2.841zM24.543 5.457c0.959 0.959 1.712 1.825 2.268 2.543h-4.811v-4.811c0.718 0.556 1.584 1.309 2.543 2.268zM28 29.5c0 0.271-0.229 0.5-0.5 0.5h-23c-0.271 0-0.5-0.229-0.5-0.5v-27c0-0.271 0.229-0.5 0.5-0.5 0 0 15.499-0 15.5 0v7c0 0.552 0.448 1 1 1h7v19.5z"></path>
+<path d="M23 26h-14c-0.552 0-1-0.448-1-1s0.448-1 1-1h14c0.552 0 1 0.448 1 1s-0.448 1-1 1z"></path>
+<path d="M23 22h-14c-0.552 0-1-0.448-1-1s0.448-1 1-1h14c0.552 0 1 0.448 1 1s-0.448 1-1 1z"></path>
+<path d="M23 18h-14c-0.552 0-1-0.448-1-1s0.448-1 1-1h14c0.552 0 1 0.448 1 1s-0.448 1-1 1z"></path>
+</symbol>
+</defs>
+</svg>
+<style>/* CSS stylesheet for displaying xarray objects in jupyterlab.
+ *
+ */
+
+:root {
+  --xr-font-color0: var(--jp-content-font-color0, rgba(0, 0, 0, 1));
+  --xr-font-color2: var(--jp-content-font-color2, rgba(0, 0, 0, 0.54));
+  --xr-font-color3: var(--jp-content-font-color3, rgba(0, 0, 0, 0.38));
+  --xr-border-color: var(--jp-border-color2, #e0e0e0);
+  --xr-disabled-color: var(--jp-layout-color3, #bdbdbd);
+  --xr-background-color: var(--jp-layout-color0, white);
+  --xr-background-color-row-even: var(--jp-layout-color1, white);
+  --xr-background-color-row-odd: var(--jp-layout-color2, #eeeeee);
+}
+
+html[theme=dark],
+body[data-theme=dark],
+body.vscode-dark {
+  --xr-font-color0: rgba(255, 255, 255, 1);
+  --xr-font-color2: rgba(255, 255, 255, 0.54);
+  --xr-font-color3: rgba(255, 255, 255, 0.38);
+  --xr-border-color: #1F1F1F;
+  --xr-disabled-color: #515151;
+  --xr-background-color: #111111;
+  --xr-background-color-row-even: #111111;
+  --xr-background-color-row-odd: #313131;
+}
+
+.xr-wrap {
+  display: block !important;
+  min-width: 300px;
+  max-width: 700px;
+}
+
+.xr-text-repr-fallback {
+  /* fallback to plain text repr when CSS is not injected (untrusted notebook) */
+  display: none;
+}
+
+.xr-header {
+  padding-top: 6px;
+  padding-bottom: 6px;
+  margin-bottom: 4px;
+  border-bottom: solid 1px var(--xr-border-color);
+}
+
+.xr-header > div,
+.xr-header > ul {
+  display: inline;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.xr-obj-type,
+.xr-array-name {
+  margin-left: 2px;
+  margin-right: 10px;
+}
+
+.xr-obj-type {
+  color: var(--xr-font-color2);
+}
+
+.xr-sections {
+  padding-left: 0 !important;
+  display: grid;
+  grid-template-columns: 150px auto auto 1fr 20px 20px;
+}
+
+.xr-section-item {
+  display: contents;
+}
+
+.xr-section-item input {
+  display: none;
+}
+
+.xr-section-item input + label {
+  color: var(--xr-disabled-color);
+}
+
+.xr-section-item input:enabled + label {
+  cursor: pointer;
+  color: var(--xr-font-color2);
+}
+
+.xr-section-item input:enabled + label:hover {
+  color: var(--xr-font-color0);
+}
+
+.xr-section-summary {
+  grid-column: 1;
+  color: var(--xr-font-color2);
+  font-weight: 500;
+}
+
+.xr-section-summary > span {
+  display: inline-block;
+  padding-left: 0.5em;
+}
+
+.xr-section-summary-in:disabled + label {
+  color: var(--xr-font-color2);
+}
+
+.xr-section-summary-in + label:before {
+  display: inline-block;
+  content: '►';
+  font-size: 11px;
+  width: 15px;
+  text-align: center;
+}
+
+.xr-section-summary-in:disabled + label:before {
+  color: var(--xr-disabled-color);
+}
+
+.xr-section-summary-in:checked + label:before {
+  content: '▼';
+}
+
+.xr-section-summary-in:checked + label > span {
+  display: none;
+}
+
+.xr-section-summary,
+.xr-section-inline-details {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+.xr-section-inline-details {
+  grid-column: 2 / -1;
+}
+
+.xr-section-details {
+  display: none;
+  grid-column: 1 / -1;
+  margin-bottom: 5px;
+}
+
+.xr-section-summary-in:checked ~ .xr-section-details {
+  display: contents;
+}
+
+.xr-array-wrap {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: 20px auto;
+}
+
+.xr-array-wrap > label {
+  grid-column: 1;
+  vertical-align: top;
+}
+
+.xr-preview {
+  color: var(--xr-font-color3);
+}
+
+.xr-array-preview,
+.xr-array-data {
+  padding: 0 5px !important;
+  grid-column: 2;
+}
+
+.xr-array-data,
+.xr-array-in:checked ~ .xr-array-preview {
+  display: none;
+}
+
+.xr-array-in:checked ~ .xr-array-data,
+.xr-array-preview {
+  display: inline-block;
+}
+
+.xr-dim-list {
+  display: inline-block !important;
+  list-style: none;
+  padding: 0 !important;
+  margin: 0;
+}
+
+.xr-dim-list li {
+  display: inline-block;
+  padding: 0;
+  margin: 0;
+}
+
+.xr-dim-list:before {
+  content: '(';
+}
+
+.xr-dim-list:after {
+  content: ')';
+}
+
+.xr-dim-list li:not(:last-child):after {
+  content: ',';
+  padding-right: 5px;
+}
+
+.xr-has-index {
+  font-weight: bold;
+}
+
+.xr-var-list,
+.xr-var-item {
+  display: contents;
+}
+
+.xr-var-item > div,
+.xr-var-item label,
+.xr-var-item > .xr-var-name span {
+  background-color: var(--xr-background-color-row-even);
+  margin-bottom: 0;
+}
+
+.xr-var-item > .xr-var-name:hover span {
+  padding-right: 5px;
+}
+
+.xr-var-list > li:nth-child(odd) > div,
+.xr-var-list > li:nth-child(odd) > label,
+.xr-var-list > li:nth-child(odd) > .xr-var-name span {
+  background-color: var(--xr-background-color-row-odd);
+}
+
+.xr-var-name {
+  grid-column: 1;
+}
+
+.xr-var-dims {
+  grid-column: 2;
+}
+
+.xr-var-dtype {
+  grid-column: 3;
+  text-align: right;
+  color: var(--xr-font-color2);
+}
+
+.xr-var-preview {
+  grid-column: 4;
+}
+
+.xr-index-preview {
+  grid-column: 2 / 5;
+  color: var(--xr-font-color2);
+}
+
+.xr-var-name,
+.xr-var-dims,
+.xr-var-dtype,
+.xr-preview,
+.xr-attrs dt {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding-right: 10px;
+}
+
+.xr-var-name:hover,
+.xr-var-dims:hover,
+.xr-var-dtype:hover,
+.xr-attrs dt:hover {
+  overflow: visible;
+  width: auto;
+  z-index: 1;
+}
+
+.xr-var-attrs,
+.xr-var-data,
+.xr-index-data {
+  display: none;
+  background-color: var(--xr-background-color) !important;
+  padding-bottom: 5px !important;
+}
+
+.xr-var-attrs-in:checked ~ .xr-var-attrs,
+.xr-var-data-in:checked ~ .xr-var-data,
+.xr-index-data-in:checked ~ .xr-index-data {
+  display: block;
+}
+
+.xr-var-data > table {
+  float: right;
+}
+
+.xr-var-name span,
+.xr-var-data,
+.xr-index-name div,
+.xr-index-data,
+.xr-attrs {
+  padding-left: 25px !important;
+}
+
+.xr-attrs,
+.xr-var-attrs,
+.xr-var-data,
+.xr-index-data {
+  grid-column: 1 / -1;
+}
+
+dl.xr-attrs {
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: 125px auto;
+}
+
+.xr-attrs dt,
+.xr-attrs dd {
+  padding: 0;
+  margin: 0;
+  float: left;
+  padding-right: 10px;
+  width: auto;
+}
+
+.xr-attrs dt {
+  font-weight: normal;
+  grid-column: 1;
+}
+
+.xr-attrs dt:hover span {
+  display: inline-block;
+  background: var(--xr-background-color);
+  padding-right: 10px;
+}
+
+.xr-attrs dd {
+  grid-column: 2;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+.xr-icon-database,
+.xr-icon-file-text2,
+.xr-no-icon {
+  display: inline-block;
+  vertical-align: middle;
+  width: 1em;
+  height: 1.5em !important;
+  stroke-width: 0;
+  stroke: currentColor;
+  fill: currentColor;
+}
+</style><pre class="xr-text-repr-fallback">&lt;xarray.DataArray 'eigenvector' (component: 2, neuron: 2)&gt;
+array([[ 0.43538525,  0.90024423],
+       [-0.90024423,  0.43538525]])
+Coordinates: (3/7)
+  * neuron      (neuron) int64 1 2
+    rank        (component) int64 1 2
+    ...          ...
+    std         (neuron) float64 1.0 3.0
+Dimensions without coordinates: component</pre><div class="xr-wrap" style="display:none"><div class="xr-header"><div class="xr-obj-type">xarray.DataArray</div><div class="xr-array-name">'eigenvector'</div><ul class="xr-dim-list"><li><span>component</span>: 2</li><li><span class="xr-has-index">neuron</span>: 2</li></ul></div><ul class="xr-sections"><li class="xr-section-item"><div class="xr-array-wrap"><input id="section-ed9bebbd-0bc1-40c0-b775-1a8a0555edd7" class="xr-array-in" type="checkbox" checked=""><label for="section-ed9bebbd-0bc1-40c0-b775-1a8a0555edd7" title="Show/hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-array-preview xr-preview"><span>0.4354 0.9002 -0.9002 0.4354</span></div><div class="xr-array-data"><pre>array([[ 0.43538525,  0.90024423],
+       [-0.90024423,  0.43538525]])</pre></div></div></li><li class="xr-section-item"><input id="section-fa5156fe-388c-49d8-830f-4aed55f09ba0" class="xr-section-summary-in" type="checkbox" checked=""><label for="section-fa5156fe-388c-49d8-830f-4aed55f09ba0" class="xr-section-summary">Coordinates: <span>(7)</span></label><div class="xr-section-inline-details"></div><div class="xr-section-details"><ul class="xr-var-list"><li class="xr-var-item"><div class="xr-var-name"><span class="xr-has-index">neuron</span></div><div class="xr-var-dims">(neuron)</div><div class="xr-var-dtype">int64</div><div class="xr-var-preview xr-preview">1 2</div><input id="attrs-a86545b5-b7b8-4da5-ab87-8972d3848509" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-a86545b5-b7b8-4da5-ab87-8972d3848509" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-71ec4005-7477-448d-807f-d8615afdccd0" class="xr-var-data-in" type="checkbox"><label for="data-71ec4005-7477-448d-807f-d8615afdccd0" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array([1, 2])</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span>rank</span></div><div class="xr-var-dims">(component)</div><div class="xr-var-dtype">int64</div><div class="xr-var-preview xr-preview">1 2</div><input id="attrs-984734c8-d5fb-47a6-8829-8a178bed9ca5" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-984734c8-d5fb-47a6-8829-8a178bed9ca5" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-2ca4e92c-5d11-405f-b93b-28b624ebd348" class="xr-var-data-in" type="checkbox"><label for="data-2ca4e92c-5d11-405f-b93b-28b624ebd348" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array([1, 2])</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span>eigenvalue</span></div><div class="xr-var-dims">(component)</div><div class="xr-var-dtype">float64</div><div class="xr-var-preview xr-preview">46.3 6.148</div><input id="attrs-62d9341c-4925-472e-901a-9896007b54d2" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-62d9341c-4925-472e-901a-9896007b54d2" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-60225c3b-768b-4b97-9ab3-82929b68d1fb" class="xr-var-data-in" type="checkbox"><label for="data-60225c3b-768b-4b97-9ab3-82929b68d1fb" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array([46.29579973,  6.14792569])</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span>beta_color</span></div><div class="xr-var-dims">(neuron)</div><div class="xr-var-dtype">float64</div><div class="xr-var-preview xr-preview">3.0 -2.0</div><input id="attrs-2fcda4fb-96dd-4d54-9ed9-851f0779d111" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-2fcda4fb-96dd-4d54-9ed9-851f0779d111" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-ba882f65-fde1-4f64-90cc-dc3a5adec3ed" class="xr-var-data-in" type="checkbox"><label for="data-ba882f65-fde1-4f64-90cc-dc3a5adec3ed" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array([ 3., -2.])</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span>beta_size</span></div><div class="xr-var-dims">(neuron)</div><div class="xr-var-dtype">float64</div><div class="xr-var-preview xr-preview">-2.0 5.0</div><input id="attrs-5b0232a0-d29e-47f5-9e1f-6ea212d4e432" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-5b0232a0-d29e-47f5-9e1f-6ea212d4e432" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-bfb0b9cf-6227-413d-8c3f-815a92b347c4" class="xr-var-data-in" type="checkbox"><label for="data-bfb0b9cf-6227-413d-8c3f-815a92b347c4" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array([-2.,  5.])</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span>mean</span></div><div class="xr-var-dims">(neuron)</div><div class="xr-var-dtype">float64</div><div class="xr-var-preview xr-preview">7.0 -6.0</div><input id="attrs-292a9c2b-3da4-44f2-9af2-8e6e48883274" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-292a9c2b-3da4-44f2-9af2-8e6e48883274" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-6dc758a6-3047-4ae6-b4f9-728b09a0e725" class="xr-var-data-in" type="checkbox"><label for="data-6dc758a6-3047-4ae6-b4f9-728b09a0e725" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array([ 7., -6.])</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span>std</span></div><div class="xr-var-dims">(neuron)</div><div class="xr-var-dtype">float64</div><div class="xr-var-preview xr-preview">1.0 3.0</div><input id="attrs-d776328a-c5b4-4378-ae56-7420fbfa3582" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-d776328a-c5b4-4378-ae56-7420fbfa3582" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-74bd4bec-a748-458e-8e9e-26380ef11c0c" class="xr-var-data-in" type="checkbox"><label for="data-74bd4bec-a748-458e-8e9e-26380ef11c0c" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array([1., 3.])</pre></div></li></ul></div></li><li class="xr-section-item"><input id="section-24983d2b-6cc1-48ac-9bd7-8caacf962d7c" class="xr-section-summary-in" type="checkbox"><label for="section-24983d2b-6cc1-48ac-9bd7-8caacf962d7c" class="xr-section-summary">Indexes: <span>(1)</span></label><div class="xr-section-inline-details"></div><div class="xr-section-details"><ul class="xr-var-list"><li class="xr-var-item"><div class="xr-index-name"><div>neuron</div></div><div class="xr-index-preview">PandasIndex</div><div></div><input id="index-bbdc4eba-52cd-4a79-9313-3cf510704482" class="xr-index-data-in" type="checkbox"><label for="index-bbdc4eba-52cd-4a79-9313-3cf510704482" title="Show/Hide index repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-index-data"><pre>PandasIndex(Index([1, 2], dtype='int64', name='neuron'))</pre></div></li></ul></div></li><li class="xr-section-item"><input id="section-f5ea33a7-35df-4d96-956b-2da8f4567a14" class="xr-section-summary-in" type="checkbox" disabled=""><label for="section-f5ea33a7-35df-4d96-956b-2da8f4567a14" class="xr-section-summary" title="Expand/collapse section">Attributes: <span>(0)</span></label><div class="xr-section-inline-details"></div><div class="xr-section-details"><dl class="xr-attrs"></dl></div></li></ul></div></div>
+</div>
+</div>
+<div id="pca-visualize" class="cell" data-execution_count="18">
 <details>
 <summary>Visualize the transformed data</summary>
 <div class="sourceCode cell-code" id="pca-visualize"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="pca-visualize-1"><a href="#pca-visualize-1" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> view_joint_scatter(</span>
@@ -5451,7 +5825,7 @@ Data variables:
 <section id="interpreting-the-transformed-data" class="level3">
 <h3 class="anchored" data-anchor-id="interpreting-the-transformed-data">Interpreting the transformed data</h3>
 <p>Let’s view the data projected onto each of the principal components.</p>
-<div id="cell-view_principal_components" class="cell" data-execution_count="18">
+<div id="cell-view_principal_components" class="cell" data-execution_count="19">
 <details>
 <summary>Visualize principal component scores</summary>
 <div class="sourceCode cell-code" id="cell-view_principal_components"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cell-view_principal_components-1"><a href="#cell-view_principal_components-1" aria-hidden="true" tabindex="-1"></a>view_individual_scatter(</span>
@@ -5461,7 +5835,7 @@ Data variables:
 <span id="cell-view_principal_components-5"><a href="#cell-view_principal_components-5" aria-hidden="true" tabindex="-1"></a>    template_func<span class="op">=</span><span class="kw">lambda</span> x: <span class="ss">f"principal component </span><span class="sc">{</span>x<span class="sc">}</span><span class="ss">"</span>,</span>
 <span id="cell-view_principal_components-6"><a href="#cell-view_principal_components-6" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output cell-output-display" data-execution_count="17">
+<div class="cell-output cell-output-display" data-execution_count="59">
 <div id="view_principal_components" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="introducing_pca_files/figure-html/view_principal_components-output-1.svg" class="img-fluid figure-img"></p>
@@ -5484,14 +5858,14 @@ Important
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>However, note that these components do not directly correspond to either of the latent variables; rather, each is a mixture of stimulus-dependent signal and noise.</p>
+<p>Note that these components do <em>not</em> directly correspond to either of the latent variables. Rather, each is a mixture of stimulus-dependent signal and noise.</p>
 </div>
 </div>
 </section>
 <section id="analyzing-the-covariance-statistics" class="level3">
 <h3 class="anchored" data-anchor-id="analyzing-the-covariance-statistics">Analyzing the covariance statistics</h3>
 <p>We can compute the variance along each eigenvector. The total variance along all eigenvectors is the same as the total variance of the original data.</p>
-<div id="eigenvalues" class="cell" data-execution_count="19">
+<div id="eigenvalues" class="cell" data-execution_count="20">
 <details>
 <summary>Display eigenvalues</summary>
 <div class="sourceCode cell-code" id="eigenvalues"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="eigenvalues-1"><a href="#eigenvalues-1" aria-hidden="true" tabindex="-1"></a>eigenvalues <span class="op">=</span> pca[<span class="st">"eigenvalue"</span>].<span class="bu">round</span>(<span class="dv">3</span>)</span>
@@ -5508,7 +5882,7 @@ variance along eigenvector 2 (eigenvalue 2): 6.148
 total variance: 52.444</code></pre>
 </div>
 </div>
-<div id="cell-visualize_eigenspectrum" class="cell" data-execution_count="20">
+<div id="cell-visualize_eigenspectrum" class="cell" data-execution_count="21">
 <details>
 <summary>View eigenspectrum</summary>
 <div class="sourceCode cell-code" id="cell-visualize_eigenspectrum"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cell-visualize_eigenspectrum-1"><a href="#cell-visualize_eigenspectrum-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> view_eigenspectrum(pca: xr.DataArray) <span class="op">-&gt;</span> mpl.figure.Figure:</span>
@@ -5530,7 +5904,7 @@ total variance: 52.444</code></pre>
 <span id="cell-visualize_eigenspectrum-17"><a href="#cell-visualize_eigenspectrum-17" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cell-visualize_eigenspectrum-18"><a href="#cell-visualize_eigenspectrum-18" aria-hidden="true" tabindex="-1"></a>view_eigenspectrum(pca)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output cell-output-display" data-execution_count="19">
+<div class="cell-output cell-output-display" data-execution_count="61">
 <div id="visualize_eigenspectrum" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="introducing_pca_files/figure-html/visualize_eigenspectrum-output-1.svg" class="img-fluid figure-img"></p>
@@ -5543,7 +5917,7 @@ total variance: 52.444</code></pre>
 <section id="quantifying-dimensionality" class="level2">
 <h2 class="anchored" data-anchor-id="quantifying-dimensionality">Quantifying dimensionality</h2>
 <p>In these data, the dimensionality is clear: there are two latent variables and both are evident in the principal components. However, in real data, we typically record from more than <span class="math inline">P = 2</span> neurons, and judging the dimensionality of larger datasets becomes tricky. To simulate such a scenario, let’s record from more neurons (say <span class="math inline">P = 10</span>)!</p>
-<div id="cell-simulate_more_neurons" class="cell" data-execution_count="21">
+<div id="cell-simulate_more_neurons" class="cell" data-execution_count="22">
 <details>
 <summary>Simulate responses from more neurons</summary>
 <div class="sourceCode cell-code" id="cell-simulate_more_neurons"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cell-simulate_more_neurons-1"><a href="#cell-simulate_more_neurons-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> _simulate_random_neuron(rng: np.random.Generator) <span class="op">-&gt;</span> Neuron:</span>
@@ -5935,7 +6309,7 @@ Coordinates: (3/8)
   * neuron      (neuron) int64 1 2 3 4 5 6 7 8 9 10
   * stimulus    (stimulus) int64 1 2 3 4 5 6 7 ... 994 995 996 997 998 999 1000
     ...          ...
-    std         (neuron) float64 -5.0 2.0 -3.0 5.0 -10.0 ... -2.0 -4.0 -2.0 -8.0</pre><div class="xr-wrap" style="display:none"><div class="xr-header"><div class="xr-obj-type">xarray.DataArray</div><div class="xr-array-name">'neuron responses'</div><ul class="xr-dim-list"><li><span class="xr-has-index">stimulus</span>: 1000</li><li><span class="xr-has-index">neuron</span>: 10</li></ul></div><ul class="xr-sections"><li class="xr-section-item"><div class="xr-array-wrap"><input id="section-4fe9399e-9b39-483c-8c8b-c4244cc97097" class="xr-array-in" type="checkbox"><label for="section-4fe9399e-9b39-483c-8c8b-c4244cc97097" title="Show/hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-array-preview xr-preview"><span>-1.747 -8.53 -7.006 4.696 8.766 ... 8.782 0.7017 -2.132 -1.981 -1.87</span></div><div class="xr-array-data"><pre>array([[ -1.7468685 ,  -8.52988047,  -7.00619911, ..., -12.08407229,
+    std         (neuron) float64 -5.0 2.0 -3.0 5.0 -10.0 ... -2.0 -4.0 -2.0 -8.0</pre><div class="xr-wrap" style="display:none"><div class="xr-header"><div class="xr-obj-type">xarray.DataArray</div><div class="xr-array-name">'neuron responses'</div><ul class="xr-dim-list"><li><span class="xr-has-index">stimulus</span>: 1000</li><li><span class="xr-has-index">neuron</span>: 10</li></ul></div><ul class="xr-sections"><li class="xr-section-item"><div class="xr-array-wrap"><input id="section-c495b185-3dc3-4cda-859b-a7082e4b42f0" class="xr-array-in" type="checkbox"><label for="section-c495b185-3dc3-4cda-859b-a7082e4b42f0" title="Show/hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-array-preview xr-preview"><span>-1.747 -8.53 -7.006 4.696 8.766 ... 8.782 0.7017 -2.132 -1.981 -1.87</span></div><div class="xr-array-data"><pre>array([[ -1.7468685 ,  -8.52988047,  -7.00619911, ..., -12.08407229,
          -6.11588709,   5.79962078],
        [  0.5417999 ,   5.76857817, -14.19056082, ...,  -7.57254665,
          15.63044955, -12.08460524],
@@ -5947,7 +6321,7 @@ Coordinates: (3/8)
        [-23.71380179,   4.65415007,  -5.80502762, ...,  -7.50271373,
         -10.13915485,  -8.14599889],
        [ -7.25947058,   1.02221347,  -8.99930611, ...,  -2.13177182,
-         -1.98124877,  -1.87010738]])</pre></div></div></li><li class="xr-section-item"><input id="section-f1442903-d90a-4c1e-95d2-31ccb0ca0067" class="xr-section-summary-in" type="checkbox" checked=""><label for="section-f1442903-d90a-4c1e-95d2-31ccb0ca0067" class="xr-section-summary">Coordinates: <span>(8)</span></label><div class="xr-section-inline-details"></div><div class="xr-section-details"><ul class="xr-var-list"><li class="xr-var-item"><div class="xr-var-name"><span class="xr-has-index">neuron</span></div><div class="xr-var-dims">(neuron)</div><div class="xr-var-dtype">int64</div><div class="xr-var-preview xr-preview">1 2 3 4 5 6 7 8 9 10</div><input id="attrs-fa39c6fd-1748-4469-918b-690d8b4557e3" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-fa39c6fd-1748-4469-918b-690d8b4557e3" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-1bfdbfd4-cb06-4e6b-96ee-cb4d672341f0" class="xr-var-data-in" type="checkbox"><label for="data-1bfdbfd4-cb06-4e6b-96ee-cb4d672341f0" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array([ 1,  2,  3,  4,  5,  6,  7,  8,  9, 10])</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span class="xr-has-index">stimulus</span></div><div class="xr-var-dims">(stimulus)</div><div class="xr-var-dtype">int64</div><div class="xr-var-preview xr-preview">1 2 3 4 5 ... 996 997 998 999 1000</div><input id="attrs-9ac61fe5-6a72-4b47-9887-61162aef5193" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-9ac61fe5-6a72-4b47-9887-61162aef5193" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-15cbccfc-8d42-4322-81ad-eae2eff89c96" class="xr-var-data-in" type="checkbox"><label for="data-15cbccfc-8d42-4322-81ad-eae2eff89c96" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array([   1,    2,    3, ...,  998,  999, 1000])</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span>color</span></div><div class="xr-var-dims">(stimulus)</div><div class="xr-var-dtype">float64</div><div class="xr-var-preview xr-preview">0.637 0.2698 ... 0.1649 0.38</div><input id="attrs-926ff474-a69a-46f6-95af-32a0b9db37c6" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-926ff474-a69a-46f6-95af-32a0b9db37c6" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-fb255fd6-d4a9-4672-a75c-c0ea14ec8967" class="xr-var-data-in" type="checkbox"><label for="data-fb255fd6-d4a9-4672-a75c-c0ea14ec8967" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array([6.36961687e-01, 2.69786714e-01, 4.09735239e-02, 1.65276355e-02,
+         -1.98124877,  -1.87010738]])</pre></div></div></li><li class="xr-section-item"><input id="section-f4fc5499-4757-4267-9ef2-21019e4e5de8" class="xr-section-summary-in" type="checkbox" checked=""><label for="section-f4fc5499-4757-4267-9ef2-21019e4e5de8" class="xr-section-summary">Coordinates: <span>(8)</span></label><div class="xr-section-inline-details"></div><div class="xr-section-details"><ul class="xr-var-list"><li class="xr-var-item"><div class="xr-var-name"><span class="xr-has-index">neuron</span></div><div class="xr-var-dims">(neuron)</div><div class="xr-var-dtype">int64</div><div class="xr-var-preview xr-preview">1 2 3 4 5 6 7 8 9 10</div><input id="attrs-dacf1003-4ae8-497d-8146-6e715ba4a77c" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-dacf1003-4ae8-497d-8146-6e715ba4a77c" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-e891fea7-9f9c-4c4c-9e24-0e79c2b22eb5" class="xr-var-data-in" type="checkbox"><label for="data-e891fea7-9f9c-4c4c-9e24-0e79c2b22eb5" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array([ 1,  2,  3,  4,  5,  6,  7,  8,  9, 10])</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span class="xr-has-index">stimulus</span></div><div class="xr-var-dims">(stimulus)</div><div class="xr-var-dtype">int64</div><div class="xr-var-preview xr-preview">1 2 3 4 5 ... 996 997 998 999 1000</div><input id="attrs-cbaf9fcf-ebfb-4f1d-b78e-652efbcc4419" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-cbaf9fcf-ebfb-4f1d-b78e-652efbcc4419" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-ce8e2dda-b1c5-4617-b513-356a0316a6bd" class="xr-var-data-in" type="checkbox"><label for="data-ce8e2dda-b1c5-4617-b513-356a0316a6bd" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array([   1,    2,    3, ...,  998,  999, 1000])</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span>color</span></div><div class="xr-var-dims">(stimulus)</div><div class="xr-var-dtype">float64</div><div class="xr-var-preview xr-preview">0.637 0.2698 ... 0.1649 0.38</div><input id="attrs-de15e525-fd22-4875-904c-7e537011824c" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-de15e525-fd22-4875-904c-7e537011824c" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-eacf7ff4-3fce-4f52-b71c-bc6e3524af7b" class="xr-var-data-in" type="checkbox"><label for="data-eacf7ff4-3fce-4f52-b71c-bc6e3524af7b" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array([6.36961687e-01, 2.69786714e-01, 4.09735239e-02, 1.65276355e-02,
        8.13270239e-01, 9.12755577e-01, 6.06635776e-01, 7.29496561e-01,
        5.43624991e-01, 9.35072424e-01, 8.15853554e-01, 2.73850017e-03,
        8.57404277e-01, 3.35855753e-02, 7.29655446e-01, 1.75655621e-01,
@@ -5987,7 +6361,7 @@ Coordinates: (3/8)
        2.90828834e-01, 7.90127803e-01, 2.74807496e-01, 7.37059356e-02,
        6.83266012e-01, 7.99269956e-01, 6.41767808e-01, 3.44843336e-01,
        5.59773319e-01, 2.15199514e-02, 5.62661656e-01, 8.56801175e-01,
-       7.80532350e-02, 3.83319397e-01, 1.64863718e-01, 3.80007897e-01])</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span>size</span></div><div class="xr-var-dims">(stimulus)</div><div class="xr-var-dtype">float64</div><div class="xr-var-preview xr-preview">0.01301 0.8278 ... 0.08158 0.3216</div><input id="attrs-3ed8594f-43a7-49dc-89b1-6652022edd8a" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-3ed8594f-43a7-49dc-89b1-6652022edd8a" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-73aaed58-07fc-40fd-9ed6-e47200f4bcbf" class="xr-var-data-in" type="checkbox"><label for="data-73aaed58-07fc-40fd-9ed6-e47200f4bcbf" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array([0.01300767, 0.82776292, 0.49624331, 0.43591807, 0.60179472,
+       7.80532350e-02, 3.83319397e-01, 1.64863718e-01, 3.80007897e-01])</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span>size</span></div><div class="xr-var-dims">(stimulus)</div><div class="xr-var-dtype">float64</div><div class="xr-var-preview xr-preview">0.01301 0.8278 ... 0.08158 0.3216</div><input id="attrs-35d9e9b9-b0a4-4587-81b5-a04148b6553f" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-35d9e9b9-b0a4-4587-81b5-a04148b6553f" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-6c002403-b90a-4d2b-90a0-a4fa991dc16e" class="xr-var-data-in" type="checkbox"><label for="data-6c002403-b90a-4d2b-90a0-a4fa991dc16e" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array([0.01300767, 0.82776292, 0.49624331, 0.43591807, 0.60179472,
        0.8500282 , 0.29126072, 0.26751697, 0.04949421, 0.26639909,
        0.06621185, 0.04155849, 0.55273056, 0.18383489, 0.07425772,
        0.91671474, 0.14873389, 0.09483079, 0.97067806, 0.66696696,
@@ -6027,13 +6401,13 @@ Coordinates: (3/8)
        0.4665367 , 0.56944602, 0.56209399, 0.54291566, 0.56611634,
        0.41747562, 0.27881285, 0.51812954, 0.12186051, 0.74927137,
        0.95293572, 0.05409649, 0.78232714, 0.22383289, 0.33641135,
-       0.03353818, 0.9690858 , 0.56209561, 0.08158143, 0.32155563])</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span>beta_color</span></div><div class="xr-var-dims">(neuron)</div><div class="xr-var-dtype">float64</div><div class="xr-var-preview xr-preview">10.0 -4.0 1.0 7.0 ... -4.0 0.0 10.0</div><input id="attrs-0684361a-e893-4cd0-b5a2-6836c61bc052" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-0684361a-e893-4cd0-b5a2-6836c61bc052" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-40c3c144-0861-4392-a63d-667c5515ae34" class="xr-var-data-in" type="checkbox"><label for="data-40c3c144-0861-4392-a63d-667c5515ae34" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array([10., -4.,  1.,  7., 10., 10., -9., -4.,  0., 10.])</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span>beta_size</span></div><div class="xr-var-dims">(neuron)</div><div class="xr-var-dtype">float64</div><div class="xr-var-preview xr-preview">7.0 1.0 -3.0 6.0 ... -3.0 8.0 6.0</div><input id="attrs-0af32462-33fd-4259-bd30-9806de0cf0fe" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-0af32462-33fd-4259-bd30-9806de0cf0fe" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-ba7bf670-ba3b-4fb6-9b8b-cba7f1251700" class="xr-var-data-in" type="checkbox"><label for="data-ba7bf670-ba3b-4fb6-9b8b-cba7f1251700" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array([ 7.,  1., -3.,  6.,  1., -7.,  4., -3.,  8.,  6.])</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span>mean</span></div><div class="xr-var-dims">(neuron)</div><div class="xr-var-dtype">float64</div><div class="xr-var-preview xr-preview">0.0 -1.0 -9.0 2.0 ... -9.0 3.0 8.0</div><input id="attrs-4e7240d2-dab2-431a-91e3-ef1c9754c8be" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-4e7240d2-dab2-431a-91e3-ef1c9754c8be" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-291a80be-ed54-4bc7-a051-9f11e2f64b5d" class="xr-var-data-in" type="checkbox"><label for="data-291a80be-ed54-4bc7-a051-9f11e2f64b5d" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array([ 0., -1., -9.,  2.,  1.,  7., -1., -9.,  3.,  8.])</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span>std</span></div><div class="xr-var-dims">(neuron)</div><div class="xr-var-dtype">float64</div><div class="xr-var-preview xr-preview">-5.0 2.0 -3.0 ... -4.0 -2.0 -8.0</div><input id="attrs-4d9fed0a-0dcd-4e9e-b984-56474f4e0de3" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-4d9fed0a-0dcd-4e9e-b984-56474f4e0de3" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-bd53805f-8879-41c3-a272-0946b2e29e30" class="xr-var-data-in" type="checkbox"><label for="data-bd53805f-8879-41c3-a272-0946b2e29e30" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array([ -5.,   2.,  -3.,   5., -10.,  -4.,  -2.,  -4.,  -2.,  -8.])</pre></div></li></ul></div></li><li class="xr-section-item"><input id="section-9044753a-18d1-4508-83d8-50b7c3d0761b" class="xr-section-summary-in" type="checkbox"><label for="section-9044753a-18d1-4508-83d8-50b7c3d0761b" class="xr-section-summary">Indexes: <span>(2)</span></label><div class="xr-section-inline-details"></div><div class="xr-section-details"><ul class="xr-var-list"><li class="xr-var-item"><div class="xr-index-name"><div>neuron</div></div><div class="xr-index-preview">PandasIndex</div><div></div><input id="index-f9190550-f9e9-46d3-9e9b-4b2e398e8748" class="xr-index-data-in" type="checkbox"><label for="index-f9190550-f9e9-46d3-9e9b-4b2e398e8748" title="Show/Hide index repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-index-data"><pre>PandasIndex(Index([1, 2, 3, 4, 5, 6, 7, 8, 9, 10], dtype='int64', name='neuron'))</pre></div></li><li class="xr-var-item"><div class="xr-index-name"><div>stimulus</div></div><div class="xr-index-preview">PandasIndex</div><div></div><input id="index-8d32b529-4cbf-4f7f-92f7-a2c72592a1c1" class="xr-index-data-in" type="checkbox"><label for="index-8d32b529-4cbf-4f7f-92f7-a2c72592a1c1" title="Show/Hide index repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-index-data"><pre>PandasIndex(Index([   1,    2,    3,    4,    5,    6,    7,    8,    9,   10,
+       0.03353818, 0.9690858 , 0.56209561, 0.08158143, 0.32155563])</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span>beta_color</span></div><div class="xr-var-dims">(neuron)</div><div class="xr-var-dtype">float64</div><div class="xr-var-preview xr-preview">10.0 -4.0 1.0 7.0 ... -4.0 0.0 10.0</div><input id="attrs-3958a742-a0db-4c81-abca-f43734fa747f" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-3958a742-a0db-4c81-abca-f43734fa747f" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-510cf6b5-b8ec-422a-9376-9a7a77bdb89e" class="xr-var-data-in" type="checkbox"><label for="data-510cf6b5-b8ec-422a-9376-9a7a77bdb89e" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array([10., -4.,  1.,  7., 10., 10., -9., -4.,  0., 10.])</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span>beta_size</span></div><div class="xr-var-dims">(neuron)</div><div class="xr-var-dtype">float64</div><div class="xr-var-preview xr-preview">7.0 1.0 -3.0 6.0 ... -3.0 8.0 6.0</div><input id="attrs-2181790f-d5c6-48a2-a4b2-73cea85e801e" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-2181790f-d5c6-48a2-a4b2-73cea85e801e" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-694df200-f004-497e-b7fd-b33e4f59bb75" class="xr-var-data-in" type="checkbox"><label for="data-694df200-f004-497e-b7fd-b33e4f59bb75" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array([ 7.,  1., -3.,  6.,  1., -7.,  4., -3.,  8.,  6.])</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span>mean</span></div><div class="xr-var-dims">(neuron)</div><div class="xr-var-dtype">float64</div><div class="xr-var-preview xr-preview">0.0 -1.0 -9.0 2.0 ... -9.0 3.0 8.0</div><input id="attrs-c8c7e671-b152-4e43-a880-e291cf67841f" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-c8c7e671-b152-4e43-a880-e291cf67841f" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-35b574c1-823b-47f5-bb3a-0e1524d21658" class="xr-var-data-in" type="checkbox"><label for="data-35b574c1-823b-47f5-bb3a-0e1524d21658" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array([ 0., -1., -9.,  2.,  1.,  7., -1., -9.,  3.,  8.])</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span>std</span></div><div class="xr-var-dims">(neuron)</div><div class="xr-var-dtype">float64</div><div class="xr-var-preview xr-preview">-5.0 2.0 -3.0 ... -4.0 -2.0 -8.0</div><input id="attrs-8955232e-f30a-4d05-97c9-86bfa7877a11" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-8955232e-f30a-4d05-97c9-86bfa7877a11" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-1a389024-d59e-4093-8800-25ac39b03f58" class="xr-var-data-in" type="checkbox"><label for="data-1a389024-d59e-4093-8800-25ac39b03f58" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array([ -5.,   2.,  -3.,   5., -10.,  -4.,  -2.,  -4.,  -2.,  -8.])</pre></div></li></ul></div></li><li class="xr-section-item"><input id="section-a88d6d54-cdde-452c-801c-ee5d76e7d860" class="xr-section-summary-in" type="checkbox"><label for="section-a88d6d54-cdde-452c-801c-ee5d76e7d860" class="xr-section-summary">Indexes: <span>(2)</span></label><div class="xr-section-inline-details"></div><div class="xr-section-details"><ul class="xr-var-list"><li class="xr-var-item"><div class="xr-index-name"><div>neuron</div></div><div class="xr-index-preview">PandasIndex</div><div></div><input id="index-1f095f27-52e2-4dfd-bebb-3fc34dc33d90" class="xr-index-data-in" type="checkbox"><label for="index-1f095f27-52e2-4dfd-bebb-3fc34dc33d90" title="Show/Hide index repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-index-data"><pre>PandasIndex(Index([1, 2, 3, 4, 5, 6, 7, 8, 9, 10], dtype='int64', name='neuron'))</pre></div></li><li class="xr-var-item"><div class="xr-index-name"><div>stimulus</div></div><div class="xr-index-preview">PandasIndex</div><div></div><input id="index-a2c82711-5444-41e6-9a5d-62c82b16107b" class="xr-index-data-in" type="checkbox"><label for="index-a2c82711-5444-41e6-9a5d-62c82b16107b" title="Show/Hide index repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-index-data"><pre>PandasIndex(Index([   1,    2,    3,    4,    5,    6,    7,    8,    9,   10,
        ...
         991,  992,  993,  994,  995,  996,  997,  998,  999, 1000],
-      dtype='int64', name='stimulus', length=1000))</pre></div></li></ul></div></li><li class="xr-section-item"><input id="section-51448b7e-2843-4e3d-813d-f6f5508b47ce" class="xr-section-summary-in" type="checkbox" disabled=""><label for="section-51448b7e-2843-4e3d-813d-f6f5508b47ce" class="xr-section-summary" title="Expand/collapse section">Attributes: <span>(0)</span></label><div class="xr-section-inline-details"></div><div class="xr-section-details"><dl class="xr-attrs"></dl></div></li></ul></div></div>
+      dtype='int64', name='stimulus', length=1000))</pre></div></li></ul></div></li><li class="xr-section-item"><input id="section-96881ce4-5f4a-4c68-ab59-0b84c7a2a2b6" class="xr-section-summary-in" type="checkbox" disabled=""><label for="section-96881ce4-5f4a-4c68-ab59-0b84c7a2a2b6" class="xr-section-summary" title="Expand/collapse section">Attributes: <span>(0)</span></label><div class="xr-section-inline-details"></div><div class="xr-section-details"><dl class="xr-attrs"></dl></div></li></ul></div></div>
 </div>
 </div>
-<div id="cell-view_principal_components_big" class="cell" data-execution_count="22">
+<div id="cell-view_principal_components_big" class="cell" data-execution_count="23">
 <details>
 <summary>Visualize principal component scores</summary>
 <div class="sourceCode cell-code" id="cell-view_principal_components_big"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cell-view_principal_components_big-1"><a href="#cell-view_principal_components_big-1" aria-hidden="true" tabindex="-1"></a>big_pca <span class="op">=</span> compute_pca(big_data)</span>
@@ -6045,7 +6419,7 @@ Coordinates: (3/8)
 <span id="cell-view_principal_components_big-7"><a href="#cell-view_principal_components_big-7" aria-hidden="true" tabindex="-1"></a>    template_func<span class="op">=</span><span class="kw">lambda</span> x: <span class="ss">f"principal component </span><span class="sc">{</span>x<span class="sc">}</span><span class="ss">"</span>,</span>
 <span id="cell-view_principal_components_big-8"><a href="#cell-view_principal_components_big-8" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output cell-output-display" data-execution_count="21">
+<div class="cell-output cell-output-display" data-execution_count="63">
 <div id="view_principal_components_big" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="introducing_pca_files/figure-html/view_principal_components_big-output-1.svg" class="img-fluid figure-img"></p>
@@ -6053,12 +6427,12 @@ Coordinates: (3/8)
 </div>
 </div>
 </div>
-<div id="cell-visualize_eigenspectrum_big" class="cell" data-execution_count="23">
+<div id="cell-visualize_eigenspectrum_big" class="cell" data-execution_count="24">
 <details>
 <summary>View eigenspectrum</summary>
 <div class="sourceCode cell-code" id="cell-visualize_eigenspectrum_big"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cell-visualize_eigenspectrum_big-1"><a href="#cell-visualize_eigenspectrum_big-1" aria-hidden="true" tabindex="-1"></a>view_eigenspectrum(big_pca)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output cell-output-display" data-execution_count="22">
+<div class="cell-output cell-output-display" data-execution_count="64">
 <div id="visualize_eigenspectrum_big" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="introducing_pca_files/figure-html/visualize_eigenspectrum_big-output-1.svg" class="img-fluid figure-img"></p>
@@ -6098,7 +6472,7 @@ Coordinates: (3/8)
 <p>Before PCA, it’s often recommended to preprocess the data by Z-scoring each of the input features <span class="math inline">X</span> – ensuring that they have zero mean and unit variance:</p>
 <p><span class="math display">Z = \dfrac{X - \mu}{\sigma}</span></p>
 <div class="callout callout-style-default callout-important callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="true" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -6107,7 +6481,7 @@ When should we standardize the data?
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-6" class="callout-6-contents callout-collapse collapse show">
+<div id="callout-7" class="callout-7-contents callout-collapse collapse show">
 <div class="callout-body-container callout-body">
 <p>Often, PCA is applied to data where the features are fundamentally different from each other. For example, we might have a dataset where the features of interest are the prices of cars (in dollars) and their masses (in kilograms). Since these two features have different units, the variances of the features are not directly comparable – there’s no obvious way to numerically compare a variance of ($20,000)<sup>2</sup> in price and a variance of (1,000 kg)<sup>2</sup> in mass. Even if the features being compared are all the same, if they are in different units – say euros, dollars, and cents – the raw variances of the data matrix are meaningless.</p>
 <p>Since PCA implicitly assumes that the variances along each dimension are comparable, we can Z-score each of the features before applying PCA to ensure that they are on a common scale.</p>
@@ -6124,16 +6498,16 @@ When should we standardize the data?
 </section>
 
 
-<div id="quarto-appendix" class="default"><aside id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+<a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a><div id="quarto-appendix" class="default"><aside id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
 
 <ol>
 <li id="fn1"><p>The eigendecomposition of a symmetric matrix <span class="math inline">X \in \mathbb{R}^{n \times n}</span> involves rewriting it as the product of three matrices <span class="math inline">X = V \Lambda V^\top</span>, where <span class="math inline">V \in \mathbb{n \times n}</span> is orthonormal and <span class="math inline">\Lambda \in \mathbb{n \times n}</span> is diagonal with non-negative entries.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn2"><p>Given a data matrix <span class="math inline">X \in \mathbb{R}^{n \times f}</span> containing neural responses to <span class="math inline">n</span> stimuli from <span class="math inline">f</span> neurons, the <em>auto-covariance</em> of <span class="math inline">X</span> (or simply its <em>covariance</em>) is defined as:</p>
-<p><span class="math inline">\text{cov}(X) = \left(\dfrac{1}{n - 1}\right) (X - \overline{X})^\top (X - \overline{X})</span></p>
+<p><span class="math display">\text{cov}(X) = \left(\dfrac{1}{n - 1}\right) (X - \overline{X})^\top (X - \overline{X})</span></p>
 <p>This is an <span class="math inline">f \times f</span> matrix where the <span class="math inline">(i, j)</span>-th element measures how much neuron <span class="math inline">i</span> covaries with neuron <span class="math inline">j</span>. If the covariance is positive, they tend to have similar activation: a stimulus that activates one neuron will tend to activate the other. If the covariance is negative, the neurons will have dissimilar activation: a stimulus that activates one neuron will likely not activate the other.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn3"><p>Let’s compute the auto-covariance of the projected data <span class="math inline">\widetilde{X}</span>:</p>
 <p><span class="math display">
-\begin{align}
+\begin{align*}
     \text{cov}(\widetilde{X})
     &amp;= \left(\dfrac{1}{n - 1}\right) \widetilde{X}^\top \widetilde{X}\\
     &amp;= \left(\dfrac{1}{n - 1}\right) \left((X - \overline{X})V\right)^\top \left((X - \overline{X})V\right)\\
@@ -6142,11 +6516,11 @@ When should we standardize the data?
     &amp;= V^\top \left( V \Lambda V^\top \right) V\\
     &amp;= I \Lambda I\\
     &amp;= \Lambda
-\end{align}
+\end{align*}
 </span><a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn4"><p>The singular value decomposition (SVD) involves rewriting a matrix <span class="math inline">X \in \mathbb{R}^{m \times n}</span> as the product of three matrices <span class="math inline">X = U \Sigma V^\top</span>, where <span class="math inline">U \in \mathbb{R}^{m \times m}</span> and <span class="math inline">V \in \mathbb{R}^{n \times n}</span> are orthonormal matrices and <span class="math inline">\Sigma \in \mathbb{R}^{m \times n}</span> is zero everywhere except potentially on its leading diagonal<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
-</aside><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>This work is licensed under a Creative Commons Attribution-ShareAlike 4.0 International License.</div></div></section></div></main> <!-- /main -->
+</aside></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
@@ -6167,150 +6541,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }
   }
   toggleBodyColorPrimary();  
-  const disableStylesheet = (stylesheets) => {
-    for (let i=0; i < stylesheets.length; i++) {
-      const stylesheet = stylesheets[i];
-      stylesheet.rel = 'prefetch';
-    }
-  }
-  const enableStylesheet = (stylesheets) => {
-    for (let i=0; i < stylesheets.length; i++) {
-      const stylesheet = stylesheets[i];
-      stylesheet.rel = 'stylesheet';
-    }
-  }
-  const manageTransitions = (selector, allowTransitions) => {
-    const els = window.document.querySelectorAll(selector);
-    for (let i=0; i < els.length; i++) {
-      const el = els[i];
-      if (allowTransitions) {
-        el.classList.remove('notransition');
-      } else {
-        el.classList.add('notransition');
-      }
-    }
-  }
-  const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
-    const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
-    const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
-    let newTheme = '';
-    if(darkModeDefault) {
-      newTheme = isAlternate ? baseTheme : alternateTheme;
-    } else {
-      newTheme = isAlternate ? alternateTheme : baseTheme;
-    }
-    const changeGiscusTheme = () => {
-      // From: https://github.com/giscus/giscus/issues/336
-      const sendMessage = (message) => {
-        const iframe = document.querySelector('iframe.giscus-frame');
-        if (!iframe) return;
-        iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
-      }
-      sendMessage({
-        setConfig: {
-          theme: newTheme
-        }
-      });
-    }
-    const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
-    if (isGiscussLoaded) {
-      changeGiscusTheme();
-    }
-  }
-  const toggleColorMode = (alternate) => {
-    // Switch the stylesheets
-    const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
-    manageTransitions('#quarto-margin-sidebar .nav-link', false);
-    if (alternate) {
-      enableStylesheet(alternateStylesheets);
-      for (const sheetNode of alternateStylesheets) {
-        if (sheetNode.id === "quarto-bootstrap") {
-          toggleBodyColorMode(sheetNode);
-        }
-      }
-    } else {
-      disableStylesheet(alternateStylesheets);
-      toggleBodyColorPrimary();
-    }
-    manageTransitions('#quarto-margin-sidebar .nav-link', true);
-    // Switch the toggles
-    const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
-    for (let i=0; i < toggles.length; i++) {
-      const toggle = toggles[i];
-      if (toggle) {
-        if (alternate) {
-          toggle.classList.add("alternate");     
-        } else {
-          toggle.classList.remove("alternate");
-        }
-      }
-    }
-    // Hack to workaround the fact that safari doesn't
-    // properly recolor the scrollbar when toggling (#1455)
-    if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
-      manageTransitions("body", false);
-      window.scrollTo(0, 1);
-      setTimeout(() => {
-        window.scrollTo(0, 0);
-        manageTransitions("body", true);
-      }, 40);  
-    }
-  }
-  const isFileUrl = () => { 
-    return window.location.protocol === 'file:';
-  }
-  const hasAlternateSentinel = () => {  
-    let styleSentinel = getColorSchemeSentinel();
-    if (styleSentinel !== null) {
-      return styleSentinel === "alternate";
-    } else {
-      return false;
-    }
-  }
-  const setStyleSentinel = (alternate) => {
-    const value = alternate ? "alternate" : "default";
-    if (!isFileUrl()) {
-      window.localStorage.setItem("quarto-color-scheme", value);
-    } else {
-      localAlternateSentinel = value;
-    }
-  }
-  const getColorSchemeSentinel = () => {
-    if (!isFileUrl()) {
-      const storageValue = window.localStorage.getItem("quarto-color-scheme");
-      return storageValue != null ? storageValue : localAlternateSentinel;
-    } else {
-      return localAlternateSentinel;
-    }
-  }
-  const darkModeDefault = false;
-  let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
-  // Dark / light mode switch
-  window.quartoToggleColorScheme = () => {
-    // Read the current dark / light value 
-    let toAlternate = !hasAlternateSentinel();
-    toggleColorMode(toAlternate);
-    setStyleSentinel(toAlternate);
-    toggleGiscusIfUsed(toAlternate, darkModeDefault);
-  };
-  // Ensure there is a toggle, if there isn't float one in the top right
-  if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
-    const a = window.document.createElement('a');
-    a.classList.add('top-right');
-    a.classList.add('quarto-color-scheme-toggle');
-    a.href = "";
-    a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
-    const i = window.document.createElement("i");
-    i.classList.add('bi');
-    a.appendChild(i);
-    window.document.body.appendChild(a);
-  }
-  // Switch to dark mode if need be
-  if (hasAlternateSentinel()) {
-    toggleColorMode(true);
-  } else {
-    toggleColorMode(false);
-  }
   const icon = "";
   const anchorJS = new window.AnchorJS();
   anchorJS.options = {
