@@ -561,7 +561,7 @@ We can observe that:
 - the *first* principal component is largely driven by the *size* of the stimulus
 - the *second* principal component is largely driven by the *color* of the stimulus
 
-::: {.callout-important collapse="false"}
+::: {.callout-important}
 However, note that these components do not directly correspond to either of the latent variables; rather, each is a mixture of stimulus-dependent signal and noise.
 :::
 
@@ -695,7 +695,7 @@ Before PCA, it's often recommended to preprocess your data by Z-scoring each of 
 $$Z = \dfrac{X - \mu}{\sigma}$$
 
 ::: {.callout-important collapse="false"}
-# When should you Z-score your data?
+# When should you standardize your data?
 
 Often, PCA is applied to data where the features are fundamentally different from each other. For example, we might have a dataset where the features of interest are the prices of cars (in dollars) and their masses (in kilograms). Since these two features have different units, the variances of the features are not directly comparable -- there's no obvious way to numerically compare a variance of ($20,000)^2^ in price and a variance of (1,000 kg)^2^ in mass. Even if the features being compared are all the same, if they are in different units -- say euros, dollars, and cents -- the raw variances of the data matrix are meaningless.
 
