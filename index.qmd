@@ -1,56 +1,79 @@
 ---
 title: "A High-Dimensional View of Neuroscience"
-subtitle: "Tutorial session at [Cognitive Computational Neuroscience 2023](https://2023.ccneuro.org/kt3.php)"
+subtitle: "[Tutorial session](https://2023.ccneuro.org/kt3.php) at [Cognitive Computational Neuroscience 2023](https://2023.ccneuro.org/kt3.php)"
 abstract: |
     Advances in technology enable us to record neural responses to many thousands of stimuli from a huge number of channels (e.g. fMRI in humans, two-photon imaging in mice, neuropixel probes in monkeys). Given the unprecedented scale of these data -- collected with incredible effort at enormous expense -- what computational tools can we use to study neural representations in high dimensions? What theoretical insights can we gain about the nature of neural representations from large-scale datasets?
-
 abstract-title: Motivation
+
 affiliations:
   - id: jhu
-    name: Bonner Lab | Johns Hopkins University
+    name: Johns Hopkins University
     url: https://cogsci.jhu.edu/
   - id: psl
     name: École normale supérieure  # TODO verify
     url: https://www.ens.psl.eu/en/ens
 
 author:
-  - name: Atlas Kazemian
-    url: https://akazemian.github.io/personal_profile/
-    email: akazemi3@jh.edu
-    orcid: 0000-0001-7699-2964
-    affiliation:
-      - ref: jhu
-  - name: Raj Magesh Gauthaman
+  - name:
+      given: Raj Magesh
+      family: Gauthaman
     url: https://cogsci.jhu.edu/directory/raj-gauthaman/  # TODO update
     email: rgautha1@jh.edu
     orcid: 0000-0001-7121-1532
     affiliation:
       - ref: jhu
-  - name: Zirui Chen
+    roles:
+      - [conceptualization, methodology, investigation, analysis, writing, editing]
+  - name:
+      given: Florentin
+      family: Guth
+    email: florentin.guth@ens.fr
+    affiliation:
+      - ref: psl
+    roles:
+      - [conceptualization, methodology, investigation, analysis, writing, editing]
+  - name:
+      given: Atlas
+      family: Kazemian
+    url: https://akazemian.github.io/personal_profile/
+    email: akazemi3@jh.edu
+    orcid: 0000-0001-7699-2964
+    affiliation:
+      - ref: jhu
+    roles:
+      - [conceptualization, editing]
+  - name:
+      given: Zirui
+      family: Chen
     url: https://cogsci.jhu.edu/directory/zirui-chen/  # TODO update
     email: zchen160@jh.edu
     orcid: 0000-0003-3666-1719
     affiliation:
       - ref: jhu
-  - name: Florentin Guth
-    url: TODO  # TODO update
-    email: TODO@TODO  # TODO update
-    orcid: 0000-0000-0000-0000  # TODO update
-    affiliation:
-      - ref: psl
-  - name: Michael Bonner
+    roles:
+      - [conceptualization, editing]
+  - name:
+      given: Michael
+      family: Bonner
     url: https://bonnerlab.org/
     email: mfbonner@jhu.edu
     orcid: 0000-0002-4992-674X
     affiliation:
       - ref: jhu
+    roles:
+      - [supervision, conceptualization, methodology]
+
+license: "This work is licensed under a Creative Commons Attribution-ShareAlike 4.0 International License."
+
+citation:
+  type: webpage
 
 format:
   html:
     code-tools:
       source: false
       toggle: false
-    title-block-style: default
+    title-block-banner: true
     toc: false
 ---
 
@@ -68,35 +91,33 @@ When
 : Saturday, August 26, 2023 @ 10:45 - 12:30
 :::
 
-## Outline
+| Section | Read | Interact | Download |
+|:-----|:-------:|:--------:|:-------------:|
+| An introduction to PCA | [website](https://bonnerlab.github.io/ccn-tutorial/pages/introducing_pca.html) | [Colab](https://colab.research.google.com/github/BonnerLab/ccn-tutorial/blob/main/notebooks/introducing_pca.ipynb)  | [download](https://bonnerlab.github.io/ccn-tutorial/pages/introducing_pca.ipynb) |
+| Exploring a neural dataset | [website](https://bonnerlab.github.io/ccn-tutorial/pages/exploring_neural_data.html) | [Colab](https://colab.research.google.com/github/BonnerLab/ccn-tutorial/blob/main/notebooks/exploring_neural_data.ipynb) | [download](https://bonnerlab.github.io/ccn-tutorial/pages/exploring_neural_data.ipynb) |
+| Dealing with noisy data | [website](https://bonnerlab.github.io/ccn-tutorial/pages/dealing_with_noise.html) | [Colab](https://colab.research.google.com/github/BonnerLab/ccn-tutorial/blob/main/notebooks/dealing_with_noise.ipynb) | [download](https://bonnerlab.github.io/ccn-tutorial/pages/dealing_with_noise.ipynb) |
+| Comparing high-dimensional representations | [website](https://bonnerlab.github.io/ccn-tutorial/pages/comparing_representations.html) | [Colab](https://colab.research.google.com/github/BonnerLab/ccn-tutorial/blob/main/notebooks/comparing_representations.ipynb) | [download](https://bonnerlab.github.io/ccn-tutorial/pages/comparing_representations.ipynb) |
 
-This tutorial is broadly divided into four parts:
+: Outline
 
-1. An introduction to PCA [[website](https://bonnerlab.github.io/ccn-tutorial/pages/introducing_pca.html), [Colab](https://colab.research.google.com/github/BonnerLab/ccn-tutorial/blob/main/notebooks/introducing_pca.ipynb), [download](https://bonnerlab.github.io/ccn-tutorial/pages/introducing_pca.ipynb)]
-2. Exploring a neural dataset [[website](https://bonnerlab.github.io/ccn-tutorial/pages/exploring_neural_data.html), [Colab](https://colab.research.google.com/github/BonnerLab/ccn-tutorial/blob/main/notebooks/exploring_neural_data.ipynb), [download](https://bonnerlab.github.io/ccn-tutorial/pages/exploring_neural_data.ipynb)]
-3. Dealing with noisy data [[website](https://bonnerlab.github.io/ccn-tutorial/pages/dealing_with_noise.html), [Colab](https://colab.research.google.com/github/BonnerLab/ccn-tutorial/blob/main/notebooks/dealing_with_noise.ipynb), [download](https://bonnerlab.github.io/ccn-tutorial/pages/dealing_with_noise.ipynb)]
-4. Comparing high-dimensional representations [[website](https://bonnerlab.github.io/ccn-tutorial/pages/comparing_representations.html), [Colab](https://colab.research.google.com/github/BonnerLab/ccn-tutorial/blob/main/notebooks/comparing_representations.ipynb), [download](https://bonnerlab.github.io/ccn-tutorial/pages/comparing_representations.ipynb)]
+::: {.callout-tip}
+# Run the tutorial interactively -- or just follow along!
 
-## Instructions
+Each section is a [computational notebook](https://docs.jupyter.org/en/latest/index.html) that can be run on [Google Colab](https://colab.research.google.com/) -- just follow the links above! If you can't run the notebooks, just follow along on the website!
+:::
 
-The [computational notebooks](https://docs.jupyter.org/en/latest/index.html) contain some fun interactive elements and are designed to be run on [Google Colab](https://colab.research.google.com/) -- just follow the links above!
-
-If you can't run the notebooks, don't worry -- just follow along on the website!
-
-::: {.callout-note collapse="true"}
+::: {.callout-note}
 # If you'd prefer to run the notebooks locally...
 
 Create a [Python virtual environment](https://packaging.python.org/en/latest/guides/installing-using-pip-and-virtual-environments/#creating-a-virtual-environment) with `Python >=3.10.12` to run the notebooks. The required dependencies will be automatically installed when you run the first cell of each notebook.
 :::
 
-::: {.callout-tip}
-# Notice a typo? Have some feedback?
+::: {.callout-warning}
+# Notice a typo? Have any feedback?
 
 Use the `Report an issue` button on the sidebar of each page to contact us! Feel free to suggest edits by using the `Edit this page` button too!
 :::
 
 ## Acknowledgments {.appendix}
 
-Thanks to the [Natural Scene Dataset](http://naturalscenesdataset.org/) team for letting use a part of the dataset for this tutorial!
-
-Thanks to the Open Science Foundation for hosting the [data files](https://osf.io/zk265/) for this tutorial!
+Thanks to the [Natural Scene Dataset](http://naturalscenesdataset.org/) team for permission to use it for this tutorial and to the [Open Science Foundation](https://osf.io/) for hosting the [data files](https://osf.io/zk265/)!

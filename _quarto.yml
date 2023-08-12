@@ -19,8 +19,8 @@ filters:
 date: 2023-08-26
 date-modified: last-modified
 date-format: long
-license: "This work is licensed under a Creative Commons Attribution-ShareAlike 4.0 International License."
 abstract-title: Summary
+lang: en-US
 
 website:
   title: "CCN 2023 | Tutorial"
@@ -47,12 +47,14 @@ website:
   repo-actions: [edit, issue]
   search:
     type: textbox
+  back-to-top-navigation: true
+
+citation-location: margin
 
 format:
   html:
     theme:
       light: flatly
-      dark: darkly
     grid:
       sidebar-width: 300px
       body-width: 800px

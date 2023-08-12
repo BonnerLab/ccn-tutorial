@@ -246,11 +246,12 @@ We have a population of neurons that contain information about the stimulus: tha
 
 ### Some geometric intuition
 
-Since we only have $P = 2$ neurons, we can visualize these data as a scatterplot, which makes their [covariance](reference.qmd#covariance) apparent.
+Since we only have $P = 2$ neurons, we can visualize these data as a scatterplot, which makes their [covariance](reference.qmd#covariance) apparent. The organization of these data in this 2-dimensional space suggests an obvious way to change our viewpoint.
+
 
 ```{python}
-# | label: joint-response
-# | code-summary: Visualize both neurons' responses jointly
+# | label: visualize_pca_animation
+# | code-summary: Animate the PCA transformation
 # | fig-align: center
 
 
@@ -291,22 +292,6 @@ def view_joint_scatter(
     plt.close(fig)
 
     return fig
-
-
-view_joint_scatter(
-    data,
-    coord="neuron responses",
-    dim="neuron",
-    template_func=lambda x: f"neuron {x} response",
-)
-```
-
-The organization of these data in this 2-dimensional space suggests an obvious way to change our viewpoint.
-
-```{python}
-# | label: visualize_pca_animation
-# | code-summary: Animate the PCA transformation
-# | fig-align: center
 
 
 def animate_pca_transformation(
@@ -395,8 +380,7 @@ def animate_pca_transformation(
         func=_update,
         frames=frame_to_end,
         interval=interval,
-        repeat=True,
-        repeat_delay=2_000,
+        repeat=False,
     )
     plt.close(fig)
     return animation.to_html5_video()
@@ -406,27 +390,37 @@ display(HTML(animate_pca_transformation(data)))
 
 ```
 
+::: {.callout-tip}
+Click on the animation above to visualize the PCA transformation!
+:::
+
 ### The mathematical definition
 
 Given a data matrix $X \in \mathbb{R}^{N \times P}$, we need to compute the [eigendecomposition](reference.qmd#eigendecomposition)[^definition-eigendecomposition] of its [auto-covariance](reference.qmd#auto-covariance)[^definition-autocovariance]:
 
 $$
-\begin{align}
+\begin{align*}
     \text{cov}(X)
     &= \left(\dfrac{1}{n - 1}\right) (X - \overline{X})^\top (X - \overline{X})\\
     &= V \Lambda V^\top
-\end{align}
+\end{align*}
 $$
 
+::: {.column-body-outset}
 ![Computing the auto-covariance, where $X$ is centered (i.e. $X - \overline{X}$)](assets/autocovariance.svg){height=50mm}
+:::
 
+::: {.column-body-outset}
 ![Computing the eigendecomposition of the auto-covariance](assets/eigendecomposition.svg){height=50mm}
+:::
 
 The columns of $V$ are *eigenvectors* that specify the directions of variance while the corresponding diagonal elements of $\Lambda$ are *eigenvalues* that specify the amount of variance along the eigenvector[^proof-eigenvalue-covariance].
 
 The original data matrix can be transformed by projecting it onto the eigenvectors: $\widetilde{X} = \left(X - \overline{X}\right) V$.
 
+::: {.column-body-outset}
 ![Transforming the original data matrix](assets/projection.svg){height=50mm}
+:::
 
 <!-- TODO ### Some terminology
 
@@ -530,10 +524,17 @@ def compute_pca(data: xr.DataArray) -> xr.Dataset:
 
 
 pca = compute_pca(data)
-display(pca)
+display(pca["score"])
 ```
 
 ### Inspecting the eigenvectors
+
+```{python}
+# | code-summary: Display the eigenvectors
+
+with xr.set_options(display_expand_data=True):
+    display(pca["eigenvector"])
+```
 
 ```{python}
 # | label: pca-visualize
@@ -574,7 +575,7 @@ We can observe that:
 - the *second* principal component is largely driven by the *color* of the stimulus
 
 ::: {.callout-important}
-However, note that these components do not directly correspond to either of the latent variables; rather, each is a mixture of stimulus-dependent signal and noise.
+Note that these components do *not* directly correspond to either of the latent variables. Rather, each is a mixture of stimulus-dependent signal and noise.
 :::
 
 ### Analyzing the covariance statistics
@@ -722,14 +723,14 @@ Note, however, that this transformation reduces the information in the system --
 
 [^definition-autocovariance]: Given a data matrix $X \in \mathbb{R}^{n \times f}$ containing neural responses to $n$ stimuli from $f$ neurons, the *auto-covariance* of $X$ (or simply its *covariance*) is defined as:
 
-    $\text{cov}(X) = \left(\dfrac{1}{n - 1}\right) (X - \overline{X})^\top (X - \overline{X})$
+    $$\text{cov}(X) = \left(\dfrac{1}{n - 1}\right) (X - \overline{X})^\top (X - \overline{X})$$
 
     This is an $f \times f$ matrix where the $(i, j)$-th element measures how much neuron $i$ covaries with neuron $j$. If the covariance is positive, they tend to have similar activation: a stimulus that activates one neuron will tend to activate the other. If the covariance is negative, the neurons will have dissimilar activation: a stimulus that activates one neuron will likely not activate the other.
 
 [^proof-eigenvalue-covariance]: Let's compute the auto-covariance of the projected data $\widetilde{X}$:
 
     $$
-    \begin{align}
+    \begin{align*}
         \text{cov}(\widetilde{X})
         &= \left(\dfrac{1}{n - 1}\right) \widetilde{X}^\top \widetilde{X}\\
         &= \left(\dfrac{1}{n - 1}\right) \left((X - \overline{X})V\right)^\top \left((X - \overline{X})V\right)\\
@@ -738,7 +739,7 @@ Note, however, that this transformation reduces the information in the system --
         &= V^\top \left( V \Lambda V^\top \right) V\\
         &= I \Lambda I\\
         &= \Lambda
-    \end{align}
+    \end{align*}
     $$
 
 [^definition-singular-value-decomposition]: The singular value decomposition (SVD) involves rewriting a matrix $X \in \mathbb{R}^{m \times n}$ as the product of three matrices $X = U \Sigma V^\top$, where $U \in \mathbb{R}^{m \times m}$ and $V \in \mathbb{R}^{n \times n}$ are orthonormal matrices and $\Sigma \in \mathbb{R}^{m \times n}$ is zero everywhere except potentially on its leading diagonal
