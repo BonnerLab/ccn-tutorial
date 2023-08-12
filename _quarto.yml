@@ -13,7 +13,7 @@ project:
     - jupyter nbconvert --clear-output --inplace notebooks/*.ipynb
 
 filters:
-  - black-formatter
+  - black-formatter  # TODO uncomment before final publishing
   - add-code-files
 
 date: 2023-08-26
@@ -38,6 +38,8 @@ website:
         text: Dealing with noise
       - href: pages/comparing_representations.qmd
         text: Comparing representations
+      - href: pages/deep_neural_networks.qmd
+        text: Deep neural networks
       - href: pages/reference.qmd
         text: Reference
     tools:
@@ -73,7 +75,7 @@ format:
     code-tools:
       source: repo
       toggle: true
-      caption: Code blocks
+      caption: Code
     fig-align: center
     fig-format: svg
     fig-responsive: true

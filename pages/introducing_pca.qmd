@@ -406,11 +406,11 @@ $$
 \end{align*}
 $$
 
-::: {.column-body-outset}
+::: {.column-page-right}
 ![Computing the auto-covariance, where $X$ is centered (i.e. $X - \overline{X}$)](assets/autocovariance.svg){height=50mm}
 :::
 
-::: {.column-body-outset}
+::: {.column-page-right}
 ![Computing the eigendecomposition of the auto-covariance](assets/eigendecomposition.svg){height=50mm}
 :::
 
@@ -418,7 +418,7 @@ The columns of $V$ are *eigenvectors* that specify the directions of variance wh
 
 The original data matrix can be transformed by projecting it onto the eigenvectors: $\widetilde{X} = \left(X - \overline{X}\right) V$.
 
-::: {.column-body-outset}
+::: {.column-page-right}
 ![Transforming the original data matrix](assets/projection.svg){height=50mm}
 :::
 

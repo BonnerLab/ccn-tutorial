@@ -10,7 +10,7 @@ affiliations:
     name: Johns Hopkins University
     url: https://cogsci.jhu.edu/
   - id: psl
-    name: École normale supérieure  # TODO verify
+    name: École normale supérieure
     url: https://www.ens.psl.eu/en/ens
 
 author:
@@ -91,22 +91,21 @@ When
 : Saturday, August 26, 2023 @ 10:45 - 12:30
 :::
 
+::: {.callout-tip}
+# Run the tutorial interactively -- or just follow along!
+
+Each section is a [computational notebook](https://docs.jupyter.org/en/latest/index.html) that can be run on [Google Colab](https://colab.research.google.com/) -- just follow the links below! If you can't run the notebooks, just follow along on the website!
+:::
+
 | Section | Read | Interact | Download |
 |:-----|:-------:|:--------:|:-------------:|
 | An introduction to PCA | [website](https://bonnerlab.github.io/ccn-tutorial/pages/introducing_pca.html) | [Colab](https://colab.research.google.com/github/BonnerLab/ccn-tutorial/blob/main/notebooks/introducing_pca.ipynb)  | [download](https://bonnerlab.github.io/ccn-tutorial/pages/introducing_pca.ipynb) |
 | Exploring a neural dataset | [website](https://bonnerlab.github.io/ccn-tutorial/pages/exploring_neural_data.html) | [Colab](https://colab.research.google.com/github/BonnerLab/ccn-tutorial/blob/main/notebooks/exploring_neural_data.ipynb) | [download](https://bonnerlab.github.io/ccn-tutorial/pages/exploring_neural_data.ipynb) |
 | Dealing with noisy data | [website](https://bonnerlab.github.io/ccn-tutorial/pages/dealing_with_noise.html) | [Colab](https://colab.research.google.com/github/BonnerLab/ccn-tutorial/blob/main/notebooks/dealing_with_noise.ipynb) | [download](https://bonnerlab.github.io/ccn-tutorial/pages/dealing_with_noise.ipynb) |
 | Comparing high-dimensional representations | [website](https://bonnerlab.github.io/ccn-tutorial/pages/comparing_representations.html) | [Colab](https://colab.research.google.com/github/BonnerLab/ccn-tutorial/blob/main/notebooks/comparing_representations.ipynb) | [download](https://bonnerlab.github.io/ccn-tutorial/pages/comparing_representations.ipynb) |
+| Deep neural networks | [website](https://bonnerlab.github.io/ccn-tutorial/pages/deep_neural_networks.html) | [Colab](https://colab.research.google.com/github/BonnerLab/ccn-tutorial/blob/main/notebooks/deep_neural_networks.ipynb) | [download](https://bonnerlab.github.io/ccn-tutorial/pages/deep_neural_networks.ipynb) |
 
-: Outline
-
-::: {.callout-tip}
-# Run the tutorial interactively -- or just follow along!
-
-Each section is a [computational notebook](https://docs.jupyter.org/en/latest/index.html) that can be run on [Google Colab](https://colab.research.google.com/) -- just follow the links above! If you can't run the notebooks, just follow along on the website!
-:::
-
-::: {.callout-note}
+::: {.callout-note collapse="true"}
 # If you'd prefer to run the notebooks locally...
 
 Create a [Python virtual environment](https://packaging.python.org/en/latest/guides/installing-using-pip-and-virtual-environments/#creating-a-virtual-environment) with `Python >=3.10.12` to run the notebooks. The required dependencies will be automatically installed when you run the first cell of each notebook.
