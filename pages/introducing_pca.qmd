@@ -47,7 +47,7 @@ from IPython.display import display, HTML
 
 ### Creating the stimuli
 
-Let's create $N = 1000$ dots of different *colors* and *sizes*. From the scatterplot, we can see that the two latent variables are [uncorrelated](reference.qmd#correlation)).
+Let's create $N = 1000$ dots of different *colors* and *sizes*. From the scatterplot, we can see that the two latent variables are [uncorrelated](reference.qmd#correlation).
 
 ```{python}
 # | label: create_the_stimuli
@@ -242,7 +242,7 @@ print(f"total variance: {variances.sum().values}")
 
 ## Studying the latent dimensions
 
-We have a population of neurons that contain information about the stimulus: that is, from the activity pattern we recorded, we expect to be able to reliably decode the color and size of the dot presented. How is this information encoded in the population activity? Is there a neuron that is sensitive to color and another that is sensitive to size? Or are there neural responses more complicated than this? If so, is there another view of the population code that might be more informative?
+We have a population of neurons that contain information about the stimulus: that is, from the activity pattern we recorded, we expect to be able to reliably decode the color and size of the dot presented. How is this information encoded in the population activity? Is there a neuron that is sensitive to color and another that is sensitive to size? Or are the neural responses more complicated than this? If so, is there another view of the population code that might be more informative?
 
 ### Some geometric intuition
 
