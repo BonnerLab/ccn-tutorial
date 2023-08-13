@@ -79,6 +79,8 @@ display(data)
 We utilized the NSD single-trial betas, preprocessed in 1.8 mm volumetric space and denoised using the GLMdenoise technique (version 3;"betas_fithrf_GLMdenoise_RR"). The betas were converted to Z-scores within each scanning session and averaged across repetitions for each stimulus.
 :::
 
+Here are some examples of stimuli that we analyzed.
+
 ```{python}
 # | label: view_stimuli
 # | code-summary: Load the stimuli
@@ -105,6 +107,8 @@ view_stimuli(stimuli)
 ```
 
 ### Visualizing principal components
+
+Now we can apply PCA to the NSD data and compute the PC scores. There are several ways to visualize these PCs.
 
 ```{python}
 # | label: image_viewing_utilities
@@ -174,6 +178,8 @@ def view_images_at_poles(
 
 ```
 
+The first method is to view the stimuli with the highest or lowest scores along a given PC. It provides simple clues of what this PC might be sensitive to, which could be features ranging from low to high complexity level.
+
 ```{python}
 # | label: extreme_images_pcs
 # | code-summary: View images that have extreme scores on the PCs
@@ -188,6 +194,8 @@ data_pca = pca.transform(data)
 for rank in [1, 2, 3, 10, 50, 100]:
     view_images_at_poles(data_pca[:, rank - 1], stimuli=stimuli, label=f"rank {rank}")
 ```
+
+An alternative approach ...
 
 ```{python}
 # | code-summary: Project the neural data onto the first two principal components
