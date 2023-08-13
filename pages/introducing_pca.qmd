@@ -236,13 +236,15 @@ print(f"total variance: {variances.sum().values}")
 
 ## Understanding the neural code
 
+We have a population of neurons that contain information about the stimulus: that is, from the activity pattern we recorded, we expect to be able to reliably decode the color and size of the dot presented. How is this information encoded in the population activity? Is there a neuron that is sensitive to color and another that is sensitive to size? Or are the neural responses more complicated than this?  If so, studying the response of each neuron in isolation (single unit tuning) may not be very informative. For instance, a neuron with weaker (i.e. non-significant) response to a condition (ex: size) might still carry some information about the presence/absence of that condition.
+
 ### Linear encoding models
 
 ### Representational similarity analysis
 
 ## Studying the latent dimensions
 
-We have a population of neurons that contain information about the stimulus: that is, from the activity pattern we recorded, we expect to be able to reliably decode the color and size of the dot presented. How is this information encoded in the population activity? Is there a neuron that is sensitive to color and another that is sensitive to size? Or are the neural responses more complicated than this? If so, is there another view of the population code that might be more informative?
+If so, is there another view of the population code that might be more informative?
 
 ### Some geometric intuition
 
