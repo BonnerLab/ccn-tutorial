@@ -17,13 +17,13 @@ author:
   - name:
       given: Raj Magesh
       family: Gauthaman
-    url: https://cogsci.jhu.edu/directory/raj-gauthaman/  # TODO update
+    url: https://raj-magesh.org/
     email: rgautha1@jh.edu
     orcid: 0000-0001-7121-1532
     affiliation:
       - ref: jhu
     roles:
-      - [conceptualization, methodology, investigation, analysis, writing, editing]
+      - [conceptualization, data curation, methodology, investigation, analysis, software, writing, editing, visualization]
   - name:
       given: Florentin
       family: Guth
@@ -31,7 +31,7 @@ author:
     affiliation:
       - ref: psl
     roles:
-      - [conceptualization, methodology, investigation, analysis, writing, editing]
+      - [conceptualization, data curation, methodology, investigation, analysis, software, writing, editing, visualization]
   - name:
       given: Atlas
       family: Kazemian
@@ -41,17 +41,17 @@ author:
     affiliation:
       - ref: jhu
     roles:
-      - [conceptualization, editing]
+      - [conceptualization, editing, visualization, validation]
   - name:
       given: Zirui
       family: Chen
-    url: https://cogsci.jhu.edu/directory/zirui-chen/  # TODO update
+    url: https://cogsci.jhu.edu/directory/zirui-chen/
     email: zchen160@jh.edu
     orcid: 0000-0003-3666-1719
     affiliation:
       - ref: jhu
     roles:
-      - [conceptualization, editing]
+      - [conceptualization, editing, visualization, validation]
   - name:
       given: Michael
       family: Bonner
@@ -61,9 +61,12 @@ author:
     affiliation:
       - ref: jhu
     roles:
-      - [supervision, conceptualization, methodology]
+      - [supervision, conceptualization, methodology, editing]
 
-license: "This work is licensed under a Creative Commons Attribution-ShareAlike 4.0 International License."
+license:
+  text: "This work is licensed under a Creative Commons Attribution-ShareAlike 4.0 International License."
+  type: open-access
+  url: https://creativecommons.org/licenses/by-sa/4.0/
 
 citation:
   type: webpage
@@ -73,7 +76,6 @@ format:
     code-tools:
       source: false
       toggle: false
-    title-block-banner: true
     toc: false
 ---
 
