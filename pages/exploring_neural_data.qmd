@@ -136,7 +136,7 @@ def view_eigenspectrum(pca: PCA, *, log: bool = False) -> None:
     fig.show()
 
 
-<--view_eigenspectrum(pca)-->
+<!-- view_eigenspectrum(pca) -->
 ```
 
 On this plot, we can observse that the first few PCs have substantial variance while there appears to be negligible variance after about rank 20. How can we interpret these PCs of different variance levels? There are some simple ways to visualize these PCs.
