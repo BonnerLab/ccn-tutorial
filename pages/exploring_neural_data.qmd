@@ -106,9 +106,42 @@ stimuli = load_stimuli()
 view_stimuli(stimuli)
 ```
 
-### Visualizing principal components
+### The neural eigenspectrum
 
-Now we can apply PCA to the NSD data and compute the PC scores. There are several ways to visualize these PCs.
+Now we can apply PCA to the neural responses and plot the eigenspectrum of the data! 
+
+```{python}
+# | code-summary: Visualize the eigenspectrum
+# | fig-align: center
+# | fig-cap: Neural eigenspectra with linear scaling
+
+
+def view_eigenspectrum(pca: PCA, *, log: bool = False) -> None:
+    eigenvalues = pd.DataFrame(pca.explained_variance_, columns=["eigenvalue"]).assign(
+        rank=1 + np.arange(pca.n_components_)
+    )
+
+    fig, ax = plt.subplots(figsize=(6, 6))
+    sns.lineplot(
+        ax=ax,
+        data=eigenvalues,
+        x="rank",
+        y="eigenvalue",
+    )
+    sns.despine(ax=ax)
+    if log:
+        ax.set_xscale("log")
+        ax.set_yscale("log")
+        ax.set_ylim(bottom=1e-2)
+    fig.show()
+
+
+view_eigenspectrum(pca)
+```
+
+On this plot, we can observse that the first few PCs have substantial variance while there appears to be negligible variance after about rank 20. How can we interpret these PCs of different variance levels? There are some simple ways to visualize these PCs.
+
+#### Visualizing principal components
 
 ```{python}
 # | label: image_viewing_utilities
@@ -178,7 +211,17 @@ def view_images_at_poles(
 
 ```
 
-The first method is to view the stimuli with the highest or lowest scores along a given PC. It provides simple clues of what this PC might be sensitive to, which could be features ranging from low to high complexity level.
+The first method is to plot the stimuli on a scatter plot, designating their X and Y coordinates to be their scores along two PCs of interest. This allows us to observe potential clustering of the stimuli.
+
+```{python}
+# | code-summary: Project the neural data onto the first two principal components
+# | fig-column: page
+# | fig-align: center
+
+view_images_as_scatterplot(data_pca[:, 0], data_pca[:, 1], stimuli=stimuli)
+```
+
+Alternativley, we can focus on the stimuli with the highest or lowest scores along a given PC. It provides simple clues of what this PC might be sensitive to, which could be features ranging from low to high complexity level.
 
 ```{python}
 # | label: extreme_images_pcs
@@ -195,82 +238,9 @@ for rank in [1, 2, 3, 10, 50, 100]:
     view_images_at_poles(data_pca[:, rank - 1], stimuli=stimuli, label=f"rank {rank}")
 ```
 
-An alternative approach ...
+#### Logarithmic scale
 
-```{python}
-# | code-summary: Project the neural data onto the first two principal components
-# | fig-column: page
-# | fig-align: center
-
-view_images_as_scatterplot(data_pca[:, 0], data_pca[:, 1], stimuli=stimuli)
-```
-
-```{python}
-# | code-summary: View eigenvectors on brain surface
-# | fig-column: page
-# | fig-align: center
-
-
-def view_eigenvector(
-    eigenvector: np.ndarray,
-    *,
-    data: xr.DataArray,
-    label: str | None = None,
-) -> None:
-    fig = plot_brain_map(
-        data=xr.DataArray(
-            name="eigenvector",
-            data=eigenvector,
-            dims=("neuroid",),
-            coords={
-                coord: ("neuroid", data[coord].values) for coord in ("x", "y", "z")
-            },
-            attrs=data.attrs,
-        ),
-        subject=data.attrs["subject"],
-        title=label,
-    )
-    fig.show()
-
-
-# for rank in (1, 2, 5, 10, 50):
-#     view_eigenvector(pca.components_[rank - 1, ...], data=data, label=f"rank {rank}")
-```
-
-### The neural eigenspectrum
-
-Let's plot the eigenspectrum of the neural responses!
-
-```{python}
-# | code-summary: Visualize the eigenspectrum
-# | fig-align: center
-# | fig-cap: Neural eigenspectra with linear scaling
-
-
-def view_eigenspectrum(pca: PCA, *, log: bool = False) -> None:
-    eigenvalues = pd.DataFrame(pca.explained_variance_, columns=["eigenvalue"]).assign(
-        rank=1 + np.arange(pca.n_components_)
-    )
-
-    fig, ax = plt.subplots(figsize=(6, 6))
-    sns.lineplot(
-        ax=ax,
-        data=eigenvalues,
-        x="rank",
-        y="eigenvalue",
-    )
-    sns.despine(ax=ax)
-    if log:
-        ax.set_xscale("log")
-        ax.set_yscale("log")
-        ax.set_ylim(bottom=1e-2)
-    fig.show()
-
-
-view_eigenspectrum(pca)
-```
-
-On this plot, there appears to be negligible variance after about rank 20. It is a common practice to drop the rest of higher-rank PCs. However, before doing so, let's try visualizing the spectrum on a logarithmic scale for both axes:
+Given these visualization, we might deem that the higher-rank PCs are non-interpretable and thus follow the common pratice to drop them. However, before doing so, let's try visualizing the spectrum on a logarithmic scale for both axes:
 
 ```{python}
 # | code-summary: Visualize the eigenspectrum on a logarithmic scale
@@ -306,6 +276,8 @@ Power laws are *scale-free*: $f(kx) \propto f(x)$.
 
 #### Nonnegative matrix factorization (NMF)
 
+
+
 ```{python}
 # | code-summary: Compute NMF of neural responses
 # | fig-column: page
@@ -322,6 +294,7 @@ view_images_as_scatterplot(data_nmf[:, 0], data_nmf[:, 1], stimuli=stimuli)
 ```
 
 #### Uniform Manifold Approximation & Projection (UMAP)
+
 
 ```{python}
 # | code-summary: Compute UMAP projection of neural responses
