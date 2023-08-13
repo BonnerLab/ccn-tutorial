@@ -244,8 +244,8 @@ But what if the neural responses are more complicated than this? And we multiple
 
 
 ## Studying the latent dimensions
-idk what to say here
- 
+
+Instead of directly studying the raw observed neural activity, we can focus on the underlying factors that capture the structure and variance in the data. 
 
 ### Some geometric intuition
 
