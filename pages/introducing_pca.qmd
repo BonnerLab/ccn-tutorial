@@ -121,6 +121,7 @@ Neuron = NamedTuple(
 # | code-summary: Simulate neuron responses
 # | code-fold: show
 
+
 def simulate_neuron_responses(
     stimuli: pd.DataFrame,
     neuron: Neuron,
@@ -136,11 +137,14 @@ def simulate_neuron_responses(
         + neuron.std * rng.standard_normal(size=(len(stimuli),))
         + neuron.mean
     )
+
+
 ```
 
 ```{python}
 # | label: function_simulate_multiple_neuron_responses
 # | code-summary: Simulate multiple neurons' responses
+
 
 def simulate_multiple_neuron_responses(
     *,
@@ -178,6 +182,7 @@ def simulate_multiple_neuron_responses(
         .transpose("stimulus", "neuron")
     )
 
+
 ```
 
 This procedure produces a data matrix $X \in \mathbb{R}^{N \times P}$ containing the $P = 2$ neurons' responses to the $N = 1000$ stimuli.
@@ -212,11 +217,7 @@ We can visualize the responses of each neuron to each dot. Note that this is a 1
 
 
 def view_individual_scatter(
-    data: xr.DataArray,
-    *,
-    coord: str,
-    dim: str,
-    template_func: Callable[[int], str]
+    data: xr.DataArray, *, coord: str, dim: str, template_func: Callable[[int], str]
 ) -> mpl.figure.Figure:
     rng = np.random.default_rng()
     data_ = data.assign_coords(
@@ -233,8 +234,7 @@ def view_individual_scatter(
         sns.scatterplot(
             ax=ax,
             data=(
-                data_
-                .isel({dim: data[coord].values == index})
+                data_.isel({dim: data[coord].values == index})
                 .rename(label)
                 .to_dataframe()
             ),
@@ -318,9 +318,7 @@ def view_joint_scatter(
     data_ = pd.DataFrame(
         {coord_: data[coord_].values for coord_ in ("color", "size")}
         | {
-            template_func(index): (
-                data.isel({dim: index - 1}).to_dataframe()[coord]
-            )
+            template_func(index): data.isel({dim: index - 1}).to_dataframe()[coord]
             for index in (1, 2)
         }
     )
@@ -345,12 +343,13 @@ def view_joint_scatter(
 
     return fig
 
+
 view_joint_scatter(
-        data,
-        coord="neuron responses",
-        dim="neuron",
-        template_func=lambda x: f"neuron {x} response",
-    )
+    data,
+    coord="neuron responses",
+    dim="neuron",
+    template_func=lambda x: f"neuron {x} response",
+)
 ```
 
 The animation below shows how we can use this to change the way we view the data.
@@ -359,6 +358,7 @@ The animation below shows how we can use this to change the way we view the data
 # | label: visualize_pca_animation
 # | code-summary: Animate the PCA transformation
 # | fig-align: center
+
 
 def animate_pca_transformation(
     data: xr.DataArray,
@@ -383,7 +383,7 @@ def animate_pca_transformation(
         coord="neuron responses",
         dim="neuron",
         template_func=lambda x: f"neuron {x} response",
-        draw_axes= True
+        draw_axes=True,
     )
     ax = fig.get_axes()[0]
     scatter = ax.get_children()[0]
@@ -453,7 +453,7 @@ def animate_pca_transformation(
     return animation.to_html5_video()
 
 
-#display(HTML(animate_pca_transformation(data)))
+# display(HTML(animate_pca_transformation(data)))
 
 ```
 
@@ -552,6 +552,8 @@ class PCA:
 
     def transform(self, /, data: np.ndarray) -> np.ndarray:
         return (data - self.mean) @ self.eigenvectors  # <5>
+
+
 ```
 
 ::: {.callout-tip collapse="true"}
@@ -580,6 +582,7 @@ Let's now transform our data into its principal components and analyse it in thi
 # | label: transforming-the-dataset
 # | code-summary: Apply the PCA transformation
 # | fig-align: center
+
 
 def compute_pca(data: xr.DataArray) -> xr.Dataset:
     pca = PCA()
@@ -683,6 +686,7 @@ print(f"total variance: {eigenvalues.sum().values}")
 # | code-summary: View eigenspectrum
 # | fig-align: center
 
+
 def view_eigenspectrum(pca: xr.DataArray) -> mpl.figure.Figure:
     fig, ax = plt.subplots(figsize=(pca.sizes["component"], 5))
     sns.lineplot(
@@ -712,6 +716,7 @@ In these data, the dimensionality is clear: there are two latent variables and b
 # | code-summary: Simulate responses from more neurons
 # | fig-align: center
 
+
 def _simulate_random_neuron(rng: np.random.Generator) -> Neuron:
     return Neuron(
         beta_color=rng.integers(-10, 11),
@@ -719,6 +724,7 @@ def _simulate_random_neuron(rng: np.random.Generator) -> Neuron:
         std=rng.integers(-10, 11),
         mean=rng.integers(-10, 11),
     )
+
 
 neurons = tuple([_simulate_random_neuron(rng) for _ in range(10)])
 
@@ -770,7 +776,10 @@ The *rank* of the covariance matrix -- equal to the number of *nonzero* eigenval
 
 print(f"rank = {(big_pca.eigenvalue > 0).sum().values}")
 
-def view_thresholded_eigenspectrum(pca: PCA, *, threshold: int | float) -> mpl.figure.Figure:
+
+def view_thresholded_eigenspectrum(
+    pca: PCA, *, threshold: int | float
+) -> mpl.figure.Figure:
     fig = view_eigenspectrum(pca)
     ax = fig.get_axes()[0]
 
@@ -805,13 +814,17 @@ A very commonly used method is to set a threshold based on the cumulative varian
 # | code-summary: Set an arbitrary threshold on the cumulative variance
 
 
-def view_cumulative_eigenspectrum(pca: xr.DataArray, *, threshold: float = 0.8) -> mpl.figure.Figure:
+def view_cumulative_eigenspectrum(
+    pca: xr.DataArray, *, threshold: float = 0.8
+) -> mpl.figure.Figure:
     fig, ax = plt.subplots(figsize=(pca.sizes["component"], 5))
 
     data = pca["eigenvalue"].copy()
     data["eigenvalue"] = data.cumsum()
     data = data.rename({"eigenvalue": "cumulative variance"})
-    data["cumulative proportion of variance"] = data["cumulative variance"] / pca["eigenvalue"].sum()
+    data["cumulative proportion of variance"] = (
+        data["cumulative variance"] / pca["eigenvalue"].sum()
+    )
 
     sns.lineplot(
         ax=ax,
@@ -852,6 +865,7 @@ When the number of latent dimensions is low, eigenspectra often have a sharp dis
 ```{python}
 # | code-summary: Plot the apparent knee of the spectrum
 
+
 def view_eigenspectrum_knee(pca: PCA, *, knee: int) -> mpl.figure.Figure:
     fig = view_eigenspectrum(pca)
     ax = fig.get_axes()[0]
@@ -874,6 +888,7 @@ def view_eigenspectrum_knee(pca: PCA, *, knee: int) -> mpl.figure.Figure:
 
     return fig
 
+
 view_eigenspectrum_knee(big_pca, knee=3)
 ```
 
@@ -888,7 +903,7 @@ $$\text{effective dimensionality}(\lambda_1, \dots \lambda_n) = \dfrac{\left( \s
 
 
 def compute_effective_dimensionality(eigenspectrum: np.ndarray) -> float:
-    return (np.sum(eigenspectrum) ** 2) / (eigenspectrum ** 2).sum()
+    return (np.sum(eigenspectrum) ** 2) / (eigenspectrum**2).sum()
 
 
 def view_effective_dimensionality_examples(pca: PCA) -> mpl.figure.Figure:
@@ -898,7 +913,7 @@ def view_effective_dimensionality_examples(pca: PCA) -> mpl.figure.Figure:
 
     weights = 1 / (1 + np.arange(n_components, dtype=np.float32))
     weights /= weights.sum()
-    
+
     spectrum_2 = list(weights * pca["eigenvalue"].sum().values)
     spectrum_3 = [float(pca["eigenvalue"].sum().values)] + [0] * (n_components - 1)
 
@@ -906,7 +921,7 @@ def view_effective_dimensionality_examples(pca: PCA) -> mpl.figure.Figure:
         {
             "eigenvalue": spectrum_1 + spectrum_2 + spectrum_3,
             "rank": list(np.tile(pca["rank"].values, 3)),
-            "example": [0] * n_components + [1] * n_components + [2] * n_components
+            "example": [0] * n_components + [1] * n_components + [2] * n_components,
         }
     )
     # return data
@@ -917,15 +932,17 @@ def view_effective_dimensionality_examples(pca: PCA) -> mpl.figure.Figure:
         x="rank",
         y="eigenvalue",
         marker="o",
-        height=5,
-        aspect=0.5,
+        height=3,
+        aspect=1,
         facet_kws={
             "sharey": False,
         },
     )
 
     for i_spectrum, ax in enumerate(g.axes.flat):
-        d = compute_effective_dimensionality(data.loc[data["example"] == i_spectrum, "eigenvalue"])
+        d = compute_effective_dimensionality(
+            data.loc[data["example"] == i_spectrum, "eigenvalue"]
+        )
         ax.set_title("$d_{eff}$" + f" = {d.round(2)}")
         ax.set_xticks([1, 10])
 
@@ -935,7 +952,10 @@ def view_effective_dimensionality_examples(pca: PCA) -> mpl.figure.Figure:
     return g.figure
 
 
-print(f"effective dimensionality = {compute_effective_dimensionality(big_pca['eigenvalue']).values.round(2)}")
+print(
+    "effective dimensionality ="
+    f" {compute_effective_dimensionality(big_pca['eigenvalue']).values.round(2)}"
+)
 
 view_effective_dimensionality_examples(big_pca)
 ```
