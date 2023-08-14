@@ -241,7 +241,7 @@ for rank in [1, 2, 3, 10, 50, 100]:
 ::: {.callout-important collapse="true"}
 # What about other methods?
 
-Interpreting PCs can be challenging especially when we rely solely on visual inspection. One of the reasons is that many features in nature are non-negative. This difficulty arises, in part, because many natural features are non-negative. As a result, methods like nonnegative matrix factorization (NMF) often offer more interpretable dimensions than PCA.
+Interpreting PCs can be challenging especially when we rely solely on visual inspection. This difficulty arises, in part, because many natural features are non-negative. As a result, methods like nonnegative matrix factorization (NMF) often offer more interpretable dimensions than PCA.
 
 ```{python}
 # | code-summary: Compute NMF of neural responses
