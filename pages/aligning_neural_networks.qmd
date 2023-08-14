@@ -1,0 +1,5 @@
+---
+title: Aligning deep neural networks
+subtitle: Using shared covariance statistics to functionally align networks
+abstract: TODO
+---

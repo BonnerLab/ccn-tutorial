@@ -1,5 +1,0 @@
----
-title: Deep neural networks
-subtitle: Aligning deep networks using their covariance statistics
-abstract: TODO
----
