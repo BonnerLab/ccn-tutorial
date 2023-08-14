@@ -275,8 +275,6 @@ Power laws are *scale-free*: $f(kx) \propto f(x)$.
 
 #### Nonnegative matrix factorization (NMF)
 
-
-
 ```{python}
 # | code-summary: Compute NMF of neural responses
 # | fig-column: page
@@ -306,3 +304,12 @@ data_umap = umap.fit_transform(data)
 
 view_images_as_scatterplot(data_umap[:, 0], data_umap[:, 1], stimuli=stimuli)
 ```
+
+Benefits of linear methods
+
+- closed form solutions
+- non-stochastic
+- well-characterized mathematically
+- preserves all the info in data (just a rotation, different view of the data)
+
+As you will see, there are cool methods to get stimulus-dependent variance using linear methods: not obvious with NMF, etc.

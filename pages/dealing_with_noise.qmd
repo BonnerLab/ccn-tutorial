@@ -28,6 +28,7 @@ from typing import NamedTuple
 import numpy as np
 import pandas as pd
 import xarray as xr
+from sklearn.decomposition import PCA
 import seaborn as sns
 import matplotlib as mpl
 from matplotlib import pyplot as plt
@@ -36,6 +37,8 @@ import ipywidgets as widgets
 from IPython.display import display
 
 from utilities.brain import load_dataset
+
+from utilities.computation import assign_logarithmic_bins
 
 ```
 
@@ -78,6 +81,8 @@ Clearly, we need a different approach to using the spectrum to separate signal a
 Even random matrices have some covariance structure that result in non-zero eigenvalues. This structure has been mathematically characterized by the [Marchenko-Pastur distribution](https://en.wikipedia.org/wiki/Marchenko-Pastur_distribution). This makes it especially difficult to infer anything about the reliability or significance of the dimension from the magnitude of the eigenvalue -- especially when the eigenvalues are close to zero.
 
 ```{python}
+# | code-summary: Visualize the covariance eigenspectra of random matrices
+# | fig-align: center
 
 
 def simulate_marchenko_pastur(
@@ -126,22 +131,64 @@ view_marchenko_pastur(eigenvalues)
 ```
 :::
 
-### Cross-validated PCA
+## Cross-validated PCA
 
 In a whole-brain calcium-imaging study where mice viewed 2,800 natural images while neural responses were recorded, Stringer et al. (2021) developed cross-validated PCA (CV-PCA) as a method to reliably estimate the covariance structure of the neural responses. Since each image was viewed twice, these repetitions could be used as train/test splits to estimate covariance eigenvalues. Specifically, eigenvectors are computed on a training set of data, and *cross-validated* eigenvalues are computed by computing the covariance between two independent sets of data:
 
-$X_\text{train}^\top X_\text{train} / (n - 1) = V \Lambda V^\top$
-
-$\Lambda_\text{test} = \left( X_\text{train} V \right) ^\top \left( X_\text{test} V \right) / (n - 1)$
+$$
+\begin{align*}
+    \text{cov}(X_\text{train}, X_\text{train})
+    &= X_\text{train}^\top X_\text{train} / (n - 1)\\
+    &= V \Lambda V^\top\\
+    \\
+    \Lambda_\text{cross-validated}
+    &= \text{cov}(X_\text{train}V, X_\text{test}V)\\
+    &= \left( X_\text{train} V \right) ^\top \left( X_\text{test} V \right) / (n - 1)
+\end{align*}
+$$
 
 These cross-validated eigenvalues represent the covariance reliably shared across two presentations of the visual stimulus -- which is a quantity we are interested in as neuroscientists: what is the "stable" part of the visual representation of a natural image? Notably, these "eigenvalues" need not be positive: if there is no shared covariance between the two systems at a rank, the expected value of the eigenvalue is $0$.
+
+### Some geometric intuition
+
+### A computational recipe
+
+```{python}
+# | label: recipe-pca
+# | code-summary: A computational recipe for cross-validated PCA
+# | code-fold: show
+
+
+class CrossValidatedPCA:
+    def __init__(self) -> None:
+        return
+
+    def __call__(self, /, x: np.ndarray, y: np.ndarray) -> np.ndarray:
+        self.pca = PCA()
+        self.pca.fit(x)
+        x_transformed = self.pca.transform(x)
+        y_transformed = self.pca.transform(y)
+
+        cross_covariance = np.cov(
+            x_transformed,
+            y_transformed,
+            rowvar=False,
+        )
+
+        self.cross_validated_spectrum = np.diag(
+            cross_covariance[:self.pca.n_components_, self.pca.n_components_:]
+        )
+
+```
+
+### Analyzing neural data
 
 Let's apply CV-PCA to our fMRI data to see what it looks like!
 
 ```{python}
 # | code-summary: Load the dataset
 
-data = load_dataset(subject=0, roi="general")
+data = load_dataset(subject=0, roi="general").load()
 
 display(data)
 ```
@@ -149,129 +196,150 @@ display(data)
 Note that the data contain fMRI responses to two repetitions of each image.
 
 ```{python}
+# | code-summary: Compute the cross-validated spectrum
 
+data_repetition_1 = data.isel({"presentation": data["rep_id"] == 0}).sortby(
+    "stimulus_id"
+)
+data_repetition_2 = data.isel({"presentation": data["rep_id"] == 1}).sortby(
+    "stimulus_id"
+)
 
-class PLSSVD:
-    def __init__(self) -> None:
-        self.left_mean: np.ndarray
-        self.right_mean: np.ndarray
-        self.left_singular_vectors: np.ndarray
-        self.right_singular_vectors: np.ndarray
+cv_pca = CrossValidatedPCA()
+cv_pca(data_repetition_1.values, data_repetition_2.values)
 
-    def fit(self, /, x: np.ndarray, y: np.ndarray) -> None:
-        self.left_mean = x.mean(axis=-2)  # <1>
-        self.right_mean = y.mean(axis=-2)  # <1>
-
-        x_centered = x - self.left_mean  # <1>
-        y_centered = y - self.right_mean  # <1>
-
-        n_stimuli = x.shape[-2]
-
-        cross_covariance = (np.swapaxes(x_centered, -1, -2) @ y_centered) / (
-            n_stimuli - 1
-        )  # <2>
-
-        (
-            self.left_singular_vectors,
-            self.singular_values,
-            self.right_singular_vectors,
-        ) = svd(
-            torch.from_numpy(cross_covariance),
-            n_components=min([*x.shape, *y.shape]),
-            truncated=True,
-            seed=random_state,
-        )  # <3>
-
-        n_stimuli = data.shape[-2]
-
-        self.left_singular_vectors = self.left_singular_vectors.cpu().numpy()
-        self.singular_values = self.singular_values.cpu().numpy()
-        self.right_singular_vectors = self.right_singular_vectors.cpu().numpy()
-
-    def transform(self, /, z: np.ndarray, *, direction: str) -> np.ndarray:
-        match direction:
-            case "left":
-                return (z - self.left_mean) @ self.left_singular_vectors  # <4>
-            case "right":
-                return (z - self.right_mean) @ self.right_singular_vectors  # <4>
-            case _:
-                raise ValueError("direction must be 'left' or 'right'")
-
-
-def bin_logarithmically(
-    data: Sequence[int | float],
-    *,
-    base: int = 10,
-    points_per_bin: int,
-    min_: int | float,
-    max_: int | float,
-) -> Sequence[float]:
-    n = points_per_bin * int(np.ceil((np.log(max_) - np.log(min_)) / (np.log(base))))
-    bin_edges = np.geomspace(min_, max_, num=n)
-    bin_centers = np.exp(np.log(bin_edges)[:-1] + np.diff(np.log(bin_edges)) / 2)
-
-    bin_edges[-1] = np.inf
-    labels = bin_centers[np.digitize(data, bin_edges) - 1]
-
-    return labels
-
-
-# data_repetition_1 = data.isel({"presentation": data["rep_id"] == 0})
-# data_repetition_2 = data.isel({"presentation": data["rep_id"] == 1})
-# data_repetition_1 = data_repetition_1.sortby("stimulus_id")
-# data_repetition_2 = data_repetition_2.sortby("stimulus_id")
-# assert np.array_equal(
-#     data_repetition_1["stimulus_id"].values, data_repetition_2["stimulus_id"].values
-# )
-
-# plssvd = PLSSVD()
-# plssvd.fit(
-#     data_repetition_1.values,
-#     data_repetition_1.values,
-# )
-# rep_1_transformed = plssvd.transform(data_repetition_1.values, direction="left")
-# rep_2_transformed = plssvd.transform(data_repetition_2.values, direction="right")
-
-
-# n_neurons_1 = rep_1_transformed.shape[-1]
-# cv_spectrum = np.diag(
-#     np.cov(rep_1_transformed, rep_2_transformed, rowvar=False)[
-#         :n_neurons_1, n_neurons_1:
-#     ]
-# )
-# cv_spectrum = pd.DataFrame(
-#     cv_spectrum, columns=["cross-validated singular value"]
-# ).assign(rank=np.arange(len(cv_spectrum)) + 1)
-# cv_spectrum = cv_spectrum.assign(
-#     bin=bin_logarithmically(
-#         cv_spectrum["cross-validated singular value"],
-#         points_per_bin=5,
-#         min_=1,
-#         max_=10_000,
-#     )
-# )
-
-# fig, ax = plt.subplots()
-# sns.lineplot(ax=ax, data=cv_spectrum, x="rank", y="cross-validated singular value")
-# sns.despine(ax=ax, offset=20)
-
-# fig, ax = plt.subplots()
-# sns.lineplot(ax=ax, data=cv_spectrum, x="rank", y="cross-validated singular value")
-# ax.set_xscale("log")
-# ax.set_yscale("log")
-# ax.set_ylim(bottom=1e-3)
-# sns.despine(ax=ax, offset=20)
-
-# fig, ax = plt.subplots()
-# sns.lineplot(
-#     ax=ax,
-#     data=cv_spectrum.groupby("bin").mean().rename(columns={"bin": "rank"}),
-#     x="rank",
-#     y="cross-validated singular value",
-#     ls=None,
-#     marker="o",
-# )
-# ax.set_xscale("log")
-# ax.set_yscale("log")
-# sns.despine(ax=ax, offset=20)
 ```
+
+```{python}
+# | code-summary: Plot the raw cross-validated spectrum
+# | fig-align: center
+
+
+def plot_cross_validated_spectrum(
+    cv_pca: CrossValidatedPCA,
+    *,
+    log: bool = False,
+    original: bool = False,
+    square: bool = False,
+    bin_logarithmically: bool = False,
+) -> mpl.figure.Figure:
+    fig, ax = plt.subplots()
+
+    data = pd.DataFrame(
+        {
+            "rank": 1 + np.arange(len(cv_pca.cross_validated_spectrum) - 1),
+            "cross-validated": cv_pca.cross_validated_spectrum[:-1],
+            "original": cv_pca.pca.explained_variance_[:-1],
+        }
+    ).melt(
+        id_vars=["rank"],
+        value_vars=["cross-validated", "original"],
+        value_name="eigenvalue",
+        var_name="spectrum",
+    )
+
+    if original:
+        sns.lineplot(
+            ax=ax,
+            data=data,
+            x="rank",
+            y="eigenvalue",
+            hue="spectrum",
+        )
+    else:
+        data = (
+            data
+            .loc[data["spectrum"] == "cross-validated"]
+            .rename(columns={"eigenvalue": "cross-validated eigenvalue"})
+            .drop(columns="spectrum")
+        )
+
+        if bin_logarithmically:
+            data["rank"] = assign_logarithmic_bins(data["rank"], points_per_bin=5, min_=1, max_=10_000)
+
+            sns.lineplot(
+                ax=ax,
+                data=data,
+                x="rank",
+                y="cross-validated eigenvalue",
+                marker="o",
+                dashes=False,
+                ls="None",
+                err_style="bars",
+                estimator="mean",
+                errorbar="sd",
+            )
+        else:
+            sns.lineplot(
+                ax=ax,
+                data=data,
+                x="rank",
+                y="cross-validated eigenvalue",
+            )
+
+    if log:
+        ax.axhline(0, ls="--", c="gray")
+        ax.set_xlim(left=1)
+        ax.set_ylim(bottom=1e-2)
+        ax.set_xscale("log")
+        ax.set_yscale("log")
+
+        if square:
+            ax.axis("square")
+
+    sns.despine(ax=ax)
+    plt.close(fig)
+
+    return fig
+
+
+plot_cross_validated_spectrum(cv_pca)
+```
+
+```{python}
+# | code-summary: Plot the cross-validated spectrum on a log-log scale
+# | fig-align: center
+
+plot_cross_validated_spectrum(cv_pca, log=True)
+```
+
+
+```{python}
+# | code-summary: Plot both the original and the cross-validated spectrum
+# | fig-align: center
+
+plot_cross_validated_spectrum(cv_pca, log=True, original=True)
+```
+
+```{python}
+# | code-summary: Bin the cross-validated spectrum
+# | fig-align: center
+
+with sns.axes_style("whitegrid"):
+    fig = plot_cross_validated_spectrum(cv_pca, log=True, bin_logarithmically=True, square=True)
+    ax = fig.get_axes()[0]
+    ax.grid(True, which="minor", c="whitesmoke")
+    ax.grid(True, which="major", c="lightgray")
+    for loc in ("left", "bottom"):
+        ax.spines[loc].set_visible(False)
+    display(fig)
+```
+
+## Power-law exponent of -1
+
+Interestingly, the power-law exponent of the neural data appears very close to $-1$. In fact, a power-law exponent of $-1$ appears with surprising regularity both in neuroscience and other fields, indicating a system at a critical point.
+
+TODO:
+
+- Same amount of variance at each decade - each decade is equally important (if assessed using variance)
+- What does this tell us about neural coding?
+- Show the Stringer result as comparison, zebrafish?
+- Information coding (Visual system operating at a critical threshold - scale-free dimensionality, more data -> extend even further
+
+::: {.callout-important}
+# An open question: is the power-law exponent of -1 universal?
+
+Open question: same power law everywhere? Sensory systems vs cognitive systems? Different representational formats, LD?
+
+Check your data!
+:::

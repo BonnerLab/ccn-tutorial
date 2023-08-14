@@ -100,44 +100,83 @@ $r_{\text{neuron}} \sim \beta_{\text{color}} \left( \text{color} \right) + \beta
 
 ```{python}
 # | label: utility_Neuron
-# | code-filename: Define the parameters controlling neuron responses
+# | code-summary: Define the parameters controlling neuron responses
 # | code-fold: show
-# | add-from: ../src/utilities/toy_example/neurons.py
-# | source-lang: python
-# | start-line: 8
-# | end-line: 14
-#
+
+Neuron = NamedTuple(
+    "Neuron",
+    beta_color=float,
+    beta_size=float,
+    mean=float,
+    std=float,
+)
 ```
 
 ```{python}
 # | label: utility_simulate_neuron_responses
-# | code-filename: (Function) Simulate neuron responses
+# | code-summary: Simulate neuron responses
 # | code-fold: show
-# | add-from: ../src/utilities/toy_example/neurons.py
-# | source-lang: python
-# | start-line: 17
-# | end-line: 31
-#
+
+def simulate_neuron_responses(
+    stimuli: pd.DataFrame,
+    neuron: Neuron,
+    *,
+    rng: np.random.Generator,
+) -> np.ndarray:
+    def z_score(x: np.ndarray) -> np.ndarray:
+        return (x - x.mean()) / x.std()
+
+    return (
+        neuron.beta_color * z_score(stimuli["color"])
+        + neuron.beta_size * z_score(stimuli["size"])
+        + neuron.std * rng.standard_normal(size=(len(stimuli),))
+        + neuron.mean
+    )
 ```
 
 ```{python}
 # | label: function_simulate_multiple_neuron_responses
-# | code-filename: (Function) Simulate multiple neurons' responses
-# | add-from: ../src/utilities/toy_example/neurons.py
-# | source-lang: python
-# | start-line: 34
-# | end-line: 68
-#
+# | code-summary: Simulate multiple neurons' responses
+
+def simulate_multiple_neuron_responses(
+    *,
+    stimuli: pd.DataFrame,
+    neurons: Sequence[Neuron],
+    rng: np.random.Generator,
+) -> xr.DataArray:
+    data = []
+    for i_neuron, neuron in enumerate(neurons):
+        data.append(
+            xr.DataArray(
+                data=simulate_neuron_responses(
+                    stimuli=stimuli,
+                    neuron=neuron,
+                    rng=rng,
+                ),
+                dims=("stimulus",),
+                coords={
+                    column: ("stimulus", values)
+                    for column, values in stimuli.reset_index(names="stimulus").items()
+                },
+            )
+            .expand_dims({"neuron": [i_neuron + 1]})
+            .assign_coords(
+                {
+                    field: ("neuron", [float(value)])
+                    for field, value in neuron._asdict().items()
+                }
+            )
+        )
+
+    return (
+        xr.concat(data, dim="neuron")
+        .rename("neuron responses")
+        .transpose("stimulus", "neuron")
+    )
+
 ```
 
 This procedure produces a data matrix $X \in \mathbb{R}^{N \times P}$ containing the $P = 2$ neurons' responses to the $N = 1000$ stimuli.
-
-```{python}
-# | label: import_utility_functions
-# | include: false
-
-from utilities.toy_example.neurons import Neuron, simulate_multiple_neuron_responses
-```
 
 ```{python}
 # | label: simulate_the_neuron_responses
