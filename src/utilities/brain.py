@@ -90,7 +90,10 @@ def unzip(
 
 
 def download_dataset(url: str = OSF_URL) -> Path:
-    filepath = download(url, filepath=Path("cache") / "downloads")
+    filepath = download(
+        url,
+        filepath=Path("cache") / "downloads" / "natural_scenes_dataset.zip"
+    )
     return unzip(filepath, extract_dir=Path("cache") / "downloads", remove_zip=False)
 
 

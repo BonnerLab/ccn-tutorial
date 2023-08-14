@@ -3,5 +3,6 @@
 # | code-summary: Install all required dependencies
 # | eval: false
 
-%pip install git+https://github.com/BonnerLab/ccn-tutorial.git
+# TODO uncomment before final packaging
+# %pip install git+https://github.com/BonnerLab/ccn-tutorial.git
 ```
