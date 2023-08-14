@@ -139,13 +139,25 @@ $$
 \begin{align*}
     \text{cov}(X_\text{train}, X_\text{train})
     &= X_\text{train}^\top X_\text{train} / (n - 1)\\
-    &= V \Lambda V^\top\\
-    \\
+    &= V \Lambda V^\top
+\end{align*}
+$$
+
+::: {.column-page}
+![](assets/autocovariance-eigendecomposition.svg)
+:::
+
+$$
+\begin{align*}
     \Lambda_\text{cross-validated}
     &= \text{cov}(X_\text{train}V, X_\text{test}V)\\
     &= \left( X_\text{train} V \right) ^\top \left( X_\text{test} V \right) / (n - 1)
 \end{align*}
 $$
+
+::: {.column-page}
+![](assets/cv_pca.png)
+:::
 
 These cross-validated eigenvalues represent the covariance reliably shared across two presentations of the visual stimulus -- which is a quantity we are interested in as neuroscientists: what is the "stable" part of the visual representation of a natural image? Notably, these "eigenvalues" need not be positive: if there is no shared covariance between the two systems at a rank, the expected value of the eigenvalue is $0$.
 
