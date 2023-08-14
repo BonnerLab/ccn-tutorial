@@ -4,6 +4,10 @@ subtitle: Using principal component analysis to reveal latent structure in data
 abstract: PCA is often used to reduce the dimensionality of large data while preserving a significant amount of variance. More fundamentally, it is a framework for studying the covariance statistics of data. In this section, we will introduce the concept of PCA with some toy examples.
 ---
 
+---
+bibliography: bibliography.bib
+---
+
 ::: {.content-visible when-format="html"}
 
 ::: {.callout-tip}
