@@ -1,3 +1,6 @@
+from collections.abc import Sequence
+
+import numpy as np
 import torch
 
 
@@ -36,3 +39,21 @@ def svd_flip(*, u: torch.Tensor, v: torch.Tensor) -> tuple[torch.Tensor, torch.T
     v *= signs.unsqueeze(-1)
 
     return u, v
+
+
+def assign_logarithmic_bins(
+    data: Sequence[int | float],
+    *,
+    base: int = 10,
+    points_per_bin: int,
+    min_: int | float,
+    max_: int | float,
+) -> Sequence[float]:
+    n = points_per_bin * int(np.ceil((np.log(max_) - np.log(min_)) / (np.log(base))))
+    bin_edges = np.geomspace(min_, max_, num=n)
+    bin_centers = np.exp(np.log(bin_edges)[:-1] + np.diff(np.log(bin_edges)) / 2)
+
+    bin_edges[-1] = np.inf
+    labels = bin_centers[np.digitize(data, bin_edges) - 1]
+
+    return labels
