@@ -51,6 +51,7 @@ website:
     type: textbox
   back-to-top-navigation: true
 
+bibliography: references.bib
 citation-location: margin
 
 format:
