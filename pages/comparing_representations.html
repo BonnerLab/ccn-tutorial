@@ -400,72 +400,81 @@ What happens when <span class="math inline">X</span> = <span class="math inline"
 <p>However, we run into the same issue as before: the singular values of a matrix are always positive and we won’t be able to use the magnitude of the singular value to assess the reliability of the variance along that dimension.</p>
 <p>Instead, we can use a cross-validated approach similar to CV-PCA, except that instead of testing generalization across different <em>presentations</em> of the stimuli, we can evaluate the reliable shared variance between the two representations across <em>stimuli</em>.</p>
 <p>Specifically, we can divide the images into two: a training split and a test split. We can compute singular vectors on the training split, and evalute <em>test</em> singular values on the test split, analogous to the CV-PCA procedure:</p>
-<p><span class="math inline">X_\text{train}^\top Y_\text{train} / (n - 1) = U \Sigma V^\top</span></p>
-<p><span class="math inline">\Sigma_\text{test} = \left( X_\text{test} U \right) ^\top \left( Y_\text{test} V \right) / (n - 1)</span></p>
+<p><span class="math display">
+\begin{align*}
+    \text{cov}(X_\text{train}, Y_\text{train})
+    &amp;= X_\text{train}^\top Y_\text{train} / (n - 1)\\
+    &amp;= U \Sigma V^\top\\
+    \\
+    \Sigma_\text{cross-validated}
+    &amp;= \text{cov}(X_\text{train} U, Y_\text{test} V)\\
+    &amp;= \left( X_\text{train} U \right) ^\top \left( Y_\text{test} V \right) / (n - 1)
+\end{align*}
+</span></p>
 </section>
 <section id="comparing-brains-and-dnns" class="level2">
 <h2 class="anchored" data-anchor-id="comparing-brains-and-dnns">Comparing brains and DNNs</h2>
-<div id="3c9bc7e8" class="cell" data-execution_count="6">
+<div id="42f785a1" class="cell" data-execution_count="6">
 <details>
 <summary>Load the datasets</summary>
-<div class="sourceCode cell-code" id="3c9bc7e8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="3c9bc7e8-1"><a href="#3c9bc7e8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># subject_1 = average_data_across_repetitions(load_dataset(subject=0, roi="general"))</span></span>
-<span id="3c9bc7e8-2"><a href="#3c9bc7e8-2" aria-hidden="true" tabindex="-1"></a><span class="co"># subject_2 = average_data_across_repetitions(load_dataset(subject=1, roi="general"))</span></span>
-<span id="3c9bc7e8-3"><a href="#3c9bc7e8-3" aria-hidden="true" tabindex="-1"></a><span class="co"># subject_1 = subject_1.sortby("stimulus_id")</span></span>
-<span id="3c9bc7e8-4"><a href="#3c9bc7e8-4" aria-hidden="true" tabindex="-1"></a><span class="co"># subject_2 = subject_2.sortby("stimulus_id")</span></span>
-<span id="3c9bc7e8-5"><a href="#3c9bc7e8-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="3c9bc7e8-6"><a href="#3c9bc7e8-6" aria-hidden="true" tabindex="-1"></a><span class="co"># display(subject_1)</span></span>
-<span id="3c9bc7e8-7"><a href="#3c9bc7e8-7" aria-hidden="true" tabindex="-1"></a><span class="co"># display(subject_2)</span></span>
-<span id="3c9bc7e8-8"><a href="#3c9bc7e8-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="3c9bc7e8-9"><a href="#3c9bc7e8-9" aria-hidden="true" tabindex="-1"></a><span class="co"># plssvd = PLSSVD()</span></span>
-<span id="3c9bc7e8-10"><a href="#3c9bc7e8-10" aria-hidden="true" tabindex="-1"></a><span class="co"># plssvd.fit(</span></span>
-<span id="3c9bc7e8-11"><a href="#3c9bc7e8-11" aria-hidden="true" tabindex="-1"></a><span class="co">#     data_repetition_1.values,</span></span>
-<span id="3c9bc7e8-12"><a href="#3c9bc7e8-12" aria-hidden="true" tabindex="-1"></a><span class="co">#     data_repetition_1.values,</span></span>
-<span id="3c9bc7e8-13"><a href="#3c9bc7e8-13" aria-hidden="true" tabindex="-1"></a><span class="co"># )</span></span>
-<span id="3c9bc7e8-14"><a href="#3c9bc7e8-14" aria-hidden="true" tabindex="-1"></a><span class="co"># rep_1_transformed = plssvd.transform(data_repetition_1.values, direction="left")</span></span>
-<span id="3c9bc7e8-15"><a href="#3c9bc7e8-15" aria-hidden="true" tabindex="-1"></a><span class="co"># rep_2_transformed = plssvd.transform(data_repetition_2.values, direction="right")</span></span>
-<span id="3c9bc7e8-16"><a href="#3c9bc7e8-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="3c9bc7e8-17"><a href="#3c9bc7e8-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="3c9bc7e8-18"><a href="#3c9bc7e8-18" aria-hidden="true" tabindex="-1"></a><span class="co"># n_neurons_1 = rep_1_transformed.shape[-1]</span></span>
-<span id="3c9bc7e8-19"><a href="#3c9bc7e8-19" aria-hidden="true" tabindex="-1"></a><span class="co"># cv_spectrum = np.diag(</span></span>
-<span id="3c9bc7e8-20"><a href="#3c9bc7e8-20" aria-hidden="true" tabindex="-1"></a><span class="co">#     np.cov(rep_1_transformed, rep_2_transformed, rowvar=False)[</span></span>
-<span id="3c9bc7e8-21"><a href="#3c9bc7e8-21" aria-hidden="true" tabindex="-1"></a><span class="co">#         :n_neurons_1, n_neurons_1:</span></span>
-<span id="3c9bc7e8-22"><a href="#3c9bc7e8-22" aria-hidden="true" tabindex="-1"></a><span class="co">#     ]</span></span>
-<span id="3c9bc7e8-23"><a href="#3c9bc7e8-23" aria-hidden="true" tabindex="-1"></a><span class="co"># )</span></span>
-<span id="3c9bc7e8-24"><a href="#3c9bc7e8-24" aria-hidden="true" tabindex="-1"></a><span class="co"># cv_spectrum = pd.DataFrame(</span></span>
-<span id="3c9bc7e8-25"><a href="#3c9bc7e8-25" aria-hidden="true" tabindex="-1"></a><span class="co">#     cv_spectrum, columns=["cross-validated singular value"]</span></span>
-<span id="3c9bc7e8-26"><a href="#3c9bc7e8-26" aria-hidden="true" tabindex="-1"></a><span class="co"># ).assign(rank=np.arange(len(cv_spectrum)) + 1)</span></span>
-<span id="3c9bc7e8-27"><a href="#3c9bc7e8-27" aria-hidden="true" tabindex="-1"></a><span class="co"># cv_spectrum = cv_spectrum.assign(</span></span>
-<span id="3c9bc7e8-28"><a href="#3c9bc7e8-28" aria-hidden="true" tabindex="-1"></a><span class="co">#     bin=bin_logarithmically(</span></span>
-<span id="3c9bc7e8-29"><a href="#3c9bc7e8-29" aria-hidden="true" tabindex="-1"></a><span class="co">#         cv_spectrum["cross-validated singular value"],</span></span>
-<span id="3c9bc7e8-30"><a href="#3c9bc7e8-30" aria-hidden="true" tabindex="-1"></a><span class="co">#         points_per_bin=5,</span></span>
-<span id="3c9bc7e8-31"><a href="#3c9bc7e8-31" aria-hidden="true" tabindex="-1"></a><span class="co">#         min_=1,</span></span>
-<span id="3c9bc7e8-32"><a href="#3c9bc7e8-32" aria-hidden="true" tabindex="-1"></a><span class="co">#         max_=10_000,</span></span>
-<span id="3c9bc7e8-33"><a href="#3c9bc7e8-33" aria-hidden="true" tabindex="-1"></a><span class="co">#     )</span></span>
-<span id="3c9bc7e8-34"><a href="#3c9bc7e8-34" aria-hidden="true" tabindex="-1"></a><span class="co"># )</span></span>
-<span id="3c9bc7e8-35"><a href="#3c9bc7e8-35" aria-hidden="true" tabindex="-1"></a></span>
-<span id="3c9bc7e8-36"><a href="#3c9bc7e8-36" aria-hidden="true" tabindex="-1"></a><span class="co"># fig, ax = plt.subplots()</span></span>
-<span id="3c9bc7e8-37"><a href="#3c9bc7e8-37" aria-hidden="true" tabindex="-1"></a><span class="co"># sns.lineplot(ax=ax, data=cv_spectrum, x="rank", y="cross-validated singular value")</span></span>
-<span id="3c9bc7e8-38"><a href="#3c9bc7e8-38" aria-hidden="true" tabindex="-1"></a><span class="co"># sns.despine(ax=ax, offset=20)</span></span>
-<span id="3c9bc7e8-39"><a href="#3c9bc7e8-39" aria-hidden="true" tabindex="-1"></a></span>
-<span id="3c9bc7e8-40"><a href="#3c9bc7e8-40" aria-hidden="true" tabindex="-1"></a><span class="co"># fig, ax = plt.subplots()</span></span>
-<span id="3c9bc7e8-41"><a href="#3c9bc7e8-41" aria-hidden="true" tabindex="-1"></a><span class="co"># sns.lineplot(ax=ax, data=cv_spectrum, x="rank", y="cross-validated singular value")</span></span>
-<span id="3c9bc7e8-42"><a href="#3c9bc7e8-42" aria-hidden="true" tabindex="-1"></a><span class="co"># ax.set_xscale("log")</span></span>
-<span id="3c9bc7e8-43"><a href="#3c9bc7e8-43" aria-hidden="true" tabindex="-1"></a><span class="co"># ax.set_yscale("log")</span></span>
-<span id="3c9bc7e8-44"><a href="#3c9bc7e8-44" aria-hidden="true" tabindex="-1"></a><span class="co"># ax.set_ylim(bottom=1e-3)</span></span>
-<span id="3c9bc7e8-45"><a href="#3c9bc7e8-45" aria-hidden="true" tabindex="-1"></a><span class="co"># sns.despine(ax=ax, offset=20)</span></span>
-<span id="3c9bc7e8-46"><a href="#3c9bc7e8-46" aria-hidden="true" tabindex="-1"></a></span>
-<span id="3c9bc7e8-47"><a href="#3c9bc7e8-47" aria-hidden="true" tabindex="-1"></a><span class="co"># fig, ax = plt.subplots()</span></span>
-<span id="3c9bc7e8-48"><a href="#3c9bc7e8-48" aria-hidden="true" tabindex="-1"></a><span class="co"># sns.lineplot(</span></span>
-<span id="3c9bc7e8-49"><a href="#3c9bc7e8-49" aria-hidden="true" tabindex="-1"></a><span class="co">#     ax=ax,</span></span>
-<span id="3c9bc7e8-50"><a href="#3c9bc7e8-50" aria-hidden="true" tabindex="-1"></a><span class="co">#     data=cv_spectrum.groupby("bin").mean().rename(columns={"bin": "rank"}),</span></span>
-<span id="3c9bc7e8-51"><a href="#3c9bc7e8-51" aria-hidden="true" tabindex="-1"></a><span class="co">#     x="rank",</span></span>
-<span id="3c9bc7e8-52"><a href="#3c9bc7e8-52" aria-hidden="true" tabindex="-1"></a><span class="co">#     y="cross-validated singular value",</span></span>
-<span id="3c9bc7e8-53"><a href="#3c9bc7e8-53" aria-hidden="true" tabindex="-1"></a><span class="co">#     ls=None,</span></span>
-<span id="3c9bc7e8-54"><a href="#3c9bc7e8-54" aria-hidden="true" tabindex="-1"></a><span class="co">#     marker="o",</span></span>
-<span id="3c9bc7e8-55"><a href="#3c9bc7e8-55" aria-hidden="true" tabindex="-1"></a><span class="co"># )</span></span>
-<span id="3c9bc7e8-56"><a href="#3c9bc7e8-56" aria-hidden="true" tabindex="-1"></a><span class="co"># ax.set_xscale("log")</span></span>
-<span id="3c9bc7e8-57"><a href="#3c9bc7e8-57" aria-hidden="true" tabindex="-1"></a><span class="co"># ax.set_yscale("log")</span></span>
-<span id="3c9bc7e8-58"><a href="#3c9bc7e8-58" aria-hidden="true" tabindex="-1"></a><span class="co"># sns.despine(ax=ax, offset=20)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="42f785a1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="42f785a1-1"><a href="#42f785a1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># subject_1 = average_data_across_repetitions(load_dataset(subject=0, roi="general"))</span></span>
+<span id="42f785a1-2"><a href="#42f785a1-2" aria-hidden="true" tabindex="-1"></a><span class="co"># subject_2 = average_data_across_repetitions(load_dataset(subject=1, roi="general"))</span></span>
+<span id="42f785a1-3"><a href="#42f785a1-3" aria-hidden="true" tabindex="-1"></a><span class="co"># subject_1 = subject_1.sortby("stimulus_id")</span></span>
+<span id="42f785a1-4"><a href="#42f785a1-4" aria-hidden="true" tabindex="-1"></a><span class="co"># subject_2 = subject_2.sortby("stimulus_id")</span></span>
+<span id="42f785a1-5"><a href="#42f785a1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="42f785a1-6"><a href="#42f785a1-6" aria-hidden="true" tabindex="-1"></a><span class="co"># display(subject_1)</span></span>
+<span id="42f785a1-7"><a href="#42f785a1-7" aria-hidden="true" tabindex="-1"></a><span class="co"># display(subject_2)</span></span>
+<span id="42f785a1-8"><a href="#42f785a1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="42f785a1-9"><a href="#42f785a1-9" aria-hidden="true" tabindex="-1"></a><span class="co"># plssvd = PLSSVD()</span></span>
+<span id="42f785a1-10"><a href="#42f785a1-10" aria-hidden="true" tabindex="-1"></a><span class="co"># plssvd.fit(</span></span>
+<span id="42f785a1-11"><a href="#42f785a1-11" aria-hidden="true" tabindex="-1"></a><span class="co">#     data_repetition_1.values,</span></span>
+<span id="42f785a1-12"><a href="#42f785a1-12" aria-hidden="true" tabindex="-1"></a><span class="co">#     data_repetition_1.values,</span></span>
+<span id="42f785a1-13"><a href="#42f785a1-13" aria-hidden="true" tabindex="-1"></a><span class="co"># )</span></span>
+<span id="42f785a1-14"><a href="#42f785a1-14" aria-hidden="true" tabindex="-1"></a><span class="co"># rep_1_transformed = plssvd.transform(data_repetition_1.values, direction="left")</span></span>
+<span id="42f785a1-15"><a href="#42f785a1-15" aria-hidden="true" tabindex="-1"></a><span class="co"># rep_2_transformed = plssvd.transform(data_repetition_2.values, direction="right")</span></span>
+<span id="42f785a1-16"><a href="#42f785a1-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="42f785a1-17"><a href="#42f785a1-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="42f785a1-18"><a href="#42f785a1-18" aria-hidden="true" tabindex="-1"></a><span class="co"># n_neurons_1 = rep_1_transformed.shape[-1]</span></span>
+<span id="42f785a1-19"><a href="#42f785a1-19" aria-hidden="true" tabindex="-1"></a><span class="co"># cv_spectrum = np.diag(</span></span>
+<span id="42f785a1-20"><a href="#42f785a1-20" aria-hidden="true" tabindex="-1"></a><span class="co">#     np.cov(rep_1_transformed, rep_2_transformed, rowvar=False)[</span></span>
+<span id="42f785a1-21"><a href="#42f785a1-21" aria-hidden="true" tabindex="-1"></a><span class="co">#         :n_neurons_1, n_neurons_1:</span></span>
+<span id="42f785a1-22"><a href="#42f785a1-22" aria-hidden="true" tabindex="-1"></a><span class="co">#     ]</span></span>
+<span id="42f785a1-23"><a href="#42f785a1-23" aria-hidden="true" tabindex="-1"></a><span class="co"># )</span></span>
+<span id="42f785a1-24"><a href="#42f785a1-24" aria-hidden="true" tabindex="-1"></a><span class="co"># cv_spectrum = pd.DataFrame(</span></span>
+<span id="42f785a1-25"><a href="#42f785a1-25" aria-hidden="true" tabindex="-1"></a><span class="co">#     cv_spectrum, columns=["cross-validated singular value"]</span></span>
+<span id="42f785a1-26"><a href="#42f785a1-26" aria-hidden="true" tabindex="-1"></a><span class="co"># ).assign(rank=np.arange(len(cv_spectrum)) + 1)</span></span>
+<span id="42f785a1-27"><a href="#42f785a1-27" aria-hidden="true" tabindex="-1"></a><span class="co"># cv_spectrum = cv_spectrum.assign(</span></span>
+<span id="42f785a1-28"><a href="#42f785a1-28" aria-hidden="true" tabindex="-1"></a><span class="co">#     bin=bin_logarithmically(</span></span>
+<span id="42f785a1-29"><a href="#42f785a1-29" aria-hidden="true" tabindex="-1"></a><span class="co">#         cv_spectrum["cross-validated singular value"],</span></span>
+<span id="42f785a1-30"><a href="#42f785a1-30" aria-hidden="true" tabindex="-1"></a><span class="co">#         points_per_bin=5,</span></span>
+<span id="42f785a1-31"><a href="#42f785a1-31" aria-hidden="true" tabindex="-1"></a><span class="co">#         min_=1,</span></span>
+<span id="42f785a1-32"><a href="#42f785a1-32" aria-hidden="true" tabindex="-1"></a><span class="co">#         max_=10_000,</span></span>
+<span id="42f785a1-33"><a href="#42f785a1-33" aria-hidden="true" tabindex="-1"></a><span class="co">#     )</span></span>
+<span id="42f785a1-34"><a href="#42f785a1-34" aria-hidden="true" tabindex="-1"></a><span class="co"># )</span></span>
+<span id="42f785a1-35"><a href="#42f785a1-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="42f785a1-36"><a href="#42f785a1-36" aria-hidden="true" tabindex="-1"></a><span class="co"># fig, ax = plt.subplots()</span></span>
+<span id="42f785a1-37"><a href="#42f785a1-37" aria-hidden="true" tabindex="-1"></a><span class="co"># sns.lineplot(ax=ax, data=cv_spectrum, x="rank", y="cross-validated singular value")</span></span>
+<span id="42f785a1-38"><a href="#42f785a1-38" aria-hidden="true" tabindex="-1"></a><span class="co"># sns.despine(ax=ax, offset=20)</span></span>
+<span id="42f785a1-39"><a href="#42f785a1-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="42f785a1-40"><a href="#42f785a1-40" aria-hidden="true" tabindex="-1"></a><span class="co"># fig, ax = plt.subplots()</span></span>
+<span id="42f785a1-41"><a href="#42f785a1-41" aria-hidden="true" tabindex="-1"></a><span class="co"># sns.lineplot(ax=ax, data=cv_spectrum, x="rank", y="cross-validated singular value")</span></span>
+<span id="42f785a1-42"><a href="#42f785a1-42" aria-hidden="true" tabindex="-1"></a><span class="co"># ax.set_xscale("log")</span></span>
+<span id="42f785a1-43"><a href="#42f785a1-43" aria-hidden="true" tabindex="-1"></a><span class="co"># ax.set_yscale("log")</span></span>
+<span id="42f785a1-44"><a href="#42f785a1-44" aria-hidden="true" tabindex="-1"></a><span class="co"># ax.set_ylim(bottom=1e-3)</span></span>
+<span id="42f785a1-45"><a href="#42f785a1-45" aria-hidden="true" tabindex="-1"></a><span class="co"># sns.despine(ax=ax, offset=20)</span></span>
+<span id="42f785a1-46"><a href="#42f785a1-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="42f785a1-47"><a href="#42f785a1-47" aria-hidden="true" tabindex="-1"></a><span class="co"># fig, ax = plt.subplots()</span></span>
+<span id="42f785a1-48"><a href="#42f785a1-48" aria-hidden="true" tabindex="-1"></a><span class="co"># sns.lineplot(</span></span>
+<span id="42f785a1-49"><a href="#42f785a1-49" aria-hidden="true" tabindex="-1"></a><span class="co">#     ax=ax,</span></span>
+<span id="42f785a1-50"><a href="#42f785a1-50" aria-hidden="true" tabindex="-1"></a><span class="co">#     data=cv_spectrum.groupby("bin").mean().rename(columns={"bin": "rank"}),</span></span>
+<span id="42f785a1-51"><a href="#42f785a1-51" aria-hidden="true" tabindex="-1"></a><span class="co">#     x="rank",</span></span>
+<span id="42f785a1-52"><a href="#42f785a1-52" aria-hidden="true" tabindex="-1"></a><span class="co">#     y="cross-validated singular value",</span></span>
+<span id="42f785a1-53"><a href="#42f785a1-53" aria-hidden="true" tabindex="-1"></a><span class="co">#     ls=None,</span></span>
+<span id="42f785a1-54"><a href="#42f785a1-54" aria-hidden="true" tabindex="-1"></a><span class="co">#     marker="o",</span></span>
+<span id="42f785a1-55"><a href="#42f785a1-55" aria-hidden="true" tabindex="-1"></a><span class="co"># )</span></span>
+<span id="42f785a1-56"><a href="#42f785a1-56" aria-hidden="true" tabindex="-1"></a><span class="co"># ax.set_xscale("log")</span></span>
+<span id="42f785a1-57"><a href="#42f785a1-57" aria-hidden="true" tabindex="-1"></a><span class="co"># ax.set_yscale("log")</span></span>
+<span id="42f785a1-58"><a href="#42f785a1-58" aria-hidden="true" tabindex="-1"></a><span class="co"># sns.despine(ax=ax, offset=20)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 
