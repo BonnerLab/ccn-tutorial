@@ -85,6 +85,8 @@ class PLSSVD:
 
         n_stimuli = x.shape[-2]
 
+        device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
         cross_covariance = (np.swapaxes(x_centered, -1, -2) @ y_centered) / (
             n_stimuli - 1
         )  # <2>
@@ -94,7 +96,7 @@ class PLSSVD:
             self.singular_values,
             self.right_singular_vectors,
         ) = svd(
-            torch.from_numpy(cross_covariance),
+            torch.from_numpy(cross_covariance).to(device),
             n_components=min([*x.shape, *y.shape]),
             truncated=True,
             seed=random_state,
