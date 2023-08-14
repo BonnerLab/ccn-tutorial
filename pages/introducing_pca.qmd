@@ -453,7 +453,7 @@ def animate_pca_transformation(
     return animation.to_html5_video()
 
 
-#display(HTML(animate_pca_transformation(data)))
+display(HTML(animate_pca_transformation(data)))
 
 ```
 
