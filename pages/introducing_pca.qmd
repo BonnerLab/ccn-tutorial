@@ -277,7 +277,7 @@ print(f"total variance: {variances.sum().values}")
 
 We have a population of neurons that contain information about the stimulus: that is, from the activity pattern we recorded, we expect to be able to reliably decode the color and size of the dot presented. How is this information encoded in the population activity? Is there a neuron that is sensitive to color and another that is sensitive to size? 
 
-A common approach to studying the information content of our 2 neurons is Representational Similarity Analysis (RSA), where the dissimaliry of a neuron's response is obtained for each pair of stimuli, and represented in a matrix of dissimilarities (RDM) (Kriegeskorte et al, 2014). Therefore, RDM indicates the degree to which each pair of stimuli is distinguished by the neuron. For instance, if neuron 1 was only senstive to color, we would expect to see a high disimilarity for all pairs of stimuli with different color, regardless of their size. 
+A common approach to studying the information content of our 2 neurons is Representational Similarity Analysis (RSA) (Kriegeskorte et al, 2014), where the dissimaliry of a neuron's response is obtained for each pair of stimuli, and represented in a matrix of dissimilarities (RDM). Therefore, RDM indicates the degree to which each pair of stimuli is distinguished by the neuron. For instance, if neuron 1 was only senstive to color, we would expect to see a high disimilarity for all pairs of stimuli with different color, regardless of their size. 
 
 But what if the neural responses are more complicated, and we have multiple experimental conditions? Is there another view of the population code that might be more informative?
 
