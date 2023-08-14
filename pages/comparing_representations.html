@@ -400,8 +400,17 @@ What happens when <span class="math inline">X</span> = <span class="math inline"
 <p>However, we run into the same issue as before: the singular values of a matrix are always positive and we won’t be able to use the magnitude of the singular value to assess the reliability of the variance along that dimension.</p>
 <p>Instead, we can use a cross-validated approach similar to CV-PCA, except that instead of testing generalization across different <em>presentations</em> of the stimuli, we can evaluate the reliable shared variance between the two representations across <em>stimuli</em>.</p>
 <p>Specifically, we can divide the images into two: a training split and a test split. We can compute singular vectors on the training split, and evalute <em>test</em> singular values on the test split, analogous to the CV-PCA procedure:</p>
-<p><span class="math inline">X_\text{train}^\top Y_\text{train} / (n - 1) = U \Sigma V^\top</span></p>
-<p><span class="math inline">\Sigma_\text{test} = \left( X_\text{test} U \right) ^\top \left( Y_\text{test} V \right) / (n - 1)</span></p>
+<p><span class="math display">
+\begin{align*}
+    \text{cov}(X_\text{train}, Y_\text{train})
+    &amp;= X_\text{train}^\top Y_\text{train} / (n - 1)\\
+    &amp;= U \Sigma V^\top\\
+    \\
+    \Sigma_\text{cross-validated}
+    &amp;= \text{cov}(X_\text{train} U, Y_\text{test} V)\\
+    &amp;= \left( X_\text{train} U \right) ^\top \left( Y_\text{test} V \right) / (n - 1)
+\end{align*}
+</span></p>
 </section>
 <section id="comparing-brains-and-dnns" class="level2">
 <h2 class="anchored" data-anchor-id="comparing-brains-and-dnns">Comparing brains and DNNs</h2>
