@@ -49,6 +49,7 @@ dependencies = [
   "seaborn",
   "scikit-learn",
   "nilearn",
+  "plotly",
   "ipykernel",
   "jupyter",
   "jupyter-cache",
