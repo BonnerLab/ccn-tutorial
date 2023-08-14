@@ -237,6 +237,37 @@ for rank in [1, 2, 3, 10, 50, 100]:
     view_images_at_poles(data_pca[:, rank - 1], stimuli=stimuli, label=f"rank {rank}")
 ```
 
+
+::: {.callout-important collapse="true"}
+# What about other methods?
+
+Interpreting PCs can be challenging especially when we rely solely on visual inspection. One of the reasons is that many features in nature are non-negative. This difficulty arises, in part, because many natural features are non-negative. As a result, methods like nonnegative matrix factorization (NMF) often offer more interpretable dimensions than PCA.
+
+```{python}
+# | code-summary: Compute NMF of neural responses
+# | fig-column: page
+# | fig-align: center
+
+scaler = MinMaxScaler()
+scaler.fit(data)
+
+nmf = NMF(n_components=2, random_state=random_state)
+data_nmf = nmf.fit_transform(scaler.transform(data))
+
+view_images_as_scatterplot(data_nmf[:, 0], data_nmf[:, 1], stimuli=stimuli)
+
+for component in range(2):
+    view_images_at_poles(data_pca[:, component], stimuli=stimuli, label=f"component {rank}")
+```
+
+<!-- What can we interpret here? -->
+<!-- if NMF can be done in a linear manner, should we stress that PCA is better for being a linear methods? -->
+
+Nonetheless, PCA has unique benefits that shouldn't be overlooked. For instance, PCA offers closed-form solutions and non-stochastic outcomes. They're also well characterized mathematically. Moreover, because PCA is essentially rotateing data to present it in a clearer perspective, it is able to preserve all the original information.
+
+:::
+
+
 #### Logarithmic scale
 
 Given these visualization, we might deem that the higher-rank PCs are non-interpretable and thus follow the common practice to drop them. However, before doing so, let's try visualizing the spectrum on a logarithmic scale for both axes:
