@@ -124,7 +124,7 @@ def view_eigenspectrum(pca: PCA, *, log: bool = False) -> None:
     fig, ax = plt.subplots(figsize=(6, 6))
     sns.lineplot(
         ax=ax,
-        data=eigenvalues,
+        data=eigenvalues.loc[eigenvalues["rank"] < pca.n_components_],
         x="rank",
         y="eigenvalue",
     )
@@ -132,11 +132,14 @@ def view_eigenspectrum(pca: PCA, *, log: bool = False) -> None:
     if log:
         ax.set_xscale("log")
         ax.set_yscale("log")
-        ax.set_ylim(bottom=1e-2)
+        ax.set_ylim(bottom=1)
     fig.show()
 
 
-<-- view_eigenspectrum(pca) -->
+pca = PCA()
+pca.fit(data)
+
+view_eigenspectrum(pca)
 ```
 
 On this plot, we can observse that the first few PCs have substantial variance while there appears to be negligible variance after about rank 20. How can we interpret these PCs of different variance levels? There are some simple ways to visualize these PCs.
@@ -218,6 +221,7 @@ The first method is to plot the stimuli on a scatter plot, designating their X a
 # | fig-column: page
 # | fig-align: center
 
+data_pca = pca.transform(data)
 view_images_as_scatterplot(data_pca[:, 0], data_pca[:, 1], stimuli=stimuli)
 ```
 
@@ -228,11 +232,6 @@ Alternativley, we can focus on the stimuli with the highest or lowest scores alo
 # | code-summary: View images that have extreme scores on the PCs
 # | fig-column: page
 # | fig-align: center
-
-pca = PCA()
-pca.fit(data)
-
-data_pca = pca.transform(data)
 
 for rank in [1, 2, 3, 10, 50, 100]:
     view_images_at_poles(data_pca[:, rank - 1], stimuli=stimuli, label=f"rank {rank}")
