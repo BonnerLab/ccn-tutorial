@@ -420,13 +420,16 @@ The covariance structure of random matrices
 \begin{align*}
     \text{cov}(X_\text{train}, X_\text{train})
     &amp;= X_\text{train}^\top X_\text{train} / (n - 1)\\
-    &amp;= V \Lambda V^\top\\
-    \\
+    &amp;= V \Lambda V^\top
+</span></p>
+<p><img src="assets/autocovariance-eigendecomposition.svg" class="img-fluid"></p>
+<p><span class="math display">
     \Lambda_\text{cross-validated}
     &amp;= \text{cov}(X_\text{train}V, X_\text{test}V)\\
     &amp;= \left( X_\text{train} V \right) ^\top \left( X_\text{test} V \right) / (n - 1)
 \end{align*}
 </span></p>
+<p><img src="assets/cv_pca.png" class="img-fluid"></p>
 <p>These cross-validated eigenvalues represent the covariance reliably shared across two presentations of the visual stimulus – which is a quantity we are interested in as neuroscientists: what is the “stable” part of the visual representation of a natural image? Notably, these “eigenvalues” need not be positive: if there is no shared covariance between the two systems at a rank, the expected value of the eigenvalue is <span class="math inline">0</span>.</p>
 <section id="some-geometric-intuition" class="level3">
 <h3 class="anchored" data-anchor-id="some-geometric-intuition">Some geometric intuition</h3>
