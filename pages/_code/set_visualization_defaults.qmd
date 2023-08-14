@@ -8,6 +8,7 @@ sns.set_theme(
     context="notebook",
     style="white",
     palette="deep",
+    rc={"legend.edgecolor": "None"},
 )
 set_matplotlib_formats("svg")
 
