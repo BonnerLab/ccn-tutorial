@@ -748,6 +748,7 @@ view_individual_scatter(
     template_func=lambda x: f"principal component {x}",
 )
 ```
+We can plot the eigenvalues as a function of rank to visualize *the eigenspectrum*. The eigensceptrum provides valuable insights about the latent dimensionality of the data. 
 
 ```{python}
 # | label: visualize_eigenspectrum_big
