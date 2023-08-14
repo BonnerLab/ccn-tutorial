@@ -4,6 +4,10 @@ subtitle: Using principal component analysis to reveal latent structure in data
 abstract: PCA is often used to reduce the dimensionality of large data while preserving a significant amount of variance. More fundamentally, it is a framework for studying the covariance statistics of data. In this section, we will introduce the concept of PCA with some toy examples.
 ---
 
+---
+bibliography: ../references.bib
+---
+
 ::: {.content-visible when-format="html"}
 
 ::: {.callout-tip}
@@ -275,9 +279,13 @@ print(f"total variance: {variances.sum().values}")
 
 ## Understanding the neural code
 
-We have a population of neurons that contain information about the stimulus: that is, from the activity pattern we recorded, we expect to be able to reliably decode the color and size of the dot presented. How is this information encoded in the population activity? Is there a neuron that is sensitive to color and another that is sensitive to size? 
+How is this information encoded in the population activity? Is there a neuron that is sensitive to color and another that is sensitive to size? 
 
-A common approach to studying the information content of our 2 neurons is Representational Similarity Analysis (RSA), where the dissimaliry of a neuron's response is obtained for each pair of stimuli, and represented in a matrix of dissimilarities (RDM). Therefore, RDM indicates the degree to which each pair of stimuli is distinguished by the neuron. For instance, if neuron 1 was only senstive to color, we would expect to see a high disimilarity for all pairs of stimuli with different color, regardless of their size. 
+A common approach to studying the information content of our 2 neurons is Representational Similarity Analysis (RSA)[@Kriegeskorte2008], where the dissimaliry of a neuron's response is obtained for each pair of stimuli, and represented in a matrix of dissimilarities (RDM). Therefore, RDM indicates the degree to which each pair of stimuli is distinguished by the neuron. 
+
+For instance, if neuron 1 was only senstive to color, we would expect to see a high disimilarity for all pairs of stimuli with different color, regardless of their size. 
+
+![](assets/rsa.png)
 
 But what if the neural responses are more complicated, and we have multiple experimental conditions? Is there another view of the population code that might be more informative?
 
@@ -288,12 +296,12 @@ Instead of directly studying the raw observed neural activity, we can focus on t
 
 ### Some geometric intuition
 
-Since we only have $P = 2$ neurons, we can visualize these data as a scatterplot, which makes their [covariance](reference.qmd#covariance) apparent. The organization of these data in this 2-dimensional space suggests an obvious way to change our viewpoint.
+Since we only have $P = 2$ neurons, we can visualize these data as a scatterplot, which makes their [covariance](reference.qmd#covariance) apparent. 
 
 
 ```{python}
-# | label: visualize_pca_animation
-# | code-summary: Animate the PCA transformation
+# | label: view_joint_scatter
+# | code-summary: visualize the joint response
 # | fig-align: center
 
 
@@ -302,7 +310,8 @@ def view_joint_scatter(
     *,
     coord: str,
     dim: str,
-    template_func: Callable[[int], str]
+    template_func: Callable[[int], str],
+    draw_axes: bool = False,
 ) -> mpl.figure.Figure:
     fig, ax = plt.subplots()
 
@@ -326,8 +335,9 @@ def view_joint_scatter(
         legend=False,
         palette="flare",
     )
-    ax.axhline(0, c="gray", ls="--")
-    ax.axvline(0, c="gray", ls="--")
+    if draw_axes:
+        ax.axhline(0, c="gray", ls="--")
+        ax.axvline(0, c="gray", ls="--")
 
     ax.set_aspect("equal", "box")
     sns.despine(ax=ax, offset=20)
@@ -335,6 +345,20 @@ def view_joint_scatter(
 
     return fig
 
+view_joint_scatter(
+        data,
+        coord="neuron responses",
+        dim="neuron",
+        template_func=lambda x: f"neuron {x} response",
+    )
+```
+
+The animation below shows how we can use this to change the way we view the data.
+
+```{python}
+# | label: visualize_pca_animation
+# | code-summary: Animate the PCA transformation
+# | fig-align: center
 
 def animate_pca_transformation(
     data: xr.DataArray,
@@ -359,6 +383,7 @@ def animate_pca_transformation(
         coord="neuron responses",
         dim="neuron",
         template_func=lambda x: f"neuron {x} response",
+        draw_axes= True
     )
     ax = fig.get_axes()[0]
     scatter = ax.get_children()[0]
@@ -436,7 +461,7 @@ def animate_pca_transformation(
 Click on the animation above to visualize the PCA transformation!
 :::
 
-As seen in the animation, we can transform our data to view the directions of maximum variance, corresponding to color and size. These directions are the principal components of our data. 
+As seen in the animation, can transform our data to view the directions of maximum variance (corresponding to color and size). These directions are the principal components of our data. 
 
 
 ### The mathematical definition
@@ -451,20 +476,29 @@ $$
 \end{align*}
 $$
 
-::: {.column-page-right}
-![Computing the auto-covariance, where $X$ is centered (i.e. $X - \overline{X}$)](assets/autocovariance.svg){height=50mm}
-:::
+To do this, we start by computing the auto-covariance of our data matrix, where $X$ is centered (i.e. $X - \overline{X}$)
+
 
 ::: {.column-page-right}
-![Computing the eigendecomposition of the auto-covariance](assets/eigendecomposition.svg){height=50mm}
+![](assets/autocovariance.svg){height=50mm}
 :::
+
+
+Next , we compute the the eigendecomposition of the auto-covariance (though the computational steps we take to get there are slightly different, as shown later)
+
+
+::: {.column-page-right}
+![](assets/eigendecomposition.svg){height=50mm}
+:::
+
 
 The columns of $V$ are *eigenvectors* that specify the directions of variance while the corresponding diagonal elements of $\Lambda$ are *eigenvalues* that specify the amount of variance along the eigenvector[^proof-eigenvalue-covariance].
 
-The original data matrix can be transformed by projecting it onto the eigenvectors: $\widetilde{X} = \left(X - \overline{X}\right) V$.
+
+Finally, the original data matrix can be transformed by projecting it onto the eigenvectors: $\widetilde{X} = \left(X - \overline{X}\right) V$.
 
 ::: {.column-page-right}
-![Transforming the original data matrix](assets/projection.svg){height=50mm}
+![](assets/projection.svg){height=50mm}
 :::
 
 <!-- TODO ### Some terminology
@@ -485,6 +519,13 @@ PCA can be used to project data into a lower-dimensional space (i.e. $p \le f$) 
 :::
 
 ### A computational recipe
+
+
+1. Center the data matrix.
+2. Compute its singular value decomposition[^definition-singular-value-decomposition].
+3. The right singular vectors $V$ of the data matrix are the eigenvectors of its auto-covariance.
+4. The singular values $\Sigma$ of the data matrix are related to the eigenvalues $\Lambda$ of its auto-covariance as $\Lambda = \Sigma^2 / (N - 1)$
+5. To project data from the ambient space to the latent space, we must subtract the mean computed in Step 1, and multiply the data by the eigenvectors.
 
 ```{python}
 # | label: recipe-pca
@@ -512,11 +553,6 @@ class PCA:
     def transform(self, /, data: np.ndarray) -> np.ndarray:
         return (data - self.mean) @ self.eigenvectors  # <5>
 ```
-1. Center the data matrix.
-2. Compute its singular value decomposition[^definition-singular-value-decomposition].
-3. The right singular vectors $V$ of the data matrix are the eigenvectors of its auto-covariance.
-4. The singular values $\Sigma$ of the data matrix are related to the eigenvalues $\Lambda$ of its auto-covariance as $\Lambda = \Sigma^2 / (N - 1)$
-5. To project data from the ambient space to the latent space, we must subtract the mean computed in Step 1, and multiply the data by the eigenvectors.
 
 ::: {.callout-tip collapse="true"}
 ### Why do we compute PCA this way instead of $\text{eig}(\text{cov}(X))$?
@@ -537,6 +573,8 @@ Check out [truncated SVD](https://scikit-learn.org/stable/modules/generated/skle
 :::
 
 ## Transforming the dataset
+
+Let's now transform our data into its principal components and analyse it in this space.
 
 ```{python}
 # | label: transforming-the-dataset
@@ -599,7 +637,7 @@ ax = fig.get_axes()[0]
 
 ### Interpreting the transformed data
 
-Let's view the data projected onto each of the principal components.
+We can view the data projected onto each of the principal components.
 
 ```{python}
 # | label: view_principal_components
@@ -614,7 +652,7 @@ view_individual_scatter(
 )
 ```
 
-We can observe that:
+We observe that:
 
 - the *first* principal component is largely driven by the *size* of the stimulus
 - the *second* principal component is largely driven by the *color* of the stimulus
@@ -667,7 +705,7 @@ view_eigenspectrum(pca)
 
 ## Quantifying dimensionality
 
-In these data, the dimensionality is clear: there are two latent variables and both are evident in the principal components. However, in real data, we typically record from more than $P = 2$ neurons, and judging the dimensionality of larger datasets becomes tricky. To simulate such a scenario, let’s record from more neurons (say $P = 10$)!
+In these data, the dimensionality is clear: there are two latent variables and both are evident in the principal components. However, in real data, we typically record from more than $P = 2$ neurons, therefore judging the dimensionality becomes tricky. To simulate such a scenario, let’s record from more neurons (say $P = 10$).
 
 ```{python}
 # | label: simulate_more_neurons
@@ -692,6 +730,9 @@ big_data = simulate_multiple_neuron_responses(
 
 display(big_data)
 ```
+
+As before, we can visualize each components and plot the eigenspectrum:
+
 
 ```{python}
 # | label: view_principal_components_big
