@@ -142,7 +142,7 @@ pca.fit(data)
 view_eigenspectrum(pca)
 ```
 
-On this plot, we can observse that the first few PCs have substantial variance while there appears to be negligible variance after about rank 20. How can we interpret these PCs of different variance levels? There are some simple ways to visualize these PCs.
+On this plot, the first few PCs have substantial variance while there appears to be negligible variance after about rank 20. How can we interpret these PCs of different variance levels? There are some simple ways to visualize these PCs.
 
 #### Visualizing principal components
 
@@ -239,7 +239,7 @@ for rank in [1, 2, 3, 10, 50, 100]:
 
 #### Logarithmic scale
 
-Given these visualization, we might deem that the higher-rank PCs are non-interpretable and thus follow the common pratice to drop them. However, before doing so, let's try visualizing the spectrum on a logarithmic scale for both axes:
+Given these visualization, we might deem that the higher-rank PCs are non-interpretable and thus follow the common practice to drop them. However, before doing so, let's try visualizing the spectrum on a logarithmic scale for both axes:
 
 ```{python}
 # | code-summary: Visualize the eigenspectrum on a logarithmic scale
