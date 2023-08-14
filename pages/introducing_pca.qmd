@@ -729,7 +729,7 @@ The *rank* of the covariance matrix -- equal to the number of *nonzero* eigenval
 
 print(f"rank = {(big_pca.eigenvalue > 0).sum().values}")
 
-def view_thresholded_eigenspectrum(pca: PCA, *, threshold: int | float):
+def view_thresholded_eigenspectrum(pca: PCA, *, threshold: int | float) -> mpl.figure.Figure:
     fig = view_eigenspectrum(pca)
     ax = fig.get_axes()[0]
 
@@ -811,7 +811,7 @@ When the number of latent dimensions is low, eigenspectra often have a sharp dis
 ```{python}
 # | code-summary: Plot the apparent knee of the spectrum
 
-def view_eigenspectrum_knee(pca: PCA, *, knee: int):
+def view_eigenspectrum_knee(pca: PCA, *, knee: int) -> mpl.figure.Figure:
     fig = view_eigenspectrum(pca)
     ax = fig.get_axes()[0]
     ax.plot(
@@ -850,7 +850,53 @@ def compute_effective_dimensionality(eigenspectrum: np.ndarray) -> float:
     return (np.sum(eigenspectrum) ** 2) / (eigenspectrum ** 2).sum()
 
 
+def view_effective_dimensionality_examples(pca: PCA) -> mpl.figure.Figure:
+    n_components = pca.sizes["component"]
+
+    spectrum_1 = [float(pca["eigenvalue"].mean().values)] * n_components
+
+    weights = 1 / (1 + np.arange(n_components, dtype=np.float32))
+    weights /= weights.sum()
+    
+    spectrum_2 = list(weights * pca["eigenvalue"].sum().values)
+    spectrum_3 = [float(pca["eigenvalue"].sum().values)] + [0] * (n_components - 1)
+
+    data = pd.DataFrame(
+        {
+            "eigenvalue": spectrum_1 + spectrum_2 + spectrum_3,
+            "rank": list(np.tile(pca["rank"].values, 3)),
+            "example": [0] * n_components + [1] * n_components + [2] * n_components
+        }
+    )
+    # return data
+    g = sns.relplot(
+        kind="line",
+        data=data,
+        col="example",
+        x="rank",
+        y="eigenvalue",
+        marker="o",
+        height=5,
+        aspect=0.5,
+        facet_kws={
+            "sharey": False,
+        },
+    )
+
+    for i_spectrum, ax in enumerate(g.axes.flat):
+        d = compute_effective_dimensionality(data.loc[data["example"] == i_spectrum, "eigenvalue"])
+        ax.set_title("$d_{eff}$" + f" = {d.round(2)}")
+        ax.set_xticks([1, 10])
+
+    sns.despine(g.figure, offset=10)
+    g.figure.tight_layout(w_pad=2)
+    plt.close(g.figure)
+    return g.figure
+
+
 print(f"effective dimensionality = {compute_effective_dimensionality(big_pca['eigenvalue']).values.round(2)}")
+
+view_effective_dimensionality_examples(big_pca)
 ```
 
 However, keep in mind that this is a toy example with idealized data. As we will see, when using standard PCA on real data it may be impossible to identify a clear distinction between meaningful dimensions and noise.

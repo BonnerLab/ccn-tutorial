@@ -137,10 +137,17 @@ Instead, we can use a cross-validated approach similar to CV-PCA, except that in
 
 Specifically, we can divide the images into two: a training split and a test split. We can compute singular vectors on the training split, and evalute *test* singular values on the test split, analogous to the CV-PCA procedure:
 
-$X_\text{train}^\top Y_\text{train} / (n - 1) = U \Sigma V^\top$
-
-$\Sigma_\text{test} = \left( X_\text{test} U \right) ^\top \left( Y_\text{test} V \right) / (n - 1)$
-
+$$
+\begin{align*}
+    \text{cov}(X_\text{train}, Y_\text{train})
+    &= X_\text{train}^\top Y_\text{train} / (n - 1)\\
+    &= U \Sigma V^\top\\
+    \\
+    \Sigma_\text{cross-validated}
+    &= \text{cov}(X_\text{train} U, Y_\text{test} V)\\
+    &= \left( X_\text{train} U \right) ^\top \left( Y_\text{test} V \right) / (n - 1)
+\end{align*}
+$$
 
 ## Comparing brains and DNNs
 
