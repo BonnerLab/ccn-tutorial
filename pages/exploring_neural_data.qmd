@@ -89,7 +89,7 @@ Here are some examples of stimuli that we analyzed.
 
 
 def view_stimuli(stimuli: xr.DataArray, *, n: int = 10) -> None:
-    fig = plt.figure(figsize=(15, 5))
+    fig = plt.figure(figsize=(12, 4))
     image_grid = ImageGrid(
         fig=fig,
         rect=(1, 1, 1),
@@ -154,9 +154,9 @@ On this plot, the first few PCs have substantial variance while there appears to
 def view_images_as_scatterplot(
     x: np.ndarray, y: np.ndarray, *, stimuli: xr.DataArray
 ) -> None:
-    fig, ax = plt.subplots(figsize=(20, 20))
+    fig, ax = plt.subplots(figsize=(10, 10))
     for i_stimulus in range(len(stimuli)):
-        image_box = OffsetImage(stimuli[i_stimulus].values, zoom=0.5)
+        image_box = OffsetImage(stimuli[i_stimulus].values, zoom=0.3)
         image_box.image.axes = ax
 
         ab = AnnotationBbox(
@@ -183,7 +183,7 @@ def view_images_at_poles(
 ) -> None:
     indices = np.argsort(x, axis=0)
 
-    fig = plt.figure(figsize=(15, 5))
+    fig = plt.figure(figsize=(12, 4))
     image_grid = ImageGrid(
         fig=fig,
         rect=(1, 1, 1),
@@ -255,9 +255,17 @@ nmf = NMF(n_components=2, random_state=random_state)
 data_nmf = nmf.fit_transform(scaler.transform(data))
 
 view_images_as_scatterplot(data_nmf[:, 0], data_nmf[:, 1], stimuli=stimuli)
+```
 
-for component in range(2):
-    view_images_at_poles(data_pca[:, component], stimuli=stimuli, label=f"component {rank}")
+Similarly, we can inspect the stimuli with highest or closest-to-zero values along each dimension.
+
+```{python}
+# | code-summary: View images that have extreme scores on the dimensions
+# | fig-column: page
+# | fig-align: center
+
+for dim in range(2):
+    view_images_at_poles(data_pca[:, dim], stimuli=stimuli, label=f"dim {dim+1}")
 ```
 
 <!-- What can we interpret here? -->
