@@ -461,7 +461,7 @@ def animate_pca_transformation(
 Click on the animation above to visualize the PCA transformation!
 :::
 
-As seen in the animation, can transform our data to view the directions of maximum variance (corresponding to color and size). These directions are the principal components of our data. 
+As seen in the animation, we can transform our data to view the directions of maximum variance. These directions are the principal components of our data. 
 
 
 ### The mathematical definition
@@ -754,6 +754,7 @@ view_individual_scatter(
     template_func=lambda x: f"principal component {x}",
 )
 ```
+We can plot the eigenvalues as a function of rank to visualize *the eigenspectrum*. The eigensceptrum provides valuable insights about the latent dimensionality of the data. 
 
 ```{python}
 # | label: visualize_eigenspectrum_big
