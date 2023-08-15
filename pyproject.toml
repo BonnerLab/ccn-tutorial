@@ -41,6 +41,8 @@ dependencies = [
   "torch",
   "torchvision",
   "torchtext",
+  "portalocker",
+  "wordcloud",
   "xarray",
   "netCDF4",
   "scipy",

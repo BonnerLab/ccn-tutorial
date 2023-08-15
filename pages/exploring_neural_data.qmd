@@ -294,7 +294,7 @@ What kind of structure is this? We observe that the spectrum is approximately li
 
 $$\log{\lambda_\text{rank}} \approx \alpha \log{\left( \text{rank} \right)} + c \implies \lambda_\text{rank} \propto \left( \text{rank} \right)^\alpha$$
 
-#### Power laws
+## Power laws
 
 A power law is a relationship of the form $f(x) \propto x^{\alpha}$, where $\alpha$ is termed the *index* of the power law, or the *power law exponent*. It is *scale-free* because $f(kx) \propto f(x)$.
 
@@ -311,7 +311,182 @@ Nevertheless, a power law relationshop will not be observed when the data
 - is random
 - has certain characteristic scale
 
+### An illustration: word frequencies
+
+Let's compute the distribution of word frequencies in a small corpus -- a collection of [IMDb movie reviews](https://pytorch.org/text/0.9.0/datasets.html#imdb)!
+
+```{python}
+# | label: generate-word-frequencies
+# | code-summary: Generate word frequency distribution
+
+from collections import Counter
+import copy
+
+from IPython.display import display, HTML
+import numpy as np
+import pandas as pd
+from torchtext.datasets import IMDB
+from torchtext.data.utils import get_tokenizer
+import matplotlib as mpl
+from matplotlib import pyplot as plt
+import seaborn as sns
+from wordcloud import WordCloud
+
+
+dataset = IMDB(split="test")
+tokenizer = get_tokenizer("basic_english", language="en")
+unwanted_tokens = {".", ",", "?", "s", "t", "(", ")", "'", "!"}
+
+counter = Counter()
+for _, text in dataset:
+    counter.update(tokenizer(text))
+
+```
+
+```{python}
+# | label: linear-word-frequency
+# | code-summary: View word frequency distribution on a linear scale
+# | fig-align: center
+
+
+def view_word_frequency_distribution(
+    counter: Counter, *, log: bool = False
+) -> mpl.figure.Figure:
+    fig, ax = plt.subplots()
+    sns.lineplot(
+        ax=ax,
+        data=pd.DataFrame(
+            {
+                "rank": 1 + np.arange(len(counter)),
+                "word frequency": sorted(counter.values())[::-1],
+            }
+        ),
+        x="rank",
+        y="word frequency",
+    )
+    if log:
+        ax.set_xscale("log")
+        ax.set_yscale("log")
+
+    sns.despine(ax=ax, offset=20)
+    plt.close(fig)
+    return fig
+
+
+view_word_frequency_distribution(counter)
+```
+
+```{python}
+# | label: logarithmic-word-frequency
+# | code-summary: View word frequency distribution on a logarithmic scale
+# | fig-align: center
+
+view_word_frequency_distribution(counter, log=True)
+```
+
+```{python}
+# | label: most-common-tokens
+# | code-summary: View the 200 most common words in the dataset
+# | fig-align: center
+
+display_counter = copy.copy(counter)
+for token in unwanted_tokens:
+    del display_counter[token]
+
+cloud = WordCloud(background_color="white", width=500, height=500)
+
+display(
+    cloud.generate_from_frequencies(dict(display_counter.most_common(200))).to_image()
+)
+```
+
+```{python}
+# | label: least-common-tokens
+# | code-summary: View the 200 least common words in the dataset
+# | fig-align: center
+
+display(
+    cloud.generate_from_frequencies(
+        dict(display_counter.most_common()[-200:])
+    ).to_image()
+)
+```
+
+```{python}
+# | label: text-original
+# | code-summary: Display an IMDb review
+
+for _, line in dataset:
+    tokens = tokenizer(line)
+    break
+
+
+def postprocess(text: str):
+    new_text = ""
+
+    for i_char, char in enumerate(text):
+        if i_char != 0:
+            prev_char = text[i_char - 1]
+        else:
+            prev_char = None
+        if i_char > 1:
+            prev2_char = text[i_char - 2]
+        else:
+            prev2_char = None
+        if i_char != len(text) - 1:
+            next_char = text[i_char + 1]
+        else:
+            next_char = None
+
+        if char == "i" and prev_char == " " and next_char == " ":
+            new_text += "I"
+        elif char == " " and (
+            next_char == "."
+            or next_char == ","
+            or next_char == "'"
+            or prev_char == "'"
+            or prev_char == "("
+            or next_char == ")"
+            or next_char == "!"
+        ):
+            continue
+        elif prev_char == " " and (prev2_char == "." or prev2_char == "!"):
+            new_text += char.upper()
+        else:
+            new_text += char
+    return new_text
+
+
+print("An IMDb review")
+display(HTML(f"<blockquote>{postprocess(' '.join(tokens))}</blockquote>"))
+```
+
+```{python}
+# | label: text-reconstruction
+# | code-summary: Reconstruct the review using the top 200 words
+
+print("Review reconstructed using top 200 words")
+display(
+    HTML(
+        (
+            "<blockquote>"
+            + postprocess(
+                " ".join(
+                    [
+                        token
+                        for token in tokens
+                        if token in [word for word, _ in counter.most_common(200)]
+                    ]
+                )
+            )
+            + "</blockquote>"
+        )
+    )
+)
+```
+
 <!-- TODO: spectra of random data moved here? -->
+TODO emphasize "long-tailedness"/"heavy-tailedness" of distribution
 
 #### Power law in neural networks
 
