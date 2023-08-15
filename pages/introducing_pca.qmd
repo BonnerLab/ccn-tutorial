@@ -601,6 +601,8 @@ display(pca["score"])
 
 ### Inspecting the eigenvectors
 
+The eigenvectors represent the directions of maximum variance in our data.
+
 ```{python}
 # | code-summary: Display the eigenvectors
 
@@ -652,7 +654,7 @@ Note that these components do *not* directly correspond to either of the latent 
 
 ### Analyzing the covariance statistics
 
-We can compute the variance along each eigenvector. The total variance along all eigenvectors is the same as the total variance of the original data.
+The eigenvalues show the variance along each eigenvector. The sum of the eigenvalues is therefore equal to the total variance,  and is the same as the total variance of the original data.
 
 ```{python}
 # | label: eigenvalues
@@ -666,12 +668,12 @@ for i_neuron in range(eigenvalues.sizes["component"]):
     )
 print(f"total variance: {eigenvalues.sum().values}")
 ```
+We can plot the eigenvalues as a function of their rank to visualize the *eigensceptrum*. As we will see shortly, the eigenspectrum provides valuable insights about the laten dimensionality of the data. 
 
 ```{python}
 # | label: visualize_eigenspectrum
 # | code-summary: View eigenspectrum
 # | fig-align: center
-
 
 def view_eigenspectrum(pca: xr.DataArray) -> mpl.figure.Figure:
     fig, ax = plt.subplots(figsize=(pca.sizes["component"], 5))
@@ -723,7 +725,7 @@ big_data = simulate_multiple_neuron_responses(
 display(big_data)
 ```
 
-As before, we can visualize each components and plot the eigenspectrum:
+As before, we can visualize each the principal component and plot the eigenspectrum:
 
 
 ```{python}
@@ -740,7 +742,6 @@ view_individual_scatter(
     template_func=lambda x: f"principal component {x}",
 )
 ```
-We can plot the eigenvalues as a function of rank to visualize *the eigenspectrum*. The eigensceptrum provides valuable insights about the latent dimensionality of the data. 
 
 ```{python}
 # | label: visualize_eigenspectrum_big
