@@ -65,6 +65,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
+<link href="../pages/assets/ccn-logo.svg" rel="icon" type="image/svg+xml">
 <script src="../site_libs/quarto-html/quarto.js"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -128,6 +129,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <nav class="navbar navbar-expand-lg navbar-dark ">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
+    <a href="../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../pages/assets/ccn-logo.svg" alt="" class="navbar-logo">
+    </a>
     <a class="navbar-brand" href="../index.html">
     <span class="navbar-title">CCN 2023 | Tutorial</span>
     </a>
@@ -218,7 +222,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">Contents</h2>
    
   <ul>
-  <li><a href="#cross-decomposition" id="toc-cross-decomposition" class="nav-link active" data-scroll-target="#cross-decomposition">Cross-decomposition</a></li>
+  <li><a href="#invariances" id="toc-invariances" class="nav-link active" data-scroll-target="#invariances">Invariances</a></li>
+  <li><a href="#cross-decomposition" id="toc-cross-decomposition" class="nav-link" data-scroll-target="#cross-decomposition">Cross-decomposition</a></li>
   <li><a href="#comparing-brains" id="toc-comparing-brains" class="nav-link" data-scroll-target="#comparing-brains">Comparing brains</a></li>
   <li><a href="#comparing-brains-and-dnns" id="toc-comparing-brains-and-dnns" class="nav-link" data-scroll-target="#comparing-brains-and-dnns">Comparing brains and DNNs</a></li>
   </ul>
@@ -243,6 +248,13 @@ Run this notebook interactively!
 <p>Here’s a <a href="https://colab.research.google.com/github/BonnerLab/ccn-tutorial/blob/main/notebooks/comparing_representations.ipynb">link to this notebook</a> on Google Colab.</p>
 </div>
 </div>
+<section id="invariances" class="level2">
+<h2 class="anchored" data-anchor-id="invariances">Invariances</h2>
+<p>Comparing different representations of the same stimuli is integral to the study of sensory neuroscience. Every computational model of a system must be effectively related to experimental data for validation. A key question to keep in mind when comparing representations is the set of invariances we would like to preserve.</p>
+<p>For example, take the CCN logo:</p>
+<p>If we translate it, it retains its “fundamental” structure – what makes it the CCN logo. If we rotate it, When comparing two representations</p>
+<p><img src="assets/transformations.svg" class="img-fluid"></p>
+</section>
 <section id="cross-decomposition" class="level2 page-columns page-full">
 <h2 class="anchored" data-anchor-id="cross-decomposition">Cross-decomposition</h2>
 <p>Just as PCA identifies the principal directions of variance of a system, <em>cross-decomposition</em> identifies the principal directions of <em>shared</em> variance between <em>two</em> systems <span class="math inline">X</span> and <span class="math inline">Y</span>. Specifically, just as PCA computes the eigendecomposition of the auto-covariance, cross-decomposition computes the singular value decomposition of the cross-covariance:</p>
@@ -289,14 +301,14 @@ What happens when <span class="math inline">X</span> = <span class="math inline"
 <p>Note that if <span class="math inline">X = Y</span>, cross-decomposition reduces to PCA:</p>
 </div>
 </div>
-<div id="install_package" class="cell" data-execution_count="2">
+<div id="install_package" class="cell" data-execution_count="1">
 <details>
 <summary>Install all required dependencies</summary>
 <div class="sourceCode cell-code" id="install_package"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="install_package-1"><a href="#install_package-1" aria-hidden="true" tabindex="-1"></a><span class="co"># </span><span class="al">TODO</span><span class="co"> uncomment before final packaging</span></span>
 <span id="install_package-2"><a href="#install_package-2" aria-hidden="true" tabindex="-1"></a><span class="co"># %pip install git+https://github.com/BonnerLab/ccn-tutorial.git</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="imports" class="cell" data-execution_count="3">
+<div id="imports" class="cell" data-execution_count="2">
 <details>
 <summary>Import various libraries</summary>
 <div class="sourceCode cell-code" id="imports"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="imports-1"><a href="#imports-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> collections.abc <span class="im">import</span> Sequence</span>
@@ -322,7 +334,7 @@ What happens when <span class="math inline">X</span> = <span class="math inline"
 <span id="imports-21"><a href="#imports-21" aria-hidden="true" tabindex="-1"></a>    load_stimuli,</span>
 <span id="imports-22"><a href="#imports-22" aria-hidden="true" tabindex="-1"></a>    plot_brain_map,</span>
 <span id="imports-23"><a href="#imports-23" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="imports-24"><a href="#imports-24" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> utilities.computation <span class="im">import</span> svd</span>
+<span id="imports-24"><a href="#imports-24" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> utilities.computation <span class="im">import</span> svd, assign_logarithmic_bins</span>
 <span id="imports-25"><a href="#imports-25" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> utilities.model <span class="im">import</span> (</span>
 <span id="imports-26"><a href="#imports-26" aria-hidden="true" tabindex="-1"></a>    extract_features,</span>
 <span id="imports-27"><a href="#imports-27" aria-hidden="true" tabindex="-1"></a>    SparseRandomProjection,</span>
@@ -330,7 +342,7 @@ What happens when <span class="math inline">X</span> = <span class="math inline"
 <span id="imports-29"><a href="#imports-29" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="set_visualization_defaults" class="cell" data-execution_count="4">
+<div id="set_visualization_defaults" class="cell" data-execution_count="3">
 <details>
 <summary>Set some visualization defaults</summary>
 <div class="sourceCode cell-code" id="set_visualization_defaults"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="set_visualization_defaults-1"><a href="#set_visualization_defaults-1" aria-hidden="true" tabindex="-1"></a><span class="op">%</span>matplotlib inline</span>
@@ -353,14 +365,14 @@ What happens when <span class="math inline">X</span> = <span class="math inline"
 <span id="set_visualization_defaults-18"><a href="#set_visualization_defaults-18" aria-hidden="true" tabindex="-1"></a>warnings.filterwarnings(<span class="st">"ignore"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="initialize_rng" class="cell" data-execution_count="5">
+<div id="initialize_rng" class="cell" data-execution_count="4">
 <details>
 <summary>Initialize a deterministic random number generator</summary>
 <div class="sourceCode cell-code" id="initialize_rng"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="initialize_rng-1"><a href="#initialize_rng-1" aria-hidden="true" tabindex="-1"></a>random_state <span class="op">=</span> <span class="dv">0</span></span>
 <span id="initialize_rng-2"><a href="#initialize_rng-2" aria-hidden="true" tabindex="-1"></a>rng <span class="op">=</span> np.random.default_rng(seed<span class="op">=</span>random_state)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="recipe-plssvd" class="cell" data-execution_count="6">
+<div id="recipe-plssvd" class="cell" data-execution_count="5">
 <details open="">
 <summary>A computational recipe for PLS-SVD</summary>
 <div class="sourceCode cell-code" id="recipe-plssvd"><pre class="sourceCode python code-annotation-code code-with-copy code-annotated"><code class="sourceCode python"><span id="recipe-plssvd-1"><a href="#recipe-plssvd-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> PLSSVD:</span>
@@ -396,20 +408,18 @@ What happens when <span class="math inline">X</span> = <span class="math inline"
 <span id="recipe-plssvd-31"><a href="#recipe-plssvd-31" aria-hidden="true" tabindex="-1"></a>            seed<span class="op">=</span>random_state,</span>
 <a class="code-annotation-anchor" data-target-cell="recipe-plssvd" data-target-annotation="3" onclick="event.preventDefault();">3</a><span id="recipe-plssvd-32" class="code-annotation-target"><a href="#recipe-plssvd-32" aria-hidden="true" tabindex="-1"></a>        )</span>
 <span id="recipe-plssvd-33"><a href="#recipe-plssvd-33" aria-hidden="true" tabindex="-1"></a></span>
-<span id="recipe-plssvd-34"><a href="#recipe-plssvd-34" aria-hidden="true" tabindex="-1"></a>        n_stimuli <span class="op">=</span> data.shape[<span class="op">-</span><span class="dv">2</span>]</span>
-<span id="recipe-plssvd-35"><a href="#recipe-plssvd-35" aria-hidden="true" tabindex="-1"></a></span>
-<span id="recipe-plssvd-36"><a href="#recipe-plssvd-36" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.left_singular_vectors <span class="op">=</span> <span class="va">self</span>.left_singular_vectors.cpu().numpy()</span>
-<span id="recipe-plssvd-37"><a href="#recipe-plssvd-37" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.singular_values <span class="op">=</span> <span class="va">self</span>.singular_values.cpu().numpy()</span>
-<span id="recipe-plssvd-38"><a href="#recipe-plssvd-38" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.right_singular_vectors <span class="op">=</span> <span class="va">self</span>.right_singular_vectors.cpu().numpy()</span>
-<span id="recipe-plssvd-39"><a href="#recipe-plssvd-39" aria-hidden="true" tabindex="-1"></a></span>
-<span id="recipe-plssvd-40"><a href="#recipe-plssvd-40" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> transform(<span class="va">self</span>, <span class="op">/</span>, z: np.ndarray, <span class="op">*</span>, direction: <span class="bu">str</span>) <span class="op">-&gt;</span> np.ndarray:</span>
-<span id="recipe-plssvd-41"><a href="#recipe-plssvd-41" aria-hidden="true" tabindex="-1"></a>        <span class="cf">match</span> direction:</span>
-<span id="recipe-plssvd-42"><a href="#recipe-plssvd-42" aria-hidden="true" tabindex="-1"></a>            <span class="cf">case</span> <span class="st">"left"</span>:</span>
-<a class="code-annotation-anchor" data-target-cell="recipe-plssvd" data-target-annotation="4" onclick="event.preventDefault();">4</a><span id="recipe-plssvd-43" class="code-annotation-target"><a href="#recipe-plssvd-43" aria-hidden="true" tabindex="-1"></a>                <span class="cf">return</span> (z <span class="op">-</span> <span class="va">self</span>.left_mean) <span class="op">@</span> <span class="va">self</span>.left_singular_vectors</span>
-<span id="recipe-plssvd-44"><a href="#recipe-plssvd-44" aria-hidden="true" tabindex="-1"></a>            <span class="cf">case</span> <span class="st">"right"</span>:</span>
-<span id="recipe-plssvd-45"><a href="#recipe-plssvd-45" aria-hidden="true" tabindex="-1"></a>                <span class="cf">return</span> (z <span class="op">-</span> <span class="va">self</span>.right_mean) <span class="op">@</span> <span class="va">self</span>.right_singular_vectors</span>
-<span id="recipe-plssvd-46"><a href="#recipe-plssvd-46" aria-hidden="true" tabindex="-1"></a>            <span class="cf">case</span> _:</span>
-<span id="recipe-plssvd-47"><a href="#recipe-plssvd-47" aria-hidden="true" tabindex="-1"></a>                <span class="cf">raise</span> <span class="pp">ValueError</span>(<span class="st">"direction must be 'left' or 'right'"</span>)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="recipe-plssvd-34"><a href="#recipe-plssvd-34" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.left_singular_vectors <span class="op">=</span> <span class="va">self</span>.left_singular_vectors.cpu().numpy()</span>
+<span id="recipe-plssvd-35"><a href="#recipe-plssvd-35" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.singular_values <span class="op">=</span> <span class="va">self</span>.singular_values.cpu().numpy()</span>
+<span id="recipe-plssvd-36"><a href="#recipe-plssvd-36" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.right_singular_vectors <span class="op">=</span> <span class="va">self</span>.right_singular_vectors.cpu().numpy()</span>
+<span id="recipe-plssvd-37"><a href="#recipe-plssvd-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="recipe-plssvd-38"><a href="#recipe-plssvd-38" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> transform(<span class="va">self</span>, <span class="op">/</span>, z: np.ndarray, <span class="op">*</span>, direction: <span class="bu">str</span>) <span class="op">-&gt;</span> np.ndarray:</span>
+<span id="recipe-plssvd-39"><a href="#recipe-plssvd-39" aria-hidden="true" tabindex="-1"></a>        <span class="cf">match</span> direction:</span>
+<span id="recipe-plssvd-40"><a href="#recipe-plssvd-40" aria-hidden="true" tabindex="-1"></a>            <span class="cf">case</span> <span class="st">"left"</span>:</span>
+<a class="code-annotation-anchor" data-target-cell="recipe-plssvd" data-target-annotation="4" onclick="event.preventDefault();">4</a><span id="recipe-plssvd-41" class="code-annotation-target"><a href="#recipe-plssvd-41" aria-hidden="true" tabindex="-1"></a>                <span class="cf">return</span> (z <span class="op">-</span> <span class="va">self</span>.left_mean) <span class="op">@</span> <span class="va">self</span>.left_singular_vectors</span>
+<span id="recipe-plssvd-42"><a href="#recipe-plssvd-42" aria-hidden="true" tabindex="-1"></a>            <span class="cf">case</span> <span class="st">"right"</span>:</span>
+<span id="recipe-plssvd-43"><a href="#recipe-plssvd-43" aria-hidden="true" tabindex="-1"></a>                <span class="cf">return</span> (z <span class="op">-</span> <span class="va">self</span>.right_mean) <span class="op">@</span> <span class="va">self</span>.right_singular_vectors</span>
+<span id="recipe-plssvd-44"><a href="#recipe-plssvd-44" aria-hidden="true" tabindex="-1"></a>            <span class="cf">case</span> _:</span>
+<span id="recipe-plssvd-45"><a href="#recipe-plssvd-45" aria-hidden="true" tabindex="-1"></a>                <span class="cf">raise</span> <span class="pp">ValueError</span>(<span class="st">"direction must be 'left' or 'right'"</span>)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-annotation">
 <dl class="code-annotation-container-grid">
@@ -427,7 +437,7 @@ What happens when <span class="math inline">X</span> = <span class="math inline"
 </dd>
 <dt data-target-cell="recipe-plssvd" data-target-annotation="4">4</dt>
 <dd>
-<span data-code-cell="recipe-plssvd" data-code-lines="43,45" data-code-annotation="4">To project data from the ambient space (<span class="math inline">X</span> or <span class="math inline">Y</span>) to the latent space, we must subtract the mean computed in Step 1, and multiply the data by the corresponding singular vectors.</span>
+<span data-code-cell="recipe-plssvd" data-code-lines="41,43" data-code-annotation="4">To project data from the ambient space (<span class="math inline">X</span> or <span class="math inline">Y</span>) to the latent space, we must subtract the mean computed in Step 1, and multiply the data by the corresponding singular vectors.</span>
 </dd>
 </dl>
 </div>
@@ -454,68 +464,947 @@ What happens when <span class="math inline">X</span> = <span class="math inline"
     &amp;= \left( X_\text{train} U \right) ^\top \left( Y_\text{test} V \right) / (n - 1)
 \end{align*}
 </span></p>
-<div id="906f613f" class="cell" data-execution_count="7">
+<div id="8711dbfe" class="cell" data-execution_count="6">
 <details>
 <summary>Load the datasets</summary>
-<div class="sourceCode cell-code" id="906f613f"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="906f613f-1"><a href="#906f613f-1" aria-hidden="true" tabindex="-1"></a><span class="co"># subject_1 = average_data_across_repetitions(load_dataset(subject=0, roi="general"))</span></span>
-<span id="906f613f-2"><a href="#906f613f-2" aria-hidden="true" tabindex="-1"></a><span class="co"># subject_2 = average_data_across_repetitions(load_dataset(subject=1, roi="general"))</span></span>
-<span id="906f613f-3"><a href="#906f613f-3" aria-hidden="true" tabindex="-1"></a><span class="co"># subject_1 = subject_1.sortby("stimulus_id")</span></span>
-<span id="906f613f-4"><a href="#906f613f-4" aria-hidden="true" tabindex="-1"></a><span class="co"># subject_2 = subject_2.sortby("stimulus_id")</span></span>
-<span id="906f613f-5"><a href="#906f613f-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="906f613f-6"><a href="#906f613f-6" aria-hidden="true" tabindex="-1"></a><span class="co"># display(subject_1)</span></span>
-<span id="906f613f-7"><a href="#906f613f-7" aria-hidden="true" tabindex="-1"></a><span class="co"># display(subject_2)</span></span>
-<span id="906f613f-8"><a href="#906f613f-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="906f613f-9"><a href="#906f613f-9" aria-hidden="true" tabindex="-1"></a><span class="co"># plssvd = PLSSVD()</span></span>
-<span id="906f613f-10"><a href="#906f613f-10" aria-hidden="true" tabindex="-1"></a><span class="co"># plssvd.fit(</span></span>
-<span id="906f613f-11"><a href="#906f613f-11" aria-hidden="true" tabindex="-1"></a><span class="co">#     data_repetition_1.values,</span></span>
-<span id="906f613f-12"><a href="#906f613f-12" aria-hidden="true" tabindex="-1"></a><span class="co">#     data_repetition_1.values,</span></span>
-<span id="906f613f-13"><a href="#906f613f-13" aria-hidden="true" tabindex="-1"></a><span class="co"># )</span></span>
-<span id="906f613f-14"><a href="#906f613f-14" aria-hidden="true" tabindex="-1"></a><span class="co"># rep_1_transformed = plssvd.transform(data_repetition_1.values, direction="left")</span></span>
-<span id="906f613f-15"><a href="#906f613f-15" aria-hidden="true" tabindex="-1"></a><span class="co"># rep_2_transformed = plssvd.transform(data_repetition_2.values, direction="right")</span></span>
-<span id="906f613f-16"><a href="#906f613f-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="906f613f-17"><a href="#906f613f-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="906f613f-18"><a href="#906f613f-18" aria-hidden="true" tabindex="-1"></a><span class="co"># n_neurons_1 = rep_1_transformed.shape[-1]</span></span>
-<span id="906f613f-19"><a href="#906f613f-19" aria-hidden="true" tabindex="-1"></a><span class="co"># cv_spectrum = np.diag(</span></span>
-<span id="906f613f-20"><a href="#906f613f-20" aria-hidden="true" tabindex="-1"></a><span class="co">#     np.cov(rep_1_transformed, rep_2_transformed, rowvar=False)[</span></span>
-<span id="906f613f-21"><a href="#906f613f-21" aria-hidden="true" tabindex="-1"></a><span class="co">#         :n_neurons_1, n_neurons_1:</span></span>
-<span id="906f613f-22"><a href="#906f613f-22" aria-hidden="true" tabindex="-1"></a><span class="co">#     ]</span></span>
-<span id="906f613f-23"><a href="#906f613f-23" aria-hidden="true" tabindex="-1"></a><span class="co"># )</span></span>
-<span id="906f613f-24"><a href="#906f613f-24" aria-hidden="true" tabindex="-1"></a><span class="co"># cv_spectrum = pd.DataFrame(</span></span>
-<span id="906f613f-25"><a href="#906f613f-25" aria-hidden="true" tabindex="-1"></a><span class="co">#     cv_spectrum, columns=["cross-validated singular value"]</span></span>
-<span id="906f613f-26"><a href="#906f613f-26" aria-hidden="true" tabindex="-1"></a><span class="co"># ).assign(rank=np.arange(len(cv_spectrum)) + 1)</span></span>
-<span id="906f613f-27"><a href="#906f613f-27" aria-hidden="true" tabindex="-1"></a><span class="co"># cv_spectrum = cv_spectrum.assign(</span></span>
-<span id="906f613f-28"><a href="#906f613f-28" aria-hidden="true" tabindex="-1"></a><span class="co">#     bin=bin_logarithmically(</span></span>
-<span id="906f613f-29"><a href="#906f613f-29" aria-hidden="true" tabindex="-1"></a><span class="co">#         cv_spectrum["cross-validated singular value"],</span></span>
-<span id="906f613f-30"><a href="#906f613f-30" aria-hidden="true" tabindex="-1"></a><span class="co">#         points_per_bin=5,</span></span>
-<span id="906f613f-31"><a href="#906f613f-31" aria-hidden="true" tabindex="-1"></a><span class="co">#         min_=1,</span></span>
-<span id="906f613f-32"><a href="#906f613f-32" aria-hidden="true" tabindex="-1"></a><span class="co">#         max_=10_000,</span></span>
-<span id="906f613f-33"><a href="#906f613f-33" aria-hidden="true" tabindex="-1"></a><span class="co">#     )</span></span>
-<span id="906f613f-34"><a href="#906f613f-34" aria-hidden="true" tabindex="-1"></a><span class="co"># )</span></span>
-<span id="906f613f-35"><a href="#906f613f-35" aria-hidden="true" tabindex="-1"></a></span>
-<span id="906f613f-36"><a href="#906f613f-36" aria-hidden="true" tabindex="-1"></a><span class="co"># fig, ax = plt.subplots()</span></span>
-<span id="906f613f-37"><a href="#906f613f-37" aria-hidden="true" tabindex="-1"></a><span class="co"># sns.lineplot(ax=ax, data=cv_spectrum, x="rank", y="cross-validated singular value")</span></span>
-<span id="906f613f-38"><a href="#906f613f-38" aria-hidden="true" tabindex="-1"></a><span class="co"># sns.despine(ax=ax, offset=20)</span></span>
-<span id="906f613f-39"><a href="#906f613f-39" aria-hidden="true" tabindex="-1"></a></span>
-<span id="906f613f-40"><a href="#906f613f-40" aria-hidden="true" tabindex="-1"></a><span class="co"># fig, ax = plt.subplots()</span></span>
-<span id="906f613f-41"><a href="#906f613f-41" aria-hidden="true" tabindex="-1"></a><span class="co"># sns.lineplot(ax=ax, data=cv_spectrum, x="rank", y="cross-validated singular value")</span></span>
-<span id="906f613f-42"><a href="#906f613f-42" aria-hidden="true" tabindex="-1"></a><span class="co"># ax.set_xscale("log")</span></span>
-<span id="906f613f-43"><a href="#906f613f-43" aria-hidden="true" tabindex="-1"></a><span class="co"># ax.set_yscale("log")</span></span>
-<span id="906f613f-44"><a href="#906f613f-44" aria-hidden="true" tabindex="-1"></a><span class="co"># ax.set_ylim(bottom=1e-3)</span></span>
-<span id="906f613f-45"><a href="#906f613f-45" aria-hidden="true" tabindex="-1"></a><span class="co"># sns.despine(ax=ax, offset=20)</span></span>
-<span id="906f613f-46"><a href="#906f613f-46" aria-hidden="true" tabindex="-1"></a></span>
-<span id="906f613f-47"><a href="#906f613f-47" aria-hidden="true" tabindex="-1"></a><span class="co"># fig, ax = plt.subplots()</span></span>
-<span id="906f613f-48"><a href="#906f613f-48" aria-hidden="true" tabindex="-1"></a><span class="co"># sns.lineplot(</span></span>
-<span id="906f613f-49"><a href="#906f613f-49" aria-hidden="true" tabindex="-1"></a><span class="co">#     ax=ax,</span></span>
-<span id="906f613f-50"><a href="#906f613f-50" aria-hidden="true" tabindex="-1"></a><span class="co">#     data=cv_spectrum.groupby("bin").mean().rename(columns={"bin": "rank"}),</span></span>
-<span id="906f613f-51"><a href="#906f613f-51" aria-hidden="true" tabindex="-1"></a><span class="co">#     x="rank",</span></span>
-<span id="906f613f-52"><a href="#906f613f-52" aria-hidden="true" tabindex="-1"></a><span class="co">#     y="cross-validated singular value",</span></span>
-<span id="906f613f-53"><a href="#906f613f-53" aria-hidden="true" tabindex="-1"></a><span class="co">#     ls=None,</span></span>
-<span id="906f613f-54"><a href="#906f613f-54" aria-hidden="true" tabindex="-1"></a><span class="co">#     marker="o",</span></span>
-<span id="906f613f-55"><a href="#906f613f-55" aria-hidden="true" tabindex="-1"></a><span class="co"># )</span></span>
-<span id="906f613f-56"><a href="#906f613f-56" aria-hidden="true" tabindex="-1"></a><span class="co"># ax.set_xscale("log")</span></span>
-<span id="906f613f-57"><a href="#906f613f-57" aria-hidden="true" tabindex="-1"></a><span class="co"># ax.set_yscale("log")</span></span>
-<span id="906f613f-58"><a href="#906f613f-58" aria-hidden="true" tabindex="-1"></a><span class="co"># sns.despine(ax=ax, offset=20)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="8711dbfe"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="8711dbfe-1"><a href="#8711dbfe-1" aria-hidden="true" tabindex="-1"></a>subject_1 <span class="op">=</span> average_data_across_repetitions(</span>
+<span id="8711dbfe-2"><a href="#8711dbfe-2" aria-hidden="true" tabindex="-1"></a>    load_dataset(subject<span class="op">=</span><span class="dv">0</span>, roi<span class="op">=</span><span class="st">"general"</span>)</span>
+<span id="8711dbfe-3"><a href="#8711dbfe-3" aria-hidden="true" tabindex="-1"></a>).sortby(<span class="st">"stimulus_id"</span>)</span>
+<span id="8711dbfe-4"><a href="#8711dbfe-4" aria-hidden="true" tabindex="-1"></a>subject_2 <span class="op">=</span> average_data_across_repetitions(load_dataset(subject<span class="op">=</span><span class="dv">1</span>, roi<span class="op">=</span><span class="st">"general"</span>))</span>
+<span id="8711dbfe-5"><a href="#8711dbfe-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="8711dbfe-6"><a href="#8711dbfe-6" aria-hidden="true" tabindex="-1"></a>stimuli <span class="op">=</span> load_stimuli()[<span class="st">"stimulus_id"</span>].values</span>
+<span id="8711dbfe-7"><a href="#8711dbfe-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="8711dbfe-8"><a href="#8711dbfe-8" aria-hidden="true" tabindex="-1"></a>display(subject_1)</span>
+<span id="8711dbfe-9"><a href="#8711dbfe-9" aria-hidden="true" tabindex="-1"></a>display(subject_2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
+<div class="cell-output cell-output-display">
+<div><svg style="position: absolute; width: 0; height: 0; overflow: hidden">
+<defs>
+<symbol id="icon-database" viewbox="0 0 32 32">
+<path d="M16 0c-8.837 0-16 2.239-16 5v4c0 2.761 7.163 5 16 5s16-2.239 16-5v-4c0-2.761-7.163-5-16-5z"></path>
+<path d="M16 17c-8.837 0-16-2.239-16-5v6c0 2.761 7.163 5 16 5s16-2.239 16-5v-6c0 2.761-7.163 5-16 5z"></path>
+<path d="M16 26c-8.837 0-16-2.239-16-5v6c0 2.761 7.163 5 16 5s16-2.239 16-5v-6c0 2.761-7.163 5-16 5z"></path>
+</symbol>
+<symbol id="icon-file-text2" viewbox="0 0 32 32">
+<path d="M28.681 7.159c-0.694-0.947-1.662-2.053-2.724-3.116s-2.169-2.030-3.116-2.724c-1.612-1.182-2.393-1.319-2.841-1.319h-15.5c-1.378 0-2.5 1.121-2.5 2.5v27c0 1.378 1.122 2.5 2.5 2.5h23c1.378 0 2.5-1.122 2.5-2.5v-19.5c0-0.448-0.137-1.23-1.319-2.841zM24.543 5.457c0.959 0.959 1.712 1.825 2.268 2.543h-4.811v-4.811c0.718 0.556 1.584 1.309 2.543 2.268zM28 29.5c0 0.271-0.229 0.5-0.5 0.5h-23c-0.271 0-0.5-0.229-0.5-0.5v-27c0-0.271 0.229-0.5 0.5-0.5 0 0 15.499-0 15.5 0v7c0 0.552 0.448 1 1 1h7v19.5z"></path>
+<path d="M23 26h-14c-0.552 0-1-0.448-1-1s0.448-1 1-1h14c0.552 0 1 0.448 1 1s-0.448 1-1 1z"></path>
+<path d="M23 22h-14c-0.552 0-1-0.448-1-1s0.448-1 1-1h14c0.552 0 1 0.448 1 1s-0.448 1-1 1z"></path>
+<path d="M23 18h-14c-0.552 0-1-0.448-1-1s0.448-1 1-1h14c0.552 0 1 0.448 1 1s-0.448 1-1 1z"></path>
+</symbol>
+</defs>
+</svg>
+<style>/* CSS stylesheet for displaying xarray objects in jupyterlab.
+ *
+ */
+
+:root {
+  --xr-font-color0: var(--jp-content-font-color0, rgba(0, 0, 0, 1));
+  --xr-font-color2: var(--jp-content-font-color2, rgba(0, 0, 0, 0.54));
+  --xr-font-color3: var(--jp-content-font-color3, rgba(0, 0, 0, 0.38));
+  --xr-border-color: var(--jp-border-color2, #e0e0e0);
+  --xr-disabled-color: var(--jp-layout-color3, #bdbdbd);
+  --xr-background-color: var(--jp-layout-color0, white);
+  --xr-background-color-row-even: var(--jp-layout-color1, white);
+  --xr-background-color-row-odd: var(--jp-layout-color2, #eeeeee);
+}
+
+html[theme=dark],
+body[data-theme=dark],
+body.vscode-dark {
+  --xr-font-color0: rgba(255, 255, 255, 1);
+  --xr-font-color2: rgba(255, 255, 255, 0.54);
+  --xr-font-color3: rgba(255, 255, 255, 0.38);
+  --xr-border-color: #1F1F1F;
+  --xr-disabled-color: #515151;
+  --xr-background-color: #111111;
+  --xr-background-color-row-even: #111111;
+  --xr-background-color-row-odd: #313131;
+}
+
+.xr-wrap {
+  display: block !important;
+  min-width: 300px;
+  max-width: 700px;
+}
+
+.xr-text-repr-fallback {
+  /* fallback to plain text repr when CSS is not injected (untrusted notebook) */
+  display: none;
+}
+
+.xr-header {
+  padding-top: 6px;
+  padding-bottom: 6px;
+  margin-bottom: 4px;
+  border-bottom: solid 1px var(--xr-border-color);
+}
+
+.xr-header > div,
+.xr-header > ul {
+  display: inline;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.xr-obj-type,
+.xr-array-name {
+  margin-left: 2px;
+  margin-right: 10px;
+}
+
+.xr-obj-type {
+  color: var(--xr-font-color2);
+}
+
+.xr-sections {
+  padding-left: 0 !important;
+  display: grid;
+  grid-template-columns: 150px auto auto 1fr 20px 20px;
+}
+
+.xr-section-item {
+  display: contents;
+}
+
+.xr-section-item input {
+  display: none;
+}
+
+.xr-section-item input + label {
+  color: var(--xr-disabled-color);
+}
+
+.xr-section-item input:enabled + label {
+  cursor: pointer;
+  color: var(--xr-font-color2);
+}
+
+.xr-section-item input:enabled + label:hover {
+  color: var(--xr-font-color0);
+}
+
+.xr-section-summary {
+  grid-column: 1;
+  color: var(--xr-font-color2);
+  font-weight: 500;
+}
+
+.xr-section-summary > span {
+  display: inline-block;
+  padding-left: 0.5em;
+}
+
+.xr-section-summary-in:disabled + label {
+  color: var(--xr-font-color2);
+}
+
+.xr-section-summary-in + label:before {
+  display: inline-block;
+  content: '►';
+  font-size: 11px;
+  width: 15px;
+  text-align: center;
+}
+
+.xr-section-summary-in:disabled + label:before {
+  color: var(--xr-disabled-color);
+}
+
+.xr-section-summary-in:checked + label:before {
+  content: '▼';
+}
+
+.xr-section-summary-in:checked + label > span {
+  display: none;
+}
+
+.xr-section-summary,
+.xr-section-inline-details {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+.xr-section-inline-details {
+  grid-column: 2 / -1;
+}
+
+.xr-section-details {
+  display: none;
+  grid-column: 1 / -1;
+  margin-bottom: 5px;
+}
+
+.xr-section-summary-in:checked ~ .xr-section-details {
+  display: contents;
+}
+
+.xr-array-wrap {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: 20px auto;
+}
+
+.xr-array-wrap > label {
+  grid-column: 1;
+  vertical-align: top;
+}
+
+.xr-preview {
+  color: var(--xr-font-color3);
+}
+
+.xr-array-preview,
+.xr-array-data {
+  padding: 0 5px !important;
+  grid-column: 2;
+}
+
+.xr-array-data,
+.xr-array-in:checked ~ .xr-array-preview {
+  display: none;
+}
+
+.xr-array-in:checked ~ .xr-array-data,
+.xr-array-preview {
+  display: inline-block;
+}
+
+.xr-dim-list {
+  display: inline-block !important;
+  list-style: none;
+  padding: 0 !important;
+  margin: 0;
+}
+
+.xr-dim-list li {
+  display: inline-block;
+  padding: 0;
+  margin: 0;
+}
+
+.xr-dim-list:before {
+  content: '(';
+}
+
+.xr-dim-list:after {
+  content: ')';
+}
+
+.xr-dim-list li:not(:last-child):after {
+  content: ',';
+  padding-right: 5px;
+}
+
+.xr-has-index {
+  font-weight: bold;
+}
+
+.xr-var-list,
+.xr-var-item {
+  display: contents;
+}
+
+.xr-var-item > div,
+.xr-var-item label,
+.xr-var-item > .xr-var-name span {
+  background-color: var(--xr-background-color-row-even);
+  margin-bottom: 0;
+}
+
+.xr-var-item > .xr-var-name:hover span {
+  padding-right: 5px;
+}
+
+.xr-var-list > li:nth-child(odd) > div,
+.xr-var-list > li:nth-child(odd) > label,
+.xr-var-list > li:nth-child(odd) > .xr-var-name span {
+  background-color: var(--xr-background-color-row-odd);
+}
+
+.xr-var-name {
+  grid-column: 1;
+}
+
+.xr-var-dims {
+  grid-column: 2;
+}
+
+.xr-var-dtype {
+  grid-column: 3;
+  text-align: right;
+  color: var(--xr-font-color2);
+}
+
+.xr-var-preview {
+  grid-column: 4;
+}
+
+.xr-index-preview {
+  grid-column: 2 / 5;
+  color: var(--xr-font-color2);
+}
+
+.xr-var-name,
+.xr-var-dims,
+.xr-var-dtype,
+.xr-preview,
+.xr-attrs dt {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding-right: 10px;
+}
+
+.xr-var-name:hover,
+.xr-var-dims:hover,
+.xr-var-dtype:hover,
+.xr-attrs dt:hover {
+  overflow: visible;
+  width: auto;
+  z-index: 1;
+}
+
+.xr-var-attrs,
+.xr-var-data,
+.xr-index-data {
+  display: none;
+  background-color: var(--xr-background-color) !important;
+  padding-bottom: 5px !important;
+}
+
+.xr-var-attrs-in:checked ~ .xr-var-attrs,
+.xr-var-data-in:checked ~ .xr-var-data,
+.xr-index-data-in:checked ~ .xr-index-data {
+  display: block;
+}
+
+.xr-var-data > table {
+  float: right;
+}
+
+.xr-var-name span,
+.xr-var-data,
+.xr-index-name div,
+.xr-index-data,
+.xr-attrs {
+  padding-left: 25px !important;
+}
+
+.xr-attrs,
+.xr-var-attrs,
+.xr-var-data,
+.xr-index-data {
+  grid-column: 1 / -1;
+}
+
+dl.xr-attrs {
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: 125px auto;
+}
+
+.xr-attrs dt,
+.xr-attrs dd {
+  padding: 0;
+  margin: 0;
+  float: left;
+  padding-right: 10px;
+  width: auto;
+}
+
+.xr-attrs dt {
+  font-weight: normal;
+  grid-column: 1;
+}
+
+.xr-attrs dt:hover span {
+  display: inline-block;
+  background: var(--xr-background-color);
+  padding-right: 10px;
+}
+
+.xr-attrs dd {
+  grid-column: 2;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+.xr-icon-database,
+.xr-icon-file-text2,
+.xr-no-icon {
+  display: inline-block;
+  vertical-align: middle;
+  width: 1em;
+  height: 1.5em !important;
+  stroke-width: 0;
+  stroke: currentColor;
+  fill: currentColor;
+}
+</style><pre class="xr-text-repr-fallback">&lt;xarray.DataArray 'fMRI betas' (presentation: 700, neuroid: 15724)&gt;
+0.4915 0.2473 0.08592 0.05828 -0.1315 ... -0.2126 -0.6315 -0.5751 -0.5354
+Coordinates: (3/4)
+    x            (neuroid) uint8 12 12 12 12 12 12 12 ... 71 72 72 72 72 72 72
+    y            (neuroid) uint8 21 22 22 22 22 22 23 ... 34 29 29 30 30 30 31
+    ...           ...
+    stimulus_id  (presentation) object 'image02950' ... 'image72948'
+Dimensions without coordinates: presentation, neuroid
+Attributes: (3/8)
+    resolution:      1pt8mm
+    preprocessing:   fithrf_GLMdenoise_RR
+    ...              ...
+    postprocessing:  averaged across first two repetitions</pre><div class="xr-wrap" style="display:none"><div class="xr-header"><div class="xr-obj-type">xarray.DataArray</div><div class="xr-array-name">'fMRI betas'</div><ul class="xr-dim-list"><li><span>presentation</span>: 700</li><li><span>neuroid</span>: 15724</li></ul></div><ul class="xr-sections"><li class="xr-section-item"><div class="xr-array-wrap"><input id="section-518fc59b-0004-4421-a08d-7a2341973854" class="xr-array-in" type="checkbox"><label for="section-518fc59b-0004-4421-a08d-7a2341973854" title="Show/hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-array-preview xr-preview"><span>0.4915 0.2473 0.08592 0.05828 ... -0.2126 -0.6315 -0.5751 -0.5354</span></div><div class="xr-array-data"><pre>array([[ 0.4915219 ,  0.24733381,  0.08592446, ..., -0.366651  ,
+         0.30723202,  0.43520752],
+       [ 0.1664538 , -0.10728736,  0.35630295, ...,  0.8608913 ,
+         0.03464809,  0.11020081],
+       [ 1.0357349 ,  0.77598304,  0.35813144, ...,  0.2419075 ,
+         0.81557286,  0.38667244],
+       ...,
+       [-0.05812129, -0.4539395 ,  0.41060364, ...,  0.5738151 ,
+        -0.718189  , -0.638827  ],
+       [-0.00340644, -1.0050421 ,  0.7278904 , ...,  0.580743  ,
+        -0.50856245, -0.2727615 ],
+       [-1.2668517 , -1.4769105 , -0.3562023 , ..., -0.63146234,
+        -0.575121  , -0.5354325 ]], dtype=float32)</pre></div></div></li><li class="xr-section-item"><input id="section-6e409c40-a443-4ab7-a603-aad270e2c954" class="xr-section-summary-in" type="checkbox" checked=""><label for="section-6e409c40-a443-4ab7-a603-aad270e2c954" class="xr-section-summary">Coordinates: <span>(4)</span></label><div class="xr-section-inline-details"></div><div class="xr-section-details"><ul class="xr-var-list"><li class="xr-var-item"><div class="xr-var-name"><span>x</span></div><div class="xr-var-dims">(neuroid)</div><div class="xr-var-dtype">uint8</div><div class="xr-var-preview xr-preview">12 12 12 12 12 ... 72 72 72 72 72</div><input id="attrs-a5ea754d-b602-4c19-beb3-fdf9c9bac548" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-a5ea754d-b602-4c19-beb3-fdf9c9bac548" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-cac641fb-3ec0-429a-8729-eacb1a13c56f" class="xr-var-data-in" type="checkbox"><label for="data-cac641fb-3ec0-429a-8729-eacb1a13c56f" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array([12, 12, 12, ..., 72, 72, 72], dtype=uint8)</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span>y</span></div><div class="xr-var-dims">(neuroid)</div><div class="xr-var-dtype">uint8</div><div class="xr-var-preview xr-preview">21 22 22 22 22 ... 29 30 30 30 31</div><input id="attrs-0f4eb9c3-1307-420e-a7eb-bc12c7fd3d16" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-0f4eb9c3-1307-420e-a7eb-bc12c7fd3d16" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-ac64be7d-0a67-4539-abc1-8dfa80dd073a" class="xr-var-data-in" type="checkbox"><label for="data-ac64be7d-0a67-4539-abc1-8dfa80dd073a" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array([21, 22, 22, ..., 30, 30, 31], dtype=uint8)</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span>z</span></div><div class="xr-var-dims">(neuroid)</div><div class="xr-var-dtype">uint8</div><div class="xr-var-preview xr-preview">47 45 46 47 48 ... 46 45 46 49 49</div><input id="attrs-dbbeb5b8-5fa4-4bf6-80d8-b32aee6e204d" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-dbbeb5b8-5fa4-4bf6-80d8-b32aee6e204d" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-553e527b-bc38-4fa6-ba16-724cac6b1b9d" class="xr-var-data-in" type="checkbox"><label for="data-553e527b-bc38-4fa6-ba16-724cac6b1b9d" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array([47, 45, 46, ..., 46, 49, 49], dtype=uint8)</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span>stimulus_id</span></div><div class="xr-var-dims">(presentation)</div><div class="xr-var-dtype">object</div><div class="xr-var-preview xr-preview">'image02950' ... 'image72948'</div><input id="attrs-d3dc93c3-67ec-4e06-a9f5-be2f064b88f1" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-d3dc93c3-67ec-4e06-a9f5-be2f064b88f1" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-761f37dc-98ed-44b0-ab11-0b87acb35d3b" class="xr-var-data-in" type="checkbox"><label for="data-761f37dc-98ed-44b0-ab11-0b87acb35d3b" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array(['image02950', 'image02990', 'image03049', 'image03077',
+       'image03146', 'image03157', 'image03164', 'image03171',
+       'image03181', 'image03386', 'image03434', 'image03449',
+       'image03489', 'image03626', 'image03682', 'image03687',
+       'image03729', 'image03809', 'image03842', 'image03847',
+       'image03856', 'image03913', 'image03951', 'image04051',
+       'image04058', 'image04129', 'image04156', 'image04249',
+       'image04423', 'image04436', 'image04667', 'image04690',
+       'image04768', 'image04786', 'image04835', 'image04892',
+       'image04930', 'image05034', 'image05106', 'image05204',
+       'image05301', 'image05338', 'image05459', 'image05542',
+       'image05583', 'image05602', 'image05714', 'image06199',
+       'image06222', 'image06431', 'image06444', 'image06489',
+       'image06514', 'image06521', 'image06558', 'image06801',
+       'image07007', 'image07039', 'image07120', 'image07207',
+       'image07366', 'image07418', 'image07480', 'image07654',
+       'image07840', 'image07859', 'image07944', 'image07948',
+       'image08006', 'image08109', 'image08204', 'image08225',
+       'image08394', 'image08415', 'image08435', 'image08465',
+       'image08509', 'image08646', 'image08807', 'image08843',
+...
+       'image64615', 'image64621', 'image64867', 'image64880',
+       'image65010', 'image65148', 'image65253', 'image65267',
+       'image65376', 'image65445', 'image65769', 'image65799',
+       'image65821', 'image65872', 'image65920', 'image65943',
+       'image66004', 'image66216', 'image66278', 'image66330',
+       'image66464', 'image66489', 'image66580', 'image66773',
+       'image66836', 'image66946', 'image66976', 'image67045',
+       'image67113', 'image67204', 'image67237', 'image67295',
+       'image67742', 'image67802', 'image67829', 'image68168',
+       'image68278', 'image68339', 'image68418', 'image68471',
+       'image68741', 'image68814', 'image68842', 'image68858',
+       'image68897', 'image69007', 'image69130', 'image69214',
+       'image69240', 'image69502', 'image69614', 'image69839',
+       'image69854', 'image70075', 'image70095', 'image70193',
+       'image70232', 'image70335', 'image70360', 'image70427',
+       'image70505', 'image71229', 'image71232', 'image71241',
+       'image71410', 'image71450', 'image71753', 'image71894',
+       'image72015', 'image72080', 'image72209', 'image72312',
+       'image72510', 'image72605', 'image72719', 'image72948'],
+      dtype=object)</pre></div></li></ul></div></li><li class="xr-section-item"><input id="section-17227da3-0a3a-446d-b245-8a652bfda5e6" class="xr-section-summary-in" type="checkbox" disabled=""><label for="section-17227da3-0a3a-446d-b245-8a652bfda5e6" class="xr-section-summary" title="Expand/collapse section">Indexes: <span>(0)</span></label><div class="xr-section-inline-details"></div><div class="xr-section-details"><ul class="xr-var-list"></ul></div></li><li class="xr-section-item"><input id="section-6c367cf6-ff23-4e2a-a103-889da2c3221a" class="xr-section-summary-in" type="checkbox" checked=""><label for="section-6c367cf6-ff23-4e2a-a103-889da2c3221a" class="xr-section-summary">Attributes: <span>(8)</span></label><div class="xr-section-inline-details"></div><div class="xr-section-details"><dl class="xr-attrs"><dt><span>resolution :</span></dt><dd>1pt8mm</dd><dt><span>preprocessing :</span></dt><dd>fithrf_GLMdenoise_RR</dd><dt><span>z_score :</span></dt><dd>True</dd><dt><span>roi :</span></dt><dd>general</dd><dt><span>subject :</span></dt><dd>0</dd><dt><span>brain shape :</span></dt><dd>[ 81 104  83]</dd><dt><span>citation :</span></dt><dd>Allen, E.J., St-Yves, G., Wu, Y. et al. A massive 7T fMRI dataset to bridge cognitive neuroscience and artificial intelligence. Nat Neurosci 25, 116-126 (2022). https://doi.org/10.1038/s41593-021-00962-x</dd><dt><span>postprocessing :</span></dt><dd>averaged across first two repetitions</dd></dl></div></li></ul></div></div>
+</div>
+<div class="cell-output cell-output-display">
+<div><svg style="position: absolute; width: 0; height: 0; overflow: hidden">
+<defs>
+<symbol id="icon-database" viewbox="0 0 32 32">
+<path d="M16 0c-8.837 0-16 2.239-16 5v4c0 2.761 7.163 5 16 5s16-2.239 16-5v-4c0-2.761-7.163-5-16-5z"></path>
+<path d="M16 17c-8.837 0-16-2.239-16-5v6c0 2.761 7.163 5 16 5s16-2.239 16-5v-6c0 2.761-7.163 5-16 5z"></path>
+<path d="M16 26c-8.837 0-16-2.239-16-5v6c0 2.761 7.163 5 16 5s16-2.239 16-5v-6c0 2.761-7.163 5-16 5z"></path>
+</symbol>
+<symbol id="icon-file-text2" viewbox="0 0 32 32">
+<path d="M28.681 7.159c-0.694-0.947-1.662-2.053-2.724-3.116s-2.169-2.030-3.116-2.724c-1.612-1.182-2.393-1.319-2.841-1.319h-15.5c-1.378 0-2.5 1.121-2.5 2.5v27c0 1.378 1.122 2.5 2.5 2.5h23c1.378 0 2.5-1.122 2.5-2.5v-19.5c0-0.448-0.137-1.23-1.319-2.841zM24.543 5.457c0.959 0.959 1.712 1.825 2.268 2.543h-4.811v-4.811c0.718 0.556 1.584 1.309 2.543 2.268zM28 29.5c0 0.271-0.229 0.5-0.5 0.5h-23c-0.271 0-0.5-0.229-0.5-0.5v-27c0-0.271 0.229-0.5 0.5-0.5 0 0 15.499-0 15.5 0v7c0 0.552 0.448 1 1 1h7v19.5z"></path>
+<path d="M23 26h-14c-0.552 0-1-0.448-1-1s0.448-1 1-1h14c0.552 0 1 0.448 1 1s-0.448 1-1 1z"></path>
+<path d="M23 22h-14c-0.552 0-1-0.448-1-1s0.448-1 1-1h14c0.552 0 1 0.448 1 1s-0.448 1-1 1z"></path>
+<path d="M23 18h-14c-0.552 0-1-0.448-1-1s0.448-1 1-1h14c0.552 0 1 0.448 1 1s-0.448 1-1 1z"></path>
+</symbol>
+</defs>
+</svg>
+<style>/* CSS stylesheet for displaying xarray objects in jupyterlab.
+ *
+ */
+
+:root {
+  --xr-font-color0: var(--jp-content-font-color0, rgba(0, 0, 0, 1));
+  --xr-font-color2: var(--jp-content-font-color2, rgba(0, 0, 0, 0.54));
+  --xr-font-color3: var(--jp-content-font-color3, rgba(0, 0, 0, 0.38));
+  --xr-border-color: var(--jp-border-color2, #e0e0e0);
+  --xr-disabled-color: var(--jp-layout-color3, #bdbdbd);
+  --xr-background-color: var(--jp-layout-color0, white);
+  --xr-background-color-row-even: var(--jp-layout-color1, white);
+  --xr-background-color-row-odd: var(--jp-layout-color2, #eeeeee);
+}
+
+html[theme=dark],
+body[data-theme=dark],
+body.vscode-dark {
+  --xr-font-color0: rgba(255, 255, 255, 1);
+  --xr-font-color2: rgba(255, 255, 255, 0.54);
+  --xr-font-color3: rgba(255, 255, 255, 0.38);
+  --xr-border-color: #1F1F1F;
+  --xr-disabled-color: #515151;
+  --xr-background-color: #111111;
+  --xr-background-color-row-even: #111111;
+  --xr-background-color-row-odd: #313131;
+}
+
+.xr-wrap {
+  display: block !important;
+  min-width: 300px;
+  max-width: 700px;
+}
+
+.xr-text-repr-fallback {
+  /* fallback to plain text repr when CSS is not injected (untrusted notebook) */
+  display: none;
+}
+
+.xr-header {
+  padding-top: 6px;
+  padding-bottom: 6px;
+  margin-bottom: 4px;
+  border-bottom: solid 1px var(--xr-border-color);
+}
+
+.xr-header > div,
+.xr-header > ul {
+  display: inline;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.xr-obj-type,
+.xr-array-name {
+  margin-left: 2px;
+  margin-right: 10px;
+}
+
+.xr-obj-type {
+  color: var(--xr-font-color2);
+}
+
+.xr-sections {
+  padding-left: 0 !important;
+  display: grid;
+  grid-template-columns: 150px auto auto 1fr 20px 20px;
+}
+
+.xr-section-item {
+  display: contents;
+}
+
+.xr-section-item input {
+  display: none;
+}
+
+.xr-section-item input + label {
+  color: var(--xr-disabled-color);
+}
+
+.xr-section-item input:enabled + label {
+  cursor: pointer;
+  color: var(--xr-font-color2);
+}
+
+.xr-section-item input:enabled + label:hover {
+  color: var(--xr-font-color0);
+}
+
+.xr-section-summary {
+  grid-column: 1;
+  color: var(--xr-font-color2);
+  font-weight: 500;
+}
+
+.xr-section-summary > span {
+  display: inline-block;
+  padding-left: 0.5em;
+}
+
+.xr-section-summary-in:disabled + label {
+  color: var(--xr-font-color2);
+}
+
+.xr-section-summary-in + label:before {
+  display: inline-block;
+  content: '►';
+  font-size: 11px;
+  width: 15px;
+  text-align: center;
+}
+
+.xr-section-summary-in:disabled + label:before {
+  color: var(--xr-disabled-color);
+}
+
+.xr-section-summary-in:checked + label:before {
+  content: '▼';
+}
+
+.xr-section-summary-in:checked + label > span {
+  display: none;
+}
+
+.xr-section-summary,
+.xr-section-inline-details {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+.xr-section-inline-details {
+  grid-column: 2 / -1;
+}
+
+.xr-section-details {
+  display: none;
+  grid-column: 1 / -1;
+  margin-bottom: 5px;
+}
+
+.xr-section-summary-in:checked ~ .xr-section-details {
+  display: contents;
+}
+
+.xr-array-wrap {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: 20px auto;
+}
+
+.xr-array-wrap > label {
+  grid-column: 1;
+  vertical-align: top;
+}
+
+.xr-preview {
+  color: var(--xr-font-color3);
+}
+
+.xr-array-preview,
+.xr-array-data {
+  padding: 0 5px !important;
+  grid-column: 2;
+}
+
+.xr-array-data,
+.xr-array-in:checked ~ .xr-array-preview {
+  display: none;
+}
+
+.xr-array-in:checked ~ .xr-array-data,
+.xr-array-preview {
+  display: inline-block;
+}
+
+.xr-dim-list {
+  display: inline-block !important;
+  list-style: none;
+  padding: 0 !important;
+  margin: 0;
+}
+
+.xr-dim-list li {
+  display: inline-block;
+  padding: 0;
+  margin: 0;
+}
+
+.xr-dim-list:before {
+  content: '(';
+}
+
+.xr-dim-list:after {
+  content: ')';
+}
+
+.xr-dim-list li:not(:last-child):after {
+  content: ',';
+  padding-right: 5px;
+}
+
+.xr-has-index {
+  font-weight: bold;
+}
+
+.xr-var-list,
+.xr-var-item {
+  display: contents;
+}
+
+.xr-var-item > div,
+.xr-var-item label,
+.xr-var-item > .xr-var-name span {
+  background-color: var(--xr-background-color-row-even);
+  margin-bottom: 0;
+}
+
+.xr-var-item > .xr-var-name:hover span {
+  padding-right: 5px;
+}
+
+.xr-var-list > li:nth-child(odd) > div,
+.xr-var-list > li:nth-child(odd) > label,
+.xr-var-list > li:nth-child(odd) > .xr-var-name span {
+  background-color: var(--xr-background-color-row-odd);
+}
+
+.xr-var-name {
+  grid-column: 1;
+}
+
+.xr-var-dims {
+  grid-column: 2;
+}
+
+.xr-var-dtype {
+  grid-column: 3;
+  text-align: right;
+  color: var(--xr-font-color2);
+}
+
+.xr-var-preview {
+  grid-column: 4;
+}
+
+.xr-index-preview {
+  grid-column: 2 / 5;
+  color: var(--xr-font-color2);
+}
+
+.xr-var-name,
+.xr-var-dims,
+.xr-var-dtype,
+.xr-preview,
+.xr-attrs dt {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding-right: 10px;
+}
+
+.xr-var-name:hover,
+.xr-var-dims:hover,
+.xr-var-dtype:hover,
+.xr-attrs dt:hover {
+  overflow: visible;
+  width: auto;
+  z-index: 1;
+}
+
+.xr-var-attrs,
+.xr-var-data,
+.xr-index-data {
+  display: none;
+  background-color: var(--xr-background-color) !important;
+  padding-bottom: 5px !important;
+}
+
+.xr-var-attrs-in:checked ~ .xr-var-attrs,
+.xr-var-data-in:checked ~ .xr-var-data,
+.xr-index-data-in:checked ~ .xr-index-data {
+  display: block;
+}
+
+.xr-var-data > table {
+  float: right;
+}
+
+.xr-var-name span,
+.xr-var-data,
+.xr-index-name div,
+.xr-index-data,
+.xr-attrs {
+  padding-left: 25px !important;
+}
+
+.xr-attrs,
+.xr-var-attrs,
+.xr-var-data,
+.xr-index-data {
+  grid-column: 1 / -1;
+}
+
+dl.xr-attrs {
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: 125px auto;
+}
+
+.xr-attrs dt,
+.xr-attrs dd {
+  padding: 0;
+  margin: 0;
+  float: left;
+  padding-right: 10px;
+  width: auto;
+}
+
+.xr-attrs dt {
+  font-weight: normal;
+  grid-column: 1;
+}
+
+.xr-attrs dt:hover span {
+  display: inline-block;
+  background: var(--xr-background-color);
+  padding-right: 10px;
+}
+
+.xr-attrs dd {
+  grid-column: 2;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+.xr-icon-database,
+.xr-icon-file-text2,
+.xr-no-icon {
+  display: inline-block;
+  vertical-align: middle;
+  width: 1em;
+  height: 1.5em !important;
+  stroke-width: 0;
+  stroke: currentColor;
+  fill: currentColor;
+}
+</style><pre class="xr-text-repr-fallback">&lt;xarray.DataArray 'fMRI betas' (presentation: 700, neuroid: 14278)&gt;
+-0.8554 0.0399 0.09591 -0.4694 -0.4573 ... -1.052 -0.6467 -0.6164 -0.8053
+Coordinates: (3/4)
+    x            (neuroid) uint8 11 11 11 11 12 12 12 ... 71 71 71 71 71 71 71
+    y            (neuroid) uint8 23 25 25 26 22 22 22 ... 28 28 29 29 30 30 30
+    ...           ...
+    stimulus_id  (presentation) object 'image02950' ... 'image72948'
+Dimensions without coordinates: presentation, neuroid
+Attributes: (3/8)
+    resolution:      1pt8mm
+    preprocessing:   fithrf_GLMdenoise_RR
+    ...              ...
+    postprocessing:  averaged across first two repetitions</pre><div class="xr-wrap" style="display:none"><div class="xr-header"><div class="xr-obj-type">xarray.DataArray</div><div class="xr-array-name">'fMRI betas'</div><ul class="xr-dim-list"><li><span>presentation</span>: 700</li><li><span>neuroid</span>: 14278</li></ul></div><ul class="xr-sections"><li class="xr-section-item"><div class="xr-array-wrap"><input id="section-1f851afd-4c7b-4b8c-be0a-e1b382709472" class="xr-array-in" type="checkbox"><label for="section-1f851afd-4c7b-4b8c-be0a-e1b382709472" title="Show/hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-array-preview xr-preview"><span>-0.8554 0.0399 0.09591 -0.4694 ... -1.052 -0.6467 -0.6164 -0.8053</span></div><div class="xr-array-data"><pre>array([[-0.85538554,  0.03990293,  0.09591419, ..., -1.6162797 ,
+        -1.1637473 , -0.22345664],
+       [-1.1291182 , -0.24890876,  0.27723873, ...,  0.8381426 ,
+         1.2138667 ,  0.9067359 ],
+       [ 1.0714364 , -0.5201533 ,  0.18692002, ...,  1.1055344 ,
+         1.4412578 ,  0.5147082 ],
+       ...,
+       [ 0.6021575 , -0.00671851, -1.2595241 , ..., -0.10587344,
+        -0.15873775, -0.6149586 ],
+       [ 0.61964816, -0.6503349 , -0.42204803, ..., -0.73787045,
+        -1.0440085 , -1.0924375 ],
+       [-0.690616  ,  0.61802167, -1.1264803 , ..., -0.6467064 ,
+        -0.61641246, -0.8052834 ]], dtype=float32)</pre></div></div></li><li class="xr-section-item"><input id="section-e1e85221-f992-42f3-8982-1450bde11d29" class="xr-section-summary-in" type="checkbox" checked=""><label for="section-e1e85221-f992-42f3-8982-1450bde11d29" class="xr-section-summary">Coordinates: <span>(4)</span></label><div class="xr-section-inline-details"></div><div class="xr-section-details"><ul class="xr-var-list"><li class="xr-var-item"><div class="xr-var-name"><span>x</span></div><div class="xr-var-dims">(neuroid)</div><div class="xr-var-dtype">uint8</div><div class="xr-var-preview xr-preview">11 11 11 11 12 ... 71 71 71 71 71</div><input id="attrs-085364cd-ced4-4fa3-81a2-b71f4aceaea7" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-085364cd-ced4-4fa3-81a2-b71f4aceaea7" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-231c1800-1063-41b8-8ace-ee6b992d766a" class="xr-var-data-in" type="checkbox"><label for="data-231c1800-1063-41b8-8ace-ee6b992d766a" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array([11, 11, 11, ..., 71, 71, 71], dtype=uint8)</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span>y</span></div><div class="xr-var-dims">(neuroid)</div><div class="xr-var-dtype">uint8</div><div class="xr-var-preview xr-preview">23 25 25 26 22 ... 29 29 30 30 30</div><input id="attrs-197014e5-43b9-4c7b-bde3-486d9a0d3604" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-197014e5-43b9-4c7b-bde3-486d9a0d3604" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-55eeceef-44cf-4d59-bc0a-49ef9b10ea8e" class="xr-var-data-in" type="checkbox"><label for="data-55eeceef-44cf-4d59-bc0a-49ef9b10ea8e" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array([23, 25, 25, ..., 30, 30, 30], dtype=uint8)</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span>z</span></div><div class="xr-var-dims">(neuroid)</div><div class="xr-var-dtype">uint8</div><div class="xr-var-preview xr-preview">37 32 33 38 36 ... 40 41 40 41 42</div><input id="attrs-df92a742-708b-4f74-8a0c-8cb5c6dd378c" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-df92a742-708b-4f74-8a0c-8cb5c6dd378c" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-ad9920ab-828e-450e-972c-73ac793b154f" class="xr-var-data-in" type="checkbox"><label for="data-ad9920ab-828e-450e-972c-73ac793b154f" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array([37, 32, 33, ..., 40, 41, 42], dtype=uint8)</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span>stimulus_id</span></div><div class="xr-var-dims">(presentation)</div><div class="xr-var-dtype">object</div><div class="xr-var-preview xr-preview">'image02950' ... 'image72948'</div><input id="attrs-195fdf5e-41b7-4ee4-b1a2-f007ac29b76b" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-195fdf5e-41b7-4ee4-b1a2-f007ac29b76b" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-0c0d42cb-e74b-4124-a37a-38e9031ba973" class="xr-var-data-in" type="checkbox"><label for="data-0c0d42cb-e74b-4124-a37a-38e9031ba973" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array(['image02950', 'image02990', 'image03049', 'image03077',
+       'image03146', 'image03157', 'image03164', 'image03171',
+       'image03181', 'image03386', 'image03434', 'image03449',
+       'image03489', 'image03626', 'image03682', 'image03687',
+       'image03729', 'image03809', 'image03842', 'image03847',
+       'image03856', 'image03913', 'image03951', 'image04051',
+       'image04058', 'image04129', 'image04156', 'image04249',
+       'image04423', 'image04436', 'image04667', 'image04690',
+       'image04768', 'image04786', 'image04835', 'image04892',
+       'image04930', 'image05034', 'image05106', 'image05204',
+       'image05301', 'image05338', 'image05459', 'image05542',
+       'image05583', 'image05602', 'image05714', 'image06199',
+       'image06222', 'image06431', 'image06444', 'image06489',
+       'image06514', 'image06521', 'image06558', 'image06801',
+       'image07007', 'image07039', 'image07120', 'image07207',
+       'image07366', 'image07418', 'image07480', 'image07654',
+       'image07840', 'image07859', 'image07944', 'image07948',
+       'image08006', 'image08109', 'image08204', 'image08225',
+       'image08394', 'image08415', 'image08435', 'image08465',
+       'image08509', 'image08646', 'image08807', 'image08843',
+...
+       'image64615', 'image64621', 'image64867', 'image64880',
+       'image65010', 'image65148', 'image65253', 'image65267',
+       'image65376', 'image65445', 'image65769', 'image65799',
+       'image65821', 'image65872', 'image65920', 'image65943',
+       'image66004', 'image66216', 'image66278', 'image66330',
+       'image66464', 'image66489', 'image66580', 'image66773',
+       'image66836', 'image66946', 'image66976', 'image67045',
+       'image67113', 'image67204', 'image67237', 'image67295',
+       'image67742', 'image67802', 'image67829', 'image68168',
+       'image68278', 'image68339', 'image68418', 'image68471',
+       'image68741', 'image68814', 'image68842', 'image68858',
+       'image68897', 'image69007', 'image69130', 'image69214',
+       'image69240', 'image69502', 'image69614', 'image69839',
+       'image69854', 'image70075', 'image70095', 'image70193',
+       'image70232', 'image70335', 'image70360', 'image70427',
+       'image70505', 'image71229', 'image71232', 'image71241',
+       'image71410', 'image71450', 'image71753', 'image71894',
+       'image72015', 'image72080', 'image72209', 'image72312',
+       'image72510', 'image72605', 'image72719', 'image72948'],
+      dtype=object)</pre></div></li></ul></div></li><li class="xr-section-item"><input id="section-1ea24c6d-6793-4175-894c-f0f607225ab6" class="xr-section-summary-in" type="checkbox" disabled=""><label for="section-1ea24c6d-6793-4175-894c-f0f607225ab6" class="xr-section-summary" title="Expand/collapse section">Indexes: <span>(0)</span></label><div class="xr-section-inline-details"></div><div class="xr-section-details"><ul class="xr-var-list"></ul></div></li><li class="xr-section-item"><input id="section-20ef6506-3dd8-4b6b-a46b-104f7d87fc3e" class="xr-section-summary-in" type="checkbox" checked=""><label for="section-20ef6506-3dd8-4b6b-a46b-104f7d87fc3e" class="xr-section-summary">Attributes: <span>(8)</span></label><div class="xr-section-inline-details"></div><div class="xr-section-details"><dl class="xr-attrs"><dt><span>resolution :</span></dt><dd>1pt8mm</dd><dt><span>preprocessing :</span></dt><dd>fithrf_GLMdenoise_RR</dd><dt><span>z_score :</span></dt><dd>True</dd><dt><span>roi :</span></dt><dd>general</dd><dt><span>subject :</span></dt><dd>1</dd><dt><span>brain shape :</span></dt><dd>[ 82 106  84]</dd><dt><span>citation :</span></dt><dd>Allen, E.J., St-Yves, G., Wu, Y. et al. A massive 7T fMRI dataset to bridge cognitive neuroscience and artificial intelligence. Nat Neurosci 25, 116-126 (2022). https://doi.org/10.1038/s41593-021-00962-x</dd><dt><span>postprocessing :</span></dt><dd>averaged across first two repetitions</dd></dl></div></li></ul></div></div>
+</div>
+</div>
+<div id="6168f1f2" class="cell" data-execution_count="7">
+<details>
+<summary>Compute the cross-participant spectrum</summary>
+<div class="sourceCode cell-code" id="6168f1f2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="6168f1f2-1"><a href="#6168f1f2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> compute_cross_validated_spectrum(</span>
+<span id="6168f1f2-2"><a href="#6168f1f2-2" aria-hidden="true" tabindex="-1"></a>    x: xr.DataArray,</span>
+<span id="6168f1f2-3"><a href="#6168f1f2-3" aria-hidden="true" tabindex="-1"></a>    y: xr.DataArray,</span>
+<span id="6168f1f2-4"><a href="#6168f1f2-4" aria-hidden="true" tabindex="-1"></a>    <span class="op">/</span>,</span>
+<span id="6168f1f2-5"><a href="#6168f1f2-5" aria-hidden="true" tabindex="-1"></a>    train_fraction: <span class="bu">float</span> <span class="op">=</span> <span class="dv">7</span> <span class="op">/</span> <span class="dv">8</span>,</span>
+<span id="6168f1f2-6"><a href="#6168f1f2-6" aria-hidden="true" tabindex="-1"></a>) <span class="op">-&gt;</span> np.ndarray:</span>
+<span id="6168f1f2-7"><a href="#6168f1f2-7" aria-hidden="true" tabindex="-1"></a>    stimuli <span class="op">=</span> x[<span class="st">"stimulus_id"</span>].values</span>
+<span id="6168f1f2-8"><a href="#6168f1f2-8" aria-hidden="true" tabindex="-1"></a>    n_train <span class="op">=</span> <span class="bu">int</span>(train_fraction <span class="op">*</span> <span class="bu">len</span>(stimuli))</span>
+<span id="6168f1f2-9"><a href="#6168f1f2-9" aria-hidden="true" tabindex="-1"></a>    stimuli <span class="op">=</span> rng.permutation(stimuli)[:n_train]</span>
+<span id="6168f1f2-10"><a href="#6168f1f2-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="6168f1f2-11"><a href="#6168f1f2-11" aria-hidden="true" tabindex="-1"></a>    train_indices <span class="op">=</span> np.isin(x[<span class="st">"stimulus_id"</span>].values, stimuli)</span>
+<span id="6168f1f2-12"><a href="#6168f1f2-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="6168f1f2-13"><a href="#6168f1f2-13" aria-hidden="true" tabindex="-1"></a>    x_train <span class="op">=</span> x.isel({<span class="st">"presentation"</span>: train_indices})</span>
+<span id="6168f1f2-14"><a href="#6168f1f2-14" aria-hidden="true" tabindex="-1"></a>    y_train <span class="op">=</span> y.isel({<span class="st">"presentation"</span>: train_indices})</span>
+<span id="6168f1f2-15"><a href="#6168f1f2-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="6168f1f2-16"><a href="#6168f1f2-16" aria-hidden="true" tabindex="-1"></a>    x_test <span class="op">=</span> x.isel({<span class="st">"presentation"</span>: <span class="op">~</span>train_indices})</span>
+<span id="6168f1f2-17"><a href="#6168f1f2-17" aria-hidden="true" tabindex="-1"></a>    y_test <span class="op">=</span> y.isel({<span class="st">"presentation"</span>: <span class="op">~</span>train_indices})</span>
+<span id="6168f1f2-18"><a href="#6168f1f2-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="6168f1f2-19"><a href="#6168f1f2-19" aria-hidden="true" tabindex="-1"></a>    scorer <span class="op">=</span> PLSSVD()</span>
+<span id="6168f1f2-20"><a href="#6168f1f2-20" aria-hidden="true" tabindex="-1"></a>    scorer.fit(x_train.values, y_train.values)</span>
+<span id="6168f1f2-21"><a href="#6168f1f2-21" aria-hidden="true" tabindex="-1"></a>    x_test_transformed <span class="op">=</span> scorer.transform(x_test.values, direction<span class="op">=</span><span class="st">"left"</span>)</span>
+<span id="6168f1f2-22"><a href="#6168f1f2-22" aria-hidden="true" tabindex="-1"></a>    y_test_transformed <span class="op">=</span> scorer.transform(y_test.values, direction<span class="op">=</span><span class="st">"right"</span>)</span>
+<span id="6168f1f2-23"><a href="#6168f1f2-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="6168f1f2-24"><a href="#6168f1f2-24" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> np.diag(</span>
+<span id="6168f1f2-25"><a href="#6168f1f2-25" aria-hidden="true" tabindex="-1"></a>        np.cov(</span>
+<span id="6168f1f2-26"><a href="#6168f1f2-26" aria-hidden="true" tabindex="-1"></a>            x_test_transformed,</span>
+<span id="6168f1f2-27"><a href="#6168f1f2-27" aria-hidden="true" tabindex="-1"></a>            y_test_transformed,</span>
+<span id="6168f1f2-28"><a href="#6168f1f2-28" aria-hidden="true" tabindex="-1"></a>            rowvar<span class="op">=</span><span class="va">False</span>,</span>
+<span id="6168f1f2-29"><a href="#6168f1f2-29" aria-hidden="true" tabindex="-1"></a>        )[:n_train, n_train:]</span>
+<span id="6168f1f2-30"><a href="#6168f1f2-30" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="6168f1f2-31"><a href="#6168f1f2-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="6168f1f2-32"><a href="#6168f1f2-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="6168f1f2-33"><a href="#6168f1f2-33" aria-hidden="true" tabindex="-1"></a>spectrum <span class="op">=</span> compute_cross_validated_spectrum(subject_1, subject_2)</span>
+<span id="6168f1f2-34"><a href="#6168f1f2-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="6168f1f2-35"><a href="#6168f1f2-35" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> pd.DataFrame(</span>
+<span id="6168f1f2-36"><a href="#6168f1f2-36" aria-hidden="true" tabindex="-1"></a>    {</span>
+<span id="6168f1f2-37"><a href="#6168f1f2-37" aria-hidden="true" tabindex="-1"></a>        <span class="st">"cross-validated singular value"</span>: spectrum,</span>
+<span id="6168f1f2-38"><a href="#6168f1f2-38" aria-hidden="true" tabindex="-1"></a>        <span class="st">"rank"</span>: assign_logarithmic_bins(</span>
+<span id="6168f1f2-39"><a href="#6168f1f2-39" aria-hidden="true" tabindex="-1"></a>            <span class="dv">1</span> <span class="op">+</span> np.arange(<span class="bu">len</span>(spectrum)), min_<span class="op">=</span><span class="dv">1</span>, max_<span class="op">=</span><span class="dv">10_000</span>, points_per_bin<span class="op">=</span><span class="dv">5</span></span>
+<span id="6168f1f2-40"><a href="#6168f1f2-40" aria-hidden="true" tabindex="-1"></a>        ),</span>
+<span id="6168f1f2-41"><a href="#6168f1f2-41" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="6168f1f2-42"><a href="#6168f1f2-42" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="6168f1f2-43"><a href="#6168f1f2-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="6168f1f2-44"><a href="#6168f1f2-44" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots()</span>
+<span id="6168f1f2-45"><a href="#6168f1f2-45" aria-hidden="true" tabindex="-1"></a>sns.lineplot(</span>
+<span id="6168f1f2-46"><a href="#6168f1f2-46" aria-hidden="true" tabindex="-1"></a>    ax<span class="op">=</span>ax,</span>
+<span id="6168f1f2-47"><a href="#6168f1f2-47" aria-hidden="true" tabindex="-1"></a>    data<span class="op">=</span>data,</span>
+<span id="6168f1f2-48"><a href="#6168f1f2-48" aria-hidden="true" tabindex="-1"></a>    x<span class="op">=</span><span class="st">"rank"</span>,</span>
+<span id="6168f1f2-49"><a href="#6168f1f2-49" aria-hidden="true" tabindex="-1"></a>    y<span class="op">=</span><span class="st">"cross-validated singular value"</span>,</span>
+<span id="6168f1f2-50"><a href="#6168f1f2-50" aria-hidden="true" tabindex="-1"></a>    marker<span class="op">=</span><span class="st">"o"</span>,</span>
+<span id="6168f1f2-51"><a href="#6168f1f2-51" aria-hidden="true" tabindex="-1"></a>    dashes<span class="op">=</span><span class="va">False</span>,</span>
+<span id="6168f1f2-52"><a href="#6168f1f2-52" aria-hidden="true" tabindex="-1"></a>    ls<span class="op">=</span><span class="st">"None"</span>,</span>
+<span id="6168f1f2-53"><a href="#6168f1f2-53" aria-hidden="true" tabindex="-1"></a>    err_style<span class="op">=</span><span class="st">"bars"</span>,</span>
+<span id="6168f1f2-54"><a href="#6168f1f2-54" aria-hidden="true" tabindex="-1"></a>    estimator<span class="op">=</span><span class="st">"mean"</span>,</span>
+<span id="6168f1f2-55"><a href="#6168f1f2-55" aria-hidden="true" tabindex="-1"></a>    errorbar<span class="op">=</span>(<span class="st">"ci"</span>, <span class="dv">99</span>),</span>
+<span id="6168f1f2-56"><a href="#6168f1f2-56" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="6168f1f2-57"><a href="#6168f1f2-57" aria-hidden="true" tabindex="-1"></a>ax.set_xscale(<span class="st">"log"</span>)</span>
+<span id="6168f1f2-58"><a href="#6168f1f2-58" aria-hidden="true" tabindex="-1"></a>ax.set_yscale(<span class="st">"log"</span>)</span>
+<span id="6168f1f2-59"><a href="#6168f1f2-59" aria-hidden="true" tabindex="-1"></a>ax.set_aspect(<span class="st">"equal"</span>, <span class="st">"box"</span>)</span>
+<span id="6168f1f2-60"><a href="#6168f1f2-60" aria-hidden="true" tabindex="-1"></a>sns.despine(ax<span class="op">=</span>ax, offset<span class="op">=</span><span class="dv">20</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+<p><img src="comparing_representations_files/figure-html/cell-8-output-1.svg" class="img-fluid"></p>
+</div>
 </div>
 </section>
 <section id="comparing-brains-and-dnns" class="level2">
@@ -528,7 +1417,7 @@ What happens when <span class="math inline">X</span> = <span class="math inline"
 <span id="cell-load-model-3"><a href="#cell-load-model-3" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> alexnet(weights<span class="op">=</span>weights)</span>
 <span id="cell-load-model-4"><a href="#cell-load-model-4" aria-hidden="true" tabindex="-1"></a>model.<span class="bu">eval</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div id="load-model" class="cell-output cell-output-display" data-execution_count="6">
+<div id="load-model" class="cell-output cell-output-display" data-execution_count="7">
 <pre><code>AlexNet(
   (features): Sequential(
     (0): Conv2d(3, 64, kernel_size=(11, 11), stride=(4, 4), padding=(2, 2))
@@ -593,8 +1482,59 @@ What happens when <span class="math inline">X</span> = <span class="math inline"
 </details>
 <div id="extract-features" class="cell-output cell-output-display">
 <script type="application/vnd.jupyter.widget-view+json">
-{"model_id":"9f5e3f7b6aaf4225bb6f9448d13d79ef","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
+{"model_id":"41dbf70cc04a44cbba3d7ed25c6af199","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
 </script>
+</div>
+</div>
+<div id="72150fe3" class="cell" data-execution_count="11">
+<details>
+<summary>Compute cross-covariance between one participant and the convolutional layers of AlexNet</summary>
+<div class="sourceCode cell-code" id="72150fe3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="72150fe3-1"><a href="#72150fe3-1" aria-hidden="true" tabindex="-1"></a>spectra <span class="op">=</span> {}</span>
+<span id="72150fe3-2"><a href="#72150fe3-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> layer, activations <span class="kw">in</span> features.items():</span>
+<span id="72150fe3-3"><a href="#72150fe3-3" aria-hidden="true" tabindex="-1"></a>    spectra[layer] <span class="op">=</span> compute_cross_validated_spectrum(subject_1, subject_2)</span>
+<span id="72150fe3-4"><a href="#72150fe3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="72150fe3-5"><a href="#72150fe3-5" aria-hidden="true" tabindex="-1"></a>remapping <span class="op">=</span> {</span>
+<span id="72150fe3-6"><a href="#72150fe3-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">"features.1"</span>: <span class="st">"conv1"</span>,</span>
+<span id="72150fe3-7"><a href="#72150fe3-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">"features.4"</span>: <span class="st">"conv2"</span>,</span>
+<span id="72150fe3-8"><a href="#72150fe3-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">"features.7"</span>: <span class="st">"conv3"</span>,</span>
+<span id="72150fe3-9"><a href="#72150fe3-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">"features.9"</span>: <span class="st">"conv4"</span>,</span>
+<span id="72150fe3-10"><a href="#72150fe3-10" aria-hidden="true" tabindex="-1"></a>    <span class="st">"features.11"</span>: <span class="st">"conv5"</span>,</span>
+<span id="72150fe3-11"><a href="#72150fe3-11" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="72150fe3-12"><a href="#72150fe3-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="72150fe3-13"><a href="#72150fe3-13" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots()</span>
+<span id="72150fe3-14"><a href="#72150fe3-14" aria-hidden="true" tabindex="-1"></a>sns.lineplot(</span>
+<span id="72150fe3-15"><a href="#72150fe3-15" aria-hidden="true" tabindex="-1"></a>    ax<span class="op">=</span>ax,</span>
+<span id="72150fe3-16"><a href="#72150fe3-16" aria-hidden="true" tabindex="-1"></a>    data<span class="op">=</span>(</span>
+<span id="72150fe3-17"><a href="#72150fe3-17" aria-hidden="true" tabindex="-1"></a>        pd.DataFrame(spectra)</span>
+<span id="72150fe3-18"><a href="#72150fe3-18" aria-hidden="true" tabindex="-1"></a>        .rename(columns<span class="op">=</span>remapping)</span>
+<span id="72150fe3-19"><a href="#72150fe3-19" aria-hidden="true" tabindex="-1"></a>        .assign(</span>
+<span id="72150fe3-20"><a href="#72150fe3-20" aria-hidden="true" tabindex="-1"></a>            rank<span class="op">=</span><span class="kw">lambda</span> x: assign_logarithmic_bins(</span>
+<span id="72150fe3-21"><a href="#72150fe3-21" aria-hidden="true" tabindex="-1"></a>                <span class="dv">1</span> <span class="op">+</span> np.arange(<span class="bu">len</span>(x)), points_per_bin<span class="op">=</span><span class="dv">3</span>, min_<span class="op">=</span><span class="dv">1</span>, max_<span class="op">=</span><span class="dv">10_000</span></span>
+<span id="72150fe3-22"><a href="#72150fe3-22" aria-hidden="true" tabindex="-1"></a>            )</span>
+<span id="72150fe3-23"><a href="#72150fe3-23" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="72150fe3-24"><a href="#72150fe3-24" aria-hidden="true" tabindex="-1"></a>        .melt(</span>
+<span id="72150fe3-25"><a href="#72150fe3-25" aria-hidden="true" tabindex="-1"></a>            id_vars<span class="op">=</span>[<span class="st">"rank"</span>],</span>
+<span id="72150fe3-26"><a href="#72150fe3-26" aria-hidden="true" tabindex="-1"></a>            value_name<span class="op">=</span><span class="st">"cross-validated singular value"</span>,</span>
+<span id="72150fe3-27"><a href="#72150fe3-27" aria-hidden="true" tabindex="-1"></a>            var_name<span class="op">=</span><span class="st">"layer"</span>,</span>
+<span id="72150fe3-28"><a href="#72150fe3-28" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="72150fe3-29"><a href="#72150fe3-29" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="72150fe3-30"><a href="#72150fe3-30" aria-hidden="true" tabindex="-1"></a>    x<span class="op">=</span><span class="st">"rank"</span>,</span>
+<span id="72150fe3-31"><a href="#72150fe3-31" aria-hidden="true" tabindex="-1"></a>    y<span class="op">=</span><span class="st">"cross-validated singular value"</span>,</span>
+<span id="72150fe3-32"><a href="#72150fe3-32" aria-hidden="true" tabindex="-1"></a>    hue<span class="op">=</span><span class="st">"layer"</span>,</span>
+<span id="72150fe3-33"><a href="#72150fe3-33" aria-hidden="true" tabindex="-1"></a>    marker<span class="op">=</span><span class="st">"o"</span>,</span>
+<span id="72150fe3-34"><a href="#72150fe3-34" aria-hidden="true" tabindex="-1"></a>    dashes<span class="op">=</span><span class="va">False</span>,</span>
+<span id="72150fe3-35"><a href="#72150fe3-35" aria-hidden="true" tabindex="-1"></a>    ls<span class="op">=</span><span class="st">"None"</span>,</span>
+<span id="72150fe3-36"><a href="#72150fe3-36" aria-hidden="true" tabindex="-1"></a>    err_style<span class="op">=</span><span class="st">"bars"</span>,</span>
+<span id="72150fe3-37"><a href="#72150fe3-37" aria-hidden="true" tabindex="-1"></a>    estimator<span class="op">=</span><span class="st">"mean"</span>,</span>
+<span id="72150fe3-38"><a href="#72150fe3-38" aria-hidden="true" tabindex="-1"></a>    errorbar<span class="op">=</span>(<span class="st">"ci"</span>, <span class="dv">99</span>),</span>
+<span id="72150fe3-39"><a href="#72150fe3-39" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="72150fe3-40"><a href="#72150fe3-40" aria-hidden="true" tabindex="-1"></a>ax.set_xscale(<span class="st">"log"</span>)</span>
+<span id="72150fe3-41"><a href="#72150fe3-41" aria-hidden="true" tabindex="-1"></a>ax.set_yscale(<span class="st">"log"</span>)</span>
+<span id="72150fe3-42"><a href="#72150fe3-42" aria-hidden="true" tabindex="-1"></a>ax.set_aspect(<span class="st">"equal"</span>, <span class="st">"box"</span>)</span>
+<span id="72150fe3-43"><a href="#72150fe3-43" aria-hidden="true" tabindex="-1"></a>sns.despine(ax<span class="op">=</span>ax, offset<span class="op">=</span><span class="dv">20</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+<p><img src="comparing_representations_files/figure-html/cell-12-output-1.svg" class="img-fluid"></p>
 </div>
 </div>
 
@@ -603,7 +1543,7 @@ What happens when <span class="math inline">X</span> = <span class="math inline"
 
 <a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a></main> <!-- /main -->
 <script type="application/vnd.jupyter.widget-state+json">
-{"state":{"039605916e8c4ab8a266814271128caf":{"model_module":"@jupyter-widgets/base","model_module_version":"2.0.0","model_name":"LayoutModel","state":{"_model_module":"@jupyter-widgets/base","_model_module_version":"2.0.0","_model_name":"LayoutModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"LayoutView","align_content":null,"align_items":null,"align_self":null,"border_bottom":null,"border_left":null,"border_right":null,"border_top":null,"bottom":null,"display":null,"flex":null,"flex_flow":null,"grid_area":null,"grid_auto_columns":null,"grid_auto_flow":null,"grid_auto_rows":null,"grid_column":null,"grid_gap":null,"grid_row":null,"grid_template_areas":null,"grid_template_columns":null,"grid_template_rows":null,"height":null,"justify_content":null,"justify_items":null,"left":null,"margin":null,"max_height":null,"max_width":null,"min_height":null,"min_width":null,"object_fit":null,"object_position":null,"order":null,"overflow":null,"padding":null,"right":null,"top":null,"visibility":null,"width":null}},"5b18a78f634f43f2936e51cb3d18223a":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"HTMLStyleModel","state":{"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"HTMLStyleModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"StyleView","background":null,"description_width":"","font_size":null,"text_color":null}},"96db19f7812b472da7192e2180d58260":{"model_module":"@jupyter-widgets/base","model_module_version":"2.0.0","model_name":"LayoutModel","state":{"_model_module":"@jupyter-widgets/base","_model_module_version":"2.0.0","_model_name":"LayoutModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"LayoutView","align_content":null,"align_items":null,"align_self":null,"border_bottom":null,"border_left":null,"border_right":null,"border_top":null,"bottom":null,"display":null,"flex":null,"flex_flow":null,"grid_area":null,"grid_auto_columns":null,"grid_auto_flow":null,"grid_auto_rows":null,"grid_column":null,"grid_gap":null,"grid_row":null,"grid_template_areas":null,"grid_template_columns":null,"grid_template_rows":null,"height":null,"justify_content":null,"justify_items":null,"left":null,"margin":null,"max_height":null,"max_width":null,"min_height":null,"min_width":null,"object_fit":null,"object_position":null,"order":null,"overflow":null,"padding":null,"right":null,"top":null,"visibility":null,"width":null}},"9f5e3f7b6aaf4225bb6f9448d13d79ef":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"HBoxModel","state":{"_dom_classes":[],"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"HBoxModel","_view_count":null,"_view_module":"@jupyter-widgets/controls","_view_module_version":"2.0.0","_view_name":"HBoxView","box_style":"","children":["IPY_MODEL_e5f307b055cb4563b0ffa4d26a79d441","IPY_MODEL_dfe22c98530e46818cb0d3f1ddb699af","IPY_MODEL_d74b3a45ca404a4a860745eebfb77e7a"],"layout":"IPY_MODEL_fdb5ed9b87414bf28ee412133644750c","tabbable":null,"tooltip":null}},"b0320adfc5984a9b9f49de2c6c5a6023":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"HTMLStyleModel","state":{"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"HTMLStyleModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"StyleView","background":null,"description_width":"","font_size":null,"text_color":null}},"bc6c3b3ffe9743caa27c066bc85d689f":{"model_module":"@jupyter-widgets/base","model_module_version":"2.0.0","model_name":"LayoutModel","state":{"_model_module":"@jupyter-widgets/base","_model_module_version":"2.0.0","_model_name":"LayoutModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"LayoutView","align_content":null,"align_items":null,"align_self":null,"border_bottom":null,"border_left":null,"border_right":null,"border_top":null,"bottom":null,"display":null,"flex":null,"flex_flow":null,"grid_area":null,"grid_auto_columns":null,"grid_auto_flow":null,"grid_auto_rows":null,"grid_column":null,"grid_gap":null,"grid_row":null,"grid_template_areas":null,"grid_template_columns":null,"grid_template_rows":null,"height":null,"justify_content":null,"justify_items":null,"left":null,"margin":null,"max_height":null,"max_width":null,"min_height":null,"min_width":null,"object_fit":null,"object_position":null,"order":null,"overflow":null,"padding":null,"right":null,"top":null,"visibility":null,"width":null}},"d74b3a45ca404a4a860745eebfb77e7a":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"HTMLModel","state":{"_dom_classes":[],"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"HTMLModel","_view_count":null,"_view_module":"@jupyter-widgets/controls","_view_module_version":"2.0.0","_view_name":"HTMLView","description":"","description_allow_html":false,"layout":"IPY_MODEL_039605916e8c4ab8a266814271128caf","placeholder":"​","style":"IPY_MODEL_5b18a78f634f43f2936e51cb3d18223a","tabbable":null,"tooltip":null,"value":" 6/6 [00:24&lt;00:00,  3.67s/it]"}},"dfe22c98530e46818cb0d3f1ddb699af":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"FloatProgressModel","state":{"_dom_classes":[],"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"FloatProgressModel","_view_count":null,"_view_module":"@jupyter-widgets/controls","_view_module_version":"2.0.0","_view_name":"ProgressView","bar_style":"","description":"","description_allow_html":false,"layout":"IPY_MODEL_96db19f7812b472da7192e2180d58260","max":6,"min":0,"orientation":"horizontal","style":"IPY_MODEL_f4c833e79ea1471aa8cb24d223942fdc","tabbable":null,"tooltip":null,"value":6}},"e5f307b055cb4563b0ffa4d26a79d441":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"HTMLModel","state":{"_dom_classes":[],"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"HTMLModel","_view_count":null,"_view_module":"@jupyter-widgets/controls","_view_module_version":"2.0.0","_view_name":"HTMLView","description":"","description_allow_html":false,"layout":"IPY_MODEL_bc6c3b3ffe9743caa27c066bc85d689f","placeholder":"​","style":"IPY_MODEL_b0320adfc5984a9b9f49de2c6c5a6023","tabbable":null,"tooltip":null,"value":"batch: 100%"}},"f4c833e79ea1471aa8cb24d223942fdc":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"ProgressStyleModel","state":{"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"ProgressStyleModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"StyleView","bar_color":null,"description_width":""}},"fdb5ed9b87414bf28ee412133644750c":{"model_module":"@jupyter-widgets/base","model_module_version":"2.0.0","model_name":"LayoutModel","state":{"_model_module":"@jupyter-widgets/base","_model_module_version":"2.0.0","_model_name":"LayoutModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"LayoutView","align_content":null,"align_items":null,"align_self":null,"border_bottom":null,"border_left":null,"border_right":null,"border_top":null,"bottom":null,"display":null,"flex":null,"flex_flow":null,"grid_area":null,"grid_auto_columns":null,"grid_auto_flow":null,"grid_auto_rows":null,"grid_column":null,"grid_gap":null,"grid_row":null,"grid_template_areas":null,"grid_template_columns":null,"grid_template_rows":null,"height":null,"justify_content":null,"justify_items":null,"left":null,"margin":null,"max_height":null,"max_width":null,"min_height":null,"min_width":null,"object_fit":null,"object_position":null,"order":null,"overflow":null,"padding":null,"right":null,"top":null,"visibility":"hidden","width":null}}},"version_major":2,"version_minor":0}
+{"state":{"41dbf70cc04a44cbba3d7ed25c6af199":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"HBoxModel","state":{"_dom_classes":[],"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"HBoxModel","_view_count":null,"_view_module":"@jupyter-widgets/controls","_view_module_version":"2.0.0","_view_name":"HBoxView","box_style":"","children":["IPY_MODEL_780dce98aa59473b8300c4ccb76494c5","IPY_MODEL_fb7c264dcd5040e0b7c8f6646a1de717","IPY_MODEL_65312373cf1d4ff6b3201248accf7770"],"layout":"IPY_MODEL_c5016c5575ce4bbb9e5134088fd25ab4","tabbable":null,"tooltip":null}},"65312373cf1d4ff6b3201248accf7770":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"HTMLModel","state":{"_dom_classes":[],"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"HTMLModel","_view_count":null,"_view_module":"@jupyter-widgets/controls","_view_module_version":"2.0.0","_view_name":"HTMLView","description":"","description_allow_html":false,"layout":"IPY_MODEL_d21a0371bf624ffea301d45e4b12f9d0","placeholder":"​","style":"IPY_MODEL_96c27585dfb2405abd9f2323ecb8c79f","tabbable":null,"tooltip":null,"value":" 6/6 [00:23&lt;00:00,  3.51s/it]"}},"780dce98aa59473b8300c4ccb76494c5":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"HTMLModel","state":{"_dom_classes":[],"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"HTMLModel","_view_count":null,"_view_module":"@jupyter-widgets/controls","_view_module_version":"2.0.0","_view_name":"HTMLView","description":"","description_allow_html":false,"layout":"IPY_MODEL_80d04bfe26a94b108cc9c3c6ff8e10e1","placeholder":"​","style":"IPY_MODEL_f3d972c5135640fd94b41f81a203c0e9","tabbable":null,"tooltip":null,"value":"batch: 100%"}},"80d04bfe26a94b108cc9c3c6ff8e10e1":{"model_module":"@jupyter-widgets/base","model_module_version":"2.0.0","model_name":"LayoutModel","state":{"_model_module":"@jupyter-widgets/base","_model_module_version":"2.0.0","_model_name":"LayoutModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"LayoutView","align_content":null,"align_items":null,"align_self":null,"border_bottom":null,"border_left":null,"border_right":null,"border_top":null,"bottom":null,"display":null,"flex":null,"flex_flow":null,"grid_area":null,"grid_auto_columns":null,"grid_auto_flow":null,"grid_auto_rows":null,"grid_column":null,"grid_gap":null,"grid_row":null,"grid_template_areas":null,"grid_template_columns":null,"grid_template_rows":null,"height":null,"justify_content":null,"justify_items":null,"left":null,"margin":null,"max_height":null,"max_width":null,"min_height":null,"min_width":null,"object_fit":null,"object_position":null,"order":null,"overflow":null,"padding":null,"right":null,"top":null,"visibility":null,"width":null}},"96c27585dfb2405abd9f2323ecb8c79f":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"HTMLStyleModel","state":{"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"HTMLStyleModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"StyleView","background":null,"description_width":"","font_size":null,"text_color":null}},"a4b71262a22247c2aadd7a40268a9342":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"ProgressStyleModel","state":{"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"ProgressStyleModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"StyleView","bar_color":null,"description_width":""}},"c5016c5575ce4bbb9e5134088fd25ab4":{"model_module":"@jupyter-widgets/base","model_module_version":"2.0.0","model_name":"LayoutModel","state":{"_model_module":"@jupyter-widgets/base","_model_module_version":"2.0.0","_model_name":"LayoutModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"LayoutView","align_content":null,"align_items":null,"align_self":null,"border_bottom":null,"border_left":null,"border_right":null,"border_top":null,"bottom":null,"display":null,"flex":null,"flex_flow":null,"grid_area":null,"grid_auto_columns":null,"grid_auto_flow":null,"grid_auto_rows":null,"grid_column":null,"grid_gap":null,"grid_row":null,"grid_template_areas":null,"grid_template_columns":null,"grid_template_rows":null,"height":null,"justify_content":null,"justify_items":null,"left":null,"margin":null,"max_height":null,"max_width":null,"min_height":null,"min_width":null,"object_fit":null,"object_position":null,"order":null,"overflow":null,"padding":null,"right":null,"top":null,"visibility":"hidden","width":null}},"d21a0371bf624ffea301d45e4b12f9d0":{"model_module":"@jupyter-widgets/base","model_module_version":"2.0.0","model_name":"LayoutModel","state":{"_model_module":"@jupyter-widgets/base","_model_module_version":"2.0.0","_model_name":"LayoutModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"LayoutView","align_content":null,"align_items":null,"align_self":null,"border_bottom":null,"border_left":null,"border_right":null,"border_top":null,"bottom":null,"display":null,"flex":null,"flex_flow":null,"grid_area":null,"grid_auto_columns":null,"grid_auto_flow":null,"grid_auto_rows":null,"grid_column":null,"grid_gap":null,"grid_row":null,"grid_template_areas":null,"grid_template_columns":null,"grid_template_rows":null,"height":null,"justify_content":null,"justify_items":null,"left":null,"margin":null,"max_height":null,"max_width":null,"min_height":null,"min_width":null,"object_fit":null,"object_position":null,"order":null,"overflow":null,"padding":null,"right":null,"top":null,"visibility":null,"width":null}},"f3d972c5135640fd94b41f81a203c0e9":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"HTMLStyleModel","state":{"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"HTMLStyleModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"StyleView","background":null,"description_width":"","font_size":null,"text_color":null}},"f6dd599717904d5aba6fdfd5dc5a4b48":{"model_module":"@jupyter-widgets/base","model_module_version":"2.0.0","model_name":"LayoutModel","state":{"_model_module":"@jupyter-widgets/base","_model_module_version":"2.0.0","_model_name":"LayoutModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"LayoutView","align_content":null,"align_items":null,"align_self":null,"border_bottom":null,"border_left":null,"border_right":null,"border_top":null,"bottom":null,"display":null,"flex":null,"flex_flow":null,"grid_area":null,"grid_auto_columns":null,"grid_auto_flow":null,"grid_auto_rows":null,"grid_column":null,"grid_gap":null,"grid_row":null,"grid_template_areas":null,"grid_template_columns":null,"grid_template_rows":null,"height":null,"justify_content":null,"justify_items":null,"left":null,"margin":null,"max_height":null,"max_width":null,"min_height":null,"min_width":null,"object_fit":null,"object_position":null,"order":null,"overflow":null,"padding":null,"right":null,"top":null,"visibility":null,"width":null}},"fb7c264dcd5040e0b7c8f6646a1de717":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"FloatProgressModel","state":{"_dom_classes":[],"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"FloatProgressModel","_view_count":null,"_view_module":"@jupyter-widgets/controls","_view_module_version":"2.0.0","_view_name":"ProgressView","bar_style":"","description":"","description_allow_html":false,"layout":"IPY_MODEL_f6dd599717904d5aba6fdfd5dc5a4b48","max":6,"min":0,"orientation":"horizontal","style":"IPY_MODEL_a4b71262a22247c2aadd7a40268a9342","tabbable":null,"tooltip":null,"value":6}}},"version_major":2,"version_minor":0}
 </script>
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {

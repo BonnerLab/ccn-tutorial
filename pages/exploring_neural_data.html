@@ -65,6 +65,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
+<link href="../pages/assets/ccn-logo.svg" rel="icon" type="image/svg+xml">
 <script src="../site_libs/quarto-html/quarto.js"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -127,6 +128,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <nav class="navbar navbar-expand-lg navbar-dark ">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
+    <a href="../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../pages/assets/ccn-logo.svg" alt="" class="navbar-logo">
+    </a>
     <a class="navbar-brand" href="../index.html">
     <span class="navbar-title">CCN 2023 | Tutorial</span>
     </a>
@@ -254,14 +258,14 @@ Run this notebook interactively!
 <p>Here’s a <a href="https://colab.research.google.com/github/BonnerLab/ccn-tutorial/blob/main/notebooks/exploring_neural_data.ipynb">link to this notebook</a> on Google Colab.</p>
 </div>
 </div>
-<div id="install_package" class="cell" data-execution_count="1">
+<div id="install_package" class="cell" data-execution_count="2">
 <details>
 <summary>Install all required dependencies</summary>
 <div class="sourceCode cell-code" id="install_package"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="install_package-1"><a href="#install_package-1" aria-hidden="true" tabindex="-1"></a><span class="co"># </span><span class="al">TODO</span><span class="co"> uncomment before final packaging</span></span>
 <span id="install_package-2"><a href="#install_package-2" aria-hidden="true" tabindex="-1"></a><span class="co"># %pip install git+https://github.com/BonnerLab/ccn-tutorial.git</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="import_libraries" class="cell" data-execution_count="2">
+<div id="import_libraries" class="cell" data-execution_count="3">
 <details>
 <summary>Import various libraries</summary>
 <div class="sourceCode cell-code" id="import_libraries"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="import_libraries-1"><a href="#import_libraries-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> collections <span class="im">import</span> Counter</span>
@@ -301,7 +305,7 @@ Run this notebook interactively!
 <span id="import_libraries-35"><a href="#import_libraries-35" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="set_visualization_defaults" class="cell" data-execution_count="3">
+<div id="set_visualization_defaults" class="cell" data-execution_count="4">
 <details>
 <summary>Set some visualization defaults</summary>
 <div class="sourceCode cell-code" id="set_visualization_defaults"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="set_visualization_defaults-1"><a href="#set_visualization_defaults-1" aria-hidden="true" tabindex="-1"></a><span class="op">%</span>matplotlib inline</span>
@@ -324,7 +328,7 @@ Run this notebook interactively!
 <span id="set_visualization_defaults-18"><a href="#set_visualization_defaults-18" aria-hidden="true" tabindex="-1"></a>warnings.filterwarnings(<span class="st">"ignore"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="initialize_rng" class="cell" data-execution_count="4">
+<div id="initialize_rng" class="cell" data-execution_count="5">
 <details>
 <summary>Initialize a deterministic random number generator</summary>
 <div class="sourceCode cell-code" id="initialize_rng"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="initialize_rng-1"><a href="#initialize_rng-1" aria-hidden="true" tabindex="-1"></a>random_state <span class="op">=</span> <span class="dv">0</span></span>
@@ -336,7 +340,7 @@ Run this notebook interactively!
 <p><img src="assets/nsd.png" class="img-fluid"></p>
 <p>NSD is the largest fMRI dataset on human vision, with 7T fMRI responses (1.8mm isotropic voxels) obtained from 8 adult participants. The experiment involved a continuous recognition task while participants observed natural scene images from the Microsoft Common Objects in Context (COCO) database (Lin et al., 2014).</p>
 <p>Let’s load the dataset. This data contains neural responses to 872 images from ~15,000 voxels reliably modulated by the visual stimuli during the NSD experiment.</p>
-<div id="1107c247" class="cell" data-execution_count="5">
+<div id="1107c247" class="cell" data-execution_count="6">
 <details>
 <summary>Load the dataset</summary>
 <div class="sourceCode cell-code" id="1107c247"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="1107c247-1"><a href="#1107c247-1" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> average_data_across_repetitions(load_dataset(subject<span class="op">=</span><span class="dv">0</span>, roi<span class="op">=</span><span class="st">"general"</span>))</span>
@@ -788,7 +792,7 @@ Some fMRI preprocessing details
 </div>
 </div>
 <p>Here are some examples of stimuli that we analyzed.</p>
-<div id="cell-view_stimuli" class="cell page-columns page-full" data-execution_count="6">
+<div id="cell-view_stimuli" class="cell page-columns page-full" data-execution_count="7">
 <details>
 <summary>Load the stimuli</summary>
 <div class="sourceCode cell-code" id="cell-view_stimuli"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cell-view_stimuli-1"><a href="#cell-view_stimuli-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> view_stimuli(stimuli: xr.DataArray, <span class="op">*</span>, n: <span class="bu">int</span> <span class="op">=</span> <span class="dv">10</span>) <span class="op">-&gt;</span> <span class="va">None</span>:</span>
@@ -819,7 +823,7 @@ Some fMRI preprocessing details
 <section id="the-neural-eigenspectrum" class="level3 page-columns page-full">
 <h3 class="anchored" data-anchor-id="the-neural-eigenspectrum">The neural eigenspectrum</h3>
 <p>Now we can apply PCA to the neural responses and plot the eigenspectrum of the data!</p>
-<div id="9550a4db" class="cell" data-execution_count="7">
+<div id="9550a4db" class="cell" data-execution_count="8">
 <details>
 <summary>Visualize the eigenspectrum</summary>
 <div class="sourceCode cell-code" id="9550a4db"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="9550a4db-1"><a href="#9550a4db-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> view_eigenspectrum(pca: PCA, <span class="op">*</span>, log: <span class="bu">bool</span> <span class="op">=</span> <span class="va">False</span>) <span class="op">-&gt;</span> <span class="va">None</span>:</span>
@@ -859,7 +863,7 @@ Some fMRI preprocessing details
 <p>On this plot, the first few PCs have substantial variance while there appears to be negligible variance after about rank 20. How can we interpret these PCs of different variance levels? There are some simple ways to visualize these PCs.</p>
 <section id="visualizing-principal-components" class="level4 page-columns page-full">
 <h4 class="anchored" data-anchor-id="visualizing-principal-components">Visualizing principal components</h4>
-<div id="image_viewing_utilities" class="cell" data-execution_count="8">
+<div id="image_viewing_utilities" class="cell" data-execution_count="9">
 <details>
 <summary>Utilities to view images</summary>
 <div class="sourceCode cell-code" id="image_viewing_utilities"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="image_viewing_utilities-1"><a href="#image_viewing_utilities-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> view_images_as_scatterplot(</span>
@@ -924,7 +928,7 @@ Some fMRI preprocessing details
 </details>
 </div>
 <p>The first method is to plot the stimuli on a scatter plot, designating their X and Y coordinates to be their scores along two PCs of interest. This allows us to observe potential clustering of the stimuli.</p>
-<div id="594ea50e" class="cell page-columns page-full" data-execution_count="9">
+<div id="594ea50e" class="cell page-columns page-full" data-execution_count="10">
 <details>
 <summary>Project the neural data onto the first two principal components</summary>
 <div class="sourceCode cell-code" id="594ea50e"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="594ea50e-1"><a href="#594ea50e-1" aria-hidden="true" tabindex="-1"></a>data_pca <span class="op">=</span> pca.transform(data)</span>
@@ -939,7 +943,7 @@ Some fMRI preprocessing details
 </div>
 </div>
 <p>Alternativley, we can focus on the stimuli with the highest or lowest scores along a given PC. It provides simple clues of what this PC might be sensitive to, which could be features ranging from low to high complexity level.</p>
-<div id="extreme_images_pcs" class="cell page-columns page-full" data-execution_count="10">
+<div id="extreme_images_pcs" class="cell page-columns page-full" data-execution_count="11">
 <details>
 <summary>View images that have extreme scores on the PCs</summary>
 <div class="sourceCode cell-code" id="extreme_images_pcs"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="extreme_images_pcs-1"><a href="#extreme_images_pcs-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> rank <span class="kw">in</span> [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">10</span>, <span class="dv">50</span>, <span class="dv">100</span>]:</span>
@@ -1001,7 +1005,7 @@ What about other methods?
 <div id="callout-3" class="callout-3-contents callout-collapse collapse page-columns page-full">
 <div class="callout-body-container callout-body page-columns page-full">
 <p>Interpreting PCs can be challenging especially when we rely solely on visual inspection. This difficulty arises, in part, because many natural features are non-negative. As a result, methods like nonnegative matrix factorization (NMF) often offer more interpretable dimensions than PCA.</p>
-<div id="4149075f" class="cell page-columns page-full" data-execution_count="11">
+<div id="4149075f" class="cell page-columns page-full" data-execution_count="12">
 <details>
 <summary>Compute NMF of neural responses</summary>
 <div class="sourceCode cell-code" id="4149075f"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="4149075f-1"><a href="#4149075f-1" aria-hidden="true" tabindex="-1"></a>scaler <span class="op">=</span> MinMaxScaler()</span>
@@ -1021,7 +1025,7 @@ What about other methods?
 </div>
 </div>
 <p>Similarly, we can inspect the stimuli with highest or closest-to-zero values along each dimension.</p>
-<div id="90f2a683" class="cell page-columns page-full" data-execution_count="12">
+<div id="90f2a683" class="cell page-columns page-full" data-execution_count="13">
 <details>
 <summary>View images that have extreme scores on the dimensions</summary>
 <div class="sourceCode cell-code" id="90f2a683"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="90f2a683-1"><a href="#90f2a683-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> dim <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">2</span>):</span>
@@ -1052,7 +1056,7 @@ What about other methods?
 <section id="logarithmic-scale" class="level4">
 <h4 class="anchored" data-anchor-id="logarithmic-scale">Logarithmic scale</h4>
 <p>Given these visualization, we might deem that the higher-rank PCs are non-interpretable and thus follow the common practice to drop them. However, before doing so, let’s try visualizing the spectrum on a logarithmic scale for both axes:</p>
-<div id="4fceb933" class="cell" data-execution_count="13">
+<div id="4fceb933" class="cell" data-execution_count="14">
 <details>
 <summary>Visualize the eigenspectrum on a logarithmic scale</summary>
 <div class="sourceCode cell-code" id="4fceb933"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="4fceb933-1"><a href="#4fceb933-1" aria-hidden="true" tabindex="-1"></a>view_eigenspectrum(pca, log<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -1090,7 +1094,7 @@ What about other methods?
 <section id="an-illustration-word-frequencies" class="level3">
 <h3 class="anchored" data-anchor-id="an-illustration-word-frequencies">An illustration: word frequencies</h3>
 <p>Let’s compute the distribution of word frequencies in a small corpus – a collection of <a href="https://pytorch.org/text/0.9.0/datasets.html#imdb">IMDb movie reviews</a>!</p>
-<div id="generate-word-frequencies" class="cell" data-execution_count="14">
+<div id="generate-word-frequencies" class="cell" data-execution_count="15">
 <details>
 <summary>Generate word frequency distribution</summary>
 <div class="sourceCode cell-code" id="generate-word-frequencies"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="generate-word-frequencies-1"><a href="#generate-word-frequencies-1" aria-hidden="true" tabindex="-1"></a>dataset <span class="op">=</span> IMDB(split<span class="op">=</span><span class="st">"test"</span>)</span>
@@ -1102,7 +1106,7 @@ What about other methods?
 <span id="generate-word-frequencies-7"><a href="#generate-word-frequencies-7" aria-hidden="true" tabindex="-1"></a>    counter.update(tokenizer(text))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="cell-linear-word-frequency" class="cell" data-execution_count="15">
+<div id="cell-linear-word-frequency" class="cell" data-execution_count="16">
 <details>
 <summary>View word frequency distribution on a linear scale</summary>
 <div class="sourceCode cell-code" id="cell-linear-word-frequency"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cell-linear-word-frequency-1"><a href="#cell-linear-word-frequency-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> view_word_frequency_distribution(</span>
@@ -1139,7 +1143,7 @@ What about other methods?
 </div>
 </div>
 </div>
-<div id="cell-logarithmic-word-frequency" class="cell" data-execution_count="16">
+<div id="cell-logarithmic-word-frequency" class="cell" data-execution_count="17">
 <details>
 <summary>View word frequency distribution on a logarithmic scale</summary>
 <div class="sourceCode cell-code" id="cell-logarithmic-word-frequency"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cell-logarithmic-word-frequency-1"><a href="#cell-logarithmic-word-frequency-1" aria-hidden="true" tabindex="-1"></a>view_word_frequency_distribution(counter, log<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -1152,7 +1156,7 @@ What about other methods?
 </div>
 </div>
 </div>
-<div id="cell-most-common-tokens" class="cell" data-execution_count="17">
+<div id="cell-most-common-tokens" class="cell" data-execution_count="18">
 <details>
 <summary>View the 200 most common words in the dataset</summary>
 <div class="sourceCode cell-code" id="cell-most-common-tokens"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cell-most-common-tokens-1"><a href="#cell-most-common-tokens-1" aria-hidden="true" tabindex="-1"></a>display_counter <span class="op">=</span> copy.copy(counter)</span>
@@ -1177,7 +1181,7 @@ What about other methods?
 </div>
 </div>
 </div>
-<div id="cell-least-common-tokens" class="cell" data-execution_count="18">
+<div id="cell-least-common-tokens" class="cell" data-execution_count="19">
 <details>
 <summary>View the 200 least common words in the dataset</summary>
 <div class="sourceCode cell-code" id="cell-least-common-tokens"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cell-least-common-tokens-1"><a href="#cell-least-common-tokens-1" aria-hidden="true" tabindex="-1"></a>display(</span>
@@ -1196,7 +1200,7 @@ What about other methods?
 </div>
 </div>
 </div>
-<div id="cell-text-original" class="cell" data-execution_count="19">
+<div id="cell-text-original" class="cell" data-execution_count="20">
 <details>
 <summary>Display an IMDb review</summary>
 <div class="sourceCode cell-code" id="cell-text-original"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cell-text-original-1"><a href="#cell-text-original-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> _, line <span class="kw">in</span> dataset:</span>
@@ -1250,7 +1254,7 @@ What about other methods?
 <blockquote class="blockquote">i love sci-fi and am willing to put up with a lot. Sci-fi movies/tv are usually underfunded, under-appreciated and misunderstood. I tried to like this, I really did, but it is to good tv sci-fi as babylon 5 is to star trek (the original). Silly prosthetics, cheap cardboard sets, stilted dialogues, cg that doesn't match the background, and painfully one-dimensional characters cannot be overcome with a'sci-fi'setting. (I'm sure there are those of you out there who think babylon 5 is good sci-fi tv. It's not. It's clichéd and uninspiring.) while us viewers might like emotion and character development, sci-fi is a genre that does not take itself seriously (cf. Star trek). It may treat important issues, yet not as a serious philosophy. It's really difficult to care about the characters here as they are not simply foolish, just missing a spark of life. Their actions and reactions are wooden and predictable, often painful to watch. The makers of earth know it's rubbish as they have to always say gene roddenberry's earth... Otherwise people would not continue watching. Roddenberry's ashes must be turning in their orbit as this dull, cheap, poorly edited (watching it without advert breaks really brings this home) trudging trabant of a show lumbers into space. Spoiler. So, kill off a main character. And then bring him back as another actor. Jeeez! Dallas all over again.</blockquote>
 </div>
 </div>
-<div id="cell-text-reconstruction" class="cell" data-execution_count="20">
+<div id="cell-text-reconstruction" class="cell" data-execution_count="21">
 <details>
 <summary>Reconstruct the review using the top 200 words</summary>
 <div class="sourceCode cell-code" id="cell-text-reconstruction"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cell-text-reconstruction-1"><a href="#cell-text-reconstruction-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Review reconstructed using top 200 words"</span>)</span>
