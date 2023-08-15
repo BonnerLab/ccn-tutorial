@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en-US" xml:lang="en-US"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.4.315">
+<meta name="generator" content="quarto-1.4.320">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -254,14 +254,14 @@ Run this notebook interactively!
 <p>Here’s a <a href="https://colab.research.google.com/github/BonnerLab/ccn-tutorial/blob/main/notebooks/exploring_neural_data.ipynb">link to this notebook</a> on Google Colab.</p>
 </div>
 </div>
-<div id="install_package" class="cell" data-execution_count="2">
+<div id="install_package" class="cell" data-execution_count="1">
 <details>
 <summary>Install all required dependencies</summary>
 <div class="sourceCode cell-code" id="install_package"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="install_package-1"><a href="#install_package-1" aria-hidden="true" tabindex="-1"></a><span class="co"># </span><span class="al">TODO</span><span class="co"> uncomment before final packaging</span></span>
 <span id="install_package-2"><a href="#install_package-2" aria-hidden="true" tabindex="-1"></a><span class="co"># %pip install git+https://github.com/BonnerLab/ccn-tutorial.git</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="import_libraries" class="cell" data-execution_count="3">
+<div id="import_libraries" class="cell" data-execution_count="2">
 <details>
 <summary>Import various libraries</summary>
 <div class="sourceCode cell-code" id="import_libraries"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="import_libraries-1"><a href="#import_libraries-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
@@ -280,13 +280,13 @@ Run this notebook interactively!
 <span id="import_libraries-14"><a href="#import_libraries-14" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.decomposition <span class="im">import</span> PCA, NMF</span>
 <span id="import_libraries-15"><a href="#import_libraries-15" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> umap <span class="im">import</span> UMAP</span>
 <span id="import_libraries-16"><a href="#import_libraries-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="import_libraries-17"><a href="#import_libraries-17" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> IPython.display <span class="im">import</span> display, HTML</span>
-<span id="import_libraries-18"><a href="#import_libraries-18" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib <span class="im">as</span> mpl</span>
-<span id="import_libraries-19"><a href="#import_libraries-19" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> mpl_toolkits.axes_grid1 <span class="im">import</span> ImageGrid</span>
-<span id="import_libraries-20"><a href="#import_libraries-20" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> matplotlib <span class="im">import</span> pyplot <span class="im">as</span> plt</span>
-<span id="import_libraries-21"><a href="#import_libraries-21" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> matplotlib_inline.backend_inline <span class="im">import</span> set_matplotlib_formats</span>
-<span id="import_libraries-22"><a href="#import_libraries-22" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> matplotlib.offsetbox <span class="im">import</span> OffsetImage, AnnotationBbox</span>
-<span id="import_libraries-23"><a href="#import_libraries-23" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
+<span id="import_libraries-17"><a href="#import_libraries-17" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib <span class="im">as</span> mpl</span>
+<span id="import_libraries-18"><a href="#import_libraries-18" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> mpl_toolkits.axes_grid1 <span class="im">import</span> ImageGrid</span>
+<span id="import_libraries-19"><a href="#import_libraries-19" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> matplotlib <span class="im">import</span> pyplot <span class="im">as</span> plt</span>
+<span id="import_libraries-20"><a href="#import_libraries-20" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> matplotlib_inline.backend_inline <span class="im">import</span> set_matplotlib_formats</span>
+<span id="import_libraries-21"><a href="#import_libraries-21" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> matplotlib.offsetbox <span class="im">import</span> OffsetImage, AnnotationBbox</span>
+<span id="import_libraries-22"><a href="#import_libraries-22" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
+<span id="import_libraries-23"><a href="#import_libraries-23" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> IPython.display <span class="im">import</span> display</span>
 <span id="import_libraries-24"><a href="#import_libraries-24" aria-hidden="true" tabindex="-1"></a></span>
 <span id="import_libraries-25"><a href="#import_libraries-25" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> utilities.brain <span class="im">import</span> (</span>
 <span id="import_libraries-26"><a href="#import_libraries-26" aria-hidden="true" tabindex="-1"></a>    load_dataset,</span>
@@ -296,7 +296,7 @@ Run this notebook interactively!
 <span id="import_libraries-30"><a href="#import_libraries-30" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="set_visualization_defaults" class="cell" data-execution_count="4">
+<div id="set_visualization_defaults" class="cell" data-execution_count="3">
 <details>
 <summary>Set some visualization defaults</summary>
 <div class="sourceCode cell-code" id="set_visualization_defaults"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="set_visualization_defaults-1"><a href="#set_visualization_defaults-1" aria-hidden="true" tabindex="-1"></a><span class="op">%</span>matplotlib inline</span>
@@ -319,7 +319,7 @@ Run this notebook interactively!
 <span id="set_visualization_defaults-18"><a href="#set_visualization_defaults-18" aria-hidden="true" tabindex="-1"></a>warnings.filterwarnings(<span class="st">"ignore"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="initialize_rng" class="cell" data-execution_count="5">
+<div id="initialize_rng" class="cell" data-execution_count="4">
 <details>
 <summary>Initialize a deterministic random number generator</summary>
 <div class="sourceCode cell-code" id="initialize_rng"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="initialize_rng-1"><a href="#initialize_rng-1" aria-hidden="true" tabindex="-1"></a>random_state <span class="op">=</span> <span class="dv">0</span></span>
@@ -331,12 +331,12 @@ Run this notebook interactively!
 <p><img src="assets/nsd.png" class="img-fluid"></p>
 <p>NSD is the largest fMRI dataset on human vision, with 7T fMRI responses (1.8mm isotropic voxels) obtained from 8 adult participants. The experiment involved a continuous recognition task while participants observed natural scene images from the Microsoft Common Objects in Context (COCO) database (Lin et al., 2014).</p>
 <p>Let’s load the dataset. This data contains neural responses to 872 images from ~15,000 voxels reliably modulated by the visual stimuli during the NSD experiment.</p>
-<div id="79510b80" class="cell" data-execution_count="6">
+<div id="930e2715" class="cell" data-execution_count="5">
 <details>
 <summary>Load the dataset</summary>
-<div class="sourceCode cell-code" id="79510b80"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="79510b80-1"><a href="#79510b80-1" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> average_data_across_repetitions(load_dataset(subject<span class="op">=</span><span class="dv">0</span>, roi<span class="op">=</span><span class="st">"general"</span>))</span>
-<span id="79510b80-2"><a href="#79510b80-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="79510b80-3"><a href="#79510b80-3" aria-hidden="true" tabindex="-1"></a>display(data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="930e2715"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="930e2715-1"><a href="#930e2715-1" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> average_data_across_repetitions(load_dataset(subject<span class="op">=</span><span class="dv">0</span>, roi<span class="op">=</span><span class="st">"general"</span>))</span>
+<span id="930e2715-2"><a href="#930e2715-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="930e2715-3"><a href="#930e2715-3" aria-hidden="true" tabindex="-1"></a>display(data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-display">
 <div><svg style="position: absolute; width: 0; height: 0; overflow: hidden">
@@ -714,7 +714,7 @@ Attributes: (3/8)
     resolution:      1pt8mm
     preprocessing:   fithrf_GLMdenoise_RR
     ...              ...
-    postprocessing:  averaged across first two repetitions</pre><div class="xr-wrap" style="display:none"><div class="xr-header"><div class="xr-obj-type">xarray.DataArray</div><div class="xr-array-name">'fMRI betas'</div><ul class="xr-dim-list"><li><span>presentation</span>: 700</li><li><span>neuroid</span>: 15724</li></ul></div><ul class="xr-sections"><li class="xr-section-item"><div class="xr-array-wrap"><input id="section-9bbaed5b-e323-4086-903d-471653cd7d26" class="xr-array-in" type="checkbox"><label for="section-9bbaed5b-e323-4086-903d-471653cd7d26" title="Show/hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-array-preview xr-preview"><span>0.4915 0.2473 0.08592 0.05828 ... -0.2126 -0.6315 -0.5751 -0.5354</span></div><div class="xr-array-data"><pre>array([[ 0.4915219 ,  0.24733381,  0.08592446, ..., -0.366651  ,
+    postprocessing:  averaged across first two repetitions</pre><div class="xr-wrap" style="display:none"><div class="xr-header"><div class="xr-obj-type">xarray.DataArray</div><div class="xr-array-name">'fMRI betas'</div><ul class="xr-dim-list"><li><span>presentation</span>: 700</li><li><span>neuroid</span>: 15724</li></ul></div><ul class="xr-sections"><li class="xr-section-item"><div class="xr-array-wrap"><input id="section-fad8602f-009c-4f7b-b044-d40165000964" class="xr-array-in" type="checkbox"><label for="section-fad8602f-009c-4f7b-b044-d40165000964" title="Show/hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-array-preview xr-preview"><span>0.4915 0.2473 0.08592 0.05828 ... -0.2126 -0.6315 -0.5751 -0.5354</span></div><div class="xr-array-data"><pre>array([[ 0.4915219 ,  0.24733381,  0.08592446, ..., -0.366651  ,
          0.30723202,  0.43520752],
        [ 0.1664538 , -0.10728736,  0.35630295, ...,  0.8608913 ,
          0.03464809,  0.11020081],
@@ -726,7 +726,7 @@ Attributes: (3/8)
        [-0.00340644, -1.0050421 ,  0.7278904 , ...,  0.580743  ,
         -0.50856245, -0.2727615 ],
        [-1.2668517 , -1.4769105 , -0.3562023 , ..., -0.63146234,
-        -0.575121  , -0.5354325 ]], dtype=float32)</pre></div></div></li><li class="xr-section-item"><input id="section-6cba2792-a56d-4efd-952b-cd0ab8c6543d" class="xr-section-summary-in" type="checkbox" checked=""><label for="section-6cba2792-a56d-4efd-952b-cd0ab8c6543d" class="xr-section-summary">Coordinates: <span>(4)</span></label><div class="xr-section-inline-details"></div><div class="xr-section-details"><ul class="xr-var-list"><li class="xr-var-item"><div class="xr-var-name"><span>x</span></div><div class="xr-var-dims">(neuroid)</div><div class="xr-var-dtype">uint8</div><div class="xr-var-preview xr-preview">12 12 12 12 12 ... 72 72 72 72 72</div><input id="attrs-4eb95ea2-e929-48c8-a701-2a016835b6f6" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-4eb95ea2-e929-48c8-a701-2a016835b6f6" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-5c80d6ea-5fc1-4e53-9f8d-4e61a1216edf" class="xr-var-data-in" type="checkbox"><label for="data-5c80d6ea-5fc1-4e53-9f8d-4e61a1216edf" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array([12, 12, 12, ..., 72, 72, 72], dtype=uint8)</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span>y</span></div><div class="xr-var-dims">(neuroid)</div><div class="xr-var-dtype">uint8</div><div class="xr-var-preview xr-preview">21 22 22 22 22 ... 29 30 30 30 31</div><input id="attrs-165caba0-3813-49bf-9e14-22c0ec2a4ba5" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-165caba0-3813-49bf-9e14-22c0ec2a4ba5" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-84964f33-f338-48db-8c14-d6597dd21887" class="xr-var-data-in" type="checkbox"><label for="data-84964f33-f338-48db-8c14-d6597dd21887" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array([21, 22, 22, ..., 30, 30, 31], dtype=uint8)</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span>z</span></div><div class="xr-var-dims">(neuroid)</div><div class="xr-var-dtype">uint8</div><div class="xr-var-preview xr-preview">47 45 46 47 48 ... 46 45 46 49 49</div><input id="attrs-c5e4ecb2-e0ff-4d14-ab9c-5b0d62b8160e" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-c5e4ecb2-e0ff-4d14-ab9c-5b0d62b8160e" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-e289770a-2f93-4c21-b29f-41d151074167" class="xr-var-data-in" type="checkbox"><label for="data-e289770a-2f93-4c21-b29f-41d151074167" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array([47, 45, 46, ..., 46, 49, 49], dtype=uint8)</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span>stimulus_id</span></div><div class="xr-var-dims">(presentation)</div><div class="xr-var-dtype">object</div><div class="xr-var-preview xr-preview">'image02950' ... 'image72948'</div><input id="attrs-33a4553f-0ec2-4fc9-8ec8-3158ddb6abef" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-33a4553f-0ec2-4fc9-8ec8-3158ddb6abef" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-81e11ffa-c89b-469c-8ea5-e29777267990" class="xr-var-data-in" type="checkbox"><label for="data-81e11ffa-c89b-469c-8ea5-e29777267990" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array(['image02950', 'image02990', 'image03049', 'image03077',
+        -0.575121  , -0.5354325 ]], dtype=float32)</pre></div></div></li><li class="xr-section-item"><input id="section-facd1634-061d-4c1f-acd4-6fabf824008d" class="xr-section-summary-in" type="checkbox" checked=""><label for="section-facd1634-061d-4c1f-acd4-6fabf824008d" class="xr-section-summary">Coordinates: <span>(4)</span></label><div class="xr-section-inline-details"></div><div class="xr-section-details"><ul class="xr-var-list"><li class="xr-var-item"><div class="xr-var-name"><span>x</span></div><div class="xr-var-dims">(neuroid)</div><div class="xr-var-dtype">uint8</div><div class="xr-var-preview xr-preview">12 12 12 12 12 ... 72 72 72 72 72</div><input id="attrs-539380f9-d678-4a76-b0e9-5f6eb67a4f6a" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-539380f9-d678-4a76-b0e9-5f6eb67a4f6a" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-69b76321-8062-41ce-bf38-4e5843938a73" class="xr-var-data-in" type="checkbox"><label for="data-69b76321-8062-41ce-bf38-4e5843938a73" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array([12, 12, 12, ..., 72, 72, 72], dtype=uint8)</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span>y</span></div><div class="xr-var-dims">(neuroid)</div><div class="xr-var-dtype">uint8</div><div class="xr-var-preview xr-preview">21 22 22 22 22 ... 29 30 30 30 31</div><input id="attrs-adefc821-f765-43be-ae92-770ba0b4775a" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-adefc821-f765-43be-ae92-770ba0b4775a" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-53cd2d84-1de0-47da-8fca-9e3e3340e6d7" class="xr-var-data-in" type="checkbox"><label for="data-53cd2d84-1de0-47da-8fca-9e3e3340e6d7" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array([21, 22, 22, ..., 30, 30, 31], dtype=uint8)</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span>z</span></div><div class="xr-var-dims">(neuroid)</div><div class="xr-var-dtype">uint8</div><div class="xr-var-preview xr-preview">47 45 46 47 48 ... 46 45 46 49 49</div><input id="attrs-9f359004-f3f4-45a1-86b2-4032e698740a" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-9f359004-f3f4-45a1-86b2-4032e698740a" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-10ab947a-1e0d-446f-9204-451c336bdf92" class="xr-var-data-in" type="checkbox"><label for="data-10ab947a-1e0d-446f-9204-451c336bdf92" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array([47, 45, 46, ..., 46, 49, 49], dtype=uint8)</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span>stimulus_id</span></div><div class="xr-var-dims">(presentation)</div><div class="xr-var-dtype">object</div><div class="xr-var-preview xr-preview">'image02950' ... 'image72948'</div><input id="attrs-da50efc4-ac11-4293-93e2-f969b44117db" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-da50efc4-ac11-4293-93e2-f969b44117db" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-7d9b7888-756e-467e-b8de-9659b82bfe4a" class="xr-var-data-in" type="checkbox"><label for="data-7d9b7888-756e-467e-b8de-9659b82bfe4a" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array(['image02950', 'image02990', 'image03049', 'image03077',
        'image03146', 'image03157', 'image03164', 'image03171',
        'image03181', 'image03386', 'image03434', 'image03449',
        'image03489', 'image03626', 'image03682', 'image03687',
@@ -766,7 +766,7 @@ Attributes: (3/8)
        'image71410', 'image71450', 'image71753', 'image71894',
        'image72015', 'image72080', 'image72209', 'image72312',
        'image72510', 'image72605', 'image72719', 'image72948'],
-      dtype=object)</pre></div></li></ul></div></li><li class="xr-section-item"><input id="section-be1202ec-b5f7-413b-b154-a6137fc5c9a4" class="xr-section-summary-in" type="checkbox" disabled=""><label for="section-be1202ec-b5f7-413b-b154-a6137fc5c9a4" class="xr-section-summary" title="Expand/collapse section">Indexes: <span>(0)</span></label><div class="xr-section-inline-details"></div><div class="xr-section-details"><ul class="xr-var-list"></ul></div></li><li class="xr-section-item"><input id="section-d9494b74-7f71-48ba-b4ff-c0b29ca51d86" class="xr-section-summary-in" type="checkbox" checked=""><label for="section-d9494b74-7f71-48ba-b4ff-c0b29ca51d86" class="xr-section-summary">Attributes: <span>(8)</span></label><div class="xr-section-inline-details"></div><div class="xr-section-details"><dl class="xr-attrs"><dt><span>resolution :</span></dt><dd>1pt8mm</dd><dt><span>preprocessing :</span></dt><dd>fithrf_GLMdenoise_RR</dd><dt><span>z_score :</span></dt><dd>True</dd><dt><span>roi :</span></dt><dd>general</dd><dt><span>subject :</span></dt><dd>0</dd><dt><span>brain shape :</span></dt><dd>[ 81 104  83]</dd><dt><span>citation :</span></dt><dd>Allen, E.J., St-Yves, G., Wu, Y. et al. A massive 7T fMRI dataset to bridge cognitive neuroscience and artificial intelligence. Nat Neurosci 25, 116-126 (2022). https://doi.org/10.1038/s41593-021-00962-x</dd><dt><span>postprocessing :</span></dt><dd>averaged across first two repetitions</dd></dl></div></li></ul></div></div>
+      dtype=object)</pre></div></li></ul></div></li><li class="xr-section-item"><input id="section-7714bd76-a415-4fde-911e-d65231d619b3" class="xr-section-summary-in" type="checkbox" disabled=""><label for="section-7714bd76-a415-4fde-911e-d65231d619b3" class="xr-section-summary" title="Expand/collapse section">Indexes: <span>(0)</span></label><div class="xr-section-inline-details"></div><div class="xr-section-details"><ul class="xr-var-list"></ul></div></li><li class="xr-section-item"><input id="section-6cdd63c7-0bfa-4fa9-afdf-a6a4f33ef2ab" class="xr-section-summary-in" type="checkbox" checked=""><label for="section-6cdd63c7-0bfa-4fa9-afdf-a6a4f33ef2ab" class="xr-section-summary">Attributes: <span>(8)</span></label><div class="xr-section-inline-details"></div><div class="xr-section-details"><dl class="xr-attrs"><dt><span>resolution :</span></dt><dd>1pt8mm</dd><dt><span>preprocessing :</span></dt><dd>fithrf_GLMdenoise_RR</dd><dt><span>z_score :</span></dt><dd>True</dd><dt><span>roi :</span></dt><dd>general</dd><dt><span>subject :</span></dt><dd>0</dd><dt><span>brain shape :</span></dt><dd>[ 81 104  83]</dd><dt><span>citation :</span></dt><dd>Allen, E.J., St-Yves, G., Wu, Y. et al. A massive 7T fMRI dataset to bridge cognitive neuroscience and artificial intelligence. Nat Neurosci 25, 116-126 (2022). https://doi.org/10.1038/s41593-021-00962-x</dd><dt><span>postprocessing :</span></dt><dd>averaged across first two repetitions</dd></dl></div></li></ul></div></div>
 </div>
 </div>
 <div class="callout callout-style-default callout-note callout-titled">
@@ -783,7 +783,7 @@ Some fMRI preprocessing details
 </div>
 </div>
 <p>Here are some examples of stimuli that we analyzed.</p>
-<div id="cell-view_stimuli" class="cell page-columns page-full" data-execution_count="7">
+<div id="cell-view_stimuli" class="cell page-columns page-full" data-execution_count="6">
 <details>
 <summary>Load the stimuli</summary>
 <div class="sourceCode cell-code" id="cell-view_stimuli"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cell-view_stimuli-1"><a href="#cell-view_stimuli-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> view_stimuli(stimuli: xr.DataArray, <span class="op">*</span>, n: <span class="bu">int</span> <span class="op">=</span> <span class="dv">10</span>) <span class="op">-&gt;</span> <span class="va">None</span>:</span>
@@ -814,33 +814,33 @@ Some fMRI preprocessing details
 <section id="the-neural-eigenspectrum" class="level3 page-columns page-full">
 <h3 class="anchored" data-anchor-id="the-neural-eigenspectrum">The neural eigenspectrum</h3>
 <p>Now we can apply PCA to the neural responses and plot the eigenspectrum of the data!</p>
-<div id="cd1b4803" class="cell" data-execution_count="8">
+<div id="bab45de0" class="cell" data-execution_count="7">
 <details>
 <summary>Visualize the eigenspectrum</summary>
-<div class="sourceCode cell-code" id="cd1b4803"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cd1b4803-1"><a href="#cd1b4803-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> view_eigenspectrum(pca: PCA, <span class="op">*</span>, log: <span class="bu">bool</span> <span class="op">=</span> <span class="va">False</span>) <span class="op">-&gt;</span> <span class="va">None</span>:</span>
-<span id="cd1b4803-2"><a href="#cd1b4803-2" aria-hidden="true" tabindex="-1"></a>    eigenvalues <span class="op">=</span> pd.DataFrame(pca.explained_variance_, columns<span class="op">=</span>[<span class="st">"eigenvalue"</span>]).assign(</span>
-<span id="cd1b4803-3"><a href="#cd1b4803-3" aria-hidden="true" tabindex="-1"></a>        rank<span class="op">=</span><span class="dv">1</span> <span class="op">+</span> np.arange(pca.n_components_)</span>
-<span id="cd1b4803-4"><a href="#cd1b4803-4" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cd1b4803-5"><a href="#cd1b4803-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cd1b4803-6"><a href="#cd1b4803-6" aria-hidden="true" tabindex="-1"></a>    fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">6</span>, <span class="dv">6</span>))</span>
-<span id="cd1b4803-7"><a href="#cd1b4803-7" aria-hidden="true" tabindex="-1"></a>    sns.lineplot(</span>
-<span id="cd1b4803-8"><a href="#cd1b4803-8" aria-hidden="true" tabindex="-1"></a>        ax<span class="op">=</span>ax,</span>
-<span id="cd1b4803-9"><a href="#cd1b4803-9" aria-hidden="true" tabindex="-1"></a>        data<span class="op">=</span>eigenvalues.loc[eigenvalues[<span class="st">"rank"</span>] <span class="op">&lt;</span> pca.n_components_],</span>
-<span id="cd1b4803-10"><a href="#cd1b4803-10" aria-hidden="true" tabindex="-1"></a>        x<span class="op">=</span><span class="st">"rank"</span>,</span>
-<span id="cd1b4803-11"><a href="#cd1b4803-11" aria-hidden="true" tabindex="-1"></a>        y<span class="op">=</span><span class="st">"eigenvalue"</span>,</span>
-<span id="cd1b4803-12"><a href="#cd1b4803-12" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cd1b4803-13"><a href="#cd1b4803-13" aria-hidden="true" tabindex="-1"></a>    sns.despine(ax<span class="op">=</span>ax)</span>
-<span id="cd1b4803-14"><a href="#cd1b4803-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> log:</span>
-<span id="cd1b4803-15"><a href="#cd1b4803-15" aria-hidden="true" tabindex="-1"></a>        ax.set_xscale(<span class="st">"log"</span>)</span>
-<span id="cd1b4803-16"><a href="#cd1b4803-16" aria-hidden="true" tabindex="-1"></a>        ax.set_yscale(<span class="st">"log"</span>)</span>
-<span id="cd1b4803-17"><a href="#cd1b4803-17" aria-hidden="true" tabindex="-1"></a>        ax.set_ylim(bottom<span class="op">=</span><span class="dv">1</span>)</span>
-<span id="cd1b4803-18"><a href="#cd1b4803-18" aria-hidden="true" tabindex="-1"></a>    fig.show()</span>
-<span id="cd1b4803-19"><a href="#cd1b4803-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cd1b4803-20"><a href="#cd1b4803-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cd1b4803-21"><a href="#cd1b4803-21" aria-hidden="true" tabindex="-1"></a>pca <span class="op">=</span> PCA()</span>
-<span id="cd1b4803-22"><a href="#cd1b4803-22" aria-hidden="true" tabindex="-1"></a>pca.fit(data)</span>
-<span id="cd1b4803-23"><a href="#cd1b4803-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cd1b4803-24"><a href="#cd1b4803-24" aria-hidden="true" tabindex="-1"></a>view_eigenspectrum(pca)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="bab45de0"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="bab45de0-1"><a href="#bab45de0-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> view_eigenspectrum(pca: PCA, <span class="op">*</span>, log: <span class="bu">bool</span> <span class="op">=</span> <span class="va">False</span>) <span class="op">-&gt;</span> <span class="va">None</span>:</span>
+<span id="bab45de0-2"><a href="#bab45de0-2" aria-hidden="true" tabindex="-1"></a>    eigenvalues <span class="op">=</span> pd.DataFrame(pca.explained_variance_, columns<span class="op">=</span>[<span class="st">"eigenvalue"</span>]).assign(</span>
+<span id="bab45de0-3"><a href="#bab45de0-3" aria-hidden="true" tabindex="-1"></a>        rank<span class="op">=</span><span class="dv">1</span> <span class="op">+</span> np.arange(pca.n_components_)</span>
+<span id="bab45de0-4"><a href="#bab45de0-4" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="bab45de0-5"><a href="#bab45de0-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="bab45de0-6"><a href="#bab45de0-6" aria-hidden="true" tabindex="-1"></a>    fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">6</span>, <span class="dv">6</span>))</span>
+<span id="bab45de0-7"><a href="#bab45de0-7" aria-hidden="true" tabindex="-1"></a>    sns.lineplot(</span>
+<span id="bab45de0-8"><a href="#bab45de0-8" aria-hidden="true" tabindex="-1"></a>        ax<span class="op">=</span>ax,</span>
+<span id="bab45de0-9"><a href="#bab45de0-9" aria-hidden="true" tabindex="-1"></a>        data<span class="op">=</span>eigenvalues.loc[eigenvalues[<span class="st">"rank"</span>] <span class="op">&lt;</span> pca.n_components_],</span>
+<span id="bab45de0-10"><a href="#bab45de0-10" aria-hidden="true" tabindex="-1"></a>        x<span class="op">=</span><span class="st">"rank"</span>,</span>
+<span id="bab45de0-11"><a href="#bab45de0-11" aria-hidden="true" tabindex="-1"></a>        y<span class="op">=</span><span class="st">"eigenvalue"</span>,</span>
+<span id="bab45de0-12"><a href="#bab45de0-12" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="bab45de0-13"><a href="#bab45de0-13" aria-hidden="true" tabindex="-1"></a>    sns.despine(ax<span class="op">=</span>ax)</span>
+<span id="bab45de0-14"><a href="#bab45de0-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> log:</span>
+<span id="bab45de0-15"><a href="#bab45de0-15" aria-hidden="true" tabindex="-1"></a>        ax.set_xscale(<span class="st">"log"</span>)</span>
+<span id="bab45de0-16"><a href="#bab45de0-16" aria-hidden="true" tabindex="-1"></a>        ax.set_yscale(<span class="st">"log"</span>)</span>
+<span id="bab45de0-17"><a href="#bab45de0-17" aria-hidden="true" tabindex="-1"></a>        ax.set_ylim(bottom<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="bab45de0-18"><a href="#bab45de0-18" aria-hidden="true" tabindex="-1"></a>    fig.show()</span>
+<span id="bab45de0-19"><a href="#bab45de0-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="bab45de0-20"><a href="#bab45de0-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="bab45de0-21"><a href="#bab45de0-21" aria-hidden="true" tabindex="-1"></a>pca <span class="op">=</span> PCA()</span>
+<span id="bab45de0-22"><a href="#bab45de0-22" aria-hidden="true" tabindex="-1"></a>pca.fit(data)</span>
+<span id="bab45de0-23"><a href="#bab45de0-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="bab45de0-24"><a href="#bab45de0-24" aria-hidden="true" tabindex="-1"></a>view_eigenspectrum(pca)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-display">
 <div class="quarto-figure quarto-figure-center">
@@ -854,7 +854,7 @@ Some fMRI preprocessing details
 <p>On this plot, the first few PCs have substantial variance while there appears to be negligible variance after about rank 20. How can we interpret these PCs of different variance levels? There are some simple ways to visualize these PCs.</p>
 <section id="visualizing-principal-components" class="level4 page-columns page-full">
 <h4 class="anchored" data-anchor-id="visualizing-principal-components">Visualizing principal components</h4>
-<div id="image_viewing_utilities" class="cell" data-execution_count="9">
+<div id="image_viewing_utilities" class="cell" data-execution_count="8">
 <details>
 <summary>Utilities to view images</summary>
 <div class="sourceCode cell-code" id="image_viewing_utilities"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="image_viewing_utilities-1"><a href="#image_viewing_utilities-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> view_images_as_scatterplot(</span>
@@ -919,11 +919,11 @@ Some fMRI preprocessing details
 </details>
 </div>
 <p>The first method is to plot the stimuli on a scatter plot, designating their X and Y coordinates to be their scores along two PCs of interest. This allows us to observe potential clustering of the stimuli.</p>
-<div id="1b0c116f" class="cell page-columns page-full" data-execution_count="10">
+<div id="7f0f99b5" class="cell page-columns page-full" data-execution_count="9">
 <details>
 <summary>Project the neural data onto the first two principal components</summary>
-<div class="sourceCode cell-code" id="1b0c116f"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="1b0c116f-1"><a href="#1b0c116f-1" aria-hidden="true" tabindex="-1"></a>data_pca <span class="op">=</span> pca.transform(data)</span>
-<span id="1b0c116f-2"><a href="#1b0c116f-2" aria-hidden="true" tabindex="-1"></a>view_images_as_scatterplot(data_pca[:, <span class="dv">0</span>], data_pca[:, <span class="dv">1</span>], stimuli<span class="op">=</span>stimuli)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="7f0f99b5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="7f0f99b5-1"><a href="#7f0f99b5-1" aria-hidden="true" tabindex="-1"></a>data_pca <span class="op">=</span> pca.transform(data)</span>
+<span id="7f0f99b5-2"><a href="#7f0f99b5-2" aria-hidden="true" tabindex="-1"></a>view_images_as_scatterplot(data_pca[:, <span class="dv">0</span>], data_pca[:, <span class="dv">1</span>], stimuli<span class="op">=</span>stimuli)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-display page-columns page-full">
 <div class="quarto-figure quarto-figure-center page-columns page-full">
@@ -934,7 +934,7 @@ Some fMRI preprocessing details
 </div>
 </div>
 <p>Alternativley, we can focus on the stimuli with the highest or lowest scores along a given PC. It provides simple clues of what this PC might be sensitive to, which could be features ranging from low to high complexity level.</p>
-<div id="extreme_images_pcs" class="cell page-columns page-full" data-execution_count="11">
+<div id="extreme_images_pcs" class="cell page-columns page-full" data-execution_count="10">
 <details>
 <summary>View images that have extreme scores on the PCs</summary>
 <div class="sourceCode cell-code" id="extreme_images_pcs"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="extreme_images_pcs-1"><a href="#extreme_images_pcs-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> rank <span class="kw">in</span> [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">10</span>, <span class="dv">50</span>, <span class="dv">100</span>]:</span>
@@ -996,16 +996,16 @@ What about other methods?
 <div id="callout-3" class="callout-3-contents callout-collapse collapse page-columns page-full">
 <div class="callout-body-container callout-body page-columns page-full">
 <p>Interpreting PCs can be challenging especially when we rely solely on visual inspection. This difficulty arises, in part, because many natural features are non-negative. As a result, methods like nonnegative matrix factorization (NMF) often offer more interpretable dimensions than PCA.</p>
-<div id="e778741a" class="cell page-columns page-full" data-execution_count="12">
+<div id="5f675686" class="cell page-columns page-full" data-execution_count="11">
 <details>
 <summary>Compute NMF of neural responses</summary>
-<div class="sourceCode cell-code" id="e778741a"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="e778741a-1"><a href="#e778741a-1" aria-hidden="true" tabindex="-1"></a>scaler <span class="op">=</span> MinMaxScaler()</span>
-<span id="e778741a-2"><a href="#e778741a-2" aria-hidden="true" tabindex="-1"></a>scaler.fit(data)</span>
-<span id="e778741a-3"><a href="#e778741a-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="e778741a-4"><a href="#e778741a-4" aria-hidden="true" tabindex="-1"></a>nmf <span class="op">=</span> NMF(n_components<span class="op">=</span><span class="dv">2</span>, random_state<span class="op">=</span>random_state)</span>
-<span id="e778741a-5"><a href="#e778741a-5" aria-hidden="true" tabindex="-1"></a>data_nmf <span class="op">=</span> nmf.fit_transform(scaler.transform(data))</span>
-<span id="e778741a-6"><a href="#e778741a-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="e778741a-7"><a href="#e778741a-7" aria-hidden="true" tabindex="-1"></a>view_images_as_scatterplot(data_nmf[:, <span class="dv">0</span>], data_nmf[:, <span class="dv">1</span>], stimuli<span class="op">=</span>stimuli)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="5f675686"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="5f675686-1"><a href="#5f675686-1" aria-hidden="true" tabindex="-1"></a>scaler <span class="op">=</span> MinMaxScaler()</span>
+<span id="5f675686-2"><a href="#5f675686-2" aria-hidden="true" tabindex="-1"></a>scaler.fit(data)</span>
+<span id="5f675686-3"><a href="#5f675686-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="5f675686-4"><a href="#5f675686-4" aria-hidden="true" tabindex="-1"></a>nmf <span class="op">=</span> NMF(n_components<span class="op">=</span><span class="dv">2</span>, random_state<span class="op">=</span>random_state)</span>
+<span id="5f675686-5"><a href="#5f675686-5" aria-hidden="true" tabindex="-1"></a>data_nmf <span class="op">=</span> nmf.fit_transform(scaler.transform(data))</span>
+<span id="5f675686-6"><a href="#5f675686-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="5f675686-7"><a href="#5f675686-7" aria-hidden="true" tabindex="-1"></a>view_images_as_scatterplot(data_nmf[:, <span class="dv">0</span>], data_nmf[:, <span class="dv">1</span>], stimuli<span class="op">=</span>stimuli)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-display page-columns page-full">
 <div class="quarto-figure quarto-figure-center page-columns page-full">
@@ -1016,11 +1016,11 @@ What about other methods?
 </div>
 </div>
 <p>Similarly, we can inspect the stimuli with highest or closest-to-zero values along each dimension.</p>
-<div id="a8ae3fa2" class="cell page-columns page-full" data-execution_count="13">
+<div id="14bf3a80" class="cell page-columns page-full" data-execution_count="12">
 <details>
 <summary>View images that have extreme scores on the dimensions</summary>
-<div class="sourceCode cell-code" id="a8ae3fa2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="a8ae3fa2-1"><a href="#a8ae3fa2-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> dim <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">2</span>):</span>
-<span id="a8ae3fa2-2"><a href="#a8ae3fa2-2" aria-hidden="true" tabindex="-1"></a>    view_images_at_poles(data_pca[:, dim], stimuli<span class="op">=</span>stimuli, label<span class="op">=</span><span class="ss">f"dim </span><span class="sc">{</span>dim<span class="op">+</span><span class="dv">1</span><span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="14bf3a80"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="14bf3a80-1"><a href="#14bf3a80-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> dim <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">2</span>):</span>
+<span id="14bf3a80-2"><a href="#14bf3a80-2" aria-hidden="true" tabindex="-1"></a>    view_images_at_poles(data_pca[:, dim], stimuli<span class="op">=</span>stimuli, label<span class="op">=</span><span class="ss">f"dim </span><span class="sc">{</span>dim<span class="op">+</span><span class="dv">1</span><span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-display page-columns page-full">
 <div class="quarto-figure quarto-figure-center page-columns page-full">
@@ -1047,10 +1047,10 @@ What about other methods?
 <section id="logarithmic-scale" class="level4">
 <h4 class="anchored" data-anchor-id="logarithmic-scale">Logarithmic scale</h4>
 <p>Given these visualization, we might deem that the higher-rank PCs are non-interpretable and thus follow the common practice to drop them. However, before doing so, let’s try visualizing the spectrum on a logarithmic scale for both axes:</p>
-<div id="cf9f0479" class="cell" data-execution_count="14">
+<div id="1480a4ef" class="cell" data-execution_count="13">
 <details>
 <summary>Visualize the eigenspectrum on a logarithmic scale</summary>
-<div class="sourceCode cell-code" id="cf9f0479"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cf9f0479-1"><a href="#cf9f0479-1" aria-hidden="true" tabindex="-1"></a>view_eigenspectrum(pca, log<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="1480a4ef"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="1480a4ef-1"><a href="#1480a4ef-1" aria-hidden="true" tabindex="-1"></a>view_eigenspectrum(pca, log<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-display">
 <div class="quarto-figure quarto-figure-center">
@@ -1085,7 +1085,7 @@ What about other methods?
 <section id="an-illustration-word-frequencies" class="level3">
 <h3 class="anchored" data-anchor-id="an-illustration-word-frequencies">An illustration: word frequencies</h3>
 <p>Let’s compute the distribution of word frequencies in a small corpus – a collection of <a href="https://pytorch.org/text/0.9.0/datasets.html#imdb">IMDb movie reviews</a>!</p>
-<div id="generate-word-frequencies" class="cell" data-execution_count="15">
+<div id="generate-word-frequencies" class="cell" data-execution_count="14">
 <details>
 <summary>Generate word frequency distribution</summary>
 <div class="sourceCode cell-code" id="generate-word-frequencies"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="generate-word-frequencies-1"><a href="#generate-word-frequencies-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> collections <span class="im">import</span> Counter</span>
@@ -1111,7 +1111,7 @@ What about other methods?
 <span id="generate-word-frequencies-21"><a href="#generate-word-frequencies-21" aria-hidden="true" tabindex="-1"></a>    counter.update(tokenizer(text))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="cell-linear-word-frequency" class="cell" data-execution_count="16">
+<div id="cell-linear-word-frequency" class="cell" data-execution_count="15">
 <details>
 <summary>View word frequency distribution on a linear scale</summary>
 <div class="sourceCode cell-code" id="cell-linear-word-frequency"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cell-linear-word-frequency-1"><a href="#cell-linear-word-frequency-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> view_word_frequency_distribution(</span>
@@ -1140,7 +1140,7 @@ What about other methods?
 <span id="cell-linear-word-frequency-24"><a href="#cell-linear-word-frequency-24" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cell-linear-word-frequency-25"><a href="#cell-linear-word-frequency-25" aria-hidden="true" tabindex="-1"></a>view_word_frequency_distribution(counter)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output cell-output-display" data-execution_count="68">
+<div class="cell-output cell-output-display" data-execution_count="14">
 <div id="linear-word-frequency" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="exploring_neural_data_files/figure-html/linear-word-frequency-output-1.svg" class="img-fluid figure-img"></p>
@@ -1148,12 +1148,12 @@ What about other methods?
 </div>
 </div>
 </div>
-<div id="cell-logarithmic-word-frequency" class="cell" data-execution_count="17">
+<div id="cell-logarithmic-word-frequency" class="cell" data-execution_count="16">
 <details>
 <summary>View word frequency distribution on a logarithmic scale</summary>
 <div class="sourceCode cell-code" id="cell-logarithmic-word-frequency"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cell-logarithmic-word-frequency-1"><a href="#cell-logarithmic-word-frequency-1" aria-hidden="true" tabindex="-1"></a>view_word_frequency_distribution(counter, log<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output cell-output-display" data-execution_count="69">
+<div class="cell-output cell-output-display" data-execution_count="15">
 <div id="logarithmic-word-frequency" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="exploring_neural_data_files/figure-html/logarithmic-word-frequency-output-1.svg" class="img-fluid figure-img"></p>
@@ -1161,451 +1161,45 @@ What about other methods?
 </div>
 </div>
 </div>
-<div id="cell-most-common-tokens" class="cell" data-execution_count="18">
+<div id="cell-most-common-tokens" class="cell" data-execution_count="17">
 <details>
 <summary>View the 200 most common words in the dataset</summary>
 <div class="sourceCode cell-code" id="cell-most-common-tokens"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cell-most-common-tokens-1"><a href="#cell-most-common-tokens-1" aria-hidden="true" tabindex="-1"></a>display_counter <span class="op">=</span> copy.copy(counter)</span>
 <span id="cell-most-common-tokens-2"><a href="#cell-most-common-tokens-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> token <span class="kw">in</span> unwanted_tokens:</span>
 <span id="cell-most-common-tokens-3"><a href="#cell-most-common-tokens-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">del</span> display_counter[token]</span>
 <span id="cell-most-common-tokens-4"><a href="#cell-most-common-tokens-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cell-most-common-tokens-5"><a href="#cell-most-common-tokens-5" aria-hidden="true" tabindex="-1"></a>cloud <span class="op">=</span> WordCloud(background_color<span class="op">=</span><span class="st">"white"</span>, width<span class="op">=</span><span class="dv">600</span>, height<span class="op">=</span><span class="dv">300</span>)</span>
+<span id="cell-most-common-tokens-5"><a href="#cell-most-common-tokens-5" aria-hidden="true" tabindex="-1"></a>cloud <span class="op">=</span> WordCloud(background_color<span class="op">=</span><span class="st">"white"</span>, width<span class="op">=</span><span class="dv">500</span>, height<span class="op">=</span><span class="dv">500</span>)</span>
 <span id="cell-most-common-tokens-6"><a href="#cell-most-common-tokens-6" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cell-most-common-tokens-7"><a href="#cell-most-common-tokens-7" aria-hidden="true" tabindex="-1"></a>display(</span>
-<span id="cell-most-common-tokens-8"><a href="#cell-most-common-tokens-8" aria-hidden="true" tabindex="-1"></a>    HTML(</span>
-<span id="cell-most-common-tokens-9"><a href="#cell-most-common-tokens-9" aria-hidden="true" tabindex="-1"></a>        cloud.generate_from_frequencies(<span class="bu">dict</span>(display_counter.most_common(<span class="dv">200</span>))).to_svg(</span>
-<span id="cell-most-common-tokens-10"><a href="#cell-most-common-tokens-10" aria-hidden="true" tabindex="-1"></a>            embed_font<span class="op">=</span><span class="va">True</span></span>
-<span id="cell-most-common-tokens-11"><a href="#cell-most-common-tokens-11" aria-hidden="true" tabindex="-1"></a>        )</span>
-<span id="cell-most-common-tokens-12"><a href="#cell-most-common-tokens-12" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cell-most-common-tokens-13"><a href="#cell-most-common-tokens-13" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cell-most-common-tokens-8"><a href="#cell-most-common-tokens-8" aria-hidden="true" tabindex="-1"></a>    cloud.generate_from_frequencies(<span class="bu">dict</span>(display_counter.most_common(<span class="dv">200</span>))).to_image()</span>
+<span id="cell-most-common-tokens-9"><a href="#cell-most-common-tokens-9" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div id="most-common-tokens" class="cell-output cell-output-display">
-<svg xmlns="http://www.w3.org/2000/svg" width="600" height="300">
-<style>@font-face{font-family:'Droid Sans Mono';font-weight:normal;font-style:normal;src:url("data:application/font-woff;charset=utf-8;base64,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")format("woff");}</style>
-<style>text{font-family:'Droid Sans Mono';font-weight:normal;font-style:normal;}</style>
-<rect width="100%" height="100%" style="fill:white"></rect>
-<text transform="translate(117,156)" font-size="203" style="fill:rgb(55, 184, 120)">the</text>
-<text transform="translate(216,280)" font-size="151" style="fill:rgb(38, 173, 129)">and</text>
-<text transform="translate(117,263)" font-size="151" style="fill:rgb(70, 8, 92)">a</text>
-<text transform="translate(121,273) rotate(-90)" font-size="143" style="fill:rgb(53, 95, 141)">of</text>
-<text transform="translate(579,283) rotate(-90)" font-size="137" style="fill:rgb(35, 138, 141)">to</text>
-<text transform="translate(470,86)" font-size="107" style="fill:rgb(144, 215, 67)">is</text>
-<text transform="translate(2,87)" font-size="102" style="fill:rgb(71, 42, 122)">it</text>
-<text transform="translate(63,139)" font-size="67" style="fill:rgb(168, 219, 52)">in</text>
-<text transform="translate(280,141)" font-size="65" style="fill:rgb(239, 229, 28)">i</text>
-<text transform="translate(282,42)" font-size="54" style="fill:rgb(32, 147, 140)">this</text>
-<text transform="translate(246,195)" font-size="51" style="fill:rgb(49, 104, 142)">that</text>
-<text transform="translate(27,288)" font-size="43" style="fill:rgb(65, 66, 135)">was</text>
-<text transform="translate(245,192) rotate(-90)" font-size="42" style="fill:rgb(39, 128, 142)">as</text>
-<text transform="translate(471,123)" font-size="41" style="fill:rgb(35, 169, 131)">movie</text>
-<text transform="translate(125,296)" font-size="41" style="fill:rgb(32, 147, 140)">with</text>
-<text transform="translate(176,124)" font-size="41" style="fill:rgb(62, 74, 137)">for</text>
-<text transform="translate(367,290) rotate(-90)" font-size="40" style="fill:rgb(39, 173, 129)">but</text>
-<text transform="translate(368,189)" font-size="39" style="fill:rgb(32, 146, 140)">film</text>
-<text transform="translate(410,27)" font-size="37" style="fill:rgb(31, 161, 136)">you</text>
-<text transform="translate(67,187)" font-size="36" style="fill:rgb(71, 14, 97)">on</text>
-<text transform="translate(534,295)" font-size="34" style="fill:rgb(31, 152, 139)">not</text>
-<text transform="translate(450,298)" font-size="33" style="fill:rgb(70, 48, 126)">are</text>
-<text transform="translate(181,89)" font-size="33" style="fill:rgb(74, 193, 109)">he</text>
-<text transform="translate(188,27)" font-size="33" style="fill:rgb(66, 190, 113)">his</text>
-<text transform="translate(502,212) rotate(-90)" font-size="33" style="fill:rgb(37, 132, 142)">have</text>
-<text transform="translate(528,235)" font-size="32" style="fill:rgb(65, 68, 135)">be</text>
-<text transform="translate(98,18)" font-size="32" style="fill:rgb(194, 223, 35)">one</text>
-<text transform="translate(7,199)" font-size="30" style="fill:rgb(32, 164, 134)">at</text>
-<text transform="translate(510,24)" font-size="30" style="fill:rgb(251, 231, 35)">all</text>
-<text transform="translate(243,99) rotate(-90)" font-size="30" style="fill:rgb(44, 177, 126)">they</text>
-<text transform="translate(217,233) rotate(-90)" font-size="30" style="fill:rgb(64, 189, 114)">by</text>
-<text transform="translate(117,81)" font-size="30" style="fill:rgb(48, 105, 142)">an</text>
-<text transform="translate(369,100) rotate(-90)" font-size="30" style="fill:rgb(165, 219, 54)">who</text>
-<text transform="translate(402,129)" font-size="29" style="fill:rgb(41, 122, 142)">from</text>
-<text transform="translate(560,206)" font-size="29" style="fill:rgb(61, 188, 116)">so</text>
-<text transform="translate(108,178)" font-size="29" style="fill:rgb(48, 105, 142)">like</text>
-<text transform="translate(315,281) rotate(-90)" font-size="28" style="fill:rgb(49, 104, 142)">there</text>
-<text transform="translate(43,21)" font-size="27" style="fill:rgb(69, 53, 129)">or</text>
-<text transform="translate(28,263) rotate(-90)" font-size="27" style="fill:rgb(55, 184, 120)">just</text>
-<text transform="translate(49,67)" font-size="27" style="fill:rgb(189, 223, 38)">if</text>
-<text transform="translate(262,298)" font-size="24" style="fill:rgb(49, 181, 123)">about</text>
-<text transform="translate(366,153) rotate(-90)" font-size="24" style="fill:rgb(44, 114, 142)">out</text>
-<text transform="translate(4,105)" font-size="24" style="fill:rgb(119, 209, 83)">her</text>
-<text transform="translate(60,242)" font-size="24" style="fill:rgb(96, 202, 96)">has</text>
-<text transform="translate(518,274)" font-size="24" style="fill:rgb(68, 2, 86)">what</text>
-<text transform="translate(384,294)" font-size="24" style="fill:rgb(72, 36, 117)">some</text>
-<text transform="translate(524,164)" font-size="23" style="fill:rgb(47, 107, 142)">can</text>
-<text transform="translate(175,173)" font-size="19" style="fill:rgb(44, 113, 142)">good</text>
-<text transform="translate(179,43)" font-size="19" style="fill:rgb(66, 63, 133)">when</text>
-<text transform="translate(96,29)" font-size="19" style="fill:rgb(46, 111, 142)">more</text>
-<text transform="translate(508,66)" font-size="19" style="fill:rgb(137, 213, 72)">very</text>
-<text transform="translate(228,297)" font-size="18" style="fill:rgb(57, 85, 140)">she</text>
-<text transform="translate(117,96)" font-size="18" style="fill:rgb(210, 226, 27)">my</text>
-<text transform="translate(300,83)" font-size="18" style="fill:rgb(54, 93, 141)">no</text>
-<text transform="translate(7,175)" font-size="18" style="fill:rgb(39, 127, 142)">up</text>
-<text transform="translate(334,297)" font-size="18" style="fill:rgb(72, 193, 110)">even</text>
-<text transform="translate(196,139)" font-size="18" style="fill:rgb(35, 136, 142)">would</text>
-<text transform="translate(451,51)" font-size="18" style="fill:rgb(51, 99, 141)">time</text>
-<text transform="translate(498,99)" font-size="18" style="fill:rgb(72, 29, 111)">see</text>
-<text transform="translate(503,209)" font-size="18" style="fill:rgb(65, 68, 135)">their</text>
-<text transform="translate(402,262) rotate(-90)" font-size="18" style="fill:rgb(38, 129, 142)">really</text>
-<text transform="translate(596,267) rotate(-90)" font-size="18" style="fill:rgb(66, 65, 134)">which</text>
-<text transform="translate(320,128) rotate(-90)" font-size="18" style="fill:rgb(46, 110, 142)">only</text>
-<text transform="translate(593,188) rotate(-90)" font-size="18" style="fill:rgb(44, 114, 142)">story</text>
-<text transform="translate(193,245)" font-size="18" style="fill:rgb(44, 177, 126)">had</text>
-<text transform="translate(413,75)" font-size="18" style="fill:rgb(37, 171, 130)">me</text>
-<text transform="translate(218,227)" font-size="18" style="fill:rgb(110, 206, 88)">were</text>
-<text transform="translate(285,152)" font-size="18" style="fill:rgb(31, 158, 137)">we</text>
-<text transform="translate(404,88)" font-size="17" style="fill:rgb(49, 102, 142)">well</text>
-<text transform="translate(122,212)" font-size="17" style="fill:rgb(67, 62, 133)">much</text>
-<text transform="translate(558,16)" font-size="17" style="fill:rgb(70, 192, 111)">than</text>
-<text transform="translate(142,141)" font-size="17" style="fill:rgb(157, 217, 59)">-</text>
-<text transform="translate(448,262) rotate(-90)" font-size="17" style="fill:rgb(59, 82, 139)">other</text>
-<text transform="translate(511,40)" font-size="17" style="fill:rgb(70, 192, 111)">get</text>
-<text transform="translate(115,42)" font-size="17" style="fill:rgb(251, 231, 35)">been</text>
-<text transform="translate(151,132) rotate(-90)" font-size="17" style="fill:rgb(68, 57, 131)">great</text>
-<text transform="translate(190,187)" font-size="17" style="fill:rgb(34, 168, 132)">bad</text>
-<text transform="translate(426,43)" font-size="17" style="fill:rgb(45, 178, 125)">do</text>
-<text transform="translate(69,115) rotate(-90)" font-size="17" style="fill:rgb(70, 8, 92)">will</text>
-<text transform="translate(55,163)" font-size="12" style="fill:rgb(31, 148, 140)">people</text>
-<text transform="translate(96,297)" font-size="12" style="fill:rgb(44, 113, 142)">also</text>
-<text transform="translate(464,66)" font-size="12" style="fill:rgb(72, 32, 113)">into</text>
-<text transform="translate(479,221)" font-size="12" style="fill:rgb(64, 189, 114)">how</text>
-<text transform="translate(143,246)" font-size="12" style="fill:rgb(56, 89, 140)">don</text>
-<text transform="translate(530,177)" font-size="12" style="fill:rgb(41, 123, 142)">him</text>
-<text transform="translate(10,73) rotate(-90)" font-size="12" style="fill:rgb(168, 219, 52)">because</text>
-<text transform="translate(47,71) rotate(-90)" font-size="12" style="fill:rgb(251, 231, 35)">most</text>
-<text transform="translate(123,150)" font-size="12" style="fill:rgb(65, 66, 135)">first</text>
-<text transform="translate(14,288) rotate(-90)" font-size="12" style="fill:rgb(61, 77, 138)">them</text>
-<text transform="translate(298,164)" font-size="12" style="fill:rgb(226, 228, 24)">its</text>
-<text transform="translate(100,56)" font-size="12" style="fill:rgb(37, 132, 142)">then</text>
-<text transform="translate(57,298)" font-size="12" style="fill:rgb(66, 63, 133)">could</text>
-<text transform="translate(458,257) rotate(-90)" font-size="12" style="fill:rgb(155, 217, 60)">make</text>
-<text transform="translate(45,33)" font-size="12" style="fill:rgb(63, 71, 136)">way</text>
-<text transform="translate(468,75)" font-size="12" style="fill:rgb(72, 23, 105)">made</text>
-<text transform="translate(9,298)" font-size="12" style="fill:rgb(70, 11, 94)">movies</text>
-<text transform="translate(576,48)" font-size="12" style="fill:rgb(32, 146, 140)">too</text>
-<text transform="translate(3,15)" font-size="12" style="fill:rgb(72, 22, 104)">any</text>
-<text transform="translate(66,227)" font-size="12" style="fill:rgb(184, 222, 41)">after</text>
-<text transform="translate(400,196)" font-size="10" style="fill:rgb(72, 38, 119)">characters</text>
-<text transform="translate(476,27)" font-size="10" style="fill:rgb(31, 152, 139)">think</text>
-<text transform="translate(563,99)" font-size="10" style="fill:rgb(51, 99, 141)">watch</text>
-<text transform="translate(154,13)" font-size="10" style="fill:rgb(72, 33, 115)">films</text>
-<text transform="translate(103,272)" font-size="10" style="fill:rgb(32, 146, 140)">character</text>
-<text transform="translate(244,255)" font-size="10" style="fill:rgb(178, 221, 45)">many</text>
-<text transform="translate(101,193)" font-size="10" style="fill:rgb(144, 215, 67)">seen</text>
-<text transform="translate(373,164) rotate(-90)" font-size="10" style="fill:rgb(90, 200, 100)">being</text>
-<text transform="translate(37,191)" font-size="10" style="fill:rgb(69, 56, 130)">never</text>
-<text transform="translate(479,236)" font-size="10" style="fill:rgb(61, 77, 138)">love</text>
-<text transform="translate(477,11)" font-size="10" style="fill:rgb(35, 169, 131)">two</text>
-<text transform="translate(350,108)" font-size="10" style="fill:rgb(117, 208, 84)">did</text>
-<text transform="translate(196,253)" font-size="10" style="fill:rgb(39, 126, 142)">know</text>
-<text transform="translate(13,162)" font-size="10" style="fill:rgb(36, 170, 131)">show</text>
-<text transform="translate(562,23)" font-size="10" style="fill:rgb(43, 117, 142)">acting</text>
-<text transform="translate(514,54)" font-size="10" style="fill:rgb(200, 224, 32)">where</text>
-<text transform="translate(94,65)" font-size="10" style="fill:rgb(65, 68, 135)">plot</text>
-<text transform="translate(550,74)" font-size="10" style="fill:rgb(31, 153, 138)">best</text>
-<text transform="translate(367,9)" font-size="10" style="fill:rgb(58, 186, 118)">little</text>
-<text transform="translate(477,265)" font-size="10" style="fill:rgb(72, 40, 120)">life</text>
-<text transform="translate(443,163)" font-size="10" style="fill:rgb(94, 201, 98)">ever</text>
-<text transform="translate(220,195)" font-size="10" style="fill:rgb(65, 68, 135)">your</text>
-<text transform="translate(104,121) rotate(-90)" font-size="10" style="fill:rgb(71, 14, 97)">does</text>
-<text transform="translate(475,130)" font-size="10" style="fill:rgb(31, 162, 135)">better</text>
-<text transform="translate(279,88)" font-size="10" style="fill:rgb(194, 223, 35)">man</text>
-<text transform="translate(517,77)" font-size="10" style="fill:rgb(149, 216, 64)">off</text>
-<text transform="translate(10,26)" font-size="10" style="fill:rgb(58, 186, 118)">scene</text>
-<text transform="translate(194,194)" font-size="10" style="fill:rgb(99, 203, 95)">end</text>
-<text transform="translate(23,126)" font-size="10" style="fill:rgb(61, 78, 138)">say</text>
-<text transform="translate(479,275)" font-size="10" style="fill:rgb(231, 228, 25)">here</text>
-<text transform="translate(28,112)" font-size="10" style="fill:rgb(186, 222, 40)">these</text>
-<text transform="translate(6,163) rotate(-90)" font-size="10" style="fill:rgb(46, 111, 142)">scenes</text>
-<text transform="translate(386,279)" font-size="10" style="fill:rgb(205, 225, 29)">still</text>
-<text transform="translate(445,110)" font-size="10" style="fill:rgb(208, 225, 28)">over</text>
-<text transform="translate(59,126)" font-size="10" style="fill:rgb(45, 113, 142)">why</text>
-<text transform="translate(192,69)" font-size="10" style="fill:rgb(36, 135, 142)">while</text>
-<text transform="translate(280,152) rotate(-90)" font-size="10" style="fill:rgb(137, 213, 72)">something</text>
-<text transform="translate(94,129)" font-size="10" style="fill:rgb(34, 140, 141)">ve</text>
-<text transform="translate(199,263)" font-size="10" style="fill:rgb(70, 8, 92)">such</text>
-<text transform="translate(70,25)" font-size="10" style="fill:rgb(38, 129, 142)">m</text>
-<text transform="translate(19,75) rotate(-90)" font-size="10" style="fill:rgb(41, 123, 142)">should</text>
-<text transform="translate(334,183)" font-size="10" style="fill:rgb(35, 138, 141)">go</text>
-<text transform="translate(325,8)" font-size="10" style="fill:rgb(127, 211, 78)">those</text>
-<text transform="translate(38,244) rotate(-90)" font-size="10" style="fill:rgb(38, 130, 142)">through</text>
-<text transform="translate(413,136)" font-size="10" style="fill:rgb(69, 5, 89)">thing</text>
-<text transform="translate(356,187)" font-size="10" style="fill:rgb(50, 101, 142)">now</text>
-<text transform="translate(473,99)" font-size="10" style="fill:rgb(178, 221, 45)">back</text>
-<text transform="translate(250,95) rotate(-90)" font-size="10" style="fill:rgb(61, 78, 138)">watching</text>
-<text transform="translate(510,292)" font-size="10" style="fill:rgb(53, 183, 121)">real</text>
-<text transform="translate(322,164)" font-size="10" style="fill:rgb(37, 131, 142)">didn</text>
-<text transform="translate(8,242) rotate(-90)" font-size="10" style="fill:rgb(72, 36, 117)">funny</text>
-<text transform="translate(445,34)" font-size="10" style="fill:rgb(72, 24, 106)">actors</text>
-<text transform="translate(566,130)" font-size="10" style="fill:rgb(45, 113, 142)">doesn</text>
-<text transform="translate(340,276) rotate(-90)" font-size="10" style="fill:rgb(33, 144, 141)">another</text>
-<text transform="translate(520,239)" font-size="5" style="fill:rgb(57, 85, 140)">actually</text>
-<text transform="translate(522,44)" font-size="5" style="fill:rgb(41, 175, 127)">years</text>
-<text transform="translate(387,267)" font-size="5" style="fill:rgb(82, 197, 105)">before</text>
-<text transform="translate(365,194)" font-size="5" style="fill:rgb(221, 227, 24)">though</text>
-<text transform="translate(481,55)" font-size="5" style="fill:rgb(56, 88, 140)">makes</text>
-<text transform="translate(67,72)" font-size="5" style="fill:rgb(88, 199, 101)">look</text>
-<text transform="translate(283,92)" font-size="5" style="fill:rgb(30, 156, 137)">lot</text>
-<text transform="translate(527,148)" font-size="5" style="fill:rgb(50, 182, 122)">find</text>
-<text transform="translate(510,279)" font-size="5" style="fill:rgb(72, 33, 115)">nothing</text>
-<text transform="translate(69,191)" font-size="5" style="fill:rgb(66, 190, 113)">going</text>
-<text transform="translate(166,286)" font-size="5" style="fill:rgb(71, 16, 99)">work</text>
-<text transform="translate(406,39)" font-size="5" style="fill:rgb(72, 22, 104)">same</text>
-<text transform="translate(222,5)" font-size="5" style="fill:rgb(72, 35, 116)">director</text>
-<text transform="translate(559,41)" font-size="5" style="fill:rgb(80, 196, 106)">every</text>
-<text transform="translate(349,28) rotate(-90)" font-size="5" style="fill:rgb(46, 111, 142)">few</text>
-<text transform="translate(347,217)" font-size="5" style="fill:rgb(53, 95, 141)">again</text>
-<text transform="translate(373,77) rotate(-90)" font-size="5" style="fill:rgb(31, 154, 138)">part</text>
-<text transform="translate(391,190) rotate(-90)" font-size="5" style="fill:rgb(46, 110, 142)">old</text>
-<text transform="translate(187,269)" font-size="5" style="fill:rgb(42, 120, 142)">re</text>
-<text transform="translate(480,15)" font-size="5" style="fill:rgb(208, 225, 28)">new</text>
-<text transform="translate(484,225)" font-size="5" style="fill:rgb(31, 154, 138)">things</text>
-<text transform="translate(374,60)" font-size="5" style="fill:rgb(31, 151, 139)">&amp;</text>
-<text transform="translate(181,131)" font-size="5" style="fill:rgb(162, 218, 55)">want</text>
-<text transform="translate(236,118)" font-size="5" style="fill:rgb(70, 48, 126)">world</text>
-<text transform="translate(291,80)" font-size="5" style="fill:rgb(223, 227, 24)">us</text>
-<text transform="translate(243,262)" font-size="5" style="fill:rgb(70, 10, 93)">pretty</text>
-<text transform="translate(115,257)" font-size="5" style="fill:rgb(36, 134, 142)">cast</text>
-<text transform="translate(309,145)" font-size="5" style="fill:rgb(59, 81, 139)">quite</text>
-<text transform="translate(209,97)" font-size="5" style="fill:rgb(221, 227, 24)">down</text>
-<text transform="translate(98,76)" font-size="5" style="fill:rgb(38, 130, 142)">around</text>
-<text transform="translate(248,154) rotate(-90)" font-size="5" style="fill:rgb(213, 226, 26)">seems</text>
-<text transform="translate(143,27)" font-size="5" style="fill:rgb(84, 197, 104)">take</text>
-<text transform="translate(540,213)" font-size="5" style="fill:rgb(51, 99, 141)">enough</text>
-<text transform="translate(349,239)" font-size="5" style="fill:rgb(56, 89, 140)">however</text>
-<text transform="translate(91,95)" font-size="5" style="fill:rgb(165, 219, 54)">horror</text>
-<text transform="translate(71,246)" font-size="5" style="fill:rgb(31, 161, 135)">thought</text>
-<text transform="translate(106,197)" font-size="5" style="fill:rgb(202, 225, 31)">both</text>
-<text transform="translate(464,152)" font-size="5" style="fill:rgb(194, 223, 35)">music</text>
-<text transform="translate(71,214)" font-size="5" style="fill:rgb(40, 124, 142)">young</text>
-<text transform="translate(86,215)" font-size="5" style="fill:rgb(31, 154, 138)">got</text>
-<text transform="translate(277,48) rotate(-90)" font-size="5" style="fill:rgb(47, 107, 142)">big</text>
-<text transform="translate(22,6)" font-size="5" style="fill:rgb(34, 168, 132)">fact</text>
-<text transform="translate(98,69)" font-size="5" style="fill:rgb(49, 104, 142)">give</text>
-<text transform="translate(589,73)" font-size="5" style="fill:rgb(50, 182, 122)">guy</text>
-<text transform="translate(493,240)" font-size="5" style="fill:rgb(66, 190, 113)">own</text>
-<text transform="translate(530,94)" font-size="5" style="fill:rgb(31, 152, 139)">long</text>
-<text transform="translate(518,122)" font-size="5" style="fill:rgb(69, 56, 130)">may</text>
-</svg>
+<div class="cell-output cell-output-display">
+<div id="most-common-tokens" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="exploring_neural_data_files/figure-html/most-common-tokens-output-1.png" class="img-fluid figure-img"></p>
+</figure>
 </div>
 </div>
-<div id="cell-least-common-tokens" class="cell" data-execution_count="19">
+</div>
+<div id="cell-least-common-tokens" class="cell" data-execution_count="18">
 <details>
 <summary>View the 200 least common words in the dataset</summary>
 <div class="sourceCode cell-code" id="cell-least-common-tokens"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cell-least-common-tokens-1"><a href="#cell-least-common-tokens-1" aria-hidden="true" tabindex="-1"></a>display(</span>
-<span id="cell-least-common-tokens-2"><a href="#cell-least-common-tokens-2" aria-hidden="true" tabindex="-1"></a>    HTML(</span>
-<span id="cell-least-common-tokens-3"><a href="#cell-least-common-tokens-3" aria-hidden="true" tabindex="-1"></a>        cloud.generate_from_frequencies(</span>
-<span id="cell-least-common-tokens-4"><a href="#cell-least-common-tokens-4" aria-hidden="true" tabindex="-1"></a>            <span class="bu">dict</span>(display_counter.most_common()[<span class="op">-</span><span class="dv">200</span>:])</span>
-<span id="cell-least-common-tokens-5"><a href="#cell-least-common-tokens-5" aria-hidden="true" tabindex="-1"></a>        ).to_svg(embed_font<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cell-least-common-tokens-6"><a href="#cell-least-common-tokens-6" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cell-least-common-tokens-7"><a href="#cell-least-common-tokens-7" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cell-least-common-tokens-2"><a href="#cell-least-common-tokens-2" aria-hidden="true" tabindex="-1"></a>    cloud.generate_from_frequencies(</span>
+<span id="cell-least-common-tokens-3"><a href="#cell-least-common-tokens-3" aria-hidden="true" tabindex="-1"></a>        <span class="bu">dict</span>(display_counter.most_common()[<span class="op">-</span><span class="dv">200</span>:])</span>
+<span id="cell-least-common-tokens-4"><a href="#cell-least-common-tokens-4" aria-hidden="true" tabindex="-1"></a>    ).to_image()</span>
+<span id="cell-least-common-tokens-5"><a href="#cell-least-common-tokens-5" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div id="least-common-tokens" class="cell-output cell-output-display">
-<svg xmlns="http://www.w3.org/2000/svg" width="600" height="300">
-<style>@font-face{font-family:'Droid Sans Mono';font-weight:normal;font-style:normal;src:url("data:application/font-woff;charset=utf-8;base64,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")format("woff");}</style>
-<style>text{font-family:'Droid Sans Mono';font-weight:normal;font-style:normal;}</style>
-<rect width="100%" height="100%" style="fill:white"></rect>
-<text transform="translate(1,192)" font-size="142" style="fill:rgb(43, 117, 142)">valuing</text>
-<text transform="translate(27,273)" font-size="105" style="fill:rgb(72, 22, 104)">slogged</text>
-<text transform="translate(36,63)" font-size="81" style="fill:rgb(72, 23, 105)">atahualpa</text>
-<text transform="translate(396,96)" font-size="41" style="fill:rgb(229, 228, 25)">yupanqui</text>
-<text transform="translate(4,96)" font-size="27" style="fill:rgb(42, 118, 142)">plot--while</text>
-<text transform="translate(443,292)" font-size="24" style="fill:rgb(59, 187, 117)">present--is</text>
-<text transform="translate(225,80)" font-size="24" style="fill:rgb(60, 79, 138)">conveyance</text>
-<text transform="translate(478,275) rotate(-90)" font-size="24" style="fill:rgb(56, 88, 140)">toddling</text>
-<text transform="translate(133,212)" font-size="24" style="fill:rgb(70, 52, 128)">re-established</text>
-<text transform="translate(19,269) rotate(-90)" font-size="24" style="fill:rgb(33, 143, 141)">arterial</text>
-<text transform="translate(10,294)" font-size="24" style="fill:rgb(78, 195, 107)">wondsershowzen</text>
-<text transform="translate(471,63)" font-size="24" style="fill:rgb(112, 207, 87)">dulling</text>
-<text transform="translate(225,107)" font-size="24" style="fill:rgb(51, 99, 141)">tyyyllerrr</text>
-<text transform="translate(176,194) rotate(-90)" font-size="24" style="fill:rgb(119, 209, 83)">mark-up</text>
-<text transform="translate(461,18)" font-size="22" style="fill:rgb(67, 61, 132)">wordsworth</text>
-<text transform="translate(475,42)" font-size="22" style="fill:rgb(47, 107, 142)">worldworn</text>
-<text transform="translate(506,266)" font-size="22" style="fill:rgb(110, 206, 88)">maigret</text>
-<text transform="translate(354,211)" font-size="22" style="fill:rgb(65, 68, 135)">bocchco</text>
-<text transform="translate(341,293)" font-size="22" style="fill:rgb(46, 179, 124)">larquey</text>
-<text transform="translate(20,209)" font-size="22" style="fill:rgb(69, 5, 89)">vorzet</text>
-<text transform="translate(10,112)" font-size="21" style="fill:rgb(74, 193, 109)">cab-driver</text>
-<text transform="translate(479,242)" font-size="21" style="fill:rgb(71, 16, 99)">espions</text>
-<text transform="translate(239,13)" font-size="17" style="fill:rgb(61, 77, 138)">exponents</text>
-<text transform="translate(515,226) rotate(-90)" font-size="17" style="fill:rgb(35, 136, 142)">interconnects</text>
-<text transform="translate(23,14)" font-size="17" style="fill:rgb(60, 79, 138)">cluzot</text>
-<text transform="translate(391,16)" font-size="17" style="fill:rgb(67, 62, 133)">lecher</text>
-<text transform="translate(346,204) rotate(-90)" font-size="17" style="fill:rgb(208, 225, 28)">earthier</text>
-<text transform="translate(41,71)" font-size="10" style="fill:rgb(70, 192, 111)">was--particularly</text>
-<text transform="translate(126,12)" font-size="10" style="fill:rgb(61, 78, 138)">légitime</text>
-<text transform="translate(73,145)" font-size="10" style="fill:rgb(122, 209, 81)">défense</text>
-<text transform="translate(65,237)" font-size="10" style="fill:rgb(108, 205, 90)">habite</text>
-<text transform="translate(172,71)" font-size="10" style="fill:rgb(39, 126, 142)">tralala</text>
-<text transform="translate(434,71)" font-size="10" style="fill:rgb(58, 84, 140)">delair/blier</text>
-<text transform="translate(428,166) rotate(-90)" font-size="10" style="fill:rgb(31, 161, 136)">geometry</text>
-<text transform="translate(168,78)" font-size="10" style="fill:rgb(34, 141, 141)">and-dance</text>
-<text transform="translate(306,87)" font-size="10" style="fill:rgb(70, 52, 128)">goldsmiths</text>
-<text transform="translate(390,113)" font-size="10" style="fill:rgb(72, 22, 104)">lamoure</text>
-<text transform="translate(596,233) rotate(-90)" font-size="10" style="fill:rgb(72, 24, 106)">piano-accompanist</text>
-<text transform="translate(192,159) rotate(-90)" font-size="10" style="fill:rgb(32, 164, 134)">eagle-like</text>
-<text transform="translate(226,174)" font-size="10" style="fill:rgb(71, 47, 125)">henri-</text>
-<text transform="translate(393,179)" font-size="10" style="fill:rgb(157, 217, 59)">nail-</text>
-<text transform="translate(367,258)" font-size="10" style="fill:rgb(37, 131, 142)">biters</text>
-<text transform="translate(455,105)" font-size="10" style="fill:rgb(139, 214, 70)">candied</text>
-<text transform="translate(544,25)" font-size="10" style="fill:rgb(71, 16, 99)">dullin</text>
-<text transform="translate(544,103)" font-size="10" style="fill:rgb(31, 148, 140)">proteges</text>
-<text transform="translate(305,173) rotate(-90)" font-size="10" style="fill:rgb(197, 224, 33)">eight-years</text>
-<text transform="translate(479,274)" font-size="10" style="fill:rgb(35, 136, 142)">gartered</text>
-<text transform="translate(228,139)" font-size="10" style="fill:rgb(31, 148, 140)">drole</text>
-<text transform="translate(311,112)" font-size="6" style="fill:rgb(205, 225, 29)">husband/accompanist</text>
-<text transform="translate(566,250)" font-size="6" style="fill:rgb(236, 229, 27)">letch</text>
-<text transform="translate(214,6)" font-size="6" style="fill:rgb(70, 192, 111)">cherce</text>
-<text transform="translate(111,33)" font-size="6" style="fill:rgb(31, 161, 136)">salaire</text>
-<text transform="translate(30,68) rotate(-90)" font-size="6" style="fill:rgb(46, 111, 142)">peur</text>
-<text transform="translate(473,26)" font-size="6" style="fill:rgb(43, 116, 142)">susy</text>
-<text transform="translate(234,91)" font-size="6" style="fill:rgb(50, 100, 142)">obviousas</text>
-<text transform="translate(549,110)" font-size="6" style="fill:rgb(34, 141, 141)">multiplicity</text>
-<text transform="translate(180,60) rotate(-90)" font-size="6" style="fill:rgb(45, 178, 125)">exuberancenot</text>
-<text transform="translate(553,297)" font-size="6" style="fill:rgb(56, 88, 140)">traitshis</text>
-<text transform="translate(482,297)" font-size="6" style="fill:rgb(70, 192, 111)">lifemixed</text>
-<text transform="translate(561,271)" font-size="6" style="fill:rgb(71, 45, 123)">lacunae</text>
-<text transform="translate(438,111)" font-size="6" style="fill:rgb(34, 168, 132)">observationit</text>
-<text transform="translate(402,172) rotate(-90)" font-size="6" style="fill:rgb(236, 229, 27)">_divinatory</text>
-<text transform="translate(281,277) rotate(-90)" font-size="6" style="fill:rgb(53, 94, 141)">multifacetedit</text>
-<text transform="translate(65,166)" font-size="6" style="fill:rgb(33, 166, 133)">_filmic</text>
-<text transform="translate(229,150)" font-size="6" style="fill:rgb(55, 184, 120)">naturea</text>
-<text transform="translate(69,278)" font-size="6" style="fill:rgb(64, 189, 114)">firstclass</text>
-<text transform="translate(60,78)" font-size="6" style="fill:rgb(65, 66, 135)">somethinghe</text>
-<text transform="translate(305,258)" font-size="6" style="fill:rgb(34, 141, 141)">choosesee</text>
-<text transform="translate(92,136)" font-size="6" style="fill:rgb(108, 205, 90)">_exemplarily</text>
-<text transform="translate(19,255)" font-size="6" style="fill:rgb(31, 161, 135)">aptitudes</text>
-<text transform="translate(181,175) rotate(-90)" font-size="6" style="fill:rgb(31, 149, 139)">physiognomymuch</text>
-<text transform="translate(461,187) rotate(-90)" font-size="6" style="fill:rgb(101, 203, 94)">preysomewhat</text>
-<text transform="translate(535,202)" font-size="6" style="fill:rgb(49, 181, 123)">cleefyet</text>
-<text transform="translate(221,160)" font-size="6" style="fill:rgb(124, 210, 80)">moviewhich</text>
-<text transform="translate(113,39)" font-size="6" style="fill:rgb(33, 166, 133)">1930-40</text>
-<text transform="translate(19,67) rotate(-90)" font-size="6" style="fill:rgb(52, 97, 141)">full-of-magic</text>
-<text transform="translate(545,172)" font-size="6" style="fill:rgb(40, 125, 142)">good-ending</text>
-<text transform="translate(585,24)" font-size="6" style="fill:rgb(70, 50, 126)">voo</text>
-<text transform="translate(81,250)" font-size="6" style="fill:rgb(60, 79, 138)">monier</text>
-<text transform="translate(333,30)" font-size="6" style="fill:rgb(45, 113, 142)">h-g</text>
-<text transform="translate(541,47)" font-size="6" style="fill:rgb(99, 203, 95)">dictionaires</text>
-<text transform="translate(510,68)" font-size="6" style="fill:rgb(70, 10, 93)">latrines</text>
-<text transform="translate(200,12)" font-size="6" style="fill:rgb(72, 36, 117)">horoscope</text>
-<text transform="translate(221,125)" font-size="6" style="fill:rgb(239, 229, 28)">sagittarius</text>
-<text transform="translate(520,170) rotate(-90)" font-size="6" style="fill:rgb(31, 159, 136)">open-heartedness</text>
-<text transform="translate(113,172)" font-size="6" style="fill:rgb(36, 135, 142)">etches</text>
-<text transform="translate(228,179)" font-size="6" style="fill:rgb(35, 136, 142)">kane=like</text>
-<text transform="translate(483,228) rotate(-90)" font-size="6" style="fill:rgb(186, 222, 40)">overstating</text>
-<text transform="translate(23,117)" font-size="6" style="fill:rgb(31, 160, 136)">contiguity</text>
-<text transform="translate(218,263) rotate(-90)" font-size="6" style="fill:rgb(74, 193, 109)">neorealists</text>
-<text transform="translate(203,179) rotate(-90)" font-size="6" style="fill:rgb(210, 226, 27)">partner/girlfriend</text>
-<text transform="translate(393,119)" font-size="6" style="fill:rgb(69, 4, 87)">lautaro</text>
-<text transform="translate(249,188)" font-size="6" style="fill:rgb(52, 97, 141)">murua</text>
-<text transform="translate(62,179)" font-size="6" style="fill:rgb(31, 158, 137)">aguiler</text>
-<text transform="translate(115,51)" font-size="6" style="fill:rgb(33, 145, 140)">ulloa</text>
-<text transform="translate(394,69)" font-size="6" style="fill:rgb(41, 121, 142)">roxana</text>
-<text transform="translate(362,11)" font-size="6" style="fill:rgb(32, 163, 134)">serafin</text>
-<text transform="translate(329,17)" font-size="6" style="fill:rgb(52, 96, 141)">saly</text>
-<text transform="translate(6,77) rotate(-90)" font-size="6" style="fill:rgb(170, 220, 50)">visually-speaking</text>
-<text transform="translate(57,189)" font-size="6" style="fill:rgb(64, 189, 114)">productors</text>
-<text transform="translate(74,214)" font-size="6" style="fill:rgb(52, 182, 121)">monkey-man</text>
-<text transform="translate(83,261)" font-size="6" style="fill:rgb(56, 88, 140)">insipide</text>
-<text transform="translate(79,225)" font-size="6" style="fill:rgb(69, 4, 87)">rereading</text>
-<text transform="translate(366,169) rotate(-90)" font-size="6" style="fill:rgb(115, 208, 86)">contriving</text>
-<text transform="translate(291,176) rotate(-90)" font-size="6" style="fill:rgb(67, 62, 133)">nobility-reeking</text>
-<text transform="translate(596,78) rotate(-90)" font-size="6" style="fill:rgb(42, 120, 142)">gussied-up</text>
-<text transform="translate(38,73) rotate(-90)" font-size="6" style="fill:rgb(88, 199, 101)">animal-cruel</text>
-<text transform="translate(352,171) rotate(-90)" font-size="6" style="fill:rgb(129, 211, 77)">chirstopher</text>
-<text transform="translate(128,219)" font-size="6" style="fill:rgb(31, 153, 138)">capitaine</text>
-<text transform="translate(324,37)" font-size="6" style="fill:rgb(53, 94, 141)">arnot</text>
-<text transform="translate(236,278)" font-size="6" style="fill:rgb(38, 130, 142)">elgar</text>
-<text transform="translate(381,62) rotate(-90)" font-size="6" style="fill:rgb(50, 182, 122)">shot-putters</text>
-<text transform="translate(135,261) rotate(-90)" font-size="6" style="fill:rgb(72, 22, 104)">explicable</text>
-<text transform="translate(344,237) rotate(-90)" font-size="6" style="fill:rgb(71, 44, 122)">alistar</text>
-<text transform="translate(407,276) rotate(-90)" font-size="6" style="fill:rgb(71, 17, 100)">schwartzennegger</text>
-<text transform="translate(415,164) rotate(-90)" font-size="6" style="fill:rgb(71, 14, 97)">appretiate</text>
-<text transform="translate(135,278)" font-size="6" style="fill:rgb(70, 11, 94)">becasue</text>
-<text transform="translate(3,275)" font-size="6" style="fill:rgb(72, 40, 120)">humaness</text>
-<text transform="translate(74,242)" font-size="6" style="fill:rgb(176, 221, 47)">weismeller</text>
-<text transform="translate(536,276)" font-size="4" style="fill:rgb(34, 141, 141)">anthropomorphism</text>
-<text transform="translate(32,125)" font-size="4" style="fill:rgb(229, 228, 25)">acculturation</text>
-<text transform="translate(174,240)" font-size="4" style="fill:rgb(35, 136, 142)">victorians</text>
-<text transform="translate(37,134)" font-size="4" style="fill:rgb(36, 134, 142)">ray-zor</text>
-<text transform="translate(363,297)" font-size="4" style="fill:rgb(49, 104, 142)">agriculture</text>
-<text transform="translate(176,278)" font-size="4" style="fill:rgb(69, 4, 87)">gratify</text>
-<text transform="translate(13,242)" font-size="4" style="fill:rgb(72, 193, 110)">wiesmuller</text>
-<text transform="translate(425,250)" font-size="4" style="fill:rgb(32, 163, 134)">chimpazees</text>
-<text transform="translate(463,145)" font-size="4" style="fill:rgb(32, 164, 134)">chimpazee</text>
-<text transform="translate(272,17)" font-size="4" style="fill:rgb(137, 213, 72)">goodall</text>
-<text transform="translate(71,157)" font-size="4" style="fill:rgb(69, 55, 129)">rousseauian</text>
-<text transform="translate(40,74)" font-size="4" style="fill:rgb(31, 148, 140)">cameroun</text>
-<text transform="translate(499,22)" font-size="4" style="fill:rgb(47, 107, 142)">blenheim</text>
-<text transform="translate(415,102)" font-size="4" style="fill:rgb(74, 193, 109)">enthrawled</text>
-<text transform="translate(86,25) rotate(-90)" font-size="4" style="fill:rgb(71, 13, 96)">entireity</text>
-<text transform="translate(179,251)" font-size="4" style="fill:rgb(41, 122, 142)">inergy</text>
-<text transform="translate(546,136)" font-size="4" style="fill:rgb(71, 17, 100)">steppin</text>
-<text transform="translate(521,111)" font-size="4" style="fill:rgb(67, 61, 132)">boilersuits</text>
-<text transform="translate(543,297)" font-size="4" style="fill:rgb(40, 125, 142)">#0</text>
-<text transform="translate(325,48)" font-size="4" style="fill:rgb(184, 222, 41)">gasmasks</text>
-<text transform="translate(358,174)" font-size="4" style="fill:rgb(54, 92, 141)">crashtest</text>
-<text transform="translate(429,34)" font-size="4" style="fill:rgb(36, 134, 142)">finelines</text>
-<text transform="translate(291,34)" font-size="4" style="fill:rgb(56, 89, 140)">soundbites</text>
-<text transform="translate(72,149)" font-size="4" style="fill:rgb(162, 218, 55)">selftitled</text>
-<text transform="translate(531,246)" font-size="4" style="fill:rgb(71, 17, 100)">banned-by-mtv</text>
-<text transform="translate(499,251)" font-size="4" style="fill:rgb(88, 199, 101)">metal/hardcore</text>
-<text transform="translate(461,133)" font-size="4" style="fill:rgb(90, 200, 100)">*still*</text>
-<text transform="translate(77,44)" font-size="4" style="fill:rgb(69, 56, 130)">133</text>
-<text transform="translate(365,196)" font-size="4" style="fill:rgb(248, 230, 33)">disasterpieces</text>
-<text transform="translate(444,49)" font-size="4" style="fill:rgb(72, 36, 117)">votary</text>
-<text transform="translate(548,144)" font-size="4" style="fill:rgb(72, 35, 116)">billets</text>
-<text transform="translate(137,233)" font-size="4" style="fill:rgb(200, 224, 32)">drollest</text>
-<text transform="translate(326,91)" font-size="4" style="fill:rgb(62, 74, 137)">rutherford/sim/grenfell</text>
-<text transform="translate(326,53)" font-size="4" style="fill:rgb(31, 161, 136)">83mins</text>
-<text transform="translate(233,117)" font-size="4" style="fill:rgb(71, 42, 122)">upper-class-twit</text>
-<text transform="translate(242,258)" font-size="4" style="fill:rgb(57, 86, 140)">whistle-stop</text>
-<text transform="translate(228,165)" font-size="4" style="fill:rgb(68, 57, 131)">girls-only</text>
-<text transform="translate(538,210)" font-size="4" style="fill:rgb(80, 196, 106)">hammersmith</text>
-<text transform="translate(164,72) rotate(-90)" font-size="4" style="fill:rgb(39, 173, 129)">liss</text>
-<text transform="translate(418,170)" font-size="4" style="fill:rgb(30, 156, 137)">swithin</text>
-<text transform="translate(269,296)" font-size="4" style="fill:rgb(37, 171, 130)">averting</text>
-<text transform="translate(22,215)" font-size="4" style="fill:rgb(66, 190, 113)">dottiest</text>
-<text transform="translate(415,196)" font-size="4" style="fill:rgb(208, 225, 28)">sim-peerless</text>
-<text transform="translate(366,278)" font-size="4" style="fill:rgb(72, 29, 111)">rutherford-ditto</text>
-<text transform="translate(50,152) rotate(-90)" font-size="4" style="fill:rgb(35, 136, 142)">alkward</text>
-<text transform="translate(150,260) rotate(-90)" font-size="4" style="fill:rgb(71, 17, 100)">hyde-brown</text>
-<text transform="translate(282,62) rotate(-90)" font-size="4" style="fill:rgb(71, 13, 96)">magnificently-planned</text>
-<text transform="translate(42,213)" font-size="4" style="fill:rgb(66, 63, 133)">pre-runner</text>
-<text transform="translate(464,138)" font-size="4" style="fill:rgb(94, 201, 98)">pepys</text>
-<text transform="translate(574,237)" font-size="4" style="fill:rgb(37, 132, 142)">decameron</text>
-<text transform="translate(248,38)" font-size="4" style="fill:rgb(66, 65, 134)">wetherby</text>
-<text transform="translate(78,33)" font-size="4" style="fill:rgb(110, 206, 88)">immovable</text>
-<text transform="translate(489,226)" font-size="4" style="fill:rgb(67, 62, 133)">shilly</text>
-<text transform="translate(119,143)" font-size="4" style="fill:rgb(33, 165, 133)">shally</text>
-<text transform="translate(117,163)" font-size="4" style="fill:rgb(197, 224, 33)">busloads</text>
-<text transform="translate(484,261)" font-size="4" style="fill:rgb(53, 95, 141)">zither</text>
-<text transform="translate(357,105)" font-size="4" style="fill:rgb(200, 224, 32)">ex-best</text>
-<text transform="translate(364,236)" font-size="4" style="fill:rgb(55, 184, 120)">worryingly</text>
-<text transform="translate(302,236)" font-size="4" style="fill:rgb(58, 83, 139)">messier</text>
-<text transform="translate(462,160)" font-size="4" style="fill:rgb(42, 120, 142)">comedy/gore</text>
-<text transform="translate(451,297)" font-size="4" style="fill:rgb(137, 213, 72)">horror-hater</text>
-<text transform="translate(66,171)" font-size="4" style="fill:rgb(58, 186, 118)">ride/jeepers</text>
-<text transform="translate(113,16)" font-size="4" style="fill:rgb(40, 125, 142)">times--but</text>
-<text transform="translate(134,110)" font-size="4" style="fill:rgb(44, 115, 142)">ok--jungmann</text>
-<text transform="translate(204,216)" font-size="4" style="fill:rgb(246, 230, 32)">friend--but</text>
-<text transform="translate(89,5)" font-size="4" style="fill:rgb(31, 158, 137)">well-made--though</text>
-<text transform="translate(409,278)" font-size="4" style="fill:rgb(30, 156, 137)">mindless--little</text>
-<text transform="translate(72,84)" font-size="4" style="fill:rgb(76, 194, 108)">buddy-comedy</text>
-<text transform="translate(427,188)" font-size="4" style="fill:rgb(72, 23, 105)">iwas</text>
-<text transform="translate(297,281)" font-size="4" style="fill:rgb(62, 73, 137)">black-esquire</text>
-<text transform="translate(174,256)" font-size="4" style="fill:rgb(41, 175, 127)">truck-stop</text>
-<text transform="translate(295,103) rotate(-90)" font-size="4" style="fill:rgb(67, 62, 133)">sickass</text>
-<text transform="translate(570,164)" font-size="4" style="fill:rgb(38, 130, 142)">clogs</text>
-<text transform="translate(87,62) rotate(-90)" font-size="4" style="fill:rgb(32, 147, 140)">red-necks</text>
-<text transform="translate(364,72)" font-size="4" style="fill:rgb(63, 188, 115)">siphoning</text>
-<text transform="translate(351,178)" font-size="4" style="fill:rgb(48, 105, 142)">camper-van</text>
-<text transform="translate(430,254)" font-size="4" style="fill:rgb(72, 31, 112)">oxymoron</text>
-<text transform="translate(569,242)" font-size="4" style="fill:rgb(70, 51, 127)">stress-related</text>
-<text transform="translate(143,33)" font-size="4" style="fill:rgb(64, 70, 136)">nose-bleed</text>
-<text transform="translate(151,16)" font-size="4" style="fill:rgb(46, 110, 142)">tank/truck</text>
-<text transform="translate(541,281)" font-size="4" style="fill:rgb(31, 148, 140)">chase/suspense</text>
-</svg>
+<div class="cell-output cell-output-display">
+<div id="least-common-tokens" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="exploring_neural_data_files/figure-html/least-common-tokens-output-1.png" class="img-fluid figure-img"></p>
+</figure>
 </div>
 </div>
-<div id="cell-text-original" class="cell" data-execution_count="20">
+</div>
+<div id="cell-text-original" class="cell" data-execution_count="19">
 <details>
 <summary>Display an IMDb review</summary>
 <div class="sourceCode cell-code" id="cell-text-original"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cell-text-original-1"><a href="#cell-text-original-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> _, line <span class="kw">in</span> dataset:</span>
@@ -1659,7 +1253,7 @@ What about other methods?
 <blockquote class="blockquote">i love sci-fi and am willing to put up with a lot. Sci-fi movies/tv are usually underfunded, under-appreciated and misunderstood. I tried to like this, I really did, but it is to good tv sci-fi as babylon 5 is to star trek (the original). Silly prosthetics, cheap cardboard sets, stilted dialogues, cg that doesn't match the background, and painfully one-dimensional characters cannot be overcome with a'sci-fi'setting. (I'm sure there are those of you out there who think babylon 5 is good sci-fi tv. It's not. It's clichéd and uninspiring.) while us viewers might like emotion and character development, sci-fi is a genre that does not take itself seriously (cf. Star trek). It may treat important issues, yet not as a serious philosophy. It's really difficult to care about the characters here as they are not simply foolish, just missing a spark of life. Their actions and reactions are wooden and predictable, often painful to watch. The makers of earth know it's rubbish as they have to always say gene roddenberry's earth... Otherwise people would not continue watching. Roddenberry's ashes must be turning in their orbit as this dull, cheap, poorly edited (watching it without advert breaks really brings this home) trudging trabant of a show lumbers into space. Spoiler. So, kill off a main character. And then bring him back as another actor. Jeeez! Dallas all over again.</blockquote>
 </div>
 </div>
-<div id="cell-text-reconstruction" class="cell" data-execution_count="21">
+<div id="cell-text-reconstruction" class="cell" data-execution_count="20">
 <details>
 <summary>Reconstruct the review using the top 200 words</summary>
 <div class="sourceCode cell-code" id="cell-text-reconstruction"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cell-text-reconstruction-1"><a href="#cell-text-reconstruction-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Review reconstructed using top 200 words"</span>)</span>
