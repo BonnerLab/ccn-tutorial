@@ -296,7 +296,7 @@ $$\log{\lambda_\text{rank}} \approx \alpha \log{\left( \text{rank} \right)} + c 
 
 #### Power laws
 
-A power law is a relationship of the form $f(x) \propto x^{\alpha}$, where $\alpha$ is termed the *index* of the power law, or the *power law exponent*.
+A power law is a relationship of the form $f(x) \propto x^{\alpha}$, where $\alpha$ is termed the *index* of the power law, or the *power law exponent*. It is *scale-free* because $f(kx) \propto f(x)$.
 
 Power laws are ubiquitious in nature, arising in all sorts of systems:
 
@@ -304,51 +304,15 @@ Power laws are ubiquitious in nature, arising in all sorts of systems:
 - wealth distribution (Pareto principle)
 - ferromagnetism (Ising model)
 
-Power laws are *scale-free*: $f(kx) \propto f(x)$.
+<!-- but see Scale-free networks are rare -->
 
-- bonus: phase transitions at critical power-law exponent
-  - e.g. Curie temperature of ferromagnetic substances
-- bonus: self-organizing systems
+Nevertheless, a power law relationshop will not be observed when the data
 
-### Some nonlinear methods
+- is random
+- has certain characteristic scale
 
-#### Nonnegative matrix factorization (NMF)
+<!-- TODO: spectra of random data moved here? -->
 
-```{python}
-# | code-summary: Compute NMF of neural responses
-# | fig-column: page
-# | fig-align: center
+#### Power law in neural networks
 
-scaler = MinMaxScaler()
-scaler.fit(data)
-
-nmf = NMF(n_components=2, random_state=random_state)
-data_nmf = nmf.fit_transform(scaler.transform(data))
-
-view_images_as_scatterplot(data_nmf[:, 0], data_nmf[:, 1], stimuli=stimuli)
-
-```
-
-#### Uniform Manifold Approximation & Projection (UMAP)
-
-
-```{python}
-# | code-summary: Compute UMAP projection of neural responses
-# | fig-column: page
-# | fig-cap: UMAP projection of neural data
-# | fig-align: center
-
-umap = UMAP(n_components=2, metric="euclidean", random_state=random_state)
-data_umap = umap.fit_transform(data)
-
-view_images_as_scatterplot(data_umap[:, 0], data_umap[:, 1], stimuli=stimuli)
-```
-
-Benefits of linear methods
-
-- closed form solutions
-- non-stochastic
-- well-characterized mathematically
-- preserves all the info in data (just a rotation, different view of the data)
-
-As you will see, there are cool methods to get stimulus-dependent variance using linear methods: not obvious with NMF, etc.
+<!-- TODO: ? -->
