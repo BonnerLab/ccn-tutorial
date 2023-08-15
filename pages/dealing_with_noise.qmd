@@ -133,7 +133,11 @@ view_marchenko_pastur(eigenvalues)
 
 ## Cross-validated PCA
 
-In a whole-brain calcium-imaging study where mice viewed 2,800 natural images while neural responses were recorded, Stringer et al. (2021) developed cross-validated PCA (CV-PCA) as a method to reliably estimate the covariance structure of the neural responses. Since each image was viewed twice, these repetitions could be used as train/test splits to estimate covariance eigenvalues. Specifically, eigenvectors are computed on a training set of data, and *cross-validated* eigenvalues are computed by computing the covariance between two independent sets of data:
+In a whole-brain calcium-imaging study where mice viewed 2,800 natural images while neural responses were recorded, Stringer et al. (2021) developed cross-validated PCA (CV-PCA) as a method to reliably estimate the covariance structure of the neural responses.
+
+![TODO update with schematic showing viewing natural images](assets/mouse.svg){width=20%}
+
+Since each image was viewed twice, these repetitions could be used as train/test splits to estimate covariance eigenvalues. Specifically, eigenvectors are computed on a training set of data, and *cross-validated* eigenvalues are computed by computing the covariance between two independent sets of data:
 
 $$
 \begin{align*}
@@ -143,8 +147,8 @@ $$
 \end{align*}
 $$
 
-::: {.column-page}
-![](assets/autocovariance-eigendecomposition.svg){height=70mm}
+::: {.column-page-right}
+![](assets/autocovariance-eigendecomposition.svg){width=100%}
 :::
 
 $$
@@ -155,13 +159,15 @@ $$
 \end{align*}
 $$
 
-::: {.column-page}
-![](assets/cv_pca.svg){height=70mm}
+::: {.column-page-right}
+![](assets/cv_pca.svg){width=100%}
 :::
 
 These cross-validated eigenvalues represent the covariance reliably shared across two presentations of the visual stimulus -- which is a quantity we are interested in as neuroscientists: what is the "stable" part of the visual representation of a natural image? Notably, these "eigenvalues" need not be positive: if there is no shared covariance between the two systems at a rank, the expected value of the eigenvalue is $0$.
 
 ### Some geometric intuition
+
+TODO add figure showing two sets of data, showing reliable covariance in one dimension but not the other
 
 ### A computational recipe
 
@@ -339,14 +345,18 @@ with sns.axes_style("whitegrid"):
 
 ## Power-law exponent of -1
 
-Interestingly, the power-law exponent of the neural data appears very close to $-1$. In fact, a power-law exponent of $-1$ appears with surprising regularity both in neuroscience and other fields, indicating a system at a critical point.
+Interestingly, the power-law exponent of the neural data appears very close to $-1$. 
 
-TODO:
+- Same amount of variance at each decade
+- each decade is equally important (if assessed using variance)
 
-- Same amount of variance at each decade - each decade is equally important (if assessed using variance)
-- What does this tell us about neural coding?
-- Show the Stringer result as comparison, zebrafish?
-- Information coding (Visual system operating at a critical threshold - scale-free dimensionality, more data -> extend even further
+In fact, a power-law exponent of $-1$ appears with surprising regularity in neuroscience.
+
+### Universality across species
+
+![TODO update with Stringer figure](assets/mouse.svg){width=20%}
+
+![TODO update with zebrafish figure](assets/zebrafish.svg){width=5%}
 
 ::: {.callout-important}
 # An open question: is the power-law exponent of -1 universal?
@@ -355,3 +365,14 @@ Open question: same power law everywhere? Sensory systems vs cognitive systems? 
 
 Check your data!
 :::
+
+### Deep neural network image representations
+
+### Speculated optimality criterion for population coding
+
+- What does this tell us about neural coding?
+
+TODO:
+
+- scale-free dimensionality
+- more data -> extend even further

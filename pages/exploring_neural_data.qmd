@@ -37,13 +37,13 @@ from sklearn.preprocessing import MinMaxScaler
 from sklearn.decomposition import PCA, NMF
 from umap import UMAP
 
+from IPython.display import display, HTML
 import matplotlib as mpl
 from mpl_toolkits.axes_grid1 import ImageGrid
 from matplotlib import pyplot as plt
 from matplotlib_inline.backend_inline import set_matplotlib_formats
 from matplotlib.offsetbox import OffsetImage, AnnotationBbox
 import seaborn as sns
-from IPython.display import display
 
 from utilities.brain import (
     load_dataset,
@@ -393,12 +393,17 @@ display_counter = copy.copy(counter)
 for token in unwanted_tokens:
     del display_counter[token]
 
-cloud = WordCloud(background_color="white", width=500, height=500)
+cloud = WordCloud(background_color="white", width=600, height=300)
 
 display(
-    cloud.generate_from_frequencies(dict(display_counter.most_common(200))).to_image()
+    HTML(
+        cloud.generate_from_frequencies(dict(display_counter.most_common(200))).to_svg(
+            embed_font=True
+        )
+    )
 )
 ```
+
 
 ```{python}
 # | label: least-common-tokens
@@ -406,9 +411,11 @@ display(
 # | fig-align: center
 
 display(
-    cloud.generate_from_frequencies(
-        dict(display_counter.most_common()[-200:])
-    ).to_image()
+    HTML(
+        cloud.generate_from_frequencies(
+            dict(display_counter.most_common()[-200:])
+        ).to_svg(embed_font=True)
+    )
 )
 ```
 

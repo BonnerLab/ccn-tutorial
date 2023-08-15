@@ -475,27 +475,17 @@ $$
 To do this, we start by computing the auto-covariance of our data matrix, where $X$ is centered (i.e. $X - \overline{X}$)
 
 
-::: {.column-page-right}
-![](assets/autocovariance.svg){height=50mm}
-:::
-
+![](assets/autocovariance.svg){width=100%}
 
 Next , we compute the the eigendecomposition of the auto-covariance (though the computational steps we take to get there are slightly different, as shown later)
 
-
-::: {.column-page-right}
-![](assets/eigendecomposition.svg){height=50mm}
-:::
-
+![](assets/eigendecomposition.svg){width=100%}
 
 The columns of $V$ are *eigenvectors* that specify the directions of variance while the corresponding diagonal elements of $\Lambda$ are *eigenvalues* that specify the amount of variance along the eigenvector[^proof-eigenvalue-covariance].
 
-
 Finally, the original data matrix can be transformed by projecting it onto the eigenvectors: $\widetilde{X} = \left(X - \overline{X}\right) V$.
 
-::: {.column-page-right}
-![](assets/projection.svg){height=50mm}
-:::
+![](assets/projection.svg){width=100%}
 
 <!-- TODO ### Some terminology
 

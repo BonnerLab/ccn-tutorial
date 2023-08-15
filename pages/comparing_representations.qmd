@@ -34,6 +34,18 @@ Here,
 - the right singular vectors $V$ define a rotation of system $Y$ into the *same* latent space, and
 - the singular values $\Sigma$ define the amount of variance shared by the two systems along the latent dimensions.
 
+::: {.column-page-right}
+![](assets/cross-covariance-svd.svg){width=100%}
+:::
+
+::: {.column-page-right}
+![](assets/pls_svd.svg){width=100%}
+:::
+
+Instead, we can use a cross-validated approach similar to CV-PCA, except that instead of testing generalization across different *presentations* of the stimuli, we can evaluate the reliable shared variance between the two representations across *stimuli*.
+
+Specifically, we can divide the images into two: a training split and a test split. We can compute singular vectors on the training split, and evalute *test* singular values on the test split, analogous to the CV-PCA procedure:
+
 ::: {.callout-note}
 # A note on terminology
 
@@ -60,7 +72,10 @@ import numpy as np
 import pandas as pd
 import xarray as xr
 import torch
-from sklearn.decomposition import TruncatedSVD
+from torchdata.datapipes.map import SequenceWrapper
+from torchvision.models import alexnet, AlexNet_Weights
+from sklearn.decomposition import TruncatedSVD, PCA
+from PIL import Image
 import seaborn as sns
 import matplotlib as mpl
 from matplotlib import pyplot as plt
@@ -74,6 +89,11 @@ from utilities.brain import (
     plot_brain_map,
 )
 from utilities.computation import svd
+from utilities.model import (
+    extract_features,
+    SparseRandomProjection,
+    create_image_datapipe,
+)
 
 ```
 
@@ -152,10 +172,6 @@ We have two data matrices $X \in \mathbb{R}^{N \times P_X}$ and $Y \in \mathbb{R
 
 However, we run into the same issue as before: the singular values of a matrix are always positive and we won't be able to use the magnitude of the singular value to assess the reliability of the variance along that dimension.
 
-Instead, we can use a cross-validated approach similar to CV-PCA, except that instead of testing generalization across different *presentations* of the stimuli, we can evaluate the reliable shared variance between the two representations across *stimuli*.
-
-Specifically, we can divide the images into two: a training split and a test split. We can compute singular vectors on the training split, and evalute *test* singular values on the test split, analogous to the CV-PCA procedure:
-
 $$
 \begin{align*}
     \text{cov}(X_\text{train}, Y_\text{train})
@@ -167,8 +183,6 @@ $$
     &= \left( X_\text{train} U \right) ^\top \left( Y_\text{test} V \right) / (n - 1)
 \end{align*}
 $$
-
-## Comparing brains and DNNs
 
 ```{python}
 # | code-summary: Load the datasets
@@ -231,4 +245,53 @@ $$
 # ax.set_xscale("log")
 # ax.set_yscale("log")
 # sns.despine(ax=ax, offset=20)
+```
+
+
+## Comparing brains and DNNs
+
+```{python}
+# | label: load-model
+# | code-summary: Load an ImageNet-trained convolutional neural network (AlexNet)
+
+weights = AlexNet_Weights.DEFAULT
+
+model = alexnet(weights=weights)
+model.eval()
+```
+
+```{python}
+# | label: create-datapipe
+# | code-summary: Prepare stimuli
+
+stimulus_set = load_stimuli().load()
+datapipe = create_image_datapipe(
+    SequenceWrapper(
+        {
+            str(stimulus["stimulus_id"].values): Image.fromarray(stimulus.values)
+            for stimulus in stimulus_set
+        }
+    ),
+    batch_size=128,
+    preprocess_fn=weights.transforms(),
+    indices=list(stimulus_set["stimulus_id"].values),
+)
+```
+
+```{python}
+# | label: extract-features
+# | code-summary: Extract AlexNet activations to the stimuli
+
+layers = [f"features.{i}" for i in (1, 4, 7, 9, 11)]
+postprocess_hook = SparseRandomProjection(n_components=2000)
+
+features = extract_features(
+    model=model,
+    model_identifier="AlexNet-ImageNet1KV1",
+    nodes=layers,
+    hooks={layer: postprocess_hook for layer in layers},
+    datapipe=datapipe,
+    datapipe_identifier="natural_scenes_dataset",
+    use_cached=False,
+)
 ```
