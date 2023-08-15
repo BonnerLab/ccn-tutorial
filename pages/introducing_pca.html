@@ -1044,7 +1044,7 @@ Kriegeskorte, Nikolaus. 2008. <span>“Representational Similarity Analysis - Co
 <p><img src="assets/rsa.png" class="img-fluid"></p>
 <p>But what if the neural responses are more complicated, and we have multiple experimental conditions? Is there another view of the population code that might be more informative?</p>
 </section>
-<section id="studying-the-latent-dimensions" class="level2 page-columns page-full">
+<section id="studying-the-latent-dimensions" class="level2">
 <h2 class="anchored" data-anchor-id="studying-the-latent-dimensions">Studying the latent dimensions</h2>
 <p>Instead of directly studying the raw observed neural activity, we can focus on the underlying factors that capture the structure and variance in the data.</p>
 <section id="some-geometric-intuition" class="level3">
@@ -1222,7 +1222,7 @@ Tip
 </div>
 <p>As seen in the animation, we can transform our data to view the directions of maximum variance. These directions are the principal components of our data.</p>
 </section>
-<section id="the-mathematical-definition" class="level3 page-columns page-full">
+<section id="the-mathematical-definition" class="level3">
 <h3 class="anchored" data-anchor-id="the-mathematical-definition">The mathematical definition</h3>
 <p>Given a data matrix <span class="math inline">X \in \mathbb{R}^{N \times P}</span>, we need to compute the <a href="../pages/reference.html#eigendecomposition">eigendecomposition</a><a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> of its <a href="../pages/reference.html#auto-covariance">auto-covariance</a><a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>:</p>
 <p><span class="math display">
@@ -1233,18 +1233,12 @@ Tip
 \end{align*}
 </span></p>
 <p>To do this, we start by computing the auto-covariance of our data matrix, where <span class="math inline">X</span> is centered (i.e.&nbsp;<span class="math inline">X - \overline{X}</span>)</p>
-<div class="column-page-right">
-<p><img src="assets/autocovariance.svg" style="height:50mm"></p>
-</div>
+<p><img src="assets/autocovariance.svg" class="img-fluid" style="width:100.0%"></p>
 <p>Next , we compute the the eigendecomposition of the auto-covariance (though the computational steps we take to get there are slightly different, as shown later)</p>
-<div class="column-page-right">
-<p><img src="assets/eigendecomposition.svg" style="height:50mm"></p>
-</div>
+<p><img src="assets/eigendecomposition.svg" class="img-fluid" style="width:100.0%"></p>
 <p>The columns of <span class="math inline">V</span> are <em>eigenvectors</em> that specify the directions of variance while the corresponding diagonal elements of <span class="math inline">\Lambda</span> are <em>eigenvalues</em> that specify the amount of variance along the eigenvector<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>.</p>
 <p>Finally, the original data matrix can be transformed by projecting it onto the eigenvectors: <span class="math inline">\widetilde{X} = \left(X - \overline{X}\right) V</span>.</p>
-<div class="column-page-right">
-<p><img src="assets/projection.svg" style="height:50mm"></p>
-</div>
+<p><img src="assets/projection.svg" class="img-fluid" style="width:100.0%"></p>
 <!-- TODO ### Some terminology
 
 Ambient space

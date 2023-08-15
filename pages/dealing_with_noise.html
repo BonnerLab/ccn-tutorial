@@ -227,7 +227,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#a-computational-recipe" id="toc-a-computational-recipe" class="nav-link" data-scroll-target="#a-computational-recipe">A computational recipe</a></li>
   <li><a href="#analyzing-neural-data" id="toc-analyzing-neural-data" class="nav-link" data-scroll-target="#analyzing-neural-data">Analyzing neural data</a></li>
   </ul></li>
-  <li><a href="#power-law-exponent-of--1" id="toc-power-law-exponent-of--1" class="nav-link" data-scroll-target="#power-law-exponent-of--1">Power-law exponent of -1</a></li>
+  <li><a href="#power-law-exponent-of--1" id="toc-power-law-exponent-of--1" class="nav-link" data-scroll-target="#power-law-exponent-of--1">Power-law exponent of -1</a>
+  <ul>
+  <li><a href="#universality-across-species" id="toc-universality-across-species" class="nav-link" data-scroll-target="#universality-across-species">Universality across species</a></li>
+  <li><a href="#deep-neural-network-image-representations" id="toc-deep-neural-network-image-representations" class="nav-link" data-scroll-target="#deep-neural-network-image-representations">Deep neural network image representations</a></li>
+  <li><a href="#speculated-optimality-criterion-for-population-coding" id="toc-speculated-optimality-criterion-for-population-coding" class="nav-link" data-scroll-target="#speculated-optimality-criterion-for-population-coding">Speculated optimality criterion for population coding</a></li>
+  </ul></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/BonnerLab/ccn-tutorial/edit/main/pages/dealing_with_noise.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/BonnerLab/ccn-tutorial/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div><div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="dealing_with_noise.ipynb" download="dealing_with_noise.ipynb"><i class="bi bi-journal-code"></i>Jupyter</a></li></ul></div></nav>
     </div>
@@ -415,7 +420,14 @@ The covariance structure of random matrices
 </section>
 <section id="cross-validated-pca" class="level2 page-columns page-full">
 <h2 class="anchored" data-anchor-id="cross-validated-pca">Cross-validated PCA</h2>
-<p>In a whole-brain calcium-imaging study where mice viewed 2,800 natural images while neural responses were recorded, Stringer et al.&nbsp;(2021) developed cross-validated PCA (CV-PCA) as a method to reliably estimate the covariance structure of the neural responses. Since each image was viewed twice, these repetitions could be used as train/test splits to estimate covariance eigenvalues. Specifically, eigenvectors are computed on a training set of data, and <em>cross-validated</em> eigenvalues are computed by computing the covariance between two independent sets of data:</p>
+<p>In a whole-brain calcium-imaging study where mice viewed 2,800 natural images while neural responses were recorded, Stringer et al.&nbsp;(2021) developed cross-validated PCA (CV-PCA) as a method to reliably estimate the covariance structure of the neural responses.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="assets/mouse.svg" class="img-fluid figure-img" style="width:20.0%"></p>
+<figcaption class="figure-caption">TODO update with schematic showing viewing natural images</figcaption>
+</figure>
+</div>
+<p>Since each image was viewed twice, these repetitions could be used as train/test splits to estimate covariance eigenvalues. Specifically, eigenvectors are computed on a training set of data, and <em>cross-validated</em> eigenvalues are computed by computing the covariance between two independent sets of data:</p>
 <p><span class="math display">
 \begin{align*}
     \text{cov}(X_\text{train}, X_\text{train})
@@ -423,8 +435,8 @@ The covariance structure of random matrices
     &amp;= V \Lambda V^\top
 \end{align*}
 </span></p>
-<div class="column-page">
-<p><img src="assets/autocovariance-eigendecomposition.svg" style="height:70mm"></p>
+<div class="column-page-right">
+<p><img src="assets/autocovariance-eigendecomposition.svg" class="img-fluid" style="width:100.0%"></p>
 </div>
 <p><span class="math display">
 \begin{align*}
@@ -433,12 +445,13 @@ The covariance structure of random matrices
     &amp;= \left( X_\text{train} V \right) ^\top \left( X_\text{test} V \right) / (n - 1)
 \end{align*}
 </span></p>
-<div class="column-page">
-<p><img src="assets/cv_pca.svg" style="height:70mm"></p>
+<div class="column-page-right">
+<p><img src="assets/cv_pca.svg" class="img-fluid" style="width:100.0%"></p>
 </div>
 <p>These cross-validated eigenvalues represent the covariance reliably shared across two presentations of the visual stimulus – which is a quantity we are interested in as neuroscientists: what is the “stable” part of the visual representation of a natural image? Notably, these “eigenvalues” need not be positive: if there is no shared covariance between the two systems at a rank, the expected value of the eigenvalue is <span class="math inline">0</span>.</p>
 <section id="some-geometric-intuition" class="level3">
 <h3 class="anchored" data-anchor-id="some-geometric-intuition">Some geometric intuition</h3>
+<p>TODO add figure showing two sets of data, showing reliable covariance in one dimension but not the other</p>
 </section>
 <section id="a-computational-recipe" class="level3">
 <h3 class="anchored" data-anchor-id="a-computational-recipe">A computational recipe</h3>
@@ -1028,14 +1041,26 @@ Attributes: (3/7)
 </section>
 <section id="power-law-exponent-of--1" class="level2">
 <h2 class="anchored" data-anchor-id="power-law-exponent-of--1">Power-law exponent of -1</h2>
-<p>Interestingly, the power-law exponent of the neural data appears very close to <span class="math inline">-1</span>. In fact, a power-law exponent of <span class="math inline">-1</span> appears with surprising regularity both in neuroscience and other fields, indicating a system at a critical point.</p>
-<p>TODO:</p>
+<p>Interestingly, the power-law exponent of the neural data appears very close to <span class="math inline">-1</span>.</p>
 <ul>
-<li>Same amount of variance at each decade - each decade is equally important (if assessed using variance)</li>
-<li>What does this tell us about neural coding?</li>
-<li>Show the Stringer result as comparison, zebrafish?</li>
-<li>Information coding (Visual system operating at a critical threshold - scale-free dimensionality, more data -&gt; extend even further</li>
+<li>Same amount of variance at each decade</li>
+<li>each decade is equally important (if assessed using variance)</li>
 </ul>
+<p>In fact, a power-law exponent of <span class="math inline">-1</span> appears with surprising regularity in neuroscience.</p>
+<section id="universality-across-species" class="level3">
+<h3 class="anchored" data-anchor-id="universality-across-species">Universality across species</h3>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="assets/mouse.svg" class="img-fluid figure-img" style="width:20.0%"></p>
+<figcaption class="figure-caption">TODO update with Stringer figure</figcaption>
+</figure>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="assets/zebrafish.svg" class="img-fluid figure-img" style="width:5.0%"></p>
+<figcaption class="figure-caption">TODO update with zebrafish figure</figcaption>
+</figure>
+</div>
 <div class="callout callout-style-default callout-important callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -1050,8 +1075,23 @@ An open question: is the power-law exponent of -1 universal?
 <p>Check your data!</p>
 </div>
 </div>
+</section>
+<section id="deep-neural-network-image-representations" class="level3">
+<h3 class="anchored" data-anchor-id="deep-neural-network-image-representations">Deep neural network image representations</h3>
+</section>
+<section id="speculated-optimality-criterion-for-population-coding" class="level3">
+<h3 class="anchored" data-anchor-id="speculated-optimality-criterion-for-population-coding">Speculated optimality criterion for population coding</h3>
+<ul>
+<li>What does this tell us about neural coding?</li>
+</ul>
+<p>TODO:</p>
+<ul>
+<li>scale-free dimensionality</li>
+<li>more data -&gt; extend even further</li>
+</ul>
 
 
+</section>
 </section>
 
 <a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a></main> <!-- /main -->
