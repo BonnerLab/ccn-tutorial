@@ -2,13 +2,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en-US" xml:lang="en-US"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.4.320">
+<meta name="generator" content="quarto-1.4.315">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="dcterms.date" content="2023-08-26">
 
-<title>CCN 2023 | Tutorial - Comparing high-dimensional representations</title>
+<title>CCN 2023 | Tutorial - Comparing neural representations</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -97,6 +97,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-label": "Search"
   }
 }</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+<script src="https://unpkg.com/@jupyter-widgets/html-manager@*/dist/embed-amd.js" crossorigin="anonymous"></script>
 
   <script>window.backupDefine = window.define; window.define = undefined;</script><script src="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.js"></script>
   <script>document.addEventListener("DOMContentLoaded", function () {
@@ -174,7 +178,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
-      <div class="quarto-title-block"><div><h1 class="title">Comparing high-dimensional representations</h1><button type="button" class="btn code-tools-button dropdown-toggle" id="quarto-code-tools-menu" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi"></i> Code</button><ul class="dropdown-menu dropdown-menu-end" aria-labelelledby="quarto-code-tools-menu"><li><a id="quarto-show-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Show All Code</a></li><li><a id="quarto-hide-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Hide All Code</a></li><li><hr class="dropdown-divider"></li><li><a id="quarto-view-source" class="dropdown-item" href="javascript:void(0)" role="button" data-quarto-source-url="https://github.com/BonnerLab/ccn-tutorial/blob/main/pages/comparing_representations.qmd">View Source</a></li></ul></div></div>
+      <div class="quarto-title-block"><div><h1 class="title">Comparing neural representations</h1><button type="button" class="btn code-tools-button dropdown-toggle" id="quarto-code-tools-menu" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi"></i> Code</button><ul class="dropdown-menu dropdown-menu-end" aria-labelelledby="quarto-code-tools-menu"><li><a id="quarto-show-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Show All Code</a></li><li><a id="quarto-hide-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Hide All Code</a></li><li><hr class="dropdown-divider"></li><li><a id="quarto-view-source" class="dropdown-item" href="javascript:void(0)" role="button" data-quarto-source-url="https://github.com/BonnerLab/ccn-tutorial/blob/main/pages/comparing_representations.qmd">View Source</a></li></ul></div></div>
             <p class="subtitle lead">Cross-validated methods to separate high-dimensional signal from noise</p>
                       </div>
   </div>
@@ -256,6 +260,9 @@ Run this notebook interactively!
 <li>the right singular vectors <span class="math inline">V</span> define a rotation of system <span class="math inline">Y</span> into the <em>same</em> latent space, and</li>
 <li>the singular values <span class="math inline">\Sigma</span> define the amount of variance shared by the two systems along the latent dimensions.</li>
 </ul>
+<div class="column-page">
+<p><img src="assets/cross-covariance-svd.svg" class="img-fluid" style="width:100.0%"></p>
+</div>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -282,14 +289,14 @@ What happens when <span class="math inline">X</span> = <span class="math inline"
 <p>Note that if <span class="math inline">X = Y</span>, cross-decomposition reduces to PCA:</p>
 </div>
 </div>
-<div id="install_package" class="cell" data-execution_count="1">
+<div id="install_package" class="cell" data-execution_count="2">
 <details>
 <summary>Install all required dependencies</summary>
 <div class="sourceCode cell-code" id="install_package"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="install_package-1"><a href="#install_package-1" aria-hidden="true" tabindex="-1"></a><span class="co"># </span><span class="al">TODO</span><span class="co"> uncomment before final packaging</span></span>
 <span id="install_package-2"><a href="#install_package-2" aria-hidden="true" tabindex="-1"></a><span class="co"># %pip install git+https://github.com/BonnerLab/ccn-tutorial.git</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="imports" class="cell" data-execution_count="2">
+<div id="imports" class="cell" data-execution_count="3">
 <details>
 <summary>Import various libraries</summary>
 <div class="sourceCode cell-code" id="imports"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="imports-1"><a href="#imports-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> collections.abc <span class="im">import</span> Sequence</span>
@@ -299,23 +306,31 @@ What happens when <span class="math inline">X</span> = <span class="math inline"
 <span id="imports-5"><a href="#imports-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="imports-6"><a href="#imports-6" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> xarray <span class="im">as</span> xr</span>
 <span id="imports-7"><a href="#imports-7" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch</span>
-<span id="imports-8"><a href="#imports-8" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.decomposition <span class="im">import</span> TruncatedSVD</span>
-<span id="imports-9"><a href="#imports-9" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
-<span id="imports-10"><a href="#imports-10" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib <span class="im">as</span> mpl</span>
-<span id="imports-11"><a href="#imports-11" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> matplotlib <span class="im">import</span> pyplot <span class="im">as</span> plt</span>
-<span id="imports-12"><a href="#imports-12" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> matplotlib_inline.backend_inline <span class="im">import</span> set_matplotlib_formats</span>
-<span id="imports-13"><a href="#imports-13" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> IPython.display <span class="im">import</span> display</span>
-<span id="imports-14"><a href="#imports-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="imports-15"><a href="#imports-15" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> utilities.brain <span class="im">import</span> (</span>
-<span id="imports-16"><a href="#imports-16" aria-hidden="true" tabindex="-1"></a>    load_dataset,</span>
-<span id="imports-17"><a href="#imports-17" aria-hidden="true" tabindex="-1"></a>    average_data_across_repetitions,</span>
-<span id="imports-18"><a href="#imports-18" aria-hidden="true" tabindex="-1"></a>    load_stimuli,</span>
-<span id="imports-19"><a href="#imports-19" aria-hidden="true" tabindex="-1"></a>    plot_brain_map,</span>
-<span id="imports-20"><a href="#imports-20" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="imports-21"><a href="#imports-21" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> utilities.computation <span class="im">import</span> svd</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="imports-8"><a href="#imports-8" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> torchdata.datapipes.<span class="bu">map</span> <span class="im">import</span> SequenceWrapper</span>
+<span id="imports-9"><a href="#imports-9" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> torchvision.models <span class="im">import</span> alexnet, AlexNet_Weights</span>
+<span id="imports-10"><a href="#imports-10" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.decomposition <span class="im">import</span> TruncatedSVD, PCA</span>
+<span id="imports-11"><a href="#imports-11" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> PIL <span class="im">import</span> Image</span>
+<span id="imports-12"><a href="#imports-12" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
+<span id="imports-13"><a href="#imports-13" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib <span class="im">as</span> mpl</span>
+<span id="imports-14"><a href="#imports-14" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> matplotlib <span class="im">import</span> pyplot <span class="im">as</span> plt</span>
+<span id="imports-15"><a href="#imports-15" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> matplotlib_inline.backend_inline <span class="im">import</span> set_matplotlib_formats</span>
+<span id="imports-16"><a href="#imports-16" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> IPython.display <span class="im">import</span> display</span>
+<span id="imports-17"><a href="#imports-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="imports-18"><a href="#imports-18" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> utilities.brain <span class="im">import</span> (</span>
+<span id="imports-19"><a href="#imports-19" aria-hidden="true" tabindex="-1"></a>    load_dataset,</span>
+<span id="imports-20"><a href="#imports-20" aria-hidden="true" tabindex="-1"></a>    average_data_across_repetitions,</span>
+<span id="imports-21"><a href="#imports-21" aria-hidden="true" tabindex="-1"></a>    load_stimuli,</span>
+<span id="imports-22"><a href="#imports-22" aria-hidden="true" tabindex="-1"></a>    plot_brain_map,</span>
+<span id="imports-23"><a href="#imports-23" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="imports-24"><a href="#imports-24" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> utilities.computation <span class="im">import</span> svd</span>
+<span id="imports-25"><a href="#imports-25" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> utilities.model <span class="im">import</span> (</span>
+<span id="imports-26"><a href="#imports-26" aria-hidden="true" tabindex="-1"></a>    extract_features,</span>
+<span id="imports-27"><a href="#imports-27" aria-hidden="true" tabindex="-1"></a>    SparseRandomProjection,</span>
+<span id="imports-28"><a href="#imports-28" aria-hidden="true" tabindex="-1"></a>    create_image_datapipe,</span>
+<span id="imports-29"><a href="#imports-29" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="set_visualization_defaults" class="cell" data-execution_count="3">
+<div id="set_visualization_defaults" class="cell" data-execution_count="4">
 <details>
 <summary>Set some visualization defaults</summary>
 <div class="sourceCode cell-code" id="set_visualization_defaults"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="set_visualization_defaults-1"><a href="#set_visualization_defaults-1" aria-hidden="true" tabindex="-1"></a><span class="op">%</span>matplotlib inline</span>
@@ -338,14 +353,14 @@ What happens when <span class="math inline">X</span> = <span class="math inline"
 <span id="set_visualization_defaults-18"><a href="#set_visualization_defaults-18" aria-hidden="true" tabindex="-1"></a>warnings.filterwarnings(<span class="st">"ignore"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="initialize_rng" class="cell" data-execution_count="4">
+<div id="initialize_rng" class="cell" data-execution_count="5">
 <details>
 <summary>Initialize a deterministic random number generator</summary>
 <div class="sourceCode cell-code" id="initialize_rng"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="initialize_rng-1"><a href="#initialize_rng-1" aria-hidden="true" tabindex="-1"></a>random_state <span class="op">=</span> <span class="dv">0</span></span>
 <span id="initialize_rng-2"><a href="#initialize_rng-2" aria-hidden="true" tabindex="-1"></a>rng <span class="op">=</span> np.random.default_rng(seed<span class="op">=</span>random_state)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="recipe-plssvd" class="cell" data-execution_count="5">
+<div id="recipe-plssvd" class="cell" data-execution_count="6">
 <details open="">
 <summary>A computational recipe for PLS-SVD</summary>
 <div class="sourceCode cell-code" id="recipe-plssvd"><pre class="sourceCode python code-annotation-code code-with-copy code-annotated"><code class="sourceCode python"><span id="recipe-plssvd-1"><a href="#recipe-plssvd-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> PLSSVD:</span>
@@ -418,13 +433,16 @@ What happens when <span class="math inline">X</span> = <span class="math inline"
 </div>
 </div>
 </section>
-<section id="comparing-brains" class="level2">
+<section id="comparing-brains" class="level2 page-columns page-full">
 <h2 class="anchored" data-anchor-id="comparing-brains">Comparing brains</h2>
 <p>In the same way that we can <strong>cross-validated PCA</strong> to estimate the shared variance across presentations of the same stimuli <em>within</em> a participant, we can use <strong>cross-decomposition</strong> to estimate the shared variance in the neural representations of the same stimuli <em>across</em> participants.</p>
 <p>We have two data matrices <span class="math inline">X \in \mathbb{R}^{N \times P_X}</span> and <span class="math inline">Y \in \mathbb{R}^{N \times P_Y}</span> from two participants. We could directly compute the singular values of their cross-covariance, which would be a direct estimate of the shared variance between these two representations.</p>
 <p>However, we run into the same issue as before: the singular values of a matrix are always positive and we won’t be able to use the magnitude of the singular value to assess the reliability of the variance along that dimension.</p>
 <p>Instead, we can use a cross-validated approach similar to CV-PCA, except that instead of testing generalization across different <em>presentations</em> of the stimuli, we can evaluate the reliable shared variance between the two representations across <em>stimuli</em>.</p>
 <p>Specifically, we can divide the images into two: a training split and a test split. We can compute singular vectors on the training split, and evalute <em>test</em> singular values on the test split, analogous to the CV-PCA procedure:</p>
+<div class="column-page">
+<p><img src="assets/pls_svd.svg" class="img-fluid" style="width:100.0%"></p>
+</div>
 <p><span class="math display">
 \begin{align*}
     \text{cov}(X_\text{train}, Y_\text{train})
@@ -436,77 +454,157 @@ What happens when <span class="math inline">X</span> = <span class="math inline"
     &amp;= \left( X_\text{train} U \right) ^\top \left( Y_\text{test} V \right) / (n - 1)
 \end{align*}
 </span></p>
+<div id="906f613f" class="cell" data-execution_count="7">
+<details>
+<summary>Load the datasets</summary>
+<div class="sourceCode cell-code" id="906f613f"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="906f613f-1"><a href="#906f613f-1" aria-hidden="true" tabindex="-1"></a><span class="co"># subject_1 = average_data_across_repetitions(load_dataset(subject=0, roi="general"))</span></span>
+<span id="906f613f-2"><a href="#906f613f-2" aria-hidden="true" tabindex="-1"></a><span class="co"># subject_2 = average_data_across_repetitions(load_dataset(subject=1, roi="general"))</span></span>
+<span id="906f613f-3"><a href="#906f613f-3" aria-hidden="true" tabindex="-1"></a><span class="co"># subject_1 = subject_1.sortby("stimulus_id")</span></span>
+<span id="906f613f-4"><a href="#906f613f-4" aria-hidden="true" tabindex="-1"></a><span class="co"># subject_2 = subject_2.sortby("stimulus_id")</span></span>
+<span id="906f613f-5"><a href="#906f613f-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="906f613f-6"><a href="#906f613f-6" aria-hidden="true" tabindex="-1"></a><span class="co"># display(subject_1)</span></span>
+<span id="906f613f-7"><a href="#906f613f-7" aria-hidden="true" tabindex="-1"></a><span class="co"># display(subject_2)</span></span>
+<span id="906f613f-8"><a href="#906f613f-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="906f613f-9"><a href="#906f613f-9" aria-hidden="true" tabindex="-1"></a><span class="co"># plssvd = PLSSVD()</span></span>
+<span id="906f613f-10"><a href="#906f613f-10" aria-hidden="true" tabindex="-1"></a><span class="co"># plssvd.fit(</span></span>
+<span id="906f613f-11"><a href="#906f613f-11" aria-hidden="true" tabindex="-1"></a><span class="co">#     data_repetition_1.values,</span></span>
+<span id="906f613f-12"><a href="#906f613f-12" aria-hidden="true" tabindex="-1"></a><span class="co">#     data_repetition_1.values,</span></span>
+<span id="906f613f-13"><a href="#906f613f-13" aria-hidden="true" tabindex="-1"></a><span class="co"># )</span></span>
+<span id="906f613f-14"><a href="#906f613f-14" aria-hidden="true" tabindex="-1"></a><span class="co"># rep_1_transformed = plssvd.transform(data_repetition_1.values, direction="left")</span></span>
+<span id="906f613f-15"><a href="#906f613f-15" aria-hidden="true" tabindex="-1"></a><span class="co"># rep_2_transformed = plssvd.transform(data_repetition_2.values, direction="right")</span></span>
+<span id="906f613f-16"><a href="#906f613f-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="906f613f-17"><a href="#906f613f-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="906f613f-18"><a href="#906f613f-18" aria-hidden="true" tabindex="-1"></a><span class="co"># n_neurons_1 = rep_1_transformed.shape[-1]</span></span>
+<span id="906f613f-19"><a href="#906f613f-19" aria-hidden="true" tabindex="-1"></a><span class="co"># cv_spectrum = np.diag(</span></span>
+<span id="906f613f-20"><a href="#906f613f-20" aria-hidden="true" tabindex="-1"></a><span class="co">#     np.cov(rep_1_transformed, rep_2_transformed, rowvar=False)[</span></span>
+<span id="906f613f-21"><a href="#906f613f-21" aria-hidden="true" tabindex="-1"></a><span class="co">#         :n_neurons_1, n_neurons_1:</span></span>
+<span id="906f613f-22"><a href="#906f613f-22" aria-hidden="true" tabindex="-1"></a><span class="co">#     ]</span></span>
+<span id="906f613f-23"><a href="#906f613f-23" aria-hidden="true" tabindex="-1"></a><span class="co"># )</span></span>
+<span id="906f613f-24"><a href="#906f613f-24" aria-hidden="true" tabindex="-1"></a><span class="co"># cv_spectrum = pd.DataFrame(</span></span>
+<span id="906f613f-25"><a href="#906f613f-25" aria-hidden="true" tabindex="-1"></a><span class="co">#     cv_spectrum, columns=["cross-validated singular value"]</span></span>
+<span id="906f613f-26"><a href="#906f613f-26" aria-hidden="true" tabindex="-1"></a><span class="co"># ).assign(rank=np.arange(len(cv_spectrum)) + 1)</span></span>
+<span id="906f613f-27"><a href="#906f613f-27" aria-hidden="true" tabindex="-1"></a><span class="co"># cv_spectrum = cv_spectrum.assign(</span></span>
+<span id="906f613f-28"><a href="#906f613f-28" aria-hidden="true" tabindex="-1"></a><span class="co">#     bin=bin_logarithmically(</span></span>
+<span id="906f613f-29"><a href="#906f613f-29" aria-hidden="true" tabindex="-1"></a><span class="co">#         cv_spectrum["cross-validated singular value"],</span></span>
+<span id="906f613f-30"><a href="#906f613f-30" aria-hidden="true" tabindex="-1"></a><span class="co">#         points_per_bin=5,</span></span>
+<span id="906f613f-31"><a href="#906f613f-31" aria-hidden="true" tabindex="-1"></a><span class="co">#         min_=1,</span></span>
+<span id="906f613f-32"><a href="#906f613f-32" aria-hidden="true" tabindex="-1"></a><span class="co">#         max_=10_000,</span></span>
+<span id="906f613f-33"><a href="#906f613f-33" aria-hidden="true" tabindex="-1"></a><span class="co">#     )</span></span>
+<span id="906f613f-34"><a href="#906f613f-34" aria-hidden="true" tabindex="-1"></a><span class="co"># )</span></span>
+<span id="906f613f-35"><a href="#906f613f-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="906f613f-36"><a href="#906f613f-36" aria-hidden="true" tabindex="-1"></a><span class="co"># fig, ax = plt.subplots()</span></span>
+<span id="906f613f-37"><a href="#906f613f-37" aria-hidden="true" tabindex="-1"></a><span class="co"># sns.lineplot(ax=ax, data=cv_spectrum, x="rank", y="cross-validated singular value")</span></span>
+<span id="906f613f-38"><a href="#906f613f-38" aria-hidden="true" tabindex="-1"></a><span class="co"># sns.despine(ax=ax, offset=20)</span></span>
+<span id="906f613f-39"><a href="#906f613f-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="906f613f-40"><a href="#906f613f-40" aria-hidden="true" tabindex="-1"></a><span class="co"># fig, ax = plt.subplots()</span></span>
+<span id="906f613f-41"><a href="#906f613f-41" aria-hidden="true" tabindex="-1"></a><span class="co"># sns.lineplot(ax=ax, data=cv_spectrum, x="rank", y="cross-validated singular value")</span></span>
+<span id="906f613f-42"><a href="#906f613f-42" aria-hidden="true" tabindex="-1"></a><span class="co"># ax.set_xscale("log")</span></span>
+<span id="906f613f-43"><a href="#906f613f-43" aria-hidden="true" tabindex="-1"></a><span class="co"># ax.set_yscale("log")</span></span>
+<span id="906f613f-44"><a href="#906f613f-44" aria-hidden="true" tabindex="-1"></a><span class="co"># ax.set_ylim(bottom=1e-3)</span></span>
+<span id="906f613f-45"><a href="#906f613f-45" aria-hidden="true" tabindex="-1"></a><span class="co"># sns.despine(ax=ax, offset=20)</span></span>
+<span id="906f613f-46"><a href="#906f613f-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="906f613f-47"><a href="#906f613f-47" aria-hidden="true" tabindex="-1"></a><span class="co"># fig, ax = plt.subplots()</span></span>
+<span id="906f613f-48"><a href="#906f613f-48" aria-hidden="true" tabindex="-1"></a><span class="co"># sns.lineplot(</span></span>
+<span id="906f613f-49"><a href="#906f613f-49" aria-hidden="true" tabindex="-1"></a><span class="co">#     ax=ax,</span></span>
+<span id="906f613f-50"><a href="#906f613f-50" aria-hidden="true" tabindex="-1"></a><span class="co">#     data=cv_spectrum.groupby("bin").mean().rename(columns={"bin": "rank"}),</span></span>
+<span id="906f613f-51"><a href="#906f613f-51" aria-hidden="true" tabindex="-1"></a><span class="co">#     x="rank",</span></span>
+<span id="906f613f-52"><a href="#906f613f-52" aria-hidden="true" tabindex="-1"></a><span class="co">#     y="cross-validated singular value",</span></span>
+<span id="906f613f-53"><a href="#906f613f-53" aria-hidden="true" tabindex="-1"></a><span class="co">#     ls=None,</span></span>
+<span id="906f613f-54"><a href="#906f613f-54" aria-hidden="true" tabindex="-1"></a><span class="co">#     marker="o",</span></span>
+<span id="906f613f-55"><a href="#906f613f-55" aria-hidden="true" tabindex="-1"></a><span class="co"># )</span></span>
+<span id="906f613f-56"><a href="#906f613f-56" aria-hidden="true" tabindex="-1"></a><span class="co"># ax.set_xscale("log")</span></span>
+<span id="906f613f-57"><a href="#906f613f-57" aria-hidden="true" tabindex="-1"></a><span class="co"># ax.set_yscale("log")</span></span>
+<span id="906f613f-58"><a href="#906f613f-58" aria-hidden="true" tabindex="-1"></a><span class="co"># sns.despine(ax=ax, offset=20)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
 </section>
 <section id="comparing-brains-and-dnns" class="level2">
 <h2 class="anchored" data-anchor-id="comparing-brains-and-dnns">Comparing brains and DNNs</h2>
-<div id="976573f7" class="cell" data-execution_count="6">
+<div id="cell-load-model" class="cell" data-execution_count="8">
 <details>
-<summary>Load the datasets</summary>
-<div class="sourceCode cell-code" id="976573f7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="976573f7-1"><a href="#976573f7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># subject_1 = average_data_across_repetitions(load_dataset(subject=0, roi="general"))</span></span>
-<span id="976573f7-2"><a href="#976573f7-2" aria-hidden="true" tabindex="-1"></a><span class="co"># subject_2 = average_data_across_repetitions(load_dataset(subject=1, roi="general"))</span></span>
-<span id="976573f7-3"><a href="#976573f7-3" aria-hidden="true" tabindex="-1"></a><span class="co"># subject_1 = subject_1.sortby("stimulus_id")</span></span>
-<span id="976573f7-4"><a href="#976573f7-4" aria-hidden="true" tabindex="-1"></a><span class="co"># subject_2 = subject_2.sortby("stimulus_id")</span></span>
-<span id="976573f7-5"><a href="#976573f7-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="976573f7-6"><a href="#976573f7-6" aria-hidden="true" tabindex="-1"></a><span class="co"># display(subject_1)</span></span>
-<span id="976573f7-7"><a href="#976573f7-7" aria-hidden="true" tabindex="-1"></a><span class="co"># display(subject_2)</span></span>
-<span id="976573f7-8"><a href="#976573f7-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="976573f7-9"><a href="#976573f7-9" aria-hidden="true" tabindex="-1"></a><span class="co"># plssvd = PLSSVD()</span></span>
-<span id="976573f7-10"><a href="#976573f7-10" aria-hidden="true" tabindex="-1"></a><span class="co"># plssvd.fit(</span></span>
-<span id="976573f7-11"><a href="#976573f7-11" aria-hidden="true" tabindex="-1"></a><span class="co">#     data_repetition_1.values,</span></span>
-<span id="976573f7-12"><a href="#976573f7-12" aria-hidden="true" tabindex="-1"></a><span class="co">#     data_repetition_1.values,</span></span>
-<span id="976573f7-13"><a href="#976573f7-13" aria-hidden="true" tabindex="-1"></a><span class="co"># )</span></span>
-<span id="976573f7-14"><a href="#976573f7-14" aria-hidden="true" tabindex="-1"></a><span class="co"># rep_1_transformed = plssvd.transform(data_repetition_1.values, direction="left")</span></span>
-<span id="976573f7-15"><a href="#976573f7-15" aria-hidden="true" tabindex="-1"></a><span class="co"># rep_2_transformed = plssvd.transform(data_repetition_2.values, direction="right")</span></span>
-<span id="976573f7-16"><a href="#976573f7-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="976573f7-17"><a href="#976573f7-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="976573f7-18"><a href="#976573f7-18" aria-hidden="true" tabindex="-1"></a><span class="co"># n_neurons_1 = rep_1_transformed.shape[-1]</span></span>
-<span id="976573f7-19"><a href="#976573f7-19" aria-hidden="true" tabindex="-1"></a><span class="co"># cv_spectrum = np.diag(</span></span>
-<span id="976573f7-20"><a href="#976573f7-20" aria-hidden="true" tabindex="-1"></a><span class="co">#     np.cov(rep_1_transformed, rep_2_transformed, rowvar=False)[</span></span>
-<span id="976573f7-21"><a href="#976573f7-21" aria-hidden="true" tabindex="-1"></a><span class="co">#         :n_neurons_1, n_neurons_1:</span></span>
-<span id="976573f7-22"><a href="#976573f7-22" aria-hidden="true" tabindex="-1"></a><span class="co">#     ]</span></span>
-<span id="976573f7-23"><a href="#976573f7-23" aria-hidden="true" tabindex="-1"></a><span class="co"># )</span></span>
-<span id="976573f7-24"><a href="#976573f7-24" aria-hidden="true" tabindex="-1"></a><span class="co"># cv_spectrum = pd.DataFrame(</span></span>
-<span id="976573f7-25"><a href="#976573f7-25" aria-hidden="true" tabindex="-1"></a><span class="co">#     cv_spectrum, columns=["cross-validated singular value"]</span></span>
-<span id="976573f7-26"><a href="#976573f7-26" aria-hidden="true" tabindex="-1"></a><span class="co"># ).assign(rank=np.arange(len(cv_spectrum)) + 1)</span></span>
-<span id="976573f7-27"><a href="#976573f7-27" aria-hidden="true" tabindex="-1"></a><span class="co"># cv_spectrum = cv_spectrum.assign(</span></span>
-<span id="976573f7-28"><a href="#976573f7-28" aria-hidden="true" tabindex="-1"></a><span class="co">#     bin=bin_logarithmically(</span></span>
-<span id="976573f7-29"><a href="#976573f7-29" aria-hidden="true" tabindex="-1"></a><span class="co">#         cv_spectrum["cross-validated singular value"],</span></span>
-<span id="976573f7-30"><a href="#976573f7-30" aria-hidden="true" tabindex="-1"></a><span class="co">#         points_per_bin=5,</span></span>
-<span id="976573f7-31"><a href="#976573f7-31" aria-hidden="true" tabindex="-1"></a><span class="co">#         min_=1,</span></span>
-<span id="976573f7-32"><a href="#976573f7-32" aria-hidden="true" tabindex="-1"></a><span class="co">#         max_=10_000,</span></span>
-<span id="976573f7-33"><a href="#976573f7-33" aria-hidden="true" tabindex="-1"></a><span class="co">#     )</span></span>
-<span id="976573f7-34"><a href="#976573f7-34" aria-hidden="true" tabindex="-1"></a><span class="co"># )</span></span>
-<span id="976573f7-35"><a href="#976573f7-35" aria-hidden="true" tabindex="-1"></a></span>
-<span id="976573f7-36"><a href="#976573f7-36" aria-hidden="true" tabindex="-1"></a><span class="co"># fig, ax = plt.subplots()</span></span>
-<span id="976573f7-37"><a href="#976573f7-37" aria-hidden="true" tabindex="-1"></a><span class="co"># sns.lineplot(ax=ax, data=cv_spectrum, x="rank", y="cross-validated singular value")</span></span>
-<span id="976573f7-38"><a href="#976573f7-38" aria-hidden="true" tabindex="-1"></a><span class="co"># sns.despine(ax=ax, offset=20)</span></span>
-<span id="976573f7-39"><a href="#976573f7-39" aria-hidden="true" tabindex="-1"></a></span>
-<span id="976573f7-40"><a href="#976573f7-40" aria-hidden="true" tabindex="-1"></a><span class="co"># fig, ax = plt.subplots()</span></span>
-<span id="976573f7-41"><a href="#976573f7-41" aria-hidden="true" tabindex="-1"></a><span class="co"># sns.lineplot(ax=ax, data=cv_spectrum, x="rank", y="cross-validated singular value")</span></span>
-<span id="976573f7-42"><a href="#976573f7-42" aria-hidden="true" tabindex="-1"></a><span class="co"># ax.set_xscale("log")</span></span>
-<span id="976573f7-43"><a href="#976573f7-43" aria-hidden="true" tabindex="-1"></a><span class="co"># ax.set_yscale("log")</span></span>
-<span id="976573f7-44"><a href="#976573f7-44" aria-hidden="true" tabindex="-1"></a><span class="co"># ax.set_ylim(bottom=1e-3)</span></span>
-<span id="976573f7-45"><a href="#976573f7-45" aria-hidden="true" tabindex="-1"></a><span class="co"># sns.despine(ax=ax, offset=20)</span></span>
-<span id="976573f7-46"><a href="#976573f7-46" aria-hidden="true" tabindex="-1"></a></span>
-<span id="976573f7-47"><a href="#976573f7-47" aria-hidden="true" tabindex="-1"></a><span class="co"># fig, ax = plt.subplots()</span></span>
-<span id="976573f7-48"><a href="#976573f7-48" aria-hidden="true" tabindex="-1"></a><span class="co"># sns.lineplot(</span></span>
-<span id="976573f7-49"><a href="#976573f7-49" aria-hidden="true" tabindex="-1"></a><span class="co">#     ax=ax,</span></span>
-<span id="976573f7-50"><a href="#976573f7-50" aria-hidden="true" tabindex="-1"></a><span class="co">#     data=cv_spectrum.groupby("bin").mean().rename(columns={"bin": "rank"}),</span></span>
-<span id="976573f7-51"><a href="#976573f7-51" aria-hidden="true" tabindex="-1"></a><span class="co">#     x="rank",</span></span>
-<span id="976573f7-52"><a href="#976573f7-52" aria-hidden="true" tabindex="-1"></a><span class="co">#     y="cross-validated singular value",</span></span>
-<span id="976573f7-53"><a href="#976573f7-53" aria-hidden="true" tabindex="-1"></a><span class="co">#     ls=None,</span></span>
-<span id="976573f7-54"><a href="#976573f7-54" aria-hidden="true" tabindex="-1"></a><span class="co">#     marker="o",</span></span>
-<span id="976573f7-55"><a href="#976573f7-55" aria-hidden="true" tabindex="-1"></a><span class="co"># )</span></span>
-<span id="976573f7-56"><a href="#976573f7-56" aria-hidden="true" tabindex="-1"></a><span class="co"># ax.set_xscale("log")</span></span>
-<span id="976573f7-57"><a href="#976573f7-57" aria-hidden="true" tabindex="-1"></a><span class="co"># ax.set_yscale("log")</span></span>
-<span id="976573f7-58"><a href="#976573f7-58" aria-hidden="true" tabindex="-1"></a><span class="co"># sns.despine(ax=ax, offset=20)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<summary>Load an ImageNet-trained convolutional neural network (AlexNet)</summary>
+<div class="sourceCode cell-code" id="cell-load-model"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cell-load-model-1"><a href="#cell-load-model-1" aria-hidden="true" tabindex="-1"></a>weights <span class="op">=</span> AlexNet_Weights.DEFAULT</span>
+<span id="cell-load-model-2"><a href="#cell-load-model-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cell-load-model-3"><a href="#cell-load-model-3" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> alexnet(weights<span class="op">=</span>weights)</span>
+<span id="cell-load-model-4"><a href="#cell-load-model-4" aria-hidden="true" tabindex="-1"></a>model.<span class="bu">eval</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
+<div id="load-model" class="cell-output cell-output-display" data-execution_count="6">
+<pre><code>AlexNet(
+  (features): Sequential(
+    (0): Conv2d(3, 64, kernel_size=(11, 11), stride=(4, 4), padding=(2, 2))
+    (1): ReLU(inplace=True)
+    (2): MaxPool2d(kernel_size=3, stride=2, padding=0, dilation=1, ceil_mode=False)
+    (3): Conv2d(64, 192, kernel_size=(5, 5), stride=(1, 1), padding=(2, 2))
+    (4): ReLU(inplace=True)
+    (5): MaxPool2d(kernel_size=3, stride=2, padding=0, dilation=1, ceil_mode=False)
+    (6): Conv2d(192, 384, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (7): ReLU(inplace=True)
+    (8): Conv2d(384, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (9): ReLU(inplace=True)
+    (10): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (11): ReLU(inplace=True)
+    (12): MaxPool2d(kernel_size=3, stride=2, padding=0, dilation=1, ceil_mode=False)
+  )
+  (avgpool): AdaptiveAvgPool2d(output_size=(6, 6))
+  (classifier): Sequential(
+    (0): Dropout(p=0.5, inplace=False)
+    (1): Linear(in_features=9216, out_features=4096, bias=True)
+    (2): ReLU(inplace=True)
+    (3): Dropout(p=0.5, inplace=False)
+    (4): Linear(in_features=4096, out_features=4096, bias=True)
+    (5): ReLU(inplace=True)
+    (6): Linear(in_features=4096, out_features=1000, bias=True)
+  )
+)</code></pre>
+</div>
+</div>
+<div id="create-datapipe" class="cell" data-execution_count="9">
+<details>
+<summary>Prepare stimuli</summary>
+<div class="sourceCode cell-code" id="create-datapipe"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="create-datapipe-1"><a href="#create-datapipe-1" aria-hidden="true" tabindex="-1"></a>stimulus_set <span class="op">=</span> load_stimuli().load()</span>
+<span id="create-datapipe-2"><a href="#create-datapipe-2" aria-hidden="true" tabindex="-1"></a>datapipe <span class="op">=</span> create_image_datapipe(</span>
+<span id="create-datapipe-3"><a href="#create-datapipe-3" aria-hidden="true" tabindex="-1"></a>    SequenceWrapper(</span>
+<span id="create-datapipe-4"><a href="#create-datapipe-4" aria-hidden="true" tabindex="-1"></a>        {</span>
+<span id="create-datapipe-5"><a href="#create-datapipe-5" aria-hidden="true" tabindex="-1"></a>            <span class="bu">str</span>(stimulus[<span class="st">"stimulus_id"</span>].values): Image.fromarray(stimulus.values)</span>
+<span id="create-datapipe-6"><a href="#create-datapipe-6" aria-hidden="true" tabindex="-1"></a>            <span class="cf">for</span> stimulus <span class="kw">in</span> stimulus_set</span>
+<span id="create-datapipe-7"><a href="#create-datapipe-7" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="create-datapipe-8"><a href="#create-datapipe-8" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="create-datapipe-9"><a href="#create-datapipe-9" aria-hidden="true" tabindex="-1"></a>    batch_size<span class="op">=</span><span class="dv">128</span>,</span>
+<span id="create-datapipe-10"><a href="#create-datapipe-10" aria-hidden="true" tabindex="-1"></a>    preprocess_fn<span class="op">=</span>weights.transforms(),</span>
+<span id="create-datapipe-11"><a href="#create-datapipe-11" aria-hidden="true" tabindex="-1"></a>    indices<span class="op">=</span><span class="bu">list</span>(stimulus_set[<span class="st">"stimulus_id"</span>].values),</span>
+<span id="create-datapipe-12"><a href="#create-datapipe-12" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div id="cell-extract-features" class="cell" data-execution_count="10">
+<details>
+<summary>Extract AlexNet activations to the stimuli</summary>
+<div class="sourceCode cell-code" id="cell-extract-features"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cell-extract-features-1"><a href="#cell-extract-features-1" aria-hidden="true" tabindex="-1"></a>layers <span class="op">=</span> [<span class="ss">f"features.</span><span class="sc">{</span>i<span class="sc">}</span><span class="ss">"</span> <span class="cf">for</span> i <span class="kw">in</span> (<span class="dv">1</span>, <span class="dv">4</span>, <span class="dv">7</span>, <span class="dv">9</span>, <span class="dv">11</span>)]</span>
+<span id="cell-extract-features-2"><a href="#cell-extract-features-2" aria-hidden="true" tabindex="-1"></a>postprocess_hook <span class="op">=</span> SparseRandomProjection(n_components<span class="op">=</span><span class="dv">2000</span>)</span>
+<span id="cell-extract-features-3"><a href="#cell-extract-features-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cell-extract-features-4"><a href="#cell-extract-features-4" aria-hidden="true" tabindex="-1"></a>features <span class="op">=</span> extract_features(</span>
+<span id="cell-extract-features-5"><a href="#cell-extract-features-5" aria-hidden="true" tabindex="-1"></a>    model<span class="op">=</span>model,</span>
+<span id="cell-extract-features-6"><a href="#cell-extract-features-6" aria-hidden="true" tabindex="-1"></a>    model_identifier<span class="op">=</span><span class="st">"AlexNet-ImageNet1KV1"</span>,</span>
+<span id="cell-extract-features-7"><a href="#cell-extract-features-7" aria-hidden="true" tabindex="-1"></a>    nodes<span class="op">=</span>layers,</span>
+<span id="cell-extract-features-8"><a href="#cell-extract-features-8" aria-hidden="true" tabindex="-1"></a>    hooks<span class="op">=</span>{layer: postprocess_hook <span class="cf">for</span> layer <span class="kw">in</span> layers},</span>
+<span id="cell-extract-features-9"><a href="#cell-extract-features-9" aria-hidden="true" tabindex="-1"></a>    datapipe<span class="op">=</span>datapipe,</span>
+<span id="cell-extract-features-10"><a href="#cell-extract-features-10" aria-hidden="true" tabindex="-1"></a>    datapipe_identifier<span class="op">=</span><span class="st">"natural_scenes_dataset"</span>,</span>
+<span id="cell-extract-features-11"><a href="#cell-extract-features-11" aria-hidden="true" tabindex="-1"></a>    use_cached<span class="op">=</span><span class="va">False</span>,</span>
+<span id="cell-extract-features-12"><a href="#cell-extract-features-12" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div id="extract-features" class="cell-output cell-output-display">
+<script type="application/vnd.jupyter.widget-view+json">
+{"model_id":"9f5e3f7b6aaf4225bb6f9448d13d79ef","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
+</script>
+</div>
 </div>
 
 
 </section>
 
 <a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a></main> <!-- /main -->
+<script type="application/vnd.jupyter.widget-state+json">
+{"state":{"039605916e8c4ab8a266814271128caf":{"model_module":"@jupyter-widgets/base","model_module_version":"2.0.0","model_name":"LayoutModel","state":{"_model_module":"@jupyter-widgets/base","_model_module_version":"2.0.0","_model_name":"LayoutModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"LayoutView","align_content":null,"align_items":null,"align_self":null,"border_bottom":null,"border_left":null,"border_right":null,"border_top":null,"bottom":null,"display":null,"flex":null,"flex_flow":null,"grid_area":null,"grid_auto_columns":null,"grid_auto_flow":null,"grid_auto_rows":null,"grid_column":null,"grid_gap":null,"grid_row":null,"grid_template_areas":null,"grid_template_columns":null,"grid_template_rows":null,"height":null,"justify_content":null,"justify_items":null,"left":null,"margin":null,"max_height":null,"max_width":null,"min_height":null,"min_width":null,"object_fit":null,"object_position":null,"order":null,"overflow":null,"padding":null,"right":null,"top":null,"visibility":null,"width":null}},"5b18a78f634f43f2936e51cb3d18223a":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"HTMLStyleModel","state":{"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"HTMLStyleModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"StyleView","background":null,"description_width":"","font_size":null,"text_color":null}},"96db19f7812b472da7192e2180d58260":{"model_module":"@jupyter-widgets/base","model_module_version":"2.0.0","model_name":"LayoutModel","state":{"_model_module":"@jupyter-widgets/base","_model_module_version":"2.0.0","_model_name":"LayoutModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"LayoutView","align_content":null,"align_items":null,"align_self":null,"border_bottom":null,"border_left":null,"border_right":null,"border_top":null,"bottom":null,"display":null,"flex":null,"flex_flow":null,"grid_area":null,"grid_auto_columns":null,"grid_auto_flow":null,"grid_auto_rows":null,"grid_column":null,"grid_gap":null,"grid_row":null,"grid_template_areas":null,"grid_template_columns":null,"grid_template_rows":null,"height":null,"justify_content":null,"justify_items":null,"left":null,"margin":null,"max_height":null,"max_width":null,"min_height":null,"min_width":null,"object_fit":null,"object_position":null,"order":null,"overflow":null,"padding":null,"right":null,"top":null,"visibility":null,"width":null}},"9f5e3f7b6aaf4225bb6f9448d13d79ef":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"HBoxModel","state":{"_dom_classes":[],"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"HBoxModel","_view_count":null,"_view_module":"@jupyter-widgets/controls","_view_module_version":"2.0.0","_view_name":"HBoxView","box_style":"","children":["IPY_MODEL_e5f307b055cb4563b0ffa4d26a79d441","IPY_MODEL_dfe22c98530e46818cb0d3f1ddb699af","IPY_MODEL_d74b3a45ca404a4a860745eebfb77e7a"],"layout":"IPY_MODEL_fdb5ed9b87414bf28ee412133644750c","tabbable":null,"tooltip":null}},"b0320adfc5984a9b9f49de2c6c5a6023":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"HTMLStyleModel","state":{"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"HTMLStyleModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"StyleView","background":null,"description_width":"","font_size":null,"text_color":null}},"bc6c3b3ffe9743caa27c066bc85d689f":{"model_module":"@jupyter-widgets/base","model_module_version":"2.0.0","model_name":"LayoutModel","state":{"_model_module":"@jupyter-widgets/base","_model_module_version":"2.0.0","_model_name":"LayoutModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"LayoutView","align_content":null,"align_items":null,"align_self":null,"border_bottom":null,"border_left":null,"border_right":null,"border_top":null,"bottom":null,"display":null,"flex":null,"flex_flow":null,"grid_area":null,"grid_auto_columns":null,"grid_auto_flow":null,"grid_auto_rows":null,"grid_column":null,"grid_gap":null,"grid_row":null,"grid_template_areas":null,"grid_template_columns":null,"grid_template_rows":null,"height":null,"justify_content":null,"justify_items":null,"left":null,"margin":null,"max_height":null,"max_width":null,"min_height":null,"min_width":null,"object_fit":null,"object_position":null,"order":null,"overflow":null,"padding":null,"right":null,"top":null,"visibility":null,"width":null}},"d74b3a45ca404a4a860745eebfb77e7a":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"HTMLModel","state":{"_dom_classes":[],"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"HTMLModel","_view_count":null,"_view_module":"@jupyter-widgets/controls","_view_module_version":"2.0.0","_view_name":"HTMLView","description":"","description_allow_html":false,"layout":"IPY_MODEL_039605916e8c4ab8a266814271128caf","placeholder":"​","style":"IPY_MODEL_5b18a78f634f43f2936e51cb3d18223a","tabbable":null,"tooltip":null,"value":" 6/6 [00:24&lt;00:00,  3.67s/it]"}},"dfe22c98530e46818cb0d3f1ddb699af":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"FloatProgressModel","state":{"_dom_classes":[],"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"FloatProgressModel","_view_count":null,"_view_module":"@jupyter-widgets/controls","_view_module_version":"2.0.0","_view_name":"ProgressView","bar_style":"","description":"","description_allow_html":false,"layout":"IPY_MODEL_96db19f7812b472da7192e2180d58260","max":6,"min":0,"orientation":"horizontal","style":"IPY_MODEL_f4c833e79ea1471aa8cb24d223942fdc","tabbable":null,"tooltip":null,"value":6}},"e5f307b055cb4563b0ffa4d26a79d441":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"HTMLModel","state":{"_dom_classes":[],"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"HTMLModel","_view_count":null,"_view_module":"@jupyter-widgets/controls","_view_module_version":"2.0.0","_view_name":"HTMLView","description":"","description_allow_html":false,"layout":"IPY_MODEL_bc6c3b3ffe9743caa27c066bc85d689f","placeholder":"​","style":"IPY_MODEL_b0320adfc5984a9b9f49de2c6c5a6023","tabbable":null,"tooltip":null,"value":"batch: 100%"}},"f4c833e79ea1471aa8cb24d223942fdc":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"ProgressStyleModel","state":{"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"ProgressStyleModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"StyleView","bar_color":null,"description_width":""}},"fdb5ed9b87414bf28ee412133644750c":{"model_module":"@jupyter-widgets/base","model_module_version":"2.0.0","model_name":"LayoutModel","state":{"_model_module":"@jupyter-widgets/base","_model_module_version":"2.0.0","_model_name":"LayoutModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"LayoutView","align_content":null,"align_items":null,"align_self":null,"border_bottom":null,"border_left":null,"border_right":null,"border_top":null,"bottom":null,"display":null,"flex":null,"flex_flow":null,"grid_area":null,"grid_auto_columns":null,"grid_auto_flow":null,"grid_auto_rows":null,"grid_column":null,"grid_gap":null,"grid_row":null,"grid_template_areas":null,"grid_template_columns":null,"grid_template_rows":null,"height":null,"justify_content":null,"justify_items":null,"left":null,"margin":null,"max_height":null,"max_width":null,"min_height":null,"min_width":null,"object_fit":null,"object_position":null,"order":null,"overflow":null,"padding":null,"right":null,"top":null,"visibility":"hidden","width":null}}},"version_major":2,"version_minor":0}
+</script>
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
