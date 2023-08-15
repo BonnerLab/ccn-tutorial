@@ -39,6 +39,8 @@ dependencies = [
   "numpy",
   "pandas",
   "torch",
+  "torchvision",
+  "torchtext",
   "xarray",
   "netCDF4",
   "scipy",
