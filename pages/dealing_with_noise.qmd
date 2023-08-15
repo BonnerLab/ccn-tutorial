@@ -156,7 +156,7 @@ $$
 $$
 
 ::: {.column-page}
-![](assets/cv_pca.png)
+![](assets/cv_pca.svg)
 :::
 
 These cross-validated eigenvalues represent the covariance reliably shared across two presentations of the visual stimulus -- which is a quantity we are interested in as neuroscientists: what is the "stable" part of the visual representation of a natural image? Notably, these "eigenvalues" need not be positive: if there is no shared covariance between the two systems at a rank, the expected value of the eigenvalue is $0$.
