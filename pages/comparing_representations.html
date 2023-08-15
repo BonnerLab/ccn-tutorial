@@ -155,7 +155,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span class="menu-text">Comparing representations</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../pages/deep_neural_networks.qmd"> 
+    <a class="nav-link" href="../pages/aligning_neural_networks.html"> 
 <span class="menu-text">Deep neural networks</span></a>
   </li>  
   <li class="nav-item">
@@ -193,7 +193,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <div>
       <div class="quarto-title-meta-heading">Modified</div>
       <div class="quarto-title-meta-contents">
-        <p class="date-modified">August 14, 2023</p>
+        <p class="date-modified">August 15, 2023</p>
       </div>
     </div>
       
@@ -214,14 +214,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">Contents</h2>
    
   <ul>
-  <li><a href="#pls-svd" id="toc-pls-svd" class="nav-link active" data-scroll-target="#pls-svd">PLS-SVD</a></li>
+  <li><a href="#cross-decomposition" id="toc-cross-decomposition" class="nav-link active" data-scroll-target="#cross-decomposition">Cross-decomposition</a></li>
   <li><a href="#comparing-brains" id="toc-comparing-brains" class="nav-link" data-scroll-target="#comparing-brains">Comparing brains</a></li>
   <li><a href="#comparing-brains-and-dnns" id="toc-comparing-brains-and-dnns" class="nav-link" data-scroll-target="#comparing-brains-and-dnns">Comparing brains and DNNs</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/BonnerLab/ccn-tutorial/edit/main/pages/comparing_representations.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/BonnerLab/ccn-tutorial/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div><div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="comparing_representations.ipynb" download="comparing_representations.ipynb"><i class="bi bi-journal-code"></i>Jupyter</a></li></ul></div></nav>
     </div>
 <!-- main -->
-<main class="content quarto-banner-title-block" id="quarto-document-content">
+<main class="content quarto-banner-title-block page-columns page-full" id="quarto-document-content">
 
 
 
@@ -239,11 +239,36 @@ Run this notebook interactively!
 <p>Here’s a <a href="https://colab.research.google.com/github/BonnerLab/ccn-tutorial/blob/main/notebooks/comparing_representations.ipynb">link to this notebook</a> on Google Colab.</p>
 </div>
 </div>
-<section id="pls-svd" class="level2">
-<h2 class="anchored" data-anchor-id="pls-svd">PLS-SVD</h2>
-<p>Just as PCA identifies the principal directions of variance of a system, PLS-SVD identifies the principal directions of <em>shared</em> variance between <em>two</em> systems. Specifically, just as PCA computes the eigendecomposition of the auto-covariance, PLS-SVD computes the singular value decomposition of the cross-covariance:</p>
-<p><span class="math inline">X^\top Y = U \Sigma V^\top</span>.</p>
-<p>Here, the left singular vectors <span class="math inline">U</span> define a rotation of the system <span class="math inline">X</span> into some latent space, the right singular vectors <span class="math inline">V</span> define a rotation of system <span class="math inline">Y</span> into the same latent space, and the singular values <span class="math inline">\Sigma</span></p>
+<section id="cross-decomposition" class="level2 page-columns page-full">
+<h2 class="anchored" data-anchor-id="cross-decomposition">Cross-decomposition</h2>
+<p>Just as PCA identifies the principal directions of variance of a system, <em>cross-decomposition</em> identifies the principal directions of <em>shared</em> variance between <em>two</em> systems <span class="math inline">X</span> and <span class="math inline">Y</span>. Specifically, just as PCA computes the eigendecomposition of the auto-covariance, cross-decomposition computes the singular value decomposition of the cross-covariance:</p>
+<p><span class="math display">
+\begin{align*}
+    \text{cov}(X, Y)
+    &amp;= X^\top Y / (n - 1)\\
+    &amp;= U \Sigma V^\top
+\end{align*}
+</span></p>
+<div class="page-columns page-full"><p></p><div class="no-row-height column-margin column-container"><span class="">Note that <span class="math inline">X</span> and <span class="math inline">Y</span> have been centered, as usual.</span></div></div>
+<p>Here,</p>
+<ul>
+<li>the left singular vectors <span class="math inline">U</span> define a rotation of the system <span class="math inline">X</span> into a latent space</li>
+<li>the right singular vectors <span class="math inline">V</span> define a rotation of system <span class="math inline">Y</span> into the <em>same</em> latent space, and</li>
+<li>the singular values <span class="math inline">\Sigma</span> define the amount of variance shared by the two systems along the latent dimensions.</li>
+</ul>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+A note on terminology
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The cross-decomposition method we describe here is more specifically known as <a href="https://scikit-learn.org/stable/modules/generated/sklearn.cross_decomposition.PLSSVD.html">Partial Least Squares Singular Value Decomposition (PLS-SVD)</a>. We simplify it to “cross-decomposition” since we will be developing a cross-validated version of the typical estimators.</p>
+</div>
+</div>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -254,7 +279,7 @@ What happens when <span class="math inline">X</span> = <span class="math inline"
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Note that if <span class="math inline">X = Y</span>, PLS-SVD reduces to PCA:</p>
+<p>Note that if <span class="math inline">X = Y</span>, cross-decomposition reduces to PCA:</p>
 </div>
 </div>
 <div id="install_package" class="cell" data-execution_count="2">
@@ -395,7 +420,7 @@ What happens when <span class="math inline">X</span> = <span class="math inline"
 </section>
 <section id="comparing-brains" class="level2">
 <h2 class="anchored" data-anchor-id="comparing-brains">Comparing brains</h2>
-<p>In the same way that we can PLS-SVD to estimate the shared variance across presentations of the same stimuli <em>within</em> a participant, we can also use it to estimate the shared variance in the neural representations of the same stimuli <em>across</em> participants.</p>
+<p>In the same way that we can <strong>cross-validated PCA</strong> to estimate the shared variance across presentations of the same stimuli <em>within</em> a participant, we can use <strong>cross-decomposition</strong> to estimate the shared variance in the neural representations of the same stimuli <em>across</em> participants.</p>
 <p>We have two data matrices <span class="math inline">X \in \mathbb{R}^{N \times P_X}</span> and <span class="math inline">Y \in \mathbb{R}^{N \times P_Y}</span> from two participants. We could directly compute the singular values of their cross-covariance, which would be a direct estimate of the shared variance between these two representations.</p>
 <p>However, we run into the same issue as before: the singular values of a matrix are always positive and we won’t be able to use the magnitude of the singular value to assess the reliability of the variance along that dimension.</p>
 <p>Instead, we can use a cross-validated approach similar to CV-PCA, except that instead of testing generalization across different <em>presentations</em> of the stimuli, we can evaluate the reliable shared variance between the two representations across <em>stimuli</em>.</p>
