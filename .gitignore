@@ -5,6 +5,7 @@
 
 /.venv
 /cache
+/data
 
 /.quarto
 /site
@@ -19,3 +20,5 @@
 
 /notebooks/cache
 /.luarc.json
+
+/*.ipynb

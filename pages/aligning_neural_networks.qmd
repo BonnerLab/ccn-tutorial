@@ -840,7 +840,7 @@ cross_covs = compute_activation_covariances(train_loader, layers, model1, model2
 ```
 
 ```{python}
-# | label: compute-cross-covariance
+# | label: compute-alignments
 # | code-summary: Compute alignments between models with an SVD, and evaluate alignment accuracy (fraction of explained variance)
 
 aligns = []  # layer_idx -> alignment

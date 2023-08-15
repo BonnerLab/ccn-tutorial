@@ -14,18 +14,37 @@ Here's a [link to this notebook](https://colab.research.google.com/github/Bonner
 
 :::
 
-## PLS-SVD
+## Cross-decomposition
 
-Just as PCA identifies the principal directions of variance of a system, PLS-SVD identifies the principal directions of *shared* variance between *two* systems. Specifically, just as PCA computes the eigendecomposition of the auto-covariance, PLS-SVD computes the singular value decomposition of the cross-covariance:
+Just as PCA identifies the principal directions of variance of a system, *cross-decomposition* identifies the principal directions of *shared* variance between *two* systems $X$ and $Y$. Specifically, just as PCA computes the eigendecomposition of the auto-covariance, cross-decomposition computes the singular value decomposition of the cross-covariance:
 
-$X^\top Y = U \Sigma V^\top$.
+$$
+\begin{align*}
+    \text{cov}(X, Y)
+    &= X^\top Y / (n - 1)\\
+    &= U \Sigma V^\top
+\end{align*}
+$$
 
-Here, the left singular vectors $U$ define a rotation of the system $X$ into some latent space, the right singular vectors $V$ define a rotation of system $Y$ into the same latent space, and the singular values $\Sigma$
+[Note that $X$ and $Y$ have been centered, as usual.]{.aside}
+
+Here,
+
+- the left singular vectors $U$ define a rotation of the system $X$ into a latent space
+- the right singular vectors $V$ define a rotation of system $Y$ into the *same* latent space, and
+- the singular values $\Sigma$ define the amount of variance shared by the two systems along the latent dimensions.
+
+::: {.callout-note}
+# A note on terminology
+
+The cross-decomposition method we describe here is more specifically known as [Partial Least Squares Singular Value Decomposition (PLS-SVD)](https://scikit-learn.org/stable/modules/generated/sklearn.cross_decomposition.PLSSVD.html). We simplify it to "cross-decomposition" since we will be developing a cross-validated version of the typical estimators.
+:::
 
 ::: {.callout-note}
 # What happens when $X$ = $Y$?
 
-Note that if $X = Y$, PLS-SVD reduces to PCA:
+Note that if $X = Y$, cross-decomposition reduces to PCA:
+
 :::
 
 {{< include _code/install_package.qmd >}}
@@ -127,7 +146,7 @@ class PLSSVD:
 
 ## Comparing brains
 
-In the same way that we can PLS-SVD to estimate the shared variance across presentations of the same stimuli *within* a participant, we can also use it to estimate the shared variance in the neural representations of the same stimuli *across* participants.
+In the same way that we can **cross-validated PCA** to estimate the shared variance across presentations of the same stimuli *within* a participant, we can use **cross-decomposition** to estimate the shared variance in the neural representations of the same stimuli *across* participants.
 
 We have two data matrices $X \in \mathbb{R}^{N \times P_X}$ and $Y \in \mathbb{R}^{N \times P_Y}$ from two participants. We could directly compute the singular values of their cross-covariance, which would be a direct estimate of the shared variance between these two representations.
 

@@ -38,7 +38,7 @@ website:
         text: Dealing with noise
       - href: pages/comparing_representations.qmd
         text: Comparing representations
-      - href: pages/deep_neural_networks.qmd
+      - href: pages/aligning_neural_networks.qmd
         text: Deep neural networks
       - href: pages/reference.qmd
         text: Reference
