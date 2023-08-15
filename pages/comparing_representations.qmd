@@ -1,5 +1,5 @@
 ---
-title: Comparing high-dimensional representations
+title: Comparing neural representations
 subtitle: Cross-validated methods to separate high-dimensional signal from noise
 abstract: Especially after the advent of high-dimensional neural network models of the brain, there has been an explosion of methods to compare high-dimensional representations, including various forms of linear regression, canonical correlation analysis (CCA), centered kernel alignment (CKA), and non-linear methods too! In this part of the tutorial, we'll describe PLS-SVD -- a method closely related to PCA -- that allows us to measure the similarity between two high-dimensional systems in a manner that is relatively interpretable and extensible for various purposes.
 ---
@@ -34,17 +34,9 @@ Here,
 - the right singular vectors $V$ define a rotation of system $Y$ into the *same* latent space, and
 - the singular values $\Sigma$ define the amount of variance shared by the two systems along the latent dimensions.
 
-::: {.column-page-right}
+::: {.column-page}
 ![](assets/cross-covariance-svd.svg){width=100%}
 :::
-
-::: {.column-page-right}
-![](assets/pls_svd.svg){width=100%}
-:::
-
-Instead, we can use a cross-validated approach similar to CV-PCA, except that instead of testing generalization across different *presentations* of the stimuli, we can evaluate the reliable shared variance between the two representations across *stimuli*.
-
-Specifically, we can divide the images into two: a training split and a test split. We can compute singular vectors on the training split, and evalute *test* singular values on the test split, analogous to the CV-PCA procedure:
 
 ::: {.callout-note}
 # A note on terminology
@@ -171,6 +163,14 @@ In the same way that we can **cross-validated PCA** to estimate the shared varia
 We have two data matrices $X \in \mathbb{R}^{N \times P_X}$ and $Y \in \mathbb{R}^{N \times P_Y}$ from two participants. We could directly compute the singular values of their cross-covariance, which would be a direct estimate of the shared variance between these two representations.
 
 However, we run into the same issue as before: the singular values of a matrix are always positive and we won't be able to use the magnitude of the singular value to assess the reliability of the variance along that dimension.
+
+Instead, we can use a cross-validated approach similar to CV-PCA, except that instead of testing generalization across different *presentations* of the stimuli, we can evaluate the reliable shared variance between the two representations across *stimuli*.
+
+Specifically, we can divide the images into two: a training split and a test split. We can compute singular vectors on the training split, and evalute *test* singular values on the test split, analogous to the CV-PCA procedure:
+
+::: {.column-page}
+![](assets/pls_svd.svg){width=100%}
+:::
 
 $$
 \begin{align*}

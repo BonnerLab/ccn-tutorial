@@ -21,6 +21,8 @@ Here's a [link to this notebook](https://colab.research.google.com/github/Bonner
 # | code-summary: Import various libraries
 # | output: false
 
+from collections import Counter
+import copy
 from pathlib import Path
 import requests
 import typing
@@ -30,6 +32,8 @@ from loguru import logger
 import numpy as np
 import pandas as pd
 import xarray as xr
+from torchtext.datasets import IMDB
+from torchtext.data.utils import get_tokenizer
 import nibabel as nib
 import nilearn.plotting
 from PIL import Image
@@ -37,13 +41,14 @@ from sklearn.preprocessing import MinMaxScaler
 from sklearn.decomposition import PCA, NMF
 from umap import UMAP
 
-from IPython.display import display, HTML
+from IPython.display import display, SVG, HTML
 import matplotlib as mpl
 from mpl_toolkits.axes_grid1 import ImageGrid
 from matplotlib import pyplot as plt
 from matplotlib_inline.backend_inline import set_matplotlib_formats
 from matplotlib.offsetbox import OffsetImage, AnnotationBbox
 import seaborn as sns
+from wordcloud import WordCloud
 
 from utilities.brain import (
     load_dataset,
@@ -319,20 +324,6 @@ Let's compute the distribution of word frequencies in a small corpus -- a collec
 # | label: generate-word-frequencies
 # | code-summary: Generate word frequency distribution
 
-from collections import Counter
-import copy
-
-from IPython.display import display, HTML
-import numpy as np
-import pandas as pd
-from torchtext.datasets import IMDB
-from torchtext.data.utils import get_tokenizer
-import matplotlib as mpl
-from matplotlib import pyplot as plt
-import seaborn as sns
-from wordcloud import WordCloud
-
-
 dataset = IMDB(split="test")
 tokenizer = get_tokenizer("basic_english", language="en")
 unwanted_tokens = {".", ",", "?", "s", "t", "(", ")", "'", "!"}
@@ -396,7 +387,7 @@ for token in unwanted_tokens:
 cloud = WordCloud(background_color="white", width=600, height=300)
 
 display(
-    HTML(
+    SVG(
         cloud.generate_from_frequencies(dict(display_counter.most_common(200))).to_svg(
             embed_font=True
         )
@@ -411,7 +402,7 @@ display(
 # | fig-align: center
 
 display(
-    HTML(
+    SVG(
         cloud.generate_from_frequencies(
             dict(display_counter.most_common()[-200:])
         ).to_svg(embed_font=True)

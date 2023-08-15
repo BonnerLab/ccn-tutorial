@@ -206,7 +206,7 @@ def one_epoch(loader, model, loss_fn, optimizer, epoch, is_training):
         it = tqdm(loader, desc=name_epoch)
         for x, y in it:
             x = x.to(DEVICE, non_blocking=True)
-            y = y.to(DEVICE,non_blocking=True)
+            y = y.to(DEVICE, non_blocking=True)
             y_hat = model(x)
 
             loss = loss_fn(y_hat, y)
@@ -967,6 +967,11 @@ train_model(cnn_model, train_loader, val_loader, num_epochs=5)
 
 state_dict_keys = list(cnn_model.state_dict().keys())
 print(f"Generating {state_dict_keys}")
-reference_accuracy, generated_accuracy = generate_network(cnn_model, state_dict_keys, train_loader, val_loader)
-print(f"Accuracy after sampling: {generated_accuracy:.1f}% (accuracy after training: {reference_accuracy:.1f}%)")
+reference_accuracy, generated_accuracy = generate_network(
+    cnn_model, state_dict_keys, train_loader, val_loader
+)
+print(
+    f"Accuracy after sampling: {generated_accuracy:.1f}% (accuracy after training:"
+    f" {reference_accuracy:.1f}%)"
+)
 ```
