@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en-US" xml:lang="en-US"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.4.315">
+<meta name="generator" content="quarto-1.4.322">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -84,7 +84,7 @@ div.csl-indent {
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
-<link href="../pages/assets/ccn-logo.svg" rel="icon" type="image/svg+xml">
+<link href="..//resources/ccn-logo.svg" rel="icon" type="image/svg+xml">
 <script src="../site_libs/quarto-html/quarto.js"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -148,7 +148,7 @@ div.csl-indent {
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
     <a href="../index.html" class="navbar-brand navbar-brand-logo">
-    <img src="../pages/assets/ccn-logo.svg" alt="" class="navbar-logo">
+    <img src="../resources/ccn-logo.svg" alt="" class="navbar-logo">
     </a>
     <a class="navbar-brand" href="../index.html">
     <span class="navbar-title">CCN 2023 | Tutorial</span>
@@ -219,7 +219,7 @@ div.csl-indent {
       <div>
       <div class="quarto-title-meta-heading">Modified</div>
       <div class="quarto-title-meta-contents">
-        <p class="date-modified">August 15, 2023</p>
+        <p class="date-modified">August 16, 2023</p>
       </div>
     </div>
       
@@ -1041,11 +1041,11 @@ total variance: 52.443</code></pre>
 <section id="understanding-the-neural-code" class="level2 page-columns page-full">
 <h2 class="anchored" data-anchor-id="understanding-the-neural-code">Understanding the neural code</h2>
 <p>How is this information encoded in the population activity? Is there a neuron that is sensitive to color and another that is sensitive to size?</p>
-<p>A common approach to studying the information content of our 2 neurons is Representational Similarity Analysis (RSA)<span class="citation" data-cites="Kriegeskorte2008">(<a href="#ref-Kriegeskorte2008" role="doc-biblioref">Kriegeskorte 2008</a>)</span>, where the dissimaliry of a neuron’s response is obtained for each pair of stimuli, and represented in a matrix of dissimilarities (RDM). Therefore, RDM indicates the degree to which each pair of stimuli is distinguished by the neuron.</p>
+<p>A common approach to studying the information content of our 2 neurons is Representational Similarity Analysis (RSA)<span class="citation" data-cites="Kriegeskorte2008">(<a href="#ref-Kriegeskorte2008" role="doc-biblioref">Kriegeskorte 2008</a>)</span>, where the dissimilarity of a neuron’s response is obtained for each pair of stimuli and represented in a matrix of dissimilarities (a <em>representational dissimilarity matrix</em>, or RDM). Therefore, an RDM indicates the degree to which each pair of stimuli is distinguished by the neuron.</p>
 <div class="no-row-height column-margin column-container"><div id="ref-Kriegeskorte2008" class="csl-entry" role="listitem">
-Kriegeskorte, Nikolaus. 2008. <span>“Representational Similarity Analysis - Connecting the Branches of Systems Neuroscience.”</span> <em>Frontiers in Systems Neuroscience</em>. <a href="https://doi.org/10.3389/neuro.06.004.2008">https://doi.org/10.3389/neuro.06.004.2008</a>.
-</div></div><p>For instance, if neuron 1 was only senstive to color, we would expect to see a high disimilarity for all pairs of stimuli with different color, regardless of their size.</p>
-<p><img src="assets/rsa.png" class="img-fluid"></p>
+Kriegeskorte, Nikolaus. 2008. <span>“Representational Similarity Analysis <span></span> Connecting the Branches of Systems Neuroscience.”</span> <em>Frontiers in Systems Neuroscience</em>. <a href="https://doi.org/10.3389/neuro.06.004.2008">https://doi.org/10.3389/neuro.06.004.2008</a>.
+</div></div><p>For instance, if neuron 1 was only senstive to color, we would expect to see a high dissimilarity for all pairs of stimuli with different colors, regardless of their size.</p>
+<p><img src="../resources/rsa.png" class="img-fluid"></p>
 <p>But what if the neural responses are more complicated, and we have multiple experimental conditions? Is there another view of the population code that might be more informative?</p>
 </section>
 <section id="studying-the-latent-dimensions" class="level2">
@@ -4841,12 +4841,12 @@ Tip
 \end{align*}
 </span></p>
 <p>To do this, we start by computing the auto-covariance of our data matrix, where <span class="math inline">X</span> is centered (i.e.&nbsp;<span class="math inline">X - \overline{X}</span>)</p>
-<p><img src="assets/autocovariance.svg" class="img-fluid" style="width:100.0%"></p>
+<p><img src="../resources/autocovariance.svg" class="img-fluid" style="width:100.0%"></p>
 <p>Next , we compute the the eigendecomposition of the auto-covariance (though the computational steps we take to get there are slightly different, as shown later)</p>
-<p><img src="assets/eigendecomposition.svg" class="img-fluid" style="width:100.0%"></p>
+<p><img src="../resources/eigendecomposition.svg" class="img-fluid" style="width:100.0%"></p>
 <p>The columns of <span class="math inline">V</span> are <em>eigenvectors</em> that specify the directions of variance while the corresponding diagonal elements of <span class="math inline">\Lambda</span> are <em>eigenvalues</em> that specify the amount of variance along the eigenvector<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>.</p>
 <p>Finally, the original data matrix can be transformed by projecting it onto the eigenvectors: <span class="math inline">\widetilde{X} = \left(X - \overline{X}\right) V</span>.</p>
-<p><img src="assets/projection.svg" class="img-fluid" style="width:100.0%"></p>
+<p><img src="../resources/projection.svg" class="img-fluid" style="width:100.0%"></p>
 <!-- TODO ### Some terminology
 
 Ambient space
@@ -6604,7 +6604,7 @@ Coordinates: (3/8)
 <section id="computing-a-summary-statistic-over-the-entire-spectrum" class="level4">
 <h4 class="anchored" data-anchor-id="computing-a-summary-statistic-over-the-entire-spectrum">Computing a summary statistic over the entire spectrum</h4>
 <p>A metric such as <em>effective dimensionality</em> summarizes the spectrum using an entropy-like measure, taking into account variances along all the dimensions:</p>
-<p><span class="math display">\text{effective dimensionality}(\lambda_1, \dots \lambda_n) = \dfrac{\left( \sum_{i=1}^n \lambda_i \right)^2}{\sum_{i=1}^n \lambda_i^2}</span></p>
+<p><span class="math display">d_\text{eff}(\lambda_1, \dots \lambda_n) = \dfrac{\left( \sum_{i=1}^n \lambda_i \right)^2}{\sum_{i=1}^n \lambda_i^2}</span></p>
 <div id="24f01930" class="cell" data-execution_count="29">
 <details>
 <summary>Compute the effective dimensionality from the spectrum</summary>

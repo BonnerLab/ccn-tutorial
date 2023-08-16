@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en-US" xml:lang="en-US"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.4.315">
+<meta name="generator" content="quarto-1.4.322">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -65,7 +65,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
-<link href="../pages/assets/ccn-logo.svg" rel="icon" type="image/svg+xml">
+<link href="..//resources/ccn-logo.svg" rel="icon" type="image/svg+xml">
 <script src="../site_libs/quarto-html/quarto.js"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -130,7 +130,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
     <a href="../index.html" class="navbar-brand navbar-brand-logo">
-    <img src="../pages/assets/ccn-logo.svg" alt="" class="navbar-logo">
+    <img src="../resources/ccn-logo.svg" alt="" class="navbar-logo">
     </a>
     <a class="navbar-brand" href="../index.html">
     <span class="navbar-title">CCN 2023 | Tutorial</span>
@@ -201,7 +201,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <div>
       <div class="quarto-title-meta-heading">Modified</div>
       <div class="quarto-title-meta-contents">
-        <p class="date-modified">August 15, 2023</p>
+        <p class="date-modified">August 16, 2023</p>
       </div>
     </div>
       
@@ -253,7 +253,7 @@ Run this notebook interactively!
 <p>Comparing different representations of the same stimuli is integral to the study of sensory neuroscience. Every computational model of a system must be effectively related to experimental data for validation. A key question to keep in mind when comparing representations is the set of invariances we would like to preserve.</p>
 <p>For example, take the CCN logo:</p>
 <p>If we translate it, it retains its “fundamental” structure – what makes it the CCN logo. If we rotate it, When comparing two representations</p>
-<p><img src="assets/transformations.svg" class="img-fluid"></p>
+<p><img src="../resources/transformations.svg" class="img-fluid"></p>
 </section>
 <section id="cross-decomposition" class="level2 page-columns page-full">
 <h2 class="anchored" data-anchor-id="cross-decomposition">Cross-decomposition</h2>
@@ -273,7 +273,7 @@ Run this notebook interactively!
 <li>the singular values <span class="math inline">\Sigma</span> define the amount of variance shared by the two systems along the latent dimensions.</li>
 </ul>
 <div class="column-page">
-<p><img src="assets/cross-covariance-svd.svg" class="img-fluid" style="width:100.0%"></p>
+<p><img src="../resources/cross-covariance-svd.svg" class="img-fluid" style="width:100.0%"></p>
 </div>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -301,14 +301,14 @@ What happens when <span class="math inline">X</span> = <span class="math inline"
 <p>Note that if <span class="math inline">X = Y</span>, cross-decomposition reduces to PCA:</p>
 </div>
 </div>
-<div id="install_package" class="cell" data-execution_count="1">
+<div id="install_package" class="cell" data-execution_count="2">
 <details>
 <summary>Install all required dependencies</summary>
 <div class="sourceCode cell-code" id="install_package"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="install_package-1"><a href="#install_package-1" aria-hidden="true" tabindex="-1"></a><span class="co"># </span><span class="al">TODO</span><span class="co"> uncomment before final packaging</span></span>
 <span id="install_package-2"><a href="#install_package-2" aria-hidden="true" tabindex="-1"></a><span class="co"># %pip install git+https://github.com/BonnerLab/ccn-tutorial.git</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="imports" class="cell" data-execution_count="2">
+<div id="imports" class="cell" data-execution_count="3">
 <details>
 <summary>Import various libraries</summary>
 <div class="sourceCode cell-code" id="imports"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="imports-1"><a href="#imports-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> collections.abc <span class="im">import</span> Sequence</span>
@@ -342,7 +342,7 @@ What happens when <span class="math inline">X</span> = <span class="math inline"
 <span id="imports-29"><a href="#imports-29" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="set_visualization_defaults" class="cell" data-execution_count="3">
+<div id="set_visualization_defaults" class="cell" data-execution_count="4">
 <details>
 <summary>Set some visualization defaults</summary>
 <div class="sourceCode cell-code" id="set_visualization_defaults"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="set_visualization_defaults-1"><a href="#set_visualization_defaults-1" aria-hidden="true" tabindex="-1"></a><span class="op">%</span>matplotlib inline</span>
@@ -365,14 +365,14 @@ What happens when <span class="math inline">X</span> = <span class="math inline"
 <span id="set_visualization_defaults-18"><a href="#set_visualization_defaults-18" aria-hidden="true" tabindex="-1"></a>warnings.filterwarnings(<span class="st">"ignore"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="initialize_rng" class="cell" data-execution_count="4">
+<div id="initialize_rng" class="cell" data-execution_count="5">
 <details>
 <summary>Initialize a deterministic random number generator</summary>
 <div class="sourceCode cell-code" id="initialize_rng"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="initialize_rng-1"><a href="#initialize_rng-1" aria-hidden="true" tabindex="-1"></a>random_state <span class="op">=</span> <span class="dv">0</span></span>
 <span id="initialize_rng-2"><a href="#initialize_rng-2" aria-hidden="true" tabindex="-1"></a>rng <span class="op">=</span> np.random.default_rng(seed<span class="op">=</span>random_state)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="recipe-plssvd" class="cell" data-execution_count="5">
+<div id="recipe-plssvd" class="cell" data-execution_count="6">
 <details open="">
 <summary>A computational recipe for PLS-SVD</summary>
 <div class="sourceCode cell-code" id="recipe-plssvd"><pre class="sourceCode python code-annotation-code code-with-copy code-annotated"><code class="sourceCode python"><span id="recipe-plssvd-1"><a href="#recipe-plssvd-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> PLSSVD:</span>
@@ -451,7 +451,7 @@ What happens when <span class="math inline">X</span> = <span class="math inline"
 <p>Instead, we can use a cross-validated approach similar to CV-PCA, except that instead of testing generalization across different <em>presentations</em> of the stimuli, we can evaluate the reliable shared variance between the two representations across <em>stimuli</em>.</p>
 <p>Specifically, we can divide the images into two: a training split and a test split. We can compute singular vectors on the training split, and evalute <em>test</em> singular values on the test split, analogous to the CV-PCA procedure:</p>
 <div class="column-page">
-<p><img src="assets/pls_svd.svg" class="img-fluid" style="width:100.0%"></p>
+<p><img src="../resources/pls_svd.svg" class="img-fluid" style="width:100.0%"></p>
 </div>
 <p><span class="math display">
 \begin{align*}
@@ -464,7 +464,7 @@ What happens when <span class="math inline">X</span> = <span class="math inline"
     &amp;= \left( X_\text{train} U \right) ^\top \left( Y_\text{test} V \right) / (n - 1)
 \end{align*}
 </span></p>
-<div id="8711dbfe" class="cell" data-execution_count="6">
+<div id="8711dbfe" class="cell" data-execution_count="7">
 <details>
 <summary>Load the datasets</summary>
 <div class="sourceCode cell-code" id="8711dbfe"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="8711dbfe-1"><a href="#8711dbfe-1" aria-hidden="true" tabindex="-1"></a>subject_1 <span class="op">=</span> average_data_across_repetitions(</span>
@@ -1338,7 +1338,7 @@ Attributes: (3/8)
       dtype=object)</pre></div></li></ul></div></li><li class="xr-section-item"><input id="section-1ea24c6d-6793-4175-894c-f0f607225ab6" class="xr-section-summary-in" type="checkbox" disabled=""><label for="section-1ea24c6d-6793-4175-894c-f0f607225ab6" class="xr-section-summary" title="Expand/collapse section">Indexes: <span>(0)</span></label><div class="xr-section-inline-details"></div><div class="xr-section-details"><ul class="xr-var-list"></ul></div></li><li class="xr-section-item"><input id="section-20ef6506-3dd8-4b6b-a46b-104f7d87fc3e" class="xr-section-summary-in" type="checkbox" checked=""><label for="section-20ef6506-3dd8-4b6b-a46b-104f7d87fc3e" class="xr-section-summary">Attributes: <span>(8)</span></label><div class="xr-section-inline-details"></div><div class="xr-section-details"><dl class="xr-attrs"><dt><span>resolution :</span></dt><dd>1pt8mm</dd><dt><span>preprocessing :</span></dt><dd>fithrf_GLMdenoise_RR</dd><dt><span>z_score :</span></dt><dd>True</dd><dt><span>roi :</span></dt><dd>general</dd><dt><span>subject :</span></dt><dd>1</dd><dt><span>brain shape :</span></dt><dd>[ 82 106  84]</dd><dt><span>citation :</span></dt><dd>Allen, E.J., St-Yves, G., Wu, Y. et al. A massive 7T fMRI dataset to bridge cognitive neuroscience and artificial intelligence. Nat Neurosci 25, 116-126 (2022). https://doi.org/10.1038/s41593-021-00962-x</dd><dt><span>postprocessing :</span></dt><dd>averaged across first two repetitions</dd></dl></div></li></ul></div></div>
 </div>
 </div>
-<div id="6168f1f2" class="cell" data-execution_count="7">
+<div id="6168f1f2" class="cell" data-execution_count="8">
 <details>
 <summary>Compute the cross-participant spectrum</summary>
 <div class="sourceCode cell-code" id="6168f1f2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="6168f1f2-1"><a href="#6168f1f2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> compute_cross_validated_spectrum(</span>
@@ -1409,7 +1409,7 @@ Attributes: (3/8)
 </section>
 <section id="comparing-brains-and-dnns" class="level2">
 <h2 class="anchored" data-anchor-id="comparing-brains-and-dnns">Comparing brains and DNNs</h2>
-<div id="cell-load-model" class="cell" data-execution_count="8">
+<div id="cell-load-model" class="cell" data-execution_count="9">
 <details>
 <summary>Load an ImageNet-trained convolutional neural network (AlexNet)</summary>
 <div class="sourceCode cell-code" id="cell-load-model"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cell-load-model-1"><a href="#cell-load-model-1" aria-hidden="true" tabindex="-1"></a>weights <span class="op">=</span> AlexNet_Weights.DEFAULT</span>
@@ -1447,7 +1447,7 @@ Attributes: (3/8)
 )</code></pre>
 </div>
 </div>
-<div id="create-datapipe" class="cell" data-execution_count="9">
+<div id="create-datapipe" class="cell" data-execution_count="10">
 <details>
 <summary>Prepare stimuli</summary>
 <div class="sourceCode cell-code" id="create-datapipe"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="create-datapipe-1"><a href="#create-datapipe-1" aria-hidden="true" tabindex="-1"></a>stimulus_set <span class="op">=</span> load_stimuli().load()</span>
@@ -1464,7 +1464,7 @@ Attributes: (3/8)
 <span id="create-datapipe-12"><a href="#create-datapipe-12" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="cell-extract-features" class="cell" data-execution_count="10">
+<div id="cell-extract-features" class="cell" data-execution_count="11">
 <details>
 <summary>Extract AlexNet activations to the stimuli</summary>
 <div class="sourceCode cell-code" id="cell-extract-features"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cell-extract-features-1"><a href="#cell-extract-features-1" aria-hidden="true" tabindex="-1"></a>layers <span class="op">=</span> [<span class="ss">f"features.</span><span class="sc">{</span>i<span class="sc">}</span><span class="ss">"</span> <span class="cf">for</span> i <span class="kw">in</span> (<span class="dv">1</span>, <span class="dv">4</span>, <span class="dv">7</span>, <span class="dv">9</span>, <span class="dv">11</span>)]</span>
@@ -1486,7 +1486,7 @@ Attributes: (3/8)
 </script>
 </div>
 </div>
-<div id="72150fe3" class="cell" data-execution_count="11">
+<div id="72150fe3" class="cell" data-execution_count="12">
 <details>
 <summary>Compute cross-covariance between one participant and the convolutional layers of AlexNet</summary>
 <div class="sourceCode cell-code" id="72150fe3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="72150fe3-1"><a href="#72150fe3-1" aria-hidden="true" tabindex="-1"></a>spectra <span class="op">=</span> {}</span>
