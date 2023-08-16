@@ -64,7 +64,7 @@ from utilities.brain import (
 {{< include _code/initialize_rng.qmd >}}
 
 ## The Natural Scenes fMRI Dataset (NSD)
-![](assets/nsd.png)
+![](/resources/nsd.png)
 
 NSD is the largest fMRI dataset on human vision, with 7T fMRI responses (1.8mm isotropic voxels) obtained from 8 adult participants. The experiment involved a continuous recognition task while participants observed natural scene images from the Microsoft Common Objects in Context (COCO) database (Lin et al., 2014).
 
@@ -385,9 +385,10 @@ for token in unwanted_tokens:
     del display_counter[token]
 
 cloud = WordCloud(
-    background_color="white",
     width=600,
     height=300,
+    background_color="white",
+    colormap="Spectral",
     random_state=random_state,
 )
 

@@ -277,14 +277,13 @@ print(f"total variance: {variances.sum().values}")
 
 How is this information encoded in the population activity? Is there a neuron that is sensitive to color and another that is sensitive to size? 
 
-A common approach to studying the information content of our 2 neurons is Representational Similarity Analysis (RSA)[@Kriegeskorte2008], where the dissimaliry of a neuron's response is obtained for each pair of stimuli, and represented in a matrix of dissimilarities (RDM). Therefore, RDM indicates the degree to which each pair of stimuli is distinguished by the neuron. 
+A common approach to studying the information content of our 2 neurons is Representational Similarity Analysis (RSA)[@Kriegeskorte2008], where the dissimilarity of a neuron's response is obtained for each pair of stimuli and represented in a matrix of dissimilarities (a *representational dissimilarity matrix*, or RDM). Therefore, an RDM indicates the degree to which each pair of stimuli is distinguished by the neuron. 
 
-For instance, if neuron 1 was only senstive to color, we would expect to see a high disimilarity for all pairs of stimuli with different color, regardless of their size. 
+For instance, if neuron 1 was only senstive to color, we would expect to see a high dissimilarity for all pairs of stimuli with different colors, regardless of their size.
 
-![](assets/rsa.png)
+![](/resources/rsa.png)
 
 But what if the neural responses are more complicated, and we have multiple experimental conditions? Is there another view of the population code that might be more informative?
-
 
 ## Studying the latent dimensions
 
@@ -475,17 +474,17 @@ $$
 To do this, we start by computing the auto-covariance of our data matrix, where $X$ is centered (i.e. $X - \overline{X}$)
 
 
-![](assets/autocovariance.svg){width=100%}
+![](/resources/autocovariance.svg){width=100%}
 
 Next , we compute the the eigendecomposition of the auto-covariance (though the computational steps we take to get there are slightly different, as shown later)
 
-![](assets/eigendecomposition.svg){width=100%}
+![](/resources/eigendecomposition.svg){width=100%}
 
 The columns of $V$ are *eigenvectors* that specify the directions of variance while the corresponding diagonal elements of $\Lambda$ are *eigenvalues* that specify the amount of variance along the eigenvector[^proof-eigenvalue-covariance].
 
 Finally, the original data matrix can be transformed by projecting it onto the eigenvectors: $\widetilde{X} = \left(X - \overline{X}\right) V$.
 
-![](assets/projection.svg){width=100%}
+![](/resources/projection.svg){width=100%}
 
 <!-- TODO ### Some terminology
 
@@ -884,7 +883,7 @@ view_eigenspectrum_knee(big_pca, knee=3)
 
 A metric such as *effective dimensionality* summarizes the spectrum using an entropy-like measure, taking into account variances along all the dimensions:
 
-$$\text{effective dimensionality}(\lambda_1, \dots \lambda_n) = \dfrac{\left( \sum_{i=1}^n \lambda_i \right)^2}{\sum_{i=1}^n \lambda_i^2}$$
+$$d_\text{eff}(\lambda_1, \dots \lambda_n) = \dfrac{\left( \sum_{i=1}^n \lambda_i \right)^2}{\sum_{i=1}^n \lambda_i^2}$$
 
 ```{python}
 # | code-summary: Compute the effective dimensionality from the spectrum

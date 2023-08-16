@@ -14,6 +14,17 @@ Here's a [link to this notebook](https://colab.research.google.com/github/Bonner
 
 :::
 
+## Invariances
+
+Comparing different representations of the same stimuli is integral to the study of sensory neuroscience. Every computational model of a system must be effectively related to experimental data for validation. A key question to keep in mind when comparing representations is the set of invariances we would like to preserve.
+
+For example, take the CCN logo:
+
+If we translate it, it retains its "fundamental" structure -- what makes it the CCN logo. If we rotate it, 
+When comparing two representations
+
+![](/resources/transformations.svg)
+
 ## Cross-decomposition
 
 Just as PCA identifies the principal directions of variance of a system, *cross-decomposition* identifies the principal directions of *shared* variance between *two* systems $X$ and $Y$. Specifically, just as PCA computes the eigendecomposition of the auto-covariance, cross-decomposition computes the singular value decomposition of the cross-covariance:
@@ -35,7 +46,7 @@ Here,
 - the singular values $\Sigma$ define the amount of variance shared by the two systems along the latent dimensions.
 
 ::: {.column-page}
-![](assets/cross-covariance-svd.svg){width=100%}
+![](/resources/cross-covariance-svd.svg){width=100%}
 :::
 
 ::: {.callout-note}
@@ -80,7 +91,7 @@ from utilities.brain import (
     load_stimuli,
     plot_brain_map,
 )
-from utilities.computation import svd
+from utilities.computation import svd, assign_logarithmic_bins
 from utilities.model import (
     extract_features,
     SparseRandomProjection,
@@ -133,8 +144,6 @@ class PLSSVD:
             seed=random_state,
         )  # <3>
 
-        n_stimuli = data.shape[-2]
-
         self.left_singular_vectors = self.left_singular_vectors.cpu().numpy()
         self.singular_values = self.singular_values.cpu().numpy()
         self.right_singular_vectors = self.right_singular_vectors.cpu().numpy()
@@ -169,7 +178,7 @@ Instead, we can use a cross-validated approach similar to CV-PCA, except that in
 Specifically, we can divide the images into two: a training split and a test split. We can compute singular vectors on the training split, and evalute *test* singular values on the test split, analogous to the CV-PCA procedure:
 
 ::: {.column-page}
-![](assets/pls_svd.svg){width=100%}
+![](/resources/pls_svd.svg){width=100%}
 :::
 
 $$
@@ -187,66 +196,83 @@ $$
 ```{python}
 # | code-summary: Load the datasets
 
-# subject_1 = average_data_across_repetitions(load_dataset(subject=0, roi="general"))
-# subject_2 = average_data_across_repetitions(load_dataset(subject=1, roi="general"))
-# subject_1 = subject_1.sortby("stimulus_id")
-# subject_2 = subject_2.sortby("stimulus_id")
+subject_1 = average_data_across_repetitions(
+    load_dataset(subject=0, roi="general")
+).sortby("stimulus_id")
+subject_2 = average_data_across_repetitions(load_dataset(subject=1, roi="general"))
 
-# display(subject_1)
-# display(subject_2)
+stimuli = load_stimuli()["stimulus_id"].values
 
-# plssvd = PLSSVD()
-# plssvd.fit(
-#     data_repetition_1.values,
-#     data_repetition_1.values,
-# )
-# rep_1_transformed = plssvd.transform(data_repetition_1.values, direction="left")
-# rep_2_transformed = plssvd.transform(data_repetition_2.values, direction="right")
-
-
-# n_neurons_1 = rep_1_transformed.shape[-1]
-# cv_spectrum = np.diag(
-#     np.cov(rep_1_transformed, rep_2_transformed, rowvar=False)[
-#         :n_neurons_1, n_neurons_1:
-#     ]
-# )
-# cv_spectrum = pd.DataFrame(
-#     cv_spectrum, columns=["cross-validated singular value"]
-# ).assign(rank=np.arange(len(cv_spectrum)) + 1)
-# cv_spectrum = cv_spectrum.assign(
-#     bin=bin_logarithmically(
-#         cv_spectrum["cross-validated singular value"],
-#         points_per_bin=5,
-#         min_=1,
-#         max_=10_000,
-#     )
-# )
-
-# fig, ax = plt.subplots()
-# sns.lineplot(ax=ax, data=cv_spectrum, x="rank", y="cross-validated singular value")
-# sns.despine(ax=ax, offset=20)
-
-# fig, ax = plt.subplots()
-# sns.lineplot(ax=ax, data=cv_spectrum, x="rank", y="cross-validated singular value")
-# ax.set_xscale("log")
-# ax.set_yscale("log")
-# ax.set_ylim(bottom=1e-3)
-# sns.despine(ax=ax, offset=20)
-
-# fig, ax = plt.subplots()
-# sns.lineplot(
-#     ax=ax,
-#     data=cv_spectrum.groupby("bin").mean().rename(columns={"bin": "rank"}),
-#     x="rank",
-#     y="cross-validated singular value",
-#     ls=None,
-#     marker="o",
-# )
-# ax.set_xscale("log")
-# ax.set_yscale("log")
-# sns.despine(ax=ax, offset=20)
+display(subject_1)
+display(subject_2)
 ```
 
+
+```{python}
+# | code-summary: Compute the cross-participant spectrum
+
+
+def compute_cross_validated_spectrum(
+    x: xr.DataArray,
+    y: xr.DataArray,
+    /,
+    train_fraction: float = 7 / 8,
+) -> np.ndarray:
+    stimuli = x["stimulus_id"].values
+    n_train = int(train_fraction * len(stimuli))
+    stimuli = rng.permutation(stimuli)[:n_train]
+
+    train_indices = np.isin(x["stimulus_id"].values, stimuli)
+
+    x_train = x.isel({"presentation": train_indices})
+    y_train = y.isel({"presentation": train_indices})
+
+    x_test = x.isel({"presentation": ~train_indices})
+    y_test = y.isel({"presentation": ~train_indices})
+
+    scorer = PLSSVD()
+    scorer.fit(x_train.values, y_train.values)
+    x_test_transformed = scorer.transform(x_test.values, direction="left")
+    y_test_transformed = scorer.transform(y_test.values, direction="right")
+
+    return np.diag(
+        np.cov(
+            x_test_transformed,
+            y_test_transformed,
+            rowvar=False,
+        )[:n_train, n_train:]
+    )
+
+
+spectrum = compute_cross_validated_spectrum(subject_1, subject_2)
+
+data = pd.DataFrame(
+    {
+        "cross-validated singular value": spectrum,
+        "rank": assign_logarithmic_bins(
+            1 + np.arange(len(spectrum)), min_=1, max_=10_000, points_per_bin=5
+        ),
+    }
+)
+
+fig, ax = plt.subplots()
+sns.lineplot(
+    ax=ax,
+    data=data,
+    x="rank",
+    y="cross-validated singular value",
+    marker="o",
+    dashes=False,
+    ls="None",
+    err_style="bars",
+    estimator="mean",
+    errorbar=("ci", 99),
+)
+ax.set_xscale("log")
+ax.set_yscale("log")
+ax.set_aspect("equal", "box")
+sns.despine(ax=ax, offset=20)
+```
 
 ## Comparing brains and DNNs
 
@@ -294,4 +320,52 @@ features = extract_features(
     datapipe_identifier="natural_scenes_dataset",
     use_cached=False,
 )
+```
+
+```{python}
+# | code-summary: Compute cross-covariance between one participant and the convolutional layers of AlexNet
+
+spectra = {}
+for layer, activations in features.items():
+    spectra[layer] = compute_cross_validated_spectrum(subject_1, subject_2)
+
+remapping = {
+    "features.1": "conv1",
+    "features.4": "conv2",
+    "features.7": "conv3",
+    "features.9": "conv4",
+    "features.11": "conv5",
+}
+
+fig, ax = plt.subplots()
+sns.lineplot(
+    ax=ax,
+    data=(
+        pd.DataFrame(spectra)
+        .rename(columns=remapping)
+        .assign(
+            rank=lambda x: assign_logarithmic_bins(
+                1 + np.arange(len(x)), points_per_bin=3, min_=1, max_=10_000
+            )
+        )
+        .melt(
+            id_vars=["rank"],
+            value_name="cross-validated singular value",
+            var_name="layer",
+        )
+    ),
+    x="rank",
+    y="cross-validated singular value",
+    hue="layer",
+    marker="o",
+    dashes=False,
+    ls="None",
+    err_style="bars",
+    estimator="mean",
+    errorbar=("ci", 99),
+)
+ax.set_xscale("log")
+ax.set_yscale("log")
+ax.set_aspect("equal", "box")
+sns.despine(ax=ax, offset=20)
 ```

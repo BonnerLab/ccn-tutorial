@@ -24,8 +24,10 @@ lang: en-US
 
 website:
   title: "CCN 2023 | Tutorial"
+  favicon: /resources/ccn-logo.svg
   navbar:
     background: primary
+    logo: /resources/ccn-logo.svg
     search: true
     left:
       - href: index.qmd
