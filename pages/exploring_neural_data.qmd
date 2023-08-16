@@ -384,7 +384,12 @@ display_counter = copy.copy(counter)
 for token in unwanted_tokens:
     del display_counter[token]
 
-cloud = WordCloud(background_color="white", width=600, height=300)
+cloud = WordCloud(
+    background_color="white",
+    width=600,
+    height=300,
+    random_state=random_state,
+)
 
 display(
     SVG(
