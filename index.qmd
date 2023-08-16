@@ -45,7 +45,7 @@ author:
   - name:
       given: Zirui
       family: Chen
-    url: https://cogsci.jhu.edu/directory/zirui-chen/
+    url: https://zche377.github.io/
     email: zchen160@jh.edu
     orcid: 0000-0003-3666-1719
     affiliation:
