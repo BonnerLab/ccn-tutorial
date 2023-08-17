@@ -11,7 +11,7 @@ import xarray as xr
 from scipy.ndimage import map_coordinates
 import nibabel as nib
 import nilearn.plotting
-import matplotlib as mpl
+from matplotlib.figure import Figure
 
 MNI_ORIGIN = np.asarray([183 - 91, 127, 73]) - 1
 MNI_RESOLUTION = 1
@@ -159,7 +159,7 @@ def plot_brain_map(
     *,
     subject: int,
     **kwargs: typing.Any,
-) -> mpl.figure.Figure:
+) -> Figure:
     mni = reshape_dataarray_to_brain(
         convert_array_to_mni(data, subject=subject),
         mni=True,

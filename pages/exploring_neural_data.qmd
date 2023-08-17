@@ -42,7 +42,7 @@ from sklearn.decomposition import PCA, NMF
 from umap import UMAP
 
 from IPython.display import display, SVG, HTML
-import matplotlib as mpl
+from matplotlib.figure import Figure
 from mpl_toolkits.axes_grid1 import ImageGrid
 from matplotlib import pyplot as plt
 from matplotlib_inline.backend_inline import set_matplotlib_formats
@@ -340,9 +340,7 @@ for _, text in dataset:
 # | fig-align: center
 
 
-def view_word_frequency_distribution(
-    counter: Counter, *, log: bool = False
-) -> mpl.figure.Figure:
+def view_word_frequency_distribution(counter: Counter, *, log: bool = False) -> Figure:
     fig, ax = plt.subplots()
     sns.lineplot(
         ax=ax,

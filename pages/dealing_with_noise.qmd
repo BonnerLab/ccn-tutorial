@@ -16,10 +16,76 @@ Here's a [link to this notebook](https://colab.research.google.com/github/Bonner
 
 ## Neural data is noisy
 
-Unfortunately for us computational neuroscientists, **experimental data is noisy**. Let's consider a neuron from the toy example we [discussed earlier](introducing_pca.qmd). The variance in its responses to the $N = 1000$ presented dots was driven by two factors:
+Unfortunately for us computational neuroscientists, **experimental data is noisy**. Let's consider a neuron from the toy example we [discussed earlier](introducing_pca.qmd).
+
+{{< include _code/install_package.qmd >}}
+
+```{python}
+# | label: imports
+# | code-summary: Import various libraries
+
+from collections.abc import Sequence
+import functools
+import warnings
+from typing import NamedTuple
+
+import numpy as np
+import pandas as pd
+import xarray as xr
+from sklearn.decomposition import PCA
+import seaborn as sns
+from matplotlib.figure import Figure
+from matplotlib import pyplot as plt
+from matplotlib.colors import SymLogNorm
+from matplotlib_inline.backend_inline import set_matplotlib_formats
+import ipywidgets as widgets
+from IPython.display import display
+
+from utilities.brain import load_dataset
+from utilities.computation import assign_logarithmic_bins
+from utilities.toy_example import (
+    Neuron,
+    create_stimuli,
+    simulate_multiple_neuron_responses,
+    view_individual_scatter,
+)
+
+```
+
+{{< include _code/set_visualization_defaults.qmd >}}
+
+{{< include _code/initialize_rng.qmd >}}
+
+The variance in its responses to the $N = 1000$ presented dots was driven by two factors:
 
 - **stimulus-dependent signal** -- how much the neural response varies with the stimulus features $\text{color}$ and $\text{size}$, and
 - **stimulus-independent noise** -- sampled from the same Gaussian distribution irrespective of the stimulus.
+
+```{python}
+# | code-summary: View signal/noise decomposition of an individual neuron's responses
+# | fig-align: center
+
+stimuli = create_stimuli(n=1000, rng=rng)
+
+neurons = {
+    "neuron response": Neuron(beta_color=3, beta_size=-2, std=1, mean=7),
+    "stimulus-dependent signal": Neuron(beta_color=3, beta_size=-2, std=0, mean=7),
+    "stimulus-independent noise": Neuron(beta_color=0, beta_size=0, std=1, mean=7),
+}
+
+data = simulate_multiple_neuron_responses(
+    stimuli=stimuli,
+    neurons=neurons.values(),
+    rng=np.random.default_rng(random_state),
+)
+
+view_individual_scatter(
+    data,
+    coord="neuron",
+    dim="neuron",
+    template_func=lambda x: f"{list(neurons.keys())[x - 1]}",
+)
+```
 
 When investigating a sensory system, we are typically interested in the former -- **we want to understand the robust, reproducible portion of the system's behavior in response to stimuli**. The remaining variance is often considered nuisance variance.
 
@@ -51,7 +117,9 @@ Finally, the source of variation we are usually most interested in is the *stimu
 
 ## What does noise look like?
 
-In the last section, we observed that neural responses have high-dimensional structure, as evidenced by the covariance spectrum obtained from principal component analysis.
+In the [previous notebook](exploring_neural_data.qmd), we observed that neural responses have high-dimensional structure, as evidenced by the covariance spectrum obtained from principal component analysis.
+
+However, this covariance spectrum is agnostic to the sources of variation in the data: it considers variance due to signal and noise to be identical. How can we use the spectrum to separate signal from noise?
 
 One of the most common denoising procedures is variance-dependent dimensionality reduction: retaining only the first few high-variance principal components of the data. The implicit assumption here is that high-variance dimensions correspond to **signal** in the system, while low-variance dimensions represent **noise**. In this section, we'll investigate this assumption and demonstrate that this isn't always true!
 
@@ -59,67 +127,58 @@ But first -- let's take a brief detour and investigate a system that is "pure no
 
 ### Covariance structure of random matrices
 
-Even random matrices have some covariance structure that result in non-zero eigenvalues. This structure has been mathematically characterized by the [Marchenko-Pastur distribution](https://en.wikipedia.org/wiki/Marchenko-Pastur_distribution). This makes it especially difficult to infer anything about the reliability or significance of the dimension from the magnitude of the eigenvalue -- especially when the eigenvalues are close to zero.
-
-{{< include _code/install_package.qmd >}}
+Let's consider a simple system: a random matrix $X \in \mathbb{R}^{N \times P}$, with entries drawn independently from a fixed Gaussian distribution $\mathcal{N}(0, \sigma^2)$.
 
 ```{python}
-# | label: imports
-# | code-summary: Import various libraries
+# | code-summary: Create a random matrix
+# | fig-align: center
 
-from collections.abc import Sequence
-import functools
-import warnings
-from typing import NamedTuple
+n_stimuli = 500
+n_neurons = 500
 
-import numpy as np
-import pandas as pd
-import xarray as xr
-from sklearn.decomposition import PCA
-import seaborn as sns
-import matplotlib as mpl
-from matplotlib import pyplot as plt
-from matplotlib_inline.backend_inline import set_matplotlib_formats
-import ipywidgets as widgets
-from IPython.display import display
+random_matrix = rng.standard_normal((n_stimuli, n_neurons))
 
-from utilities.brain import load_dataset
 
-from utilities.computation import assign_logarithmic_bins
+def view_random_matrix(data: np.ndarray, /) -> Figure:
+    fig, ax = plt.subplots()
+    image = ax.imshow(
+        data, cmap="Spectral", norm=SymLogNorm(linthresh=1e-2, linscale=1e-1)
+    )
+    fig.colorbar(image)
+    sns.despine(ax=ax, left=True, bottom=True)
 
+    ax.set_xticks([])
+    ax.set_yticks([])
+    plt.close(fig)
+
+    return fig
+
+
+view_random_matrix(random_matrix)
 ```
 
-{{< include _code/set_visualization_defaults.qmd >}}
-
-{{< include _code/initialize_rng.qmd >}}
+We might expect that a random matrix ought to have no covariance structure, since all the entries were sampled independently. However, this isn't the case! In fact, random matrices have well-defined covariance structure that is described by the [Marchenko-Pastur distribution](https://en.wikipedia.org/wiki/Marchenko-Pastur_distribution).
 
 ```{python}
-# | code-summary: Visualize the covariance eigenspectra of random matrices
+# | code-summary: Visualize the covariance eigenspectrum of the random matrix
 # | fig-align: center
 
 
-def simulate_marchenko_pastur(
-    n_stimuli: int = 500,
-    n_neurons: int = 500,
-    n_repetitions: int = 50,
-) -> np.ndarray:
-    data = rng.standard_normal((n_repetitions, n_stimuli, n_neurons))
+def view_eigenspectrum(data: np.ndarray, *, log: bool = False) -> None:
     data -= data.mean(axis=-2, keepdims=True)
 
     singular_values = np.linalg.svd(data, compute_uv=False)
-    return (
+    eigenvalues = (
         xr.DataArray(
             name="eigenvalue",
             data=singular_values**2 / (n_stimuli - 1),
-            dims=("repetition", "rank"),
+            dims=("rank",),
             coords={"rank": ("rank", 1 + np.arange(singular_values.shape[-1]))},
         )
         .to_dataframe()
         .reset_index()
     )
 
-
-def view_marchenko_pastur(eigenvalues: xr.DataArray, *, log: bool = False) -> None:
     fig, ax = plt.subplots()
     sns.lineplot(
         ax=ax,
@@ -134,16 +193,27 @@ def view_marchenko_pastur(eigenvalues: xr.DataArray, *, log: bool = False) -> No
         ax.set_xscale("log")
         ax.set_yscale("log")
         ax.set_ylim(bottom=1e-2)
+        ax.set_aspect("equal", "box")
 
     sns.despine(ax=ax, offset=20)
     fig.show()
 
 
-eigenvalues = simulate_marchenko_pastur()
-view_marchenko_pastur(eigenvalues)
+view_eigenspectrum(random_matrix)
 ```
 
-### Truncating spectra might ignore low-variance signal!
+Let's view the spectrum on a logarithmic scale to see what it looks like.
+
+```{python}
+# | code-summary: Re-plot the covariance eigenspectrum on a log-log scale
+# | fig-align: center
+
+view_eigenspectrum(random_matrix, log=True)
+```
+
+Even random matrices have systematic covariance structure that result in non-zero eigenvalues at all ranks. How can we know that a region of our spectrum is driven by signal and not noise?
+
+### Decomposing a covariance eigenspectrum
 
 For example, consider a *very realistic* scenario where a participant gets bored performing our experiment inside an fMRI scanner and starts yodeling to entertain themselves. The highest variance components in the measured neural response would likely be motion artifacts and not whatever signal we were interested in measuring. A high-quality data preprocessing pipeline would help mitigate such extreme components of variance -- but cannot remove them entirely!
 
@@ -155,11 +225,23 @@ Clearly, we need a different approach to using the spectrum to separate signal a
 
 ## Cross-validated PCA
 
-In a whole-brain calcium-imaging study where mice viewed 2,800 natural images while neural responses were recorded, Stringer et al. (2021) developed cross-validated PCA (CV-PCA) as a method to reliably estimate the covariance structure of the neural responses.
+In a whole-brain [calcium-imaging](https://en.wikipedia.org/wiki/Calcium_imaging) study, @Stringer2019 recorded the responses of 10,000 neurons in mouse primary visual cortex to 2,800 natural images.
 
 ![TODO update with schematic showing viewing natural images](/resources/mouse.svg){width=20%}
 
-Since each image was viewed twice, these repetitions could be used as train/test splits to estimate covariance eigenvalues. Specifically, eigenvectors are computed on a training set of data, and *cross-validated* eigenvalues are computed by computing the covariance between two independent sets of data:
+Armed with this large dataset, they set out to develop a method that could reliably estimate the covariance structure of these neural responses: *cross-validated PCA*.
+
+Since most neuroscience experiments collect multiple responses to the same stimulus across different trials, @Stringer2019 decided to use one set of responses as a training set and other as a test set when computing the covariance eigenspectrum.
+
+Specifically, if there were $N$ unique stimuli -- each seen twice -- the data matrix $X \in \mathbb{R}^{2N \times P}$ is split into two matrices $X_\text{train} \in \mathbb{R}^{N \times P}$ and $X_\text{test} \in \mathbb{R}^{N \times P}$, where the rows of $X_\text{train}$ and $X_\text{test}$ correspond to the same stimuli.
+
+![](/resources/x_train_x_test.svg){width=80% fig-align="center"}
+
+### Step 1 -- Compute eigenvectors on the training set
+
+The first step is to compute the principal components -- the eigenvectors of the auto-covariance matrix -- of the training set:
+
+[As usual, $X_\text{train}$ must be centered when computing its covariance.]{.aside}
 
 $$
 \begin{align*}
@@ -173,6 +255,12 @@ $$
 ![](/resources/autocovariance-eigendecomposition.svg){width=100%}
 :::
 
+### Step 2 -- Compute cross-validated eigenvalues
+
+The second step is to compute *cross-validated eigenvalues* by projecting both the training and the test sets onto the eigenvectors from Step 1, and computing their cross-covariance:
+
+[Both $X_\text{train}$ and $X_\text{test}$ are centered prior to the projection using the mean of $X_\text{train}.$]{.aside}
+
 $$
 \begin{align*}
     \Lambda_\text{cross-validated}
@@ -185,7 +273,12 @@ $$
 ![](/resources/cv_pca.svg){width=100%}
 :::
 
-These cross-validated eigenvalues represent the covariance reliably shared across two presentations of the visual stimulus -- which is a quantity we are interested in as neuroscientists: what is the "stable" part of the visual representation of a natural image? Notably, these "eigenvalues" need not be positive: if there is no shared covariance between the two systems at a rank, the expected value of the eigenvalue is $0$.
+These cross-validated eigenvalues represent the covariance reliably shared across two presentations of the visual stimulus -- the "stable" part of the visual representation of a natural image.
+
+::: {.callout-warning}
+
+These cross-validated "eigenvalues" need not be positive: if there is no shared covariance between the two systems along a particular eigenvector, the expected value of the eigenvalue is $0$. This makes interpretation simple: if there is reliable variance along a dimension, its cross-validated eigenvalue will be significantly above zero.
+:::
 
 ### Some geometric intuition
 
@@ -222,7 +315,7 @@ class CrossValidatedPCA:
 
 ```
 
-### Analyzing neural data
+## Investigating neural data
 
 Let's apply CV-PCA to our fMRI data to see what it looks like!
 
@@ -234,7 +327,7 @@ data = load_dataset(subject=0, roi="general").load()
 display(data)
 ```
 
-Note that the data contain fMRI responses to two repetitions of each image.
+Note that the data contain fMRI responses to two repetitions of $N = 700$ images for a total of $2N = 1400$ presentations.
 
 ```{python}
 # | code-summary: Compute the cross-validated spectrum
@@ -252,7 +345,6 @@ cv_pca(data_repetition_1.values, data_repetition_2.values)
 ```
 
 ```{python}
-# | label: fig-cross-validated-spectrum
 # | code-summary: Plot the raw cross-validated spectrum
 # | fig-align: center
 
@@ -264,7 +356,7 @@ def plot_cross_validated_spectrum(
     original: bool = False,
     square: bool = False,
     bin_logarithmically: bool = False,
-) -> mpl.figure.Figure:
+) -> Figure:
     fig, ax = plt.subplots()
 
     data = pd.DataFrame(
@@ -339,25 +431,39 @@ def plot_cross_validated_spectrum(
 plot_cross_validated_spectrum(cv_pca)
 ```
 
+We can see a typical spectrum that appears to have a knee somewhere around 10 dimensions, beyond which the variance quickly flattens out close to zero.
+
+Let's re-plot this cross-validated covariance eigenspectrum on a logarithmic scale.
+
 ```{python}
-# | label: fig-cross-validated-spectrum-log
 # | code-summary: Plot the cross-validated spectrum on a log-log scale
 # | fig-align: center
 
 plot_cross_validated_spectrum(cv_pca, log=True)
 ```
 
+Here, we see that the apparent knee isn't present -- in fact, the spectrum appears to obey a power law at all ranks! Additionally, since these eigenvalues were obtained from a cross-validated analysis, we know that they represent stimulus-related variance that is consistent across different presentations of the same stimuli and not noise.
+
+To verify this, let's plot the covariance spectrum of the training dataset, the one that we would obtain from regular principal components analysis.
 
 ```{python}
-# | label: fig-cross-validated-spectrum-log-original
 # | code-summary: Plot both the original and the cross-validated spectrum
 # | fig-align: center
 
 plot_cross_validated_spectrum(cv_pca, log=True, original=True)
 ```
 
+The covariance eigenspectrum of the training data (orange) is higher than the cross-validated spectrum (blue) at all ranks -- suggesting that the process is indeed removing trial-specific noise.
+
+::: {.callout-important}
+# The neural population code is high-dimensional!
+
+Importantly, note that after removing trial-specific noise using cross-validated PCA, the covariance eigenspectrum retains its power-law structure at all ranks! This suggests that the neural population code is truly high-dimensional.
+:::
+
+Finally, let's re-plot the cross-validated spectrum in a cleaner fashion, where the trends of interest are more clearly visible.
+
 ```{python}
-# | label: fig-cross-validated-spectrum-log-binned
 # | code-summary: Bin the cross-validated spectrum
 # | fig-align: center
 
@@ -373,36 +479,72 @@ with sns.axes_style("whitegrid"):
     display(fig)
 ```
 
+Here, we've averaged the spectrum in local bins that expand exponentially in size (and thus appear uniformly spaced on the logarithmic scale). The individual points denote the mean cross-validated eigenvalue in each bin while the error bars denote the standard deviation of these eigenvalues.
+
+Averaging within such bins allows us to detect signal even in a regime where the cross-validated spectrum oscillates wildly near zero and also visualize the power law more cleanly.
+
 ## A universal power-law exponent
-
-Interestingly, the power-law exponent of the neural data appears very close to $-1$. 
-
-- Same amount of variance at each decade
-- each decade is equally important (if assessed using variance)
-
-In fact, a power-law exponent of $-1$ appears with surprising regularity in neuroscience.
 
 ### Universality across species
 
+The power-law exponent of the neural data appears very close to $-1$, as you can see from the slope of the cross-validated spectrum Interestingly, a power-law exponent of $-1$ appears with surprising regularity in neuroscience.
+
+@Stringer2019, who developed cross-validated PCA, discovered that mouse primary visual cortex responses obey a power-law with exponent $-1$ over several orders of magnitude.
+
 ![TODO update with Stringer figure](/resources/mouse.svg){width=20%}
+
+More recently, @Wang2023 reported a similar result from whole-brain calcium recordings in zebrafish during hunting and spontaneous behavior.
 
 ![TODO update with zebrafish figure](/resources/zebrafish.svg){width=5%}
 
-::: {.callout-important}
-# An open question: is the power-law exponent of -1 universal?
+In this notebook, we have demonstrated that a similar scale-invariant covariance structure underlies human visual representations of natural scenes too!
 
-Open question: same power law everywhere? Sensory systems vs cognitive systems? Different representational formats, LD?
+### Deep neural network image representations
+
+Interestingly, several recent results from the machine learning literature corroborate this result! Specifically, @Agrawal2022 report that neural networks whose internal representations have a covariance spectrum that decays as a power law with index $-1$ perform better.
+
+This has made the power law index a statistic of interest for assessing model representation quality -- and perhaps a target of direct optimization.
+
+::: {.callout-important}
+# Is the power-law exponent of -1 universal?
+
+Do we observe the same power-law covariance spectra in other organisms? Could it be a universal statistical property of neural population codes?
 
 Check your data!
 :::
 
-### Deep neural network image representations
+::: {.callout-important}
+# Is high-dimensional coding a hallmark of sensory systems?
 
-### Speculated optimality criterion for population coding
+Do all sensory systems use a high-dimensional population code -- where an expressive representation of the outside world might allow rapid learning and generalization to various ethological tasks? Perhaps more *cognitive* systems might use low-dimensional representational formats to enable stable, invariant behaviors...
+:::
 
-- What does this tell us about neural coding?
+### What makes $\text{variance} \propto \text{rank}^{-1}$ special?
 
-TODO:
+A power-law index of $-1$ implies a special sort of scale-invariance. Consider the total variance captured by such a covariance eigenspectrum within a range of ranks $[\alpha, \beta]$:
 
-- scale-free dimensionality
-- more data -> extend even further
+$$
+\begin{align*}
+    \int_\alpha^\beta x^{-1} dx &= \ln{\left\lvert\frac{\beta}{\alpha}\right\rvert}
+\end{align*}
+$$
+
+This total variance only depends on the ratio $\beta / \alpha$ -- indicating that a power law with a $-1$ slope has equal variance in each decade: i.e., the total variance from rank $1$ to rank $10$ is equal to the total variance from rank $100$ to rank $1000$.
+
+This suggests that each decade is equally important and contributes as much to the representation, though the later decades have their variance spread out over many more dimensions.
+
+### An optimality criterion for population codes?
+
+@Stringer2019 provide a possible explanation for why systems might tend toward a $-1$ covariance eigenspectrum.
+
+For sufficiently high-dimensional data, if a spectrum decays any slower than $-1$, the representational manifold becomes non-smooth: small changes in the input might lead to large changes in the representational space -- clearly an undesirable property for stable perception and cognition.
+
+In contrast, if a spectrum decays significantly faster than $-1$, it loses some expressivity by not utilizing all the dimensions it has available.
+
+## The future
+
+Our simple demonstrations in this notebook suggest a profound difference in the way we should think about population coding.
+
+Neural data is *not* reducible to a small number of interpretable, high-variance dimensions. Much like a text cannot be understood using only the most frequent words, understanding a population code must involve studying reliable information along all dimensions.
+
+Moreover, neural data is high-dimensional to an extent previously unappreciated. In fact, the power-law scaling observed doesn't saturate at the tail of the spectrum, suggesting that with even larger datasets with more stimuli, we might find reliable stimulus-specific variance along even more dimensions!

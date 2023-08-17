@@ -32,14 +32,29 @@ import numpy as np
 import pandas as pd
 import xarray as xr
 import seaborn as sns
-import matplotlib as mpl
 from matplotlib import pyplot as plt
+from matplotlib.figure import Figure
+import matplotlib.ticker as ticker
 from matplotlib.animation import FuncAnimation
 from matplotlib_inline.backend_inline import set_matplotlib_formats
 import ipywidgets as widgets
 from IPython.display import display, HTML
-
 ```
+
+::: {.content-visible when-format="html"}
+```{python}
+# | label: import-utility-functions
+# | code-summary: Import utility functions
+
+from utilities.toy_example import (
+    create_stimuli,
+    Neuron,
+    simulate_neuron_responses,
+    simulate_multiple_neuron_responses,
+    view_individual_scatter,
+)
+```
+:::
 
 {{< include _code/set_visualization_defaults.qmd >}}
 
@@ -50,25 +65,21 @@ from IPython.display import display, HTML
 Let's create $N = 1000$ dots of different *colors* and *sizes*. From the scatterplot, we can see that the two latent variables are [uncorrelated](reference.qmd#correlation).
 
 ```{python}
+# | add-from: ../src/utilities/toy_example.py
+# | source-lang: python
+# | code-filename: (Function) Create stimulus dots of various colors and sizes
+# | start-line: 21
+# | end-line: 31
+# | code-fold: show
+#
+```
+
+```{python}
 # | label: create_the_stimuli
-# | code-summary: Create stimulus dots of various colors and sizes
+# | code-summary: Visualize the stimuli
 # | fig-align: center
 
-
-def create_stimuli(
-    *,
-    n_stimuli: int,
-    rng: np.random.Generator,
-) -> pd.DataFrame:
-    return pd.DataFrame(
-        {
-            "color": rng.random(size=(n_stimuli,)),
-            "size": rng.random(size=(n_stimuli,)),
-        }
-    ).set_index(1 + np.arange(n_stimuli))
-
-
-def view_stimuli(data: pd.DataFrame) -> mpl.figure.Figure:
+def view_stimuli(data: pd.DataFrame) -> Figure:
     fig, ax = plt.subplots()
     sns.scatterplot(
         ax=ax,
@@ -87,7 +98,7 @@ def view_stimuli(data: pd.DataFrame) -> mpl.figure.Figure:
     return fig
 
 
-stimuli = create_stimuli(n_stimuli=1_000, rng=rng)
+stimuli = create_stimuli(n=1_000, rng=rng)
 
 view_stimuli(stimuli)
 ```
@@ -99,86 +110,40 @@ Now, let's simulate some neural data. We need to decide how the $P = 2$ neurons 
 $r_{\text{neuron}} \sim \beta_{\text{color}} \left( \text{color} \right) + \beta_{\text{size}} \left( \text{size} \right) + \epsilon$, where $\epsilon \sim \mathcal{N}(\mu_{\text{neuron}}, \sigma_{\text{neuron}}^2)$
 
 ```{python}
-# | label: utility_Neuron
-# | code-summary: Define the parameters controlling neuron responses
+# | add-from: ../src/utilities/toy_example.py
+# | source-lang: python
+# | code-filename: (Definition) Parameters controlling neuron responses
+# | start-line: 12
+# | end-line: 18
 # | code-fold: show
-
-Neuron = NamedTuple(
-    "Neuron",
-    beta_color=float,
-    beta_size=float,
-    mean=float,
-    std=float,
-)
+#
 ```
 
+As we can see, each neuron's response is completely defined by exactly four parameters:
+
+- $\beta_{\text{color}}$ -- how much the neuron cares about the stimulus $\text{color}$
+- $\beta_{\text{size}}$ -- how much the neuron cares about the stimulus $\text{size}$
+- $\mu_{\text{neuron}}$ -- the mean of the neuron's responses
+- $\sigma_{\text{neuron}}^2$ -- the stimulus-independent variance of the neuron's responses
+
 ```{python}
-# | label: utility_simulate_neuron_responses
-# | code-summary: Simulate neuron responses
+# | add-from: ../src/utilities/toy_example.py
+# | source-lang: python
+# | code-filename: (Function) Simulate neuron responses
+# | start-line: 34
+# | end-line: 48
 # | code-fold: show
-
-
-def simulate_neuron_responses(
-    stimuli: pd.DataFrame,
-    neuron: Neuron,
-    *,
-    rng: np.random.Generator,
-) -> np.ndarray:
-    def z_score(x: np.ndarray) -> np.ndarray:
-        return (x - x.mean()) / x.std()
-
-    return (
-        neuron.beta_color * z_score(stimuli["color"])
-        + neuron.beta_size * z_score(stimuli["size"])
-        + neuron.std * rng.standard_normal(size=(len(stimuli),))
-        + neuron.mean
-    )
-
-
+#
 ```
 
+
 ```{python}
-# | label: function_simulate_multiple_neuron_responses
-# | code-summary: Simulate multiple neurons' responses
-
-
-def simulate_multiple_neuron_responses(
-    *,
-    stimuli: pd.DataFrame,
-    neurons: Sequence[Neuron],
-    rng: np.random.Generator,
-) -> xr.DataArray:
-    data = []
-    for i_neuron, neuron in enumerate(neurons):
-        data.append(
-            xr.DataArray(
-                data=simulate_neuron_responses(
-                    stimuli=stimuli,
-                    neuron=neuron,
-                    rng=rng,
-                ),
-                dims=("stimulus",),
-                coords={
-                    column: ("stimulus", values)
-                    for column, values in stimuli.reset_index(names="stimulus").items()
-                },
-            )
-            .expand_dims({"neuron": [i_neuron + 1]})
-            .assign_coords(
-                {
-                    field: ("neuron", [float(value)])
-                    for field, value in neuron._asdict().items()
-                }
-            )
-        )
-
-    return (
-        xr.concat(data, dim="neuron")
-        .rename("neuron responses")
-        .transpose("stimulus", "neuron")
-    )
-
-
+# | add-from: ../src/utilities/toy_example.py
+# | source-lang: python
+# | code-filename: (Function) Simulate multiple neurons' responses
+# | start-line: 51
+# | end-line: 85
+#
 ```
 
 This procedure produces a data matrix $X \in \mathbb{R}^{N \times P}$ containing the $P = 2$ neurons' responses to the $N = 1000$ stimuli.
@@ -207,50 +172,19 @@ display(data)
 We can visualize the responses of each neuron to each dot. Note that this is a 1-dimensional scatterplot; the spread along the vertical axis is just for visualization purposes.
 
 ```{python}
+# | add-from: ../src/utilities/toy_example.py
+# | source-lang: python
+# | code-filename: (Function) Visualize individual scatter
+# | start-line: 88
+# | end-line: 129
+#
+```
+
+
+```{python}
 # | label: visualize_neuron_responses
 # | code-summary: Visualize the individual neuron responses
 # | fig-align: center
-
-
-def view_individual_scatter(
-    data: xr.DataArray, *, coord: str, dim: str, template_func: Callable[[int], str]
-) -> mpl.figure.Figure:
-    rng = np.random.default_rng()
-    data_ = data.assign_coords(
-        {"arbitrary": ("stimulus", rng.random(data.sizes["stimulus"]))}
-    )
-    min_, max_ = data_.min(), data_.max()
-
-    n_features = data.sizes[dim]
-
-    fig, axes = plt.subplots(nrows=n_features, figsize=(7, 2 * n_features))
-
-    for index, ax in zip(data[coord].values, axes.flat):
-        label = template_func(index)
-        sns.scatterplot(
-            ax=ax,
-            data=(
-                data_.isel({dim: data[coord].values == index})
-                .rename(label)
-                .to_dataframe()
-            ),
-            x=label,
-            y="arbitrary",
-            hue="color",
-            size="size",
-            palette="flare",
-            legend=False,
-        )
-        sns.despine(ax=ax, left=True, offset=10)
-
-        ax.set_xlim([min_, max_])
-        ax.get_yaxis().set_visible(False)
-
-    fig.tight_layout(h_pad=3)
-    plt.close(fig)
-
-    return fig
-
 
 view_individual_scatter(
     data,
@@ -307,7 +241,7 @@ def view_joint_scatter(
     dim: str,
     template_func: Callable[[int], str],
     draw_axes: bool = False,
-) -> mpl.figure.Figure:
+) -> Figure:
     fig, ax = plt.subplots()
 
     data_ = pd.DataFrame(
@@ -484,7 +418,7 @@ The columns of $V$ are *eigenvectors* that specify the directions of variance wh
 
 Finally, the original data matrix can be transformed by projecting it onto the eigenvectors: $\widetilde{X} = \left(X - \overline{X}\right) V$.
 
-![](/resources/projection.svg){width=100%}
+![](/resources/projection.svg){width=80%}
 
 <!-- TODO ### Some terminology
 
@@ -674,7 +608,7 @@ We can plot the eigenvalues as a function of their rank to visualize the *eigens
 # | code-summary: View eigenspectrum
 # | fig-align: center
 
-def view_eigenspectrum(pca: xr.DataArray) -> mpl.figure.Figure:
+def view_eigenspectrum(pca: xr.DataArray) -> Figure:
     fig, ax = plt.subplots(figsize=(pca.sizes["component"], 5))
     sns.lineplot(
         ax=ax,
@@ -766,7 +700,7 @@ print(f"rank = {(big_pca.eigenvalue > 0).sum().values}")
 
 def view_thresholded_eigenspectrum(
     pca: PCA, *, threshold: int | float
-) -> mpl.figure.Figure:
+) -> Figure:
     fig = view_eigenspectrum(pca)
     ax = fig.get_axes()[0]
 
@@ -803,7 +737,7 @@ A very commonly used method is to set a threshold based on the cumulative varian
 
 def view_cumulative_eigenspectrum(
     pca: xr.DataArray, *, threshold: float = 0.8
-) -> mpl.figure.Figure:
+) -> Figure:
     fig, ax = plt.subplots(figsize=(pca.sizes["component"], 5))
 
     data = pca["eigenvalue"].copy()
@@ -834,7 +768,7 @@ def view_cumulative_eigenspectrum(
 
     sns.despine(ax=ax, offset=20)
     sns.despine(ax=ax_twin, offset=20, left=True, bottom=True, right=False, top=True)
-    ax_twin.yaxis.set_major_formatter(mpl.ticker.PercentFormatter(1))
+    ax_twin.yaxis.set_major_formatter(ticker.PercentFormatter(1))
 
     fig.tight_layout()
     plt.close(fig)
@@ -853,7 +787,7 @@ When the number of latent dimensions is low, eigenspectra often have a sharp dis
 # | code-summary: Plot the apparent knee of the spectrum
 
 
-def view_eigenspectrum_knee(pca: PCA, *, knee: int) -> mpl.figure.Figure:
+def view_eigenspectrum_knee(pca: PCA, *, knee: int) -> Figure:
     fig = view_eigenspectrum(pca)
     ax = fig.get_axes()[0]
     ax.plot(
@@ -893,7 +827,7 @@ def compute_effective_dimensionality(eigenspectrum: np.ndarray) -> float:
     return (np.sum(eigenspectrum) ** 2) / (eigenspectrum**2).sum()
 
 
-def view_effective_dimensionality_examples(pca: PCA) -> mpl.figure.Figure:
+def view_effective_dimensionality_examples(pca: PCA) -> Figure:
     n_components = pca.sizes["component"]
 
     spectrum_1 = [float(pca["eigenvalue"].mean().values)] * n_components
@@ -967,7 +901,11 @@ Since PCA implicitly assumes that the variances along each dimension are compara
 Note, however, that this transformation reduces the information in the system -- it is possible that the variances of the features are informative.
 :::
 
-### What if the stimulus features covary?
+<!-- ### What if the stimulus features covary? -->
+
+## Further reading
+
+1. [This StackOverflow answer](https://stats.stackexchange.com/a/134283) is a great explanation for how [singular value decomposition ](reference.qmd#singular-value-decomposition) is related to principal component analysis.
 
 [^definition-eigendecomposition]: The eigendecomposition of a symmetric matrix $X \in \mathbb{R}^{n \times n}$ involves rewriting it as the product of three matrices $X = V \Lambda V^\top$, where $V \in \mathbb{n \times n}$ is orthonormal and $\Lambda \in \mathbb{n \times n}$ is diagonal with non-negative entries.
 
