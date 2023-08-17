@@ -543,22 +543,6 @@ with xr.set_options(display_expand_data=True):
     display(pca["eigenvector"])
 ```
 
-```{python}
-# | label: pca-visualize
-# | code-summary: Visualize the transformed data
-# | fig-align: center
-
-fig = view_joint_scatter(
-    data,
-    coord="neuron responses",
-    dim="neuron",
-    template_func=lambda x: f"neuron {x} response",
-)
-ax = fig.get_axes()[0]
-# TODO plot eigenvectors on joint scatter
-# ax.plot()
-```
-
 ### Interpreting the transformed data
 
 We can view the data projected onto each of the principal components.
