@@ -68,7 +68,7 @@ from utilities.brain import (
 
 NSD is the largest fMRI dataset on human vision, with 7T fMRI responses (1.8mm isotropic voxels) obtained from 8 adult participants. The experiment involved a continuous recognition task while participants observed natural scene images from the Microsoft Common Objects in Context (COCO) database (Lin et al., 2014).
 
-Let's load the dataset. This data contains neural responses to 872 images from ~15,000 voxels reliably modulated by the visual stimuli during the NSD experiment.
+Let's load the dataset. This data contains neural responses to 700 images from ~15,000 voxels reliably modulated by the visual stimuli during the NSD experiment.
 
 ```{python}
 # | code-summary: Load the dataset
