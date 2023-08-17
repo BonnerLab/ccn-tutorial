@@ -313,7 +313,7 @@ Power laws are ubiquitious in nature, arising in all sorts of systems:
 Nevertheless, a power law relationshop will not be observed when the data
 
 - is random
-- has certain characteristic scale
+- has a characteristic scale
 
 ### An analogy: word frequencies
 
