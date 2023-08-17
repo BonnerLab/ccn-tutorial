@@ -111,6 +111,7 @@ stimuli = load_stimuli()
 view_stimuli(stimuli)
 ```
 
+
 ### The neural eigenspectrum
 
 Now we can apply PCA to the neural responses and plot the eigenspectrum of the data! 
@@ -147,9 +148,10 @@ pca.fit(data)
 view_eigenspectrum(pca)
 ```
 
-On this plot, the first few PCs have substantial variance while there appears to be negligible variance after about rank 20. How can we interpret these PCs of different variance levels? There are some simple ways to visualize these PCs.
+::: {.callout-tip collapse="true"}
+# Visualization of principal components
 
-#### Visualizing principal components
+There are some simple ways to visualize and interpret the principle components.
 
 ```{python}
 # | label: image_viewing_utilities
@@ -241,7 +243,7 @@ Alternativley, we can focus on the stimuli with the highest or lowest scores alo
 for rank in [1, 2, 3, 10, 50, 100]:
     view_images_at_poles(data_pca[:, rank - 1], stimuli=stimuli, label=f"rank {rank}")
 ```
-
+:::
 
 ::: {.callout-important collapse="true"}
 # What about other methods?
@@ -280,10 +282,7 @@ Nonetheless, PCA has unique benefits that shouldn't be overlooked. For instance,
 
 :::
 
-
-#### Logarithmic scale
-
-Given these visualization, we might deem that the higher-rank PCs are non-interpretable and thus follow the common practice to drop them. However, before doing so, let's try visualizing the spectrum on a logarithmic scale for both axes:
+On this plot, it looks like that the first few PCs have substantial variance while the rest are negligable, which suggests a low-dimensional structure. However, when dealing with high-dimensional data that span several orders of magnitude, it's more insightful to use a logarithmic scale. We can examine many key statistical trends more clearly across the orders. So let's try visualizing the spectrum on a logarithmic scale for both axes:
 
 ```{python}
 # | code-summary: Visualize the eigenspectrum on a logarithmic scale
@@ -293,15 +292,15 @@ Given these visualization, we might deem that the higher-rank PCs are non-interp
 view_eigenspectrum(pca, log=True)
 ```
 
-On a log-log scale, the spectrum shows no obvious discontinuity! This suggests that the neural population code has a scale-free structure and its latent dimensionality is likely higher than 20!
-
-What kind of structure is this? We observe that the spectrum is approximately linear on this log-log scale, suggesting that the eigenvalues obey a power law:
+On a log-log scale, the spectrum shows a trend similar to a linear relationship, suggesting that the eignenspectrum might be a power law distribution:
 
 $$\log{\lambda_\text{rank}} \approx \alpha \log{\left( \text{rank} \right)} + c \implies \lambda_\text{rank} \propto \left( \text{rank} \right)^\alpha$$
 
+There is information spanning across all ranks as we find no obvious cut-off point, this distributions. So the number of effect dimensions here is likely much higher than what we would speculate from the linear scale.
+
 ## Power laws
 
-A power law is a relationship of the form $f(x) \propto x^{\alpha}$, where $\alpha$ is termed the *index* of the power law, or the *power law exponent*. It is *scale-free* because $f(kx) \propto f(x)$.
+A power law is a relationship of the form $f(x) \propto x^{\alpha}$, where $\alpha$ is termed the *index* of the power law, or the *power law exponent*. It suggests a *scale-free* structure because $f(kx) \propto f(x)$.
 
 Power laws are ubiquitious in nature, arising in all sorts of systems:
 
@@ -316,9 +315,9 @@ Nevertheless, a power law relationshop will not be observed when the data
 - is random
 - has certain characteristic scale
 
-### An illustration: word frequencies
+### An analogy: word frequencies
 
-Let's compute the distribution of word frequencies in a small corpus -- a collection of [IMDb movie reviews](https://pytorch.org/text/0.9.0/datasets.html#imdb)!
+Zipf's law suggests a power law distribution of use frequency of English words.Let's compute the distribution of frequencies in a small corpus -- a collection of [IMDb movie reviews](https://pytorch.org/text/0.9.0/datasets.html#imdb).
 
 ```{python}
 # | label: generate-word-frequencies
@@ -335,7 +334,7 @@ for _, text in dataset:
 ```
 
 ```{python}
-# | label: linear-word-frequency
+# | label: logarithmic-word-frequency
 # | code-summary: View word frequency distribution on a linear scale
 # | fig-align: center
 
@@ -362,57 +361,10 @@ def view_word_frequency_distribution(counter: Counter, *, log: bool = False) -> 
     return fig
 
 
-view_word_frequency_distribution(counter)
-```
-
-```{python}
-# | label: logarithmic-word-frequency
-# | code-summary: View word frequency distribution on a logarithmic scale
-# | fig-align: center
-
 view_word_frequency_distribution(counter, log=True)
 ```
 
-```{python}
-# | label: most-common-tokens
-# | code-summary: View the 200 most common words in the dataset
-# | fig-align: center
-
-display_counter = copy.copy(counter)
-for token in unwanted_tokens:
-    del display_counter[token]
-
-cloud = WordCloud(
-    width=600,
-    height=300,
-    background_color="white",
-    colormap="Spectral",
-    random_state=random_state,
-)
-
-display(
-    SVG(
-        cloud.generate_from_frequencies(dict(display_counter.most_common(200))).to_svg(
-            embed_font=True
-        )
-    )
-)
-```
-
-
-```{python}
-# | label: least-common-tokens
-# | code-summary: View the 200 least common words in the dataset
-# | fig-align: center
-
-display(
-    SVG(
-        cloud.generate_from_frequencies(
-            dict(display_counter.most_common()[-200:])
-        ).to_svg(embed_font=True)
-    )
-)
-```
+If only the high-frequency words are meaningful to human language, then we should be able to reconstruct a movie review with these words only:
 
 ```{python}
 # | label: text-original
@@ -487,6 +439,5 @@ display(
 )
 ```
 
-<!-- TODO： emphasize "long-tailedness"/"heavy-tailedness" of distribution -->
+This demonstrates that the high-rank, low-frequency words also carries meaningful information. Similarly, we will likely also lose information if we try to reconstruct neural data wiht just the high-variance PCs.
 
-<!-- #### Power law in neural networks -->
