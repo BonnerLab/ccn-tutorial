@@ -487,10 +487,6 @@ display(
 )
 ```
 
-<!-- TODO: spectra of random data moved here? -->
-TODO emphasize "long-tailedness"/"heavy-tailedness" of distribution
-<!-- TODO wrap the word cloud SVGs in <figure> tags to ensure proper display -->
+<!-- TODO： emphasize "long-tailedness"/"heavy-tailedness" of distribution -->
 
-#### Power law in neural networks
-
-<!-- TODO: ? -->
+<!-- #### Power law in neural networks -->

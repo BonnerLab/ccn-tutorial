@@ -281,7 +281,7 @@ view_joint_scatter(
 )
 ```
 
-The animation below shows how we can use this to change the way we view the data.
+We can use the covariance to change the way we view the data. Run the animation below for demonstration.
 
 ```{python}
 # | label: visualize_pca_animation
@@ -585,7 +585,7 @@ We observe that:
 Note that these components do *not* directly correspond to either of the latent variables. Rather, each is a mixture of stimulus-dependent signal and noise.
 :::
 
-### Analyzing the covariance statistics
+### Inspecting the eigenspectrum
 
 The eigenvalues show the variance along each eigenvector. The sum of the eigenvalues is therefore equal to the total variance,  and is the same as the total variance of the original data.
 
