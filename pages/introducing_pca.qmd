@@ -347,7 +347,7 @@ view_joint_scatter(
 )
 ```
 
-The animation below shows how we can use this to change the way we view the data.
+We can use the covariance to change the way we view the data. Run the animation below for demonstration.
 
 ```{python}
 # | label: visualize_pca_animation
