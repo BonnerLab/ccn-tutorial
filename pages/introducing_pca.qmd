@@ -865,7 +865,10 @@ print(
 view_effective_dimensionality_examples(big_pca)
 ```
 
-However, keep in mind that this is a toy example with idealized data. As we will see, when using standard PCA on real data it may be impossible to identify a clear distinction between meaningful dimensions and noise.
+## Takeaways
+
+- PCA is a useful tool for studying the latent dimensionality of reresentations.
+- However, keep in mind that this is a toy example with idealized data. As we will see, when using standard PCA on real data it may be impossible to identify a clear distinction between meaningful dimensions and noise.
 
 ## Further thoughts
 
