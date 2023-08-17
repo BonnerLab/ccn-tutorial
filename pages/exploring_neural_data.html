@@ -200,7 +200,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <div>
       <div class="quarto-title-meta-heading">Modified</div>
       <div class="quarto-title-meta-contents">
-        <p class="date-modified">August 17, 2023</p>
+        <p class="date-modified">August 16, 2023</p>
       </div>
     </div>
       
@@ -231,7 +231,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </ul></li>
   <li><a href="#power-laws" id="toc-power-laws" class="nav-link" data-scroll-target="#power-laws">Power laws</a>
   <ul>
-  <li><a href="#an-illustration-word-frequencies" id="toc-an-illustration-word-frequencies" class="nav-link" data-scroll-target="#an-illustration-word-frequencies">An illustration: word frequencies</a></li>
+  <li><a href="#an-illustration-word-frequencies" id="toc-an-illustration-word-frequencies" class="nav-link" data-scroll-target="#an-illustration-word-frequencies">An illustration: word frequencies</a>
+  <ul class="collapse">
+  <li><a href="#power-law-in-neural-networks" id="toc-power-law-in-neural-networks" class="nav-link" data-scroll-target="#power-law-in-neural-networks">Power law in neural networks</a></li>
+  </ul></li>
   </ul></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/BonnerLab/ccn-tutorial/edit/main/pages/exploring_neural_data.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/BonnerLab/ccn-tutorial/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div><div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="exploring_neural_data.ipynb" download="exploring_neural_data.ipynb"><i class="bi bi-journal-code"></i>Jupyter</a></li></ul></div></nav>
@@ -255,14 +258,14 @@ Run this notebook interactively!
 <p>Here’s a <a href="https://colab.research.google.com/github/BonnerLab/ccn-tutorial/blob/main/notebooks/exploring_neural_data.ipynb">link to this notebook</a> on Google Colab.</p>
 </div>
 </div>
-<div id="install_package" class="cell" data-execution_count="1">
+<div id="install_package" class="cell" data-execution_count="2">
 <details>
 <summary>Install all required dependencies</summary>
 <div class="sourceCode cell-code" id="install_package"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="install_package-1"><a href="#install_package-1" aria-hidden="true" tabindex="-1"></a><span class="co"># </span><span class="al">TODO</span><span class="co"> uncomment before final packaging</span></span>
 <span id="install_package-2"><a href="#install_package-2" aria-hidden="true" tabindex="-1"></a><span class="co"># %pip install git+https://github.com/BonnerLab/ccn-tutorial.git</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="import_libraries" class="cell" data-execution_count="2">
+<div id="import_libraries" class="cell" data-execution_count="3">
 <details>
 <summary>Import various libraries</summary>
 <div class="sourceCode cell-code" id="import_libraries"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="import_libraries-1"><a href="#import_libraries-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> collections <span class="im">import</span> Counter</span>
@@ -286,7 +289,7 @@ Run this notebook interactively!
 <span id="import_libraries-19"><a href="#import_libraries-19" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> umap <span class="im">import</span> UMAP</span>
 <span id="import_libraries-20"><a href="#import_libraries-20" aria-hidden="true" tabindex="-1"></a></span>
 <span id="import_libraries-21"><a href="#import_libraries-21" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> IPython.display <span class="im">import</span> display, SVG, HTML</span>
-<span id="import_libraries-22"><a href="#import_libraries-22" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib <span class="im">as</span> mpl</span>
+<span id="import_libraries-22"><a href="#import_libraries-22" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> matplotlib.figure <span class="im">import</span> Figure</span>
 <span id="import_libraries-23"><a href="#import_libraries-23" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> mpl_toolkits.axes_grid1 <span class="im">import</span> ImageGrid</span>
 <span id="import_libraries-24"><a href="#import_libraries-24" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> matplotlib <span class="im">import</span> pyplot <span class="im">as</span> plt</span>
 <span id="import_libraries-25"><a href="#import_libraries-25" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> matplotlib_inline.backend_inline <span class="im">import</span> set_matplotlib_formats</span>
@@ -302,7 +305,7 @@ Run this notebook interactively!
 <span id="import_libraries-35"><a href="#import_libraries-35" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="set_visualization_defaults" class="cell" data-execution_count="3">
+<div id="set_visualization_defaults" class="cell" data-execution_count="4">
 <details>
 <summary>Set some visualization defaults</summary>
 <div class="sourceCode cell-code" id="set_visualization_defaults"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="set_visualization_defaults-1"><a href="#set_visualization_defaults-1" aria-hidden="true" tabindex="-1"></a><span class="op">%</span>matplotlib inline</span>
@@ -325,7 +328,7 @@ Run this notebook interactively!
 <span id="set_visualization_defaults-18"><a href="#set_visualization_defaults-18" aria-hidden="true" tabindex="-1"></a>warnings.filterwarnings(<span class="st">"ignore"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="initialize_rng" class="cell" data-execution_count="4">
+<div id="initialize_rng" class="cell" data-execution_count="5">
 <details>
 <summary>Initialize a deterministic random number generator</summary>
 <div class="sourceCode cell-code" id="initialize_rng"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="initialize_rng-1"><a href="#initialize_rng-1" aria-hidden="true" tabindex="-1"></a>random_state <span class="op">=</span> <span class="dv">0</span></span>
@@ -337,12 +340,12 @@ Run this notebook interactively!
 <p><img src="../resources/nsd.png" class="img-fluid"></p>
 <p>NSD is the largest fMRI dataset on human vision, with 7T fMRI responses (1.8mm isotropic voxels) obtained from 8 adult participants. The experiment involved a continuous recognition task while participants observed natural scene images from the Microsoft Common Objects in Context (COCO) database (Lin et al., 2014).</p>
 <p>Let’s load the dataset. This data contains neural responses to 872 images from ~15,000 voxels reliably modulated by the visual stimuli during the NSD experiment.</p>
-<div id="c30204dd" class="cell" data-execution_count="5">
+<div id="08c1f7e2" class="cell" data-execution_count="6">
 <details>
 <summary>Load the dataset</summary>
-<div class="sourceCode cell-code" id="c30204dd"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="c30204dd-1"><a href="#c30204dd-1" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> average_data_across_repetitions(load_dataset(subject<span class="op">=</span><span class="dv">0</span>, roi<span class="op">=</span><span class="st">"general"</span>))</span>
-<span id="c30204dd-2"><a href="#c30204dd-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="c30204dd-3"><a href="#c30204dd-3" aria-hidden="true" tabindex="-1"></a>display(data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="08c1f7e2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="08c1f7e2-1"><a href="#08c1f7e2-1" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> average_data_across_repetitions(load_dataset(subject<span class="op">=</span><span class="dv">0</span>, roi<span class="op">=</span><span class="st">"general"</span>))</span>
+<span id="08c1f7e2-2"><a href="#08c1f7e2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="08c1f7e2-3"><a href="#08c1f7e2-3" aria-hidden="true" tabindex="-1"></a>display(data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-display">
 <div><svg style="position: absolute; width: 0; height: 0; overflow: hidden">
@@ -720,7 +723,7 @@ Attributes: (3/8)
     resolution:      1pt8mm
     preprocessing:   fithrf_GLMdenoise_RR
     ...              ...
-    postprocessing:  averaged across first two repetitions</pre><div class="xr-wrap" style="display:none"><div class="xr-header"><div class="xr-obj-type">xarray.DataArray</div><div class="xr-array-name">'fMRI betas'</div><ul class="xr-dim-list"><li><span>presentation</span>: 700</li><li><span>neuroid</span>: 15724</li></ul></div><ul class="xr-sections"><li class="xr-section-item"><div class="xr-array-wrap"><input id="section-41312980-27a5-4db0-9f81-e78fe63e049f" class="xr-array-in" type="checkbox"><label for="section-41312980-27a5-4db0-9f81-e78fe63e049f" title="Show/hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-array-preview xr-preview"><span>0.4915 0.2473 0.08592 0.05828 ... -0.2126 -0.6315 -0.5751 -0.5354</span></div><div class="xr-array-data"><pre>array([[ 0.4915219 ,  0.24733381,  0.08592446, ..., -0.366651  ,
+    postprocessing:  averaged across first two repetitions</pre><div class="xr-wrap" style="display:none"><div class="xr-header"><div class="xr-obj-type">xarray.DataArray</div><div class="xr-array-name">'fMRI betas'</div><ul class="xr-dim-list"><li><span>presentation</span>: 700</li><li><span>neuroid</span>: 15724</li></ul></div><ul class="xr-sections"><li class="xr-section-item"><div class="xr-array-wrap"><input id="section-9857e576-e493-4dce-803c-8e62d50743fd" class="xr-array-in" type="checkbox"><label for="section-9857e576-e493-4dce-803c-8e62d50743fd" title="Show/hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-array-preview xr-preview"><span>0.4915 0.2473 0.08592 0.05828 ... -0.2126 -0.6315 -0.5751 -0.5354</span></div><div class="xr-array-data"><pre>array([[ 0.4915219 ,  0.24733381,  0.08592446, ..., -0.366651  ,
          0.30723202,  0.43520752],
        [ 0.1664538 , -0.10728736,  0.35630295, ...,  0.8608913 ,
          0.03464809,  0.11020081],
@@ -732,7 +735,7 @@ Attributes: (3/8)
        [-0.00340644, -1.0050421 ,  0.7278904 , ...,  0.580743  ,
         -0.50856245, -0.2727615 ],
        [-1.2668517 , -1.4769105 , -0.3562023 , ..., -0.63146234,
-        -0.575121  , -0.5354325 ]], dtype=float32)</pre></div></div></li><li class="xr-section-item"><input id="section-18f27d65-3996-495e-a77f-651d17596c8f" class="xr-section-summary-in" type="checkbox" checked=""><label for="section-18f27d65-3996-495e-a77f-651d17596c8f" class="xr-section-summary">Coordinates: <span>(4)</span></label><div class="xr-section-inline-details"></div><div class="xr-section-details"><ul class="xr-var-list"><li class="xr-var-item"><div class="xr-var-name"><span>x</span></div><div class="xr-var-dims">(neuroid)</div><div class="xr-var-dtype">uint8</div><div class="xr-var-preview xr-preview">12 12 12 12 12 ... 72 72 72 72 72</div><input id="attrs-83ea8426-4be1-4109-9e97-9269cbd58207" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-83ea8426-4be1-4109-9e97-9269cbd58207" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-d6e0a313-be13-4c44-98e4-274e3a45e89b" class="xr-var-data-in" type="checkbox"><label for="data-d6e0a313-be13-4c44-98e4-274e3a45e89b" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array([12, 12, 12, ..., 72, 72, 72], dtype=uint8)</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span>y</span></div><div class="xr-var-dims">(neuroid)</div><div class="xr-var-dtype">uint8</div><div class="xr-var-preview xr-preview">21 22 22 22 22 ... 29 30 30 30 31</div><input id="attrs-fd2cf6de-f34a-40b0-b064-4a75766249ef" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-fd2cf6de-f34a-40b0-b064-4a75766249ef" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-e22c053f-971c-45f2-b43b-885e1559eb26" class="xr-var-data-in" type="checkbox"><label for="data-e22c053f-971c-45f2-b43b-885e1559eb26" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array([21, 22, 22, ..., 30, 30, 31], dtype=uint8)</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span>z</span></div><div class="xr-var-dims">(neuroid)</div><div class="xr-var-dtype">uint8</div><div class="xr-var-preview xr-preview">47 45 46 47 48 ... 46 45 46 49 49</div><input id="attrs-ef6b0c95-aab1-442a-a4a4-909ff5b68080" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-ef6b0c95-aab1-442a-a4a4-909ff5b68080" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-b1c5aba3-57bc-48be-9305-d3f4abcceb38" class="xr-var-data-in" type="checkbox"><label for="data-b1c5aba3-57bc-48be-9305-d3f4abcceb38" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array([47, 45, 46, ..., 46, 49, 49], dtype=uint8)</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span>stimulus_id</span></div><div class="xr-var-dims">(presentation)</div><div class="xr-var-dtype">object</div><div class="xr-var-preview xr-preview">'image02950' ... 'image72948'</div><input id="attrs-b29474a1-6fd6-4586-b8e4-3e4766e78bc5" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-b29474a1-6fd6-4586-b8e4-3e4766e78bc5" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-e918a68b-8c78-4eff-aca7-d7133bbc4bef" class="xr-var-data-in" type="checkbox"><label for="data-e918a68b-8c78-4eff-aca7-d7133bbc4bef" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array(['image02950', 'image02990', 'image03049', 'image03077',
+        -0.575121  , -0.5354325 ]], dtype=float32)</pre></div></div></li><li class="xr-section-item"><input id="section-ca5e8638-d766-4e00-8c81-2fa85804d783" class="xr-section-summary-in" type="checkbox" checked=""><label for="section-ca5e8638-d766-4e00-8c81-2fa85804d783" class="xr-section-summary">Coordinates: <span>(4)</span></label><div class="xr-section-inline-details"></div><div class="xr-section-details"><ul class="xr-var-list"><li class="xr-var-item"><div class="xr-var-name"><span>x</span></div><div class="xr-var-dims">(neuroid)</div><div class="xr-var-dtype">uint8</div><div class="xr-var-preview xr-preview">12 12 12 12 12 ... 72 72 72 72 72</div><input id="attrs-1306563c-7891-4637-8af6-06ad670013b9" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-1306563c-7891-4637-8af6-06ad670013b9" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-08e3be41-bfa0-4f2b-ad0b-4c659f3932ac" class="xr-var-data-in" type="checkbox"><label for="data-08e3be41-bfa0-4f2b-ad0b-4c659f3932ac" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array([12, 12, 12, ..., 72, 72, 72], dtype=uint8)</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span>y</span></div><div class="xr-var-dims">(neuroid)</div><div class="xr-var-dtype">uint8</div><div class="xr-var-preview xr-preview">21 22 22 22 22 ... 29 30 30 30 31</div><input id="attrs-ab17b179-f6e5-493c-bc17-c6828a4ed056" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-ab17b179-f6e5-493c-bc17-c6828a4ed056" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-de776aaa-7d0f-465c-a6f0-43ebad9a00aa" class="xr-var-data-in" type="checkbox"><label for="data-de776aaa-7d0f-465c-a6f0-43ebad9a00aa" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array([21, 22, 22, ..., 30, 30, 31], dtype=uint8)</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span>z</span></div><div class="xr-var-dims">(neuroid)</div><div class="xr-var-dtype">uint8</div><div class="xr-var-preview xr-preview">47 45 46 47 48 ... 46 45 46 49 49</div><input id="attrs-ae7ca27b-e77a-495d-805a-be99c7c14d28" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-ae7ca27b-e77a-495d-805a-be99c7c14d28" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-b464f06b-8cbe-4719-82ec-67168e4f8126" class="xr-var-data-in" type="checkbox"><label for="data-b464f06b-8cbe-4719-82ec-67168e4f8126" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array([47, 45, 46, ..., 46, 49, 49], dtype=uint8)</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span>stimulus_id</span></div><div class="xr-var-dims">(presentation)</div><div class="xr-var-dtype">object</div><div class="xr-var-preview xr-preview">'image02950' ... 'image72948'</div><input id="attrs-635caa7d-49a9-4372-a8f8-4825837f1e95" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-635caa7d-49a9-4372-a8f8-4825837f1e95" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-a7d2d172-7a49-4e59-b70c-0ee2a38e666d" class="xr-var-data-in" type="checkbox"><label for="data-a7d2d172-7a49-4e59-b70c-0ee2a38e666d" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array(['image02950', 'image02990', 'image03049', 'image03077',
        'image03146', 'image03157', 'image03164', 'image03171',
        'image03181', 'image03386', 'image03434', 'image03449',
        'image03489', 'image03626', 'image03682', 'image03687',
@@ -772,7 +775,7 @@ Attributes: (3/8)
        'image71410', 'image71450', 'image71753', 'image71894',
        'image72015', 'image72080', 'image72209', 'image72312',
        'image72510', 'image72605', 'image72719', 'image72948'],
-      dtype=object)</pre></div></li></ul></div></li><li class="xr-section-item"><input id="section-1e2b0888-11b7-4f35-ba9c-3a7633cc2289" class="xr-section-summary-in" type="checkbox" disabled=""><label for="section-1e2b0888-11b7-4f35-ba9c-3a7633cc2289" class="xr-section-summary" title="Expand/collapse section">Indexes: <span>(0)</span></label><div class="xr-section-inline-details"></div><div class="xr-section-details"><ul class="xr-var-list"></ul></div></li><li class="xr-section-item"><input id="section-1c0bf6e3-11cd-4640-a98d-fabe5c192330" class="xr-section-summary-in" type="checkbox" checked=""><label for="section-1c0bf6e3-11cd-4640-a98d-fabe5c192330" class="xr-section-summary">Attributes: <span>(8)</span></label><div class="xr-section-inline-details"></div><div class="xr-section-details"><dl class="xr-attrs"><dt><span>resolution :</span></dt><dd>1pt8mm</dd><dt><span>preprocessing :</span></dt><dd>fithrf_GLMdenoise_RR</dd><dt><span>z_score :</span></dt><dd>True</dd><dt><span>roi :</span></dt><dd>general</dd><dt><span>subject :</span></dt><dd>0</dd><dt><span>brain shape :</span></dt><dd>[ 81 104  83]</dd><dt><span>citation :</span></dt><dd>Allen, E.J., St-Yves, G., Wu, Y. et al. A massive 7T fMRI dataset to bridge cognitive neuroscience and artificial intelligence. Nat Neurosci 25, 116-126 (2022). https://doi.org/10.1038/s41593-021-00962-x</dd><dt><span>postprocessing :</span></dt><dd>averaged across first two repetitions</dd></dl></div></li></ul></div></div>
+      dtype=object)</pre></div></li></ul></div></li><li class="xr-section-item"><input id="section-31e45518-defc-45ea-9475-e58463f09b7a" class="xr-section-summary-in" type="checkbox" disabled=""><label for="section-31e45518-defc-45ea-9475-e58463f09b7a" class="xr-section-summary" title="Expand/collapse section">Indexes: <span>(0)</span></label><div class="xr-section-inline-details"></div><div class="xr-section-details"><ul class="xr-var-list"></ul></div></li><li class="xr-section-item"><input id="section-ebec68ea-19a3-469f-ae34-ecd2c67589c9" class="xr-section-summary-in" type="checkbox" checked=""><label for="section-ebec68ea-19a3-469f-ae34-ecd2c67589c9" class="xr-section-summary">Attributes: <span>(8)</span></label><div class="xr-section-inline-details"></div><div class="xr-section-details"><dl class="xr-attrs"><dt><span>resolution :</span></dt><dd>1pt8mm</dd><dt><span>preprocessing :</span></dt><dd>fithrf_GLMdenoise_RR</dd><dt><span>z_score :</span></dt><dd>True</dd><dt><span>roi :</span></dt><dd>general</dd><dt><span>subject :</span></dt><dd>0</dd><dt><span>brain shape :</span></dt><dd>[ 81 104  83]</dd><dt><span>citation :</span></dt><dd>Allen, E.J., St-Yves, G., Wu, Y. et al. A massive 7T fMRI dataset to bridge cognitive neuroscience and artificial intelligence. Nat Neurosci 25, 116-126 (2022). https://doi.org/10.1038/s41593-021-00962-x</dd><dt><span>postprocessing :</span></dt><dd>averaged across first two repetitions</dd></dl></div></li></ul></div></div>
 </div>
 </div>
 <div class="callout callout-style-default callout-note callout-titled">
@@ -789,7 +792,7 @@ Some fMRI preprocessing details
 </div>
 </div>
 <p>Here are some examples of stimuli that we analyzed.</p>
-<div id="cell-view_stimuli" class="cell page-columns page-full" data-execution_count="6">
+<div id="cell-view_stimuli" class="cell page-columns page-full" data-execution_count="7">
 <details>
 <summary>Load the stimuli</summary>
 <div class="sourceCode cell-code" id="cell-view_stimuli"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cell-view_stimuli-1"><a href="#cell-view_stimuli-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> view_stimuli(stimuli: xr.DataArray, <span class="op">*</span>, n: <span class="bu">int</span> <span class="op">=</span> <span class="dv">10</span>) <span class="op">-&gt;</span> <span class="va">None</span>:</span>
@@ -820,33 +823,33 @@ Some fMRI preprocessing details
 <section id="the-neural-eigenspectrum" class="level3 page-columns page-full">
 <h3 class="anchored" data-anchor-id="the-neural-eigenspectrum">The neural eigenspectrum</h3>
 <p>Now we can apply PCA to the neural responses and plot the eigenspectrum of the data!</p>
-<div id="cfb2976e" class="cell" data-execution_count="7">
+<div id="948ddcba" class="cell" data-execution_count="8">
 <details>
 <summary>Visualize the eigenspectrum</summary>
-<div class="sourceCode cell-code" id="cfb2976e"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cfb2976e-1"><a href="#cfb2976e-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> view_eigenspectrum(pca: PCA, <span class="op">*</span>, log: <span class="bu">bool</span> <span class="op">=</span> <span class="va">False</span>) <span class="op">-&gt;</span> <span class="va">None</span>:</span>
-<span id="cfb2976e-2"><a href="#cfb2976e-2" aria-hidden="true" tabindex="-1"></a>    eigenvalues <span class="op">=</span> pd.DataFrame(pca.explained_variance_, columns<span class="op">=</span>[<span class="st">"eigenvalue"</span>]).assign(</span>
-<span id="cfb2976e-3"><a href="#cfb2976e-3" aria-hidden="true" tabindex="-1"></a>        rank<span class="op">=</span><span class="dv">1</span> <span class="op">+</span> np.arange(pca.n_components_)</span>
-<span id="cfb2976e-4"><a href="#cfb2976e-4" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cfb2976e-5"><a href="#cfb2976e-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cfb2976e-6"><a href="#cfb2976e-6" aria-hidden="true" tabindex="-1"></a>    fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">6</span>, <span class="dv">6</span>))</span>
-<span id="cfb2976e-7"><a href="#cfb2976e-7" aria-hidden="true" tabindex="-1"></a>    sns.lineplot(</span>
-<span id="cfb2976e-8"><a href="#cfb2976e-8" aria-hidden="true" tabindex="-1"></a>        ax<span class="op">=</span>ax,</span>
-<span id="cfb2976e-9"><a href="#cfb2976e-9" aria-hidden="true" tabindex="-1"></a>        data<span class="op">=</span>eigenvalues.loc[eigenvalues[<span class="st">"rank"</span>] <span class="op">&lt;</span> pca.n_components_],</span>
-<span id="cfb2976e-10"><a href="#cfb2976e-10" aria-hidden="true" tabindex="-1"></a>        x<span class="op">=</span><span class="st">"rank"</span>,</span>
-<span id="cfb2976e-11"><a href="#cfb2976e-11" aria-hidden="true" tabindex="-1"></a>        y<span class="op">=</span><span class="st">"eigenvalue"</span>,</span>
-<span id="cfb2976e-12"><a href="#cfb2976e-12" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cfb2976e-13"><a href="#cfb2976e-13" aria-hidden="true" tabindex="-1"></a>    sns.despine(ax<span class="op">=</span>ax)</span>
-<span id="cfb2976e-14"><a href="#cfb2976e-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> log:</span>
-<span id="cfb2976e-15"><a href="#cfb2976e-15" aria-hidden="true" tabindex="-1"></a>        ax.set_xscale(<span class="st">"log"</span>)</span>
-<span id="cfb2976e-16"><a href="#cfb2976e-16" aria-hidden="true" tabindex="-1"></a>        ax.set_yscale(<span class="st">"log"</span>)</span>
-<span id="cfb2976e-17"><a href="#cfb2976e-17" aria-hidden="true" tabindex="-1"></a>        ax.set_ylim(bottom<span class="op">=</span><span class="dv">1</span>)</span>
-<span id="cfb2976e-18"><a href="#cfb2976e-18" aria-hidden="true" tabindex="-1"></a>    fig.show()</span>
-<span id="cfb2976e-19"><a href="#cfb2976e-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cfb2976e-20"><a href="#cfb2976e-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cfb2976e-21"><a href="#cfb2976e-21" aria-hidden="true" tabindex="-1"></a>pca <span class="op">=</span> PCA()</span>
-<span id="cfb2976e-22"><a href="#cfb2976e-22" aria-hidden="true" tabindex="-1"></a>pca.fit(data)</span>
-<span id="cfb2976e-23"><a href="#cfb2976e-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cfb2976e-24"><a href="#cfb2976e-24" aria-hidden="true" tabindex="-1"></a>view_eigenspectrum(pca)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="948ddcba"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="948ddcba-1"><a href="#948ddcba-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> view_eigenspectrum(pca: PCA, <span class="op">*</span>, log: <span class="bu">bool</span> <span class="op">=</span> <span class="va">False</span>) <span class="op">-&gt;</span> <span class="va">None</span>:</span>
+<span id="948ddcba-2"><a href="#948ddcba-2" aria-hidden="true" tabindex="-1"></a>    eigenvalues <span class="op">=</span> pd.DataFrame(pca.explained_variance_, columns<span class="op">=</span>[<span class="st">"eigenvalue"</span>]).assign(</span>
+<span id="948ddcba-3"><a href="#948ddcba-3" aria-hidden="true" tabindex="-1"></a>        rank<span class="op">=</span><span class="dv">1</span> <span class="op">+</span> np.arange(pca.n_components_)</span>
+<span id="948ddcba-4"><a href="#948ddcba-4" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="948ddcba-5"><a href="#948ddcba-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="948ddcba-6"><a href="#948ddcba-6" aria-hidden="true" tabindex="-1"></a>    fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">6</span>, <span class="dv">6</span>))</span>
+<span id="948ddcba-7"><a href="#948ddcba-7" aria-hidden="true" tabindex="-1"></a>    sns.lineplot(</span>
+<span id="948ddcba-8"><a href="#948ddcba-8" aria-hidden="true" tabindex="-1"></a>        ax<span class="op">=</span>ax,</span>
+<span id="948ddcba-9"><a href="#948ddcba-9" aria-hidden="true" tabindex="-1"></a>        data<span class="op">=</span>eigenvalues.loc[eigenvalues[<span class="st">"rank"</span>] <span class="op">&lt;</span> pca.n_components_],</span>
+<span id="948ddcba-10"><a href="#948ddcba-10" aria-hidden="true" tabindex="-1"></a>        x<span class="op">=</span><span class="st">"rank"</span>,</span>
+<span id="948ddcba-11"><a href="#948ddcba-11" aria-hidden="true" tabindex="-1"></a>        y<span class="op">=</span><span class="st">"eigenvalue"</span>,</span>
+<span id="948ddcba-12"><a href="#948ddcba-12" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="948ddcba-13"><a href="#948ddcba-13" aria-hidden="true" tabindex="-1"></a>    sns.despine(ax<span class="op">=</span>ax)</span>
+<span id="948ddcba-14"><a href="#948ddcba-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> log:</span>
+<span id="948ddcba-15"><a href="#948ddcba-15" aria-hidden="true" tabindex="-1"></a>        ax.set_xscale(<span class="st">"log"</span>)</span>
+<span id="948ddcba-16"><a href="#948ddcba-16" aria-hidden="true" tabindex="-1"></a>        ax.set_yscale(<span class="st">"log"</span>)</span>
+<span id="948ddcba-17"><a href="#948ddcba-17" aria-hidden="true" tabindex="-1"></a>        ax.set_ylim(bottom<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="948ddcba-18"><a href="#948ddcba-18" aria-hidden="true" tabindex="-1"></a>    fig.show()</span>
+<span id="948ddcba-19"><a href="#948ddcba-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="948ddcba-20"><a href="#948ddcba-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="948ddcba-21"><a href="#948ddcba-21" aria-hidden="true" tabindex="-1"></a>pca <span class="op">=</span> PCA()</span>
+<span id="948ddcba-22"><a href="#948ddcba-22" aria-hidden="true" tabindex="-1"></a>pca.fit(data)</span>
+<span id="948ddcba-23"><a href="#948ddcba-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="948ddcba-24"><a href="#948ddcba-24" aria-hidden="true" tabindex="-1"></a>view_eigenspectrum(pca)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-display">
 <div class="quarto-figure quarto-figure-center">
@@ -860,7 +863,7 @@ Some fMRI preprocessing details
 <p>On this plot, the first few PCs have substantial variance while there appears to be negligible variance after about rank 20. How can we interpret these PCs of different variance levels? There are some simple ways to visualize these PCs.</p>
 <section id="visualizing-principal-components" class="level4 page-columns page-full">
 <h4 class="anchored" data-anchor-id="visualizing-principal-components">Visualizing principal components</h4>
-<div id="image_viewing_utilities" class="cell" data-execution_count="8">
+<div id="image_viewing_utilities" class="cell" data-execution_count="9">
 <details>
 <summary>Utilities to view images</summary>
 <div class="sourceCode cell-code" id="image_viewing_utilities"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="image_viewing_utilities-1"><a href="#image_viewing_utilities-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> view_images_as_scatterplot(</span>
@@ -925,11 +928,11 @@ Some fMRI preprocessing details
 </details>
 </div>
 <p>The first method is to plot the stimuli on a scatter plot, designating their X and Y coordinates to be their scores along two PCs of interest. This allows us to observe potential clustering of the stimuli.</p>
-<div id="ef7916f2" class="cell page-columns page-full" data-execution_count="9">
+<div id="5174c148" class="cell page-columns page-full" data-execution_count="10">
 <details>
 <summary>Project the neural data onto the first two principal components</summary>
-<div class="sourceCode cell-code" id="ef7916f2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="ef7916f2-1"><a href="#ef7916f2-1" aria-hidden="true" tabindex="-1"></a>data_pca <span class="op">=</span> pca.transform(data)</span>
-<span id="ef7916f2-2"><a href="#ef7916f2-2" aria-hidden="true" tabindex="-1"></a>view_images_as_scatterplot(data_pca[:, <span class="dv">0</span>], data_pca[:, <span class="dv">1</span>], stimuli<span class="op">=</span>stimuli)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="5174c148"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="5174c148-1"><a href="#5174c148-1" aria-hidden="true" tabindex="-1"></a>data_pca <span class="op">=</span> pca.transform(data)</span>
+<span id="5174c148-2"><a href="#5174c148-2" aria-hidden="true" tabindex="-1"></a>view_images_as_scatterplot(data_pca[:, <span class="dv">0</span>], data_pca[:, <span class="dv">1</span>], stimuli<span class="op">=</span>stimuli)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-display page-columns page-full">
 <div class="quarto-figure quarto-figure-center page-columns page-full">
@@ -940,7 +943,7 @@ Some fMRI preprocessing details
 </div>
 </div>
 <p>Alternativley, we can focus on the stimuli with the highest or lowest scores along a given PC. It provides simple clues of what this PC might be sensitive to, which could be features ranging from low to high complexity level.</p>
-<div id="extreme_images_pcs" class="cell page-columns page-full" data-execution_count="10">
+<div id="extreme_images_pcs" class="cell page-columns page-full" data-execution_count="11">
 <details>
 <summary>View images that have extreme scores on the PCs</summary>
 <div class="sourceCode cell-code" id="extreme_images_pcs"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="extreme_images_pcs-1"><a href="#extreme_images_pcs-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> rank <span class="kw">in</span> [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">10</span>, <span class="dv">50</span>, <span class="dv">100</span>]:</span>
@@ -1002,16 +1005,16 @@ What about other methods?
 <div id="callout-3" class="callout-3-contents callout-collapse collapse page-columns page-full">
 <div class="callout-body-container callout-body page-columns page-full">
 <p>Interpreting PCs can be challenging especially when we rely solely on visual inspection. This difficulty arises, in part, because many natural features are non-negative. As a result, methods like nonnegative matrix factorization (NMF) often offer more interpretable dimensions than PCA.</p>
-<div id="f4f3366e" class="cell page-columns page-full" data-execution_count="11">
+<div id="a13d831c" class="cell page-columns page-full" data-execution_count="12">
 <details>
 <summary>Compute NMF of neural responses</summary>
-<div class="sourceCode cell-code" id="f4f3366e"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="f4f3366e-1"><a href="#f4f3366e-1" aria-hidden="true" tabindex="-1"></a>scaler <span class="op">=</span> MinMaxScaler()</span>
-<span id="f4f3366e-2"><a href="#f4f3366e-2" aria-hidden="true" tabindex="-1"></a>scaler.fit(data)</span>
-<span id="f4f3366e-3"><a href="#f4f3366e-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="f4f3366e-4"><a href="#f4f3366e-4" aria-hidden="true" tabindex="-1"></a>nmf <span class="op">=</span> NMF(n_components<span class="op">=</span><span class="dv">2</span>, random_state<span class="op">=</span>random_state)</span>
-<span id="f4f3366e-5"><a href="#f4f3366e-5" aria-hidden="true" tabindex="-1"></a>data_nmf <span class="op">=</span> nmf.fit_transform(scaler.transform(data))</span>
-<span id="f4f3366e-6"><a href="#f4f3366e-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="f4f3366e-7"><a href="#f4f3366e-7" aria-hidden="true" tabindex="-1"></a>view_images_as_scatterplot(data_nmf[:, <span class="dv">0</span>], data_nmf[:, <span class="dv">1</span>], stimuli<span class="op">=</span>stimuli)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="a13d831c"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="a13d831c-1"><a href="#a13d831c-1" aria-hidden="true" tabindex="-1"></a>scaler <span class="op">=</span> MinMaxScaler()</span>
+<span id="a13d831c-2"><a href="#a13d831c-2" aria-hidden="true" tabindex="-1"></a>scaler.fit(data)</span>
+<span id="a13d831c-3"><a href="#a13d831c-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="a13d831c-4"><a href="#a13d831c-4" aria-hidden="true" tabindex="-1"></a>nmf <span class="op">=</span> NMF(n_components<span class="op">=</span><span class="dv">2</span>, random_state<span class="op">=</span>random_state)</span>
+<span id="a13d831c-5"><a href="#a13d831c-5" aria-hidden="true" tabindex="-1"></a>data_nmf <span class="op">=</span> nmf.fit_transform(scaler.transform(data))</span>
+<span id="a13d831c-6"><a href="#a13d831c-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="a13d831c-7"><a href="#a13d831c-7" aria-hidden="true" tabindex="-1"></a>view_images_as_scatterplot(data_nmf[:, <span class="dv">0</span>], data_nmf[:, <span class="dv">1</span>], stimuli<span class="op">=</span>stimuli)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-display page-columns page-full">
 <div class="quarto-figure quarto-figure-center page-columns page-full">
@@ -1022,11 +1025,11 @@ What about other methods?
 </div>
 </div>
 <p>Similarly, we can inspect the stimuli with highest or closest-to-zero values along each dimension.</p>
-<div id="ba2197b6" class="cell page-columns page-full" data-execution_count="12">
+<div id="a388d5aa" class="cell page-columns page-full" data-execution_count="13">
 <details>
 <summary>View images that have extreme scores on the dimensions</summary>
-<div class="sourceCode cell-code" id="ba2197b6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="ba2197b6-1"><a href="#ba2197b6-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> dim <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">2</span>):</span>
-<span id="ba2197b6-2"><a href="#ba2197b6-2" aria-hidden="true" tabindex="-1"></a>    view_images_at_poles(data_pca[:, dim], stimuli<span class="op">=</span>stimuli, label<span class="op">=</span><span class="ss">f"dim </span><span class="sc">{</span>dim<span class="op">+</span><span class="dv">1</span><span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="a388d5aa"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="a388d5aa-1"><a href="#a388d5aa-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> dim <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">2</span>):</span>
+<span id="a388d5aa-2"><a href="#a388d5aa-2" aria-hidden="true" tabindex="-1"></a>    view_images_at_poles(data_pca[:, dim], stimuli<span class="op">=</span>stimuli, label<span class="op">=</span><span class="ss">f"dim </span><span class="sc">{</span>dim<span class="op">+</span><span class="dv">1</span><span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-display page-columns page-full">
 <div class="quarto-figure quarto-figure-center page-columns page-full">
@@ -1053,10 +1056,10 @@ What about other methods?
 <section id="logarithmic-scale" class="level4">
 <h4 class="anchored" data-anchor-id="logarithmic-scale">Logarithmic scale</h4>
 <p>Given these visualization, we might deem that the higher-rank PCs are non-interpretable and thus follow the common practice to drop them. However, before doing so, let’s try visualizing the spectrum on a logarithmic scale for both axes:</p>
-<div id="5bdbf3d3" class="cell" data-execution_count="13">
+<div id="e50dfabe" class="cell" data-execution_count="14">
 <details>
 <summary>Visualize the eigenspectrum on a logarithmic scale</summary>
-<div class="sourceCode cell-code" id="5bdbf3d3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="5bdbf3d3-1"><a href="#5bdbf3d3-1" aria-hidden="true" tabindex="-1"></a>view_eigenspectrum(pca, log<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="e50dfabe"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="e50dfabe-1"><a href="#e50dfabe-1" aria-hidden="true" tabindex="-1"></a>view_eigenspectrum(pca, log<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-display">
 <div class="quarto-figure quarto-figure-center">
@@ -1091,7 +1094,7 @@ What about other methods?
 <section id="an-illustration-word-frequencies" class="level3">
 <h3 class="anchored" data-anchor-id="an-illustration-word-frequencies">An illustration: word frequencies</h3>
 <p>Let’s compute the distribution of word frequencies in a small corpus – a collection of <a href="https://pytorch.org/text/0.9.0/datasets.html#imdb">IMDb movie reviews</a>!</p>
-<div id="generate-word-frequencies" class="cell" data-execution_count="14">
+<div id="generate-word-frequencies" class="cell" data-execution_count="15">
 <details>
 <summary>Generate word frequency distribution</summary>
 <div class="sourceCode cell-code" id="generate-word-frequencies"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="generate-word-frequencies-1"><a href="#generate-word-frequencies-1" aria-hidden="true" tabindex="-1"></a>dataset <span class="op">=</span> IMDB(split<span class="op">=</span><span class="st">"test"</span>)</span>
@@ -1103,34 +1106,32 @@ What about other methods?
 <span id="generate-word-frequencies-7"><a href="#generate-word-frequencies-7" aria-hidden="true" tabindex="-1"></a>    counter.update(tokenizer(text))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="cell-linear-word-frequency" class="cell" data-execution_count="15">
+<div id="cell-linear-word-frequency" class="cell" data-execution_count="16">
 <details>
 <summary>View word frequency distribution on a linear scale</summary>
-<div class="sourceCode cell-code" id="cell-linear-word-frequency"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cell-linear-word-frequency-1"><a href="#cell-linear-word-frequency-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> view_word_frequency_distribution(</span>
-<span id="cell-linear-word-frequency-2"><a href="#cell-linear-word-frequency-2" aria-hidden="true" tabindex="-1"></a>    counter: Counter, <span class="op">*</span>, log: <span class="bu">bool</span> <span class="op">=</span> <span class="va">False</span></span>
-<span id="cell-linear-word-frequency-3"><a href="#cell-linear-word-frequency-3" aria-hidden="true" tabindex="-1"></a>) <span class="op">-&gt;</span> mpl.figure.Figure:</span>
-<span id="cell-linear-word-frequency-4"><a href="#cell-linear-word-frequency-4" aria-hidden="true" tabindex="-1"></a>    fig, ax <span class="op">=</span> plt.subplots()</span>
-<span id="cell-linear-word-frequency-5"><a href="#cell-linear-word-frequency-5" aria-hidden="true" tabindex="-1"></a>    sns.lineplot(</span>
-<span id="cell-linear-word-frequency-6"><a href="#cell-linear-word-frequency-6" aria-hidden="true" tabindex="-1"></a>        ax<span class="op">=</span>ax,</span>
-<span id="cell-linear-word-frequency-7"><a href="#cell-linear-word-frequency-7" aria-hidden="true" tabindex="-1"></a>        data<span class="op">=</span>pd.DataFrame(</span>
-<span id="cell-linear-word-frequency-8"><a href="#cell-linear-word-frequency-8" aria-hidden="true" tabindex="-1"></a>            {</span>
-<span id="cell-linear-word-frequency-9"><a href="#cell-linear-word-frequency-9" aria-hidden="true" tabindex="-1"></a>                <span class="st">"rank"</span>: <span class="dv">1</span> <span class="op">+</span> np.arange(<span class="bu">len</span>(counter)),</span>
-<span id="cell-linear-word-frequency-10"><a href="#cell-linear-word-frequency-10" aria-hidden="true" tabindex="-1"></a>                <span class="st">"word frequency"</span>: <span class="bu">sorted</span>(counter.values())[::<span class="op">-</span><span class="dv">1</span>],</span>
-<span id="cell-linear-word-frequency-11"><a href="#cell-linear-word-frequency-11" aria-hidden="true" tabindex="-1"></a>            }</span>
-<span id="cell-linear-word-frequency-12"><a href="#cell-linear-word-frequency-12" aria-hidden="true" tabindex="-1"></a>        ),</span>
-<span id="cell-linear-word-frequency-13"><a href="#cell-linear-word-frequency-13" aria-hidden="true" tabindex="-1"></a>        x<span class="op">=</span><span class="st">"rank"</span>,</span>
-<span id="cell-linear-word-frequency-14"><a href="#cell-linear-word-frequency-14" aria-hidden="true" tabindex="-1"></a>        y<span class="op">=</span><span class="st">"word frequency"</span>,</span>
-<span id="cell-linear-word-frequency-15"><a href="#cell-linear-word-frequency-15" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cell-linear-word-frequency-16"><a href="#cell-linear-word-frequency-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> log:</span>
-<span id="cell-linear-word-frequency-17"><a href="#cell-linear-word-frequency-17" aria-hidden="true" tabindex="-1"></a>        ax.set_xscale(<span class="st">"log"</span>)</span>
-<span id="cell-linear-word-frequency-18"><a href="#cell-linear-word-frequency-18" aria-hidden="true" tabindex="-1"></a>        ax.set_yscale(<span class="st">"log"</span>)</span>
-<span id="cell-linear-word-frequency-19"><a href="#cell-linear-word-frequency-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cell-linear-word-frequency-20"><a href="#cell-linear-word-frequency-20" aria-hidden="true" tabindex="-1"></a>    sns.despine(ax<span class="op">=</span>ax, offset<span class="op">=</span><span class="dv">20</span>)</span>
-<span id="cell-linear-word-frequency-21"><a href="#cell-linear-word-frequency-21" aria-hidden="true" tabindex="-1"></a>    plt.close(fig)</span>
-<span id="cell-linear-word-frequency-22"><a href="#cell-linear-word-frequency-22" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> fig</span>
-<span id="cell-linear-word-frequency-23"><a href="#cell-linear-word-frequency-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cell-linear-word-frequency-24"><a href="#cell-linear-word-frequency-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cell-linear-word-frequency-25"><a href="#cell-linear-word-frequency-25" aria-hidden="true" tabindex="-1"></a>view_word_frequency_distribution(counter)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cell-linear-word-frequency"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cell-linear-word-frequency-1"><a href="#cell-linear-word-frequency-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> view_word_frequency_distribution(counter: Counter, <span class="op">*</span>, log: <span class="bu">bool</span> <span class="op">=</span> <span class="va">False</span>) <span class="op">-&gt;</span> Figure:</span>
+<span id="cell-linear-word-frequency-2"><a href="#cell-linear-word-frequency-2" aria-hidden="true" tabindex="-1"></a>    fig, ax <span class="op">=</span> plt.subplots()</span>
+<span id="cell-linear-word-frequency-3"><a href="#cell-linear-word-frequency-3" aria-hidden="true" tabindex="-1"></a>    sns.lineplot(</span>
+<span id="cell-linear-word-frequency-4"><a href="#cell-linear-word-frequency-4" aria-hidden="true" tabindex="-1"></a>        ax<span class="op">=</span>ax,</span>
+<span id="cell-linear-word-frequency-5"><a href="#cell-linear-word-frequency-5" aria-hidden="true" tabindex="-1"></a>        data<span class="op">=</span>pd.DataFrame(</span>
+<span id="cell-linear-word-frequency-6"><a href="#cell-linear-word-frequency-6" aria-hidden="true" tabindex="-1"></a>            {</span>
+<span id="cell-linear-word-frequency-7"><a href="#cell-linear-word-frequency-7" aria-hidden="true" tabindex="-1"></a>                <span class="st">"rank"</span>: <span class="dv">1</span> <span class="op">+</span> np.arange(<span class="bu">len</span>(counter)),</span>
+<span id="cell-linear-word-frequency-8"><a href="#cell-linear-word-frequency-8" aria-hidden="true" tabindex="-1"></a>                <span class="st">"word frequency"</span>: <span class="bu">sorted</span>(counter.values())[::<span class="op">-</span><span class="dv">1</span>],</span>
+<span id="cell-linear-word-frequency-9"><a href="#cell-linear-word-frequency-9" aria-hidden="true" tabindex="-1"></a>            }</span>
+<span id="cell-linear-word-frequency-10"><a href="#cell-linear-word-frequency-10" aria-hidden="true" tabindex="-1"></a>        ),</span>
+<span id="cell-linear-word-frequency-11"><a href="#cell-linear-word-frequency-11" aria-hidden="true" tabindex="-1"></a>        x<span class="op">=</span><span class="st">"rank"</span>,</span>
+<span id="cell-linear-word-frequency-12"><a href="#cell-linear-word-frequency-12" aria-hidden="true" tabindex="-1"></a>        y<span class="op">=</span><span class="st">"word frequency"</span>,</span>
+<span id="cell-linear-word-frequency-13"><a href="#cell-linear-word-frequency-13" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cell-linear-word-frequency-14"><a href="#cell-linear-word-frequency-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> log:</span>
+<span id="cell-linear-word-frequency-15"><a href="#cell-linear-word-frequency-15" aria-hidden="true" tabindex="-1"></a>        ax.set_xscale(<span class="st">"log"</span>)</span>
+<span id="cell-linear-word-frequency-16"><a href="#cell-linear-word-frequency-16" aria-hidden="true" tabindex="-1"></a>        ax.set_yscale(<span class="st">"log"</span>)</span>
+<span id="cell-linear-word-frequency-17"><a href="#cell-linear-word-frequency-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cell-linear-word-frequency-18"><a href="#cell-linear-word-frequency-18" aria-hidden="true" tabindex="-1"></a>    sns.despine(ax<span class="op">=</span>ax, offset<span class="op">=</span><span class="dv">20</span>)</span>
+<span id="cell-linear-word-frequency-19"><a href="#cell-linear-word-frequency-19" aria-hidden="true" tabindex="-1"></a>    plt.close(fig)</span>
+<span id="cell-linear-word-frequency-20"><a href="#cell-linear-word-frequency-20" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> fig</span>
+<span id="cell-linear-word-frequency-21"><a href="#cell-linear-word-frequency-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cell-linear-word-frequency-22"><a href="#cell-linear-word-frequency-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cell-linear-word-frequency-23"><a href="#cell-linear-word-frequency-23" aria-hidden="true" tabindex="-1"></a>view_word_frequency_distribution(counter)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-display" data-execution_count="14">
 <div id="linear-word-frequency" class="quarto-figure quarto-figure-center anchored">
@@ -1140,7 +1141,7 @@ What about other methods?
 </div>
 </div>
 </div>
-<div id="cell-logarithmic-word-frequency" class="cell" data-execution_count="16">
+<div id="cell-logarithmic-word-frequency" class="cell" data-execution_count="17">
 <details>
 <summary>View word frequency distribution on a logarithmic scale</summary>
 <div class="sourceCode cell-code" id="cell-logarithmic-word-frequency"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cell-logarithmic-word-frequency-1"><a href="#cell-logarithmic-word-frequency-1" aria-hidden="true" tabindex="-1"></a>view_word_frequency_distribution(counter, log<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -1153,7 +1154,7 @@ What about other methods?
 </div>
 </div>
 </div>
-<div id="cell-most-common-tokens" class="cell" data-execution_count="17">
+<div id="cell-most-common-tokens" class="cell" data-execution_count="18">
 <details>
 <summary>View the 200 most common words in the dataset</summary>
 <div class="sourceCode cell-code" id="cell-most-common-tokens"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cell-most-common-tokens-1"><a href="#cell-most-common-tokens-1" aria-hidden="true" tabindex="-1"></a>display_counter <span class="op">=</span> copy.copy(counter)</span>
@@ -1184,7 +1185,7 @@ What about other methods?
 </div>
 </div>
 </div>
-<div id="cell-least-common-tokens" class="cell" data-execution_count="18">
+<div id="cell-least-common-tokens" class="cell" data-execution_count="19">
 <details>
 <summary>View the 200 least common words in the dataset</summary>
 <div class="sourceCode cell-code" id="cell-least-common-tokens"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cell-least-common-tokens-1"><a href="#cell-least-common-tokens-1" aria-hidden="true" tabindex="-1"></a>display(</span>
@@ -1203,7 +1204,7 @@ What about other methods?
 </div>
 </div>
 </div>
-<div id="cell-text-original" class="cell" data-execution_count="19">
+<div id="cell-text-original" class="cell" data-execution_count="20">
 <details>
 <summary>Display an IMDb review</summary>
 <div class="sourceCode cell-code" id="cell-text-original"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cell-text-original-1"><a href="#cell-text-original-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> _, line <span class="kw">in</span> dataset:</span>
@@ -1257,7 +1258,7 @@ What about other methods?
 <blockquote class="blockquote">i love sci-fi and am willing to put up with a lot. Sci-fi movies/tv are usually underfunded, under-appreciated and misunderstood. I tried to like this, I really did, but it is to good tv sci-fi as babylon 5 is to star trek (the original). Silly prosthetics, cheap cardboard sets, stilted dialogues, cg that doesn't match the background, and painfully one-dimensional characters cannot be overcome with a'sci-fi'setting. (I'm sure there are those of you out there who think babylon 5 is good sci-fi tv. It's not. It's clichéd and uninspiring.) while us viewers might like emotion and character development, sci-fi is a genre that does not take itself seriously (cf. Star trek). It may treat important issues, yet not as a serious philosophy. It's really difficult to care about the characters here as they are not simply foolish, just missing a spark of life. Their actions and reactions are wooden and predictable, often painful to watch. The makers of earth know it's rubbish as they have to always say gene roddenberry's earth... Otherwise people would not continue watching. Roddenberry's ashes must be turning in their orbit as this dull, cheap, poorly edited (watching it without advert breaks really brings this home) trudging trabant of a show lumbers into space. Spoiler. So, kill off a main character. And then bring him back as another actor. Jeeez! Dallas all over again.</blockquote>
 </div>
 </div>
-<div id="cell-text-reconstruction" class="cell" data-execution_count="20">
+<div id="cell-text-reconstruction" class="cell" data-execution_count="21">
 <details>
 <summary>Reconstruct the review using the top 200 words</summary>
 <div class="sourceCode cell-code" id="cell-text-reconstruction"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cell-text-reconstruction-1"><a href="#cell-text-reconstruction-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Review reconstructed using top 200 words"</span>)</span>
@@ -1286,10 +1287,14 @@ What about other methods?
 <blockquote class="blockquote">i love and to up with a lot. Are, and. I to like this, I really did, but it is to good as is to (the).,,, that doesn't the, and characters be with a''. (I'm there are those of you out there who think is good. It's not. It's and.) while us like and character, is a that does not take (.). It, not as a. It's really to about the characters here as they are not, just a of life. Their and are and, to watch. The of know it's as they have to say's... People would not watching.'s be in their as this,, (watching it really this) of a show into.. So, off a character. And then him back as another.! All over again.</blockquote>
 </div>
 </div>
-<!-- TODO： emphasize "long-tailedness"/"heavy-tailedness" of distribution -->
-<!-- #### Power law in neural networks -->
+<!-- TODO: spectra of random data moved here? -->
+<p>TODO emphasize “long-tailedness”/“heavy-tailedness” of distribution <!-- TODO wrap the word cloud SVGs in <figure> tags to ensure proper display --></p>
+<section id="power-law-in-neural-networks" class="level4">
+<h4 class="anchored" data-anchor-id="power-law-in-neural-networks">Power law in neural networks</h4>
+<!-- TODO: ? -->
 
 
+</section>
 </section>
 </section>
 
