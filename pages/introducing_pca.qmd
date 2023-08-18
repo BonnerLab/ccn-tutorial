@@ -167,9 +167,12 @@ data = simulate_multiple_neuron_responses(
 display(data)
 ```
 
-### Visualizing the neurons
+## Understanding the neural code
 
-We can visualize the responses of each neuron to each dot. Note that this is a 1-dimensional scatterplot; the spread along the vertical axis is just for visualization purposes.
+How is this information encoded in the population activity? Is there a neuron that is sensitive to color and another that is sensitive to size?
+
+One way to understand this is by studying the neurons directly. Let's start by visualizing the response of each neuron to our stimuli. Note that the below plots are 1-dimensional scatterplot; the spread along the vertical axis is just for visualization purposes.
+
 
 ```{python}
 # | add-from: ../src/utilities/toy_example.py
@@ -195,33 +198,21 @@ view_individual_scatter(
 
 ```
 
-We can see that each neuron is tuned to both color *and* size. Additionally, note that the neurons' responses have different variances.
+By visualizing the responses, we can see that each neuron is tuned to both color *and* size. 
 
-```{python}
-# | label: variance
-# | code-summary: Compute the variance of each neuron's responses
+Additionally, we can use methods such as Representational Similarity Analysis (RSA)[@Kriegeskorte2008] to study the information content of the two neurons. In RSA, the dissimilarity between the response of two systems (here our two neurons) is obtained for each pair of stimuli and represented in a matrix of dissimilarities (a *representational dissimilarity matrix*, or RDM). Therefore, an RDM indicates the degree to which each pair of stimuli is distinguished by the two systems. 
 
-variances = data.var(dim="stimulus", ddof=1).round(3).rename("neuron variances")
-for i_neuron in range(variances.sizes["neuron"]):
-    print(f"variance of neuron {i_neuron + 1} responses: {variances[i_neuron].values}")
-print(f"total variance: {variances.sum().values}")
-```
-
-## Understanding the neural code
-
-How is this information encoded in the population activity? Is there a neuron that is sensitive to color and another that is sensitive to size? 
-
-A common approach to studying the information content of our 2 neurons is Representational Similarity Analysis (RSA)[@Kriegeskorte2008], where the dissimilarity of a neuron's response is obtained for each pair of stimuli and represented in a matrix of dissimilarities (a *representational dissimilarity matrix*, or RDM). Therefore, an RDM indicates the degree to which each pair of stimuli is distinguished by the neuron. 
-
-For instance, if neuron 1 was only senstive to color, we would expect to see a high dissimilarity for all pairs of stimuli with different colors, regardless of their size.
 
 ![](/resources/rsa.png)
 
-But what if the neural responses are more complicated, and we have multiple experimental conditions? Is there another view of the population code that might be more informative?
+What if we want to study the underlying structure of this code? Is there another view of the population code that might be more informative?
+
+
 
 ## Studying the latent dimensions
 
-Instead of directly studying the raw observed neural activity, we can focus on the underlying factors that capture the structure and variance in the data. 
+Instead of directly studying the neurons, we can focus on the underlying factors that capture the structure and variance in the data. 
+
 
 ### Some geometric intuition
 
@@ -382,7 +373,7 @@ def animate_pca_transformation(
     return animation.to_html5_video()
 
 
-display(HTML(animate_pca_transformation(data)))
+#display(HTML(animate_pca_transformation(data)))
 
 ```
 
@@ -395,7 +386,7 @@ As seen in the animation, we can transform our data to view the directions of ma
 
 ### The mathematical definition
 
-Given a data matrix $X \in \mathbb{R}^{N \times P}$, we need to compute the [eigendecomposition](reference.qmd#eigendecomposition)[^definition-eigendecomposition] of its [auto-covariance](reference.qmd#auto-covariance)[^definition-autocovariance]:
+Given a data matrix $X \in \mathbb{R}^{N \times P}$, we need to compute the [eigendecomposition](reference.qmd#eigendecomposition)[^definition-eigendecomposition] of its [covariance](reference.qmd#auto-covariance)[^definition-autocovariance]:
 
 $$
 \begin{align*}
@@ -405,12 +396,12 @@ $$
 \end{align*}
 $$
 
-To do this, we start by computing the auto-covariance of our data matrix, where $X$ is centered (i.e. $X - \overline{X}$)
+To do this, we start by computing the covariance of our data matrix, where $X$ is centered (i.e. $X - \overline{X}$)
 
 
 ![](/resources/autocovariance.svg){width=100%}
 
-Next , we compute the the eigendecomposition of the auto-covariance (though the computational steps we take to get there are slightly different, as shown later)
+Next , we compute the the eigendecomposition of the covariance (though the computational steps we take to get there are slightly different, as shown later)
 
 ![](/resources/eigendecomposition.svg){width=100%}
 
@@ -442,8 +433,8 @@ PCA can be used to project data into a lower-dimensional space (i.e. $p \le f$) 
 
 1. Center the data matrix.
 2. Compute its singular value decomposition[^definition-singular-value-decomposition].
-3. The right singular vectors $V$ of the data matrix are the eigenvectors of its auto-covariance.
-4. The singular values $\Sigma$ of the data matrix are related to the eigenvalues $\Lambda$ of its auto-covariance as $\Lambda = \Sigma^2 / (N - 1)$
+3. The right singular vectors $V$ of the data matrix are the eigenvectors of its covariance.
+4. The singular values $\Sigma$ of the data matrix are related to the eigenvalues $\Lambda$ of its covariance as $\Lambda = \Sigma^2 / (N - 1)$
 5. To project data from the ambient space to the latent space, we must subtract the mean computed in Step 1, and multiply the data by the eigenvectors.
 
 ```{python}
@@ -478,13 +469,13 @@ class PCA:
 ::: {.callout-tip collapse="true"}
 ### Why do we compute PCA this way instead of $\text{eig}(\text{cov}(X))$?
 
-To apply PCA to a data matrix, we might be tempted to use the definition and naively compute its [auto-covariance](reference.qmd#auto-covariance) followed by an [eigendecomposition](reference.qmd#eigendecomposition). However, when the number of neurons $P$ is large, this approach is memory-intensive and prone to numerical errors.
+To apply PCA to a data matrix, we might be tempted to use the definition and naively compute its [covariance](reference.qmd#auto-covariance) followed by an [eigendecomposition](reference.qmd#eigendecomposition). However, when the number of neurons $P$ is large, this approach is memory-intensive and prone to numerical errors.
 
 Instead, we can use the [singular value decomposition](reference.qmd#singular-value-decomposition) (SVD) of $X$ to efficiently compute its PCA transformation. Specifically, $X = U \Sigma V^\top$ is a singular value decomposition, where $U$ and $V$ are orthonormal and $\Sigma$ is diagonal.
 
-The auto-covariance matrix reduces to $X^\top X / (n - 1) = V \left(\frac{\Sigma^2}{n - 1} \right) V^\top$, which is exactly the eigendecomposition required.
+The covariance matrix reduces to $X^\top X / (n - 1) = V \left(\frac{\Sigma^2}{n - 1} \right) V^\top$, which is exactly the eigendecomposition required.
 
-Specifically, the eigenvalues $\lambda_i$ of the auto-covariance matrix are related to the singular values $\sigma_i$ of the data matrix as $\lambda_i = \sigma_i^2 / (N - 1)$, while the eigenvectors of the auto-covariance matrix are exactly the right singular vectors $V$ of the data matrix $X$.
+Specifically, the eigenvalues $\lambda_i$ of the covariance matrix are related to the singular values $\sigma_i$ of the data matrix as $\lambda_i = \sigma_i^2 / (N - 1)$, while the eigenvectors of the auto-covariance matrix are exactly the right singular vectors $V$ of the data matrix $X$.
 :::
 
 ::: {.callout-tip collapse="true"}
@@ -571,7 +562,7 @@ Note that these components do *not* directly correspond to either of the latent 
 
 ### Inspecting the eigenspectrum
 
-The eigenvalues show the variance along each eigenvector. The sum of the eigenvalues is therefore equal to the total variance,  and is the same as the total variance of the original data.
+The eigenvalues show the variance along each eigenvector. The sum of the eigenvalues is therefore equal to the total variance. 
 
 ```{python}
 # | label: eigenvalues
@@ -585,6 +576,19 @@ for i_neuron in range(eigenvalues.sizes["component"]):
     )
 print(f"total variance: {eigenvalues.sum().values}")
 ```
+We can also see that this is equal to the total variance in the original data.
+
+```{python}
+# | label: variance
+# | code-summary: Compute total variance in the original data
+
+variances = data.var(dim="stimulus", ddof=1).round(3).rename("neuron variances")
+for i_neuron in range(variances.sizes["neuron"]):
+    print(f"variance of neuron {i_neuron + 1} responses: {variances[i_neuron].values}")
+print(f"total variance: {variances.sum().values}")
+```
+
+
 We can plot the eigenvalues as a function of their rank to visualize the *eigensceptrum*. As we will see shortly, the eigenspectrum provides valuable insights about the laten dimensionality of the data. 
 
 ```{python}
@@ -668,13 +672,14 @@ view_individual_scatter(
 view_eigenspectrum(big_pca)
 ```
 
-Since we know that this data was generated from exactly *2* latent variables -- *color* and *size* -- we know that the latent dimensionality of the data must be $2$. Eyeballing the spectrum, we can corroborate this: the first two dimensions have much higher variance than the rest. We refer to these as the *effective dimensions*.
+We know by design that this data was generated from *2* latent variables -- *color* and *size*. The dimensionality of the data is also apparent from the eigenspectrum: the first two dimensions have much higher variance than the rest. We refer to these as the *effective dimensions*.
 
-However, in real datasets with naturalistic stimuli, we often don't know what the latent variables are! Based on the spectrum, several approaches are used to quantify the latent dimensionality of a dataset:
+However, in real datasets with naturalistic stimuli, we often don't know what the latent variables are! In these cases, its common to use the eigenspectrum to estimate the latent dimensionality of the data. There are several approaches for doing so:
+
 
 #### Rank of the covariance matrix
 
-The *rank* of the covariance matrix -- equal to the number of *nonzero* eigenvalues -- would be the latent dimensionality in the ideal setting where the data has zero noise. In real data, the rank is typically equal to the ambient dimensionality, since there is typically some variance along every dimension.
+The *rank* of the covariance matrix -- equal to the number of *nonzero* eigenvalues -- would be the latent dimensionality in the ideal setting where the data has zero noise. In real data, the rank is typically equal to the ambient dimensionality (which here is the number of neurons we record from), since there is typically some variance along every dimension.
 
 ```{python}
 # | code-summary: Set a threshold of zero on the variance
@@ -796,6 +801,7 @@ def view_eigenspectrum_knee(pca: PCA, *, knee: int) -> Figure:
 
 view_eigenspectrum_knee(big_pca, knee=3)
 ```
+So far, all of the techniques discussed largely depend on some paramter that needs ot be decided by the researcher. For instance, a cumulative threshold of 80% is an arbitrary choice, and if we decided to choose 90% instead, we would get a different number of dimensions. This is why sometimes a parameter-free estimate is preferred. 
 
 #### Computing a summary statistic over the entire spectrum
 
@@ -865,12 +871,15 @@ print(
 view_effective_dimensionality_examples(big_pca)
 ```
 
-## Takeaways
+## Takeaways and further thoughts
 
-- PCA is a useful tool for studying the latent dimensionality of reresentations.
-- However, keep in mind that this is a toy example with idealized data. As we will see, when using standard PCA on real data it may be impossible to identify a clear distinction between meaningful dimensions and noise.
+- PCA is a useful tool for studying the neural code and estimating the latent dimensionality of representations.
+- However, PCA focuses on how much variance is present along each dimension, and not the usefulness of the dimensions. Here we used a toy example with idealized data, where the high variance dimensions are meaninful and the low variance ones are noise. 
+- This may not always be the case, we could have very high variance noise dimensions, and low variance meaningful dimensions.
+- Later in the tutorial, we will discuss more powerful techniques that can handle such problems. But before that, let's analyze a real neuroscience dataset. 
 
-## Further thoughts
+
+## Additional notes
 
 ### Preprocessing the data
 
@@ -902,7 +911,7 @@ Note, however, that this transformation reduces the information in the system --
 
     This is an $f \times f$ matrix where the $(i, j)$-th element measures how much neuron $i$ covaries with neuron $j$. If the covariance is positive, they tend to have similar activation: a stimulus that activates one neuron will tend to activate the other. If the covariance is negative, the neurons will have dissimilar activation: a stimulus that activates one neuron will likely not activate the other.
 
-[^proof-eigenvalue-covariance]: Let's compute the auto-covariance of the projected data $\widetilde{X}$:
+[^proof-eigenvalue-covariance]: Let's compute the covariance of the projected data $\widetilde{X}$:
 
     $$
     \begin{align*}
