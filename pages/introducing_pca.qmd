@@ -171,7 +171,7 @@ display(data)
 
 How is this information encoded in the population activity? Is there a neuron that is sensitive to color and another that is sensitive to size?
 
-One way to understand this is by studying the neurons directly. Let's start by visualizing the response of each neuron to our stimuli. Note that the below plots are 1-dimensional scatterplot; the spread along the vertical axis is just for visualization purposes.
+One way to understand this is by studying the neurons directly. Let's start by visualizing the response of each neuron to our stimuli. Note that the below plots are 1-dimensional scatterplots; the spread along the vertical axis is just for visualization purposes.
 
 
 ```{python}
@@ -200,7 +200,7 @@ view_individual_scatter(
 
 By visualizing the responses, we can see that each neuron is tuned to both color *and* size. 
 
-Additionally, we can use methods such as Representational Similarity Analysis (RSA)[@Kriegeskorte2008] to study the information content of the two neurons. In RSA, the dissimilarity between the response of two systems (here our two neurons) is obtained for each pair of stimuli and represented in a matrix of dissimilarities (a *representational dissimilarity matrix*, or RDM). Therefore, an RDM indicates the degree to which each pair of stimuli is distinguished by the two systems. 
+We can also use methods such as Representational Similarity Analysis (RSA)[@Kriegeskorte2008] to study the information content of the two neurons. In RSA, the dissimilarity between the response of two systems (here our two neurons) is obtained for each pair of stimuli and represented in a matrix of dissimilarities (a *representational dissimilarity matrix*, or RDM). Therefore, an RDM indicates the degree to which each pair of stimuli is distinguished by the two systems. 
 
 
 ![](/resources/rsa.png)
@@ -672,9 +672,9 @@ view_individual_scatter(
 view_eigenspectrum(big_pca)
 ```
 
-We know by design that this data was generated from *2* latent variables -- *color* and *size*. The dimensionality of the data is also apparent from the eigenspectrum: the first two dimensions have much higher variance than the rest. We refer to these as the *effective dimensions*.
+We know by design that this data was generated from *2* latent variables -- *color* and *size*. However, in real datasets with naturalistic stimuli, we often don't know what the latent variables are! It's common to use the eigenspectrum to estimate the latent dimensionality of the data. For instance, inspecting the eigenspectrum of our toy example tells us that the first two dimensions have much higher variance than the rest. We refer to these as the *effective dimensions*.
 
-However, in real datasets with naturalistic stimuli, we often don't know what the latent variables are! In these cases, its common to use the eigenspectrum to estimate the latent dimensionality of the data. There are several approaches for doing so:
+In general, there are several approaches for estimating dimensionality based on the eigenspectrum:
 
 
 #### Rank of the covariance matrix
@@ -801,7 +801,7 @@ def view_eigenspectrum_knee(pca: PCA, *, knee: int) -> Figure:
 
 view_eigenspectrum_knee(big_pca, knee=3)
 ```
-So far, all of the techniques discussed largely depend on some paramter that needs ot be decided by the researcher. For instance, a cumulative threshold of 80% is an arbitrary choice, and if we decided to choose 90% instead, we would get a different number of dimensions. This is why sometimes a parameter-free estimate is preferred. 
+So far, all of the techniques discussed depend on a paramter that needs to be decided by the researcher. For instance, a cumulative threshold of 80% is an arbitrary choice, and if we decided to choose 90% instead, we would get a different number of dimensions. This is why sometimes a parameter-free estimate is preferred. 
 
 #### Computing a summary statistic over the entire spectrum
 
@@ -874,8 +874,9 @@ view_effective_dimensionality_examples(big_pca)
 ## Takeaways and further thoughts
 
 - PCA is a useful tool for studying the neural code and estimating the latent dimensionality of representations.
-- However, PCA focuses on how much variance is present along each dimension, and not the usefulness of the dimensions. Here we used a toy example with idealized data, where the high variance dimensions are meaninful and the low variance ones are noise. 
-- This may not always be the case, we could have very high variance noise dimensions, and low variance meaningful dimensions.
+- However, PCA focuses on how much variance is present along each dimension, and not the usefulness of the dimensions. 
+- Here we used a toy example with idealized data, where the high variance dimensions are meaninful and the low variance ones are noise. 
+- This may not always be the case, we could instead have high variance noise dimensions, and low variance meaningful dimensions.
 - Later in the tutorial, we will discuss more powerful techniques that can handle such problems. But before that, let's analyze a real neuroscience dataset. 
 
 
