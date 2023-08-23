@@ -105,7 +105,9 @@ view_stimuli(stimuli)
 
 ### Simulating neural responses
 
-Now, let's simulate some neural data. We need to decide how the $P = 2$ neurons might respond to these $N = 1000$ stimulus dots. Each neuron could respond to either one or both of the latent features that define these stimuli -- $\text{color}$ and $\text{size}$. The neuron's responses could also be subject to noise. Hence, we model each neuron’s response $r_\text{neuron}$ as a simple linear combination of the two latent features with stimulus-independent Gaussian noise $\epsilon$:
+Now, let's simulate some neural data. We need to decide how the $P = 2$ neurons might respond to these $N = 1000$ stimulus dots. Each neuron could respond to either one or both of the latent features that define these stimuli -- $\text{color}$ and $\text{size}$. The neuron's responses could also be subject to noise. 
+
+Here, we model each neuron’s response $r_\text{neuron}$ as a simple linear combination of the two latent features with stimulus-independent Gaussian noise $\epsilon$:
 
 $r_{\text{neuron}} \sim \beta_{\text{color}} \left( \text{color} \right) + \beta_{\text{size}} \left( \text{size} \right) + \epsilon$, where $\epsilon \sim \mathcal{N}(\mu_{\text{neuron}}, \sigma_{\text{neuron}}^2)$
 
@@ -486,7 +488,7 @@ Check out [truncated SVD](https://scikit-learn.org/stable/modules/generated/skle
 
 ## Transforming the dataset
 
-Let's now transform our data into its principal components and analyse it in this space.
+Let's now project our data into its principal components and analyse it in this space.
 
 ```{python}
 # | label: transforming-the-dataset
