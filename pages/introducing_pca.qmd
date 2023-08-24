@@ -881,7 +881,6 @@ view_effective_dimensionality_examples(big_pca)
 - This may not always be the case, we could instead have high variance noise dimensions, and low variance meaningful dimensions.
 - Later in the tutorial, we will discuss more powerful techniques that can handle such problems. But before that, let's analyze a real neuroscience dataset. 
 
-
 ## Additional notes
 
 ### Preprocessing the data
@@ -899,8 +898,6 @@ Since PCA implicitly assumes that the variances along each dimension are compara
 
 Note, however, that this transformation reduces the information in the system -- it is possible that the variances of the features are informative.
 :::
-
-<!-- ### What if the stimulus features covary? -->
 
 ## Further reading
 
