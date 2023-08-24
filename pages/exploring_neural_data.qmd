@@ -275,9 +275,6 @@ for dim in range(2):
     view_images_at_poles(data_pca[:, dim], stimuli=stimuli, label=f"dim {dim+1}")
 ```
 
-<!-- What can we interpret here? -->
-<!-- if NMF can be done in a linear manner, should we stress that PCA is better for being a linear methods? -->
-
 Nonetheless, PCA has unique benefits that shouldn't be overlooked. For instance, PCA offers closed-form solutions and non-stochastic outcomes. They're also well characterized mathematically. Moreover, because PCA is essentially rotateing data to present it in a clearer perspective, it is able to preserve all the original information.
 
 :::
@@ -307,8 +304,6 @@ Power laws are ubiquitious in nature, arising in all sorts of systems:
 - word frequencies in natural language (Zipf's law)
 - wealth distribution (Pareto principle)
 - ferromagnetism (Ising model)
-
-<!-- but see Scale-free networks are rare -->
 
 Nevertheless, a power law relationshop will not be observed when the data
 
