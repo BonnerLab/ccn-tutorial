@@ -14,67 +14,6 @@ Here's a [link to this notebook](https://colab.research.google.com/github/Bonner
 
 :::
 
-## Invariances
-
-Comparing different representations of the same stimuli is integral to the study of sensory neuroscience. Every computational model of a system must be effectively related to experimental data for validation -- and this necessitates the comparison of two high-dimensional datasets.
-
-Before comparing any representations, we must decide what transformations of a representation preserve its identity -- or what invariances we would like to enforce.
-
-As a simple visual example, let's take the CCN logo -- which can be interpreted as a cloud of data points in two dimensions -- and apply various transformations to it.
-
-![](/resources/ccn.svg){fig-align="center" height=30mm}
-
-### Translation
-
-![](/resources/ccn.svg){fig-align="center" height=30mm}
-
-::: {.callout-tip}
-# What is a translation?
-
-$X \rightarrow X + \text{constant}$
-:::
-
-### Scaling (isotropic)
-
-![](/resources/ccn.svg){fig-align="center" height=15mm}
-
-::: {.callout-tip}
-# What is an isotropic scaling?
-
-$X \rightarrow \text{constant}(X)$
-:::
-
-### Scaling (anisotropic)
-
-::: {.callout-tip}
-# What is an anisotropic scaling?
-
-$$ X \rightarrow \begin{bmatrix}
-\alpha & 0 \\
-0 & \beta 
-\end{bmatrix}\text{constant}(X)$$
-:::
-
-
-### Rotation
-
-
-### Reflection
-
-
-
-### Shear
-
-![](/resources/ccn-shear.svg){fig-align="center" height=30mm}
-
-### Nonlinear magic
-
-![](/resources/ccn-nonlinear.svg){fig-align="center" height=60mm}
-
-## Linear regression
-
-Is an overall $R^2$ a good metric to compare two systems? Well, yes.
-
 ## Cross-decomposition
 
 Just as PCA identifies the principal directions of variance of a system, *cross-decomposition* identifies the principal directions of *shared* variance between *two* systems $X$ and $Y$. Specifically, just as PCA computes the eigendecomposition of the auto-covariance, cross-decomposition computes the singular value decomposition of the cross-covariance:
@@ -109,7 +48,6 @@ The cross-decomposition method we describe here is more specifically known as [P
 # What happens when $X$ = $Y$?
 
 Note that if $X = Y$, cross-decomposition reduces to PCA:
-
 :::
 
 {{< include _code/install_package.qmd >}}
@@ -257,7 +195,6 @@ display(subject_1)
 display(subject_2)
 ```
 
-
 ```{python}
 # | code-summary: Compute the cross-participant spectrum
 
@@ -323,5 +260,3 @@ ax.set_yscale("log")
 ax.set_aspect("equal", "box")
 sns.despine(ax=ax, offset=20)
 ```
-
-

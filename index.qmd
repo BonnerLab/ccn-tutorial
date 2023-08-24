@@ -94,18 +94,18 @@ When
 :::
 
 ::: {.callout-tip}
-# Run the tutorial interactively -- or just follow along!
+# Run the tutorial interactively -- or just follow along on the website!
 
-Each section is a [computational notebook](https://docs.jupyter.org/en/latest/index.html) that can be run on [Google Colab](https://colab.research.google.com/) -- just follow the links below! If you can't run the notebooks, just follow along on the website!
+Each section is a [computational notebook](https://docs.jupyter.org/en/latest/index.html) that can be run interactively on [Google Colab](https://colab.research.google.com/) or viewed rendered on this site -- just follow the links below!
 :::
 
 | Section | Read | Interact | Download |
 |:-----|:-------:|:--------:|:-------------:|
-| An introduction to PCA | [website](https://bonnerlab.github.io/ccn-tutorial/pages/introducing_pca.html) | [Colab](https://colab.research.google.com/github/BonnerLab/ccn-tutorial/blob/main/notebooks/introducing_pca.ipynb)  | [download](https://bonnerlab.github.io/ccn-tutorial/pages/introducing_pca.ipynb) |
-| Exploring a neural dataset | [website](https://bonnerlab.github.io/ccn-tutorial/pages/exploring_neural_data.html) | [Colab](https://colab.research.google.com/github/BonnerLab/ccn-tutorial/blob/main/notebooks/exploring_neural_data.ipynb) | [download](https://bonnerlab.github.io/ccn-tutorial/pages/exploring_neural_data.ipynb) |
-| Dealing with noisy data | [website](https://bonnerlab.github.io/ccn-tutorial/pages/dealing_with_noise.html) | [Colab](https://colab.research.google.com/github/BonnerLab/ccn-tutorial/blob/main/notebooks/dealing_with_noise.ipynb) | [download](https://bonnerlab.github.io/ccn-tutorial/pages/dealing_with_noise.ipynb) |
-| Comparing neural representations | [website](https://bonnerlab.github.io/ccn-tutorial/pages/comparing_representations.html) | [Colab](https://colab.research.google.com/github/BonnerLab/ccn-tutorial/blob/main/notebooks/comparing_representations.ipynb) | [download](https://bonnerlab.github.io/ccn-tutorial/pages/comparing_representations.ipynb) |
-| Aligning deep neural networks | [website](https://bonnerlab.github.io/ccn-tutorial/pages/aligning_neural_networks.html) | [Colab](https://colab.research.google.com/github/BonnerLab/ccn-tutorial/blob/main/notebooks/aligning_neural_networks.ipynb) | [download](https://bonnerlab.github.io/ccn-tutorial/pages/aligning_neural_networks.ipynb) |
+| Introducing PCA | [website](https://bonnerlab.github.io/ccn-tutorial/pages/introducing_pca.html) | [Colab](https://colab.research.google.com/github/BonnerLab/ccn-tutorial/blob/main/notebooks/introducing_pca.ipynb)  | [download](https://bonnerlab.github.io/ccn-tutorial/pages/introducing_pca.ipynb) |
+| Exploring neural data | [website](https://bonnerlab.github.io/ccn-tutorial/pages/exploring_neural_data.html) | [Colab](https://colab.research.google.com/github/BonnerLab/ccn-tutorial/blob/main/notebooks/exploring_neural_data.ipynb) | [download](https://bonnerlab.github.io/ccn-tutorial/pages/exploring_neural_data.ipynb) |
+| Dealing with noise | [website](https://bonnerlab.github.io/ccn-tutorial/pages/dealing_with_noise.html) | [Colab](https://colab.research.google.com/github/BonnerLab/ccn-tutorial/blob/main/notebooks/dealing_with_noise.ipynb) | [download](https://bonnerlab.github.io/ccn-tutorial/pages/dealing_with_noise.ipynb) |
+| Comparing representations | [website](https://bonnerlab.github.io/ccn-tutorial/pages/comparing_representations.html) | [Colab](https://colab.research.google.com/github/BonnerLab/ccn-tutorial/blob/main/notebooks/comparing_representations.ipynb) | [download](https://bonnerlab.github.io/ccn-tutorial/pages/comparing_representations.ipynb) |
+| Analyzing neural networks | [website](https://bonnerlab.github.io/ccn-tutorial/pages/analyzing_neural_networks.html) | [Colab](https://colab.research.google.com/github/BonnerLab/ccn-tutorial/blob/main/notebooks/analyzing_neural_networks.ipynb) | [download](https://bonnerlab.github.io/ccn-tutorial/pages/analyzing_neural_networks.ipynb) |
 
 ::: {.callout-note collapse="true"}
 # If you'd prefer to run the notebooks locally...
@@ -116,9 +116,9 @@ Create a [Python virtual environment](https://packaging.python.org/en/latest/gui
 ::: {.callout-warning}
 # Notice a typo? Have any feedback?
 
-Use the `Report an issue` button on the sidebar of each page to contact us! Feel free to suggest edits by using the `Edit this page` button too!
+Use the `Report an issue` button on the sidebar of each page to contact us. Feel free to suggest edits by using the `Edit this page` button too!
 :::
 
 ## Acknowledgments {.appendix}
 
-Thanks to the [Natural Scene Dataset](http://naturalscenesdataset.org/) team for permission to use it for this tutorial and to the [Open Science Foundation](https://osf.io/) for hosting the [data files](https://osf.io/zk265/)!
+Thanks to the [Natural Scene Dataset](http://naturalscenesdataset.org/) team for permission to use it for this tutorial and to the [Open Science Foundation](https://osf.io/) for hosting the [data files](https://osf.io/zk265/).
