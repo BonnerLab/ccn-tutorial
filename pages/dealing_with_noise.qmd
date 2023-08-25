@@ -248,7 +248,7 @@ Specifically, if there were $N$ unique stimuli -- each seen twice -- the data ma
 
 ### Step 1 -- Compute eigenvectors on the training set
 
-The first step is to compute the principal components -- the eigenvectors of the auto-covariance matrix -- of the training set:
+The first step is to compute the principal components -- the eigenvectors of the covariance matrix -- of the training set:
 
 [As usual, $X_\text{train}$ must be centered when computing its covariance.]{.aside}
 

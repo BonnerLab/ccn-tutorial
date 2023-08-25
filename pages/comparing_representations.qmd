@@ -16,7 +16,7 @@ Here's a [link to this notebook](https://colab.research.google.com/github/Bonner
 
 ## Cross-decomposition
 
-Just as PCA identifies the principal directions of variance of a system, *cross-decomposition* identifies the principal directions of *shared* variance between *two* systems $X$ and $Y$. Specifically, just as PCA computes the eigendecomposition of the auto-covariance, cross-decomposition computes the singular value decomposition of the cross-covariance:
+Just as PCA identifies the principal directions of variance of a system, *cross-decomposition* identifies the principal directions of *shared* variance between *two* systems $X$ and $Y$. Specifically, just as PCA computes the eigendecomposition of the *auto-*covariance, cross-decomposition computes the singular value decomposition of the *cross-*covariance:
 
 $$
 \begin{align*}
@@ -197,9 +197,10 @@ display(subject_2)
 
 ```{python}
 # | code-summary: Compute the cross-participant spectrum
+# | fig-align: center
 
 
-def compute_cross_validated_spectrum(
+def compute_cross_participant_spectrum(
     x: xr.DataArray,
     y: xr.DataArray,
     /,
@@ -231,13 +232,16 @@ def compute_cross_validated_spectrum(
     )
 
 
-spectrum = compute_cross_validated_spectrum(subject_1, subject_2)
+cross_participant_spectrum = compute_cross_participant_spectrum(subject_1, subject_2)
 
 data = pd.DataFrame(
     {
-        "cross-validated singular value": spectrum,
+        "cross-validated singular value": cross_participant_spectrum,
         "rank": assign_logarithmic_bins(
-            1 + np.arange(len(spectrum)), min_=1, max_=10_000, points_per_bin=5
+            1 + np.arange(len(cross_participant_spectrum)),
+            min_=1,
+            max_=10_000,
+            points_per_bin=5,
         ),
     }
 )
@@ -253,10 +257,105 @@ sns.lineplot(
     ls="None",
     err_style="bars",
     estimator="mean",
-    errorbar=("ci", 99),
+    errorbar="sd",
 )
 ax.set_xscale("log")
 ax.set_yscale("log")
 ax.set_aspect("equal", "box")
 sns.despine(ax=ax, offset=20)
 ```
+
+```{python}
+# | code-summary: Plot both the within- and cross-participant spectra
+# | fig-align: center
+
+
+def compute_within_participant_spectrum(data: xr.DataArray) -> np.ndarray:
+    x_train = data.isel({"presentation": data["rep_id"] == 0}).sortby("stimulus_id")
+    y_train = data.isel({"presentation": data["rep_id"] == 0}).sortby("stimulus_id")
+
+    x_test = data.isel({"presentation": data["rep_id"] == 0}).sortby("stimulus_id")
+    y_test = data.isel({"presentation": data["rep_id"] == 1}).sortby("stimulus_id")
+
+    scorer = PLSSVD()
+    scorer.fit(x_train.values, x_train.values)
+    x_test_transformed = scorer.transform(x_test.values, direction="left")
+    y_test_transformed = scorer.transform(y_test.values, direction="right")
+
+    n_components = x_test_transformed.shape[-1]
+
+    return np.diag(
+        np.cov(
+            x_test_transformed,
+            y_test_transformed,
+            rowvar=False,
+        )[:n_components, n_components:]
+    )
+
+
+within_participant_spectrum = compute_within_participant_spectrum(
+    load_dataset(subject=0, roi="general")
+)
+
+data = pd.concat(
+    [
+        data.assign(comparison="cross-individual"),
+        pd.DataFrame(
+            {
+                "cross-validated singular value": within_participant_spectrum,
+                "rank": assign_logarithmic_bins(
+                    1 + np.arange(len(within_participant_spectrum)),
+                    min_=1,
+                    max_=10_000,
+                    points_per_bin=5,
+                ),
+            }
+        ).assign(comparison="within-individual"),
+    ],
+    axis=0,
+)
+
+
+with sns.axes_style("whitegrid"):
+    fig, ax = plt.subplots()
+
+    sns.lineplot(
+        ax=ax,
+        data=data,
+        x="rank",
+        y="cross-validated singular value",
+        hue="comparison",
+        hue_order=["cross-individual", "within-individual"],
+        style="comparison",
+        style_order=["within-individual", "cross-individual"],
+        markers=["o", "s"],
+        dashes=False,
+        ls="None",
+        err_style="bars",
+        estimator="mean",
+        errorbar="sd",
+    )
+    ax.set_xscale("log")
+    ax.set_yscale("log")
+    ax.set_aspect("equal", "box")
+
+    ax.grid(True, which="minor", c="whitesmoke")
+    ax.grid(True, which="major", c="lightgray")
+    for loc in ("left", "bottom", "top", "right"):
+        ax.spines[loc].set_visible(False)
+```
+
+## Variations
+
+This cross-decomposition approach is quite flexible, allowing many possible levels of generalization.
+
+Cross-trial generalization
+: At the most basic level, we can test the generalization of the latent dimensions across different trials -- repetitions of the same stimuli. This approach identifies stimulus-specific variance that generalizes over trial-specific noise -- and is what we used above for the within-participant comparison above (cross-validated PCA).
+
+Cross-image generalization
+: Next, we could test the generalization of the latent dimensions across different stimulus sets -- how consistent the directions of covariance across different datasets. This was used to evaluate the cross-participant comparison above.
+
+Cross-individual generalization
+: Finally, we could examine the variance shared between two different high-dimensional systems -- here, we compared neural responses from two different subjects.
+
+In fact, we could combine several of these to get very strict generalization criteria: we could even estimate the spectrum of variance that generalizes across trials, stimuli, and individuals.

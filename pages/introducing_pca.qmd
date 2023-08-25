@@ -466,7 +466,7 @@ Instead, we can use the [singular value decomposition](reference.qmd#singular-va
 
 The covariance matrix reduces to $X^\top X / (n - 1) = V \left(\frac{\Sigma^2}{n - 1} \right) V^\top$, which is exactly the eigendecomposition required.
 
-Specifically, the eigenvalues $\lambda_i$ of the covariance matrix are related to the singular values $\sigma_i$ of the data matrix as $\lambda_i = \sigma_i^2 / (N - 1)$, while the eigenvectors of the auto-covariance matrix are exactly the right singular vectors $V$ of the data matrix $X$.
+Specifically, the eigenvalues $\lambda_i$ of the covariance matrix are related to the singular values $\sigma_i$ of the data matrix as $\lambda_i = \sigma_i^2 / (N - 1)$, while the eigenvectors of the covariance matrix are exactly the right singular vectors $V$ of the data matrix $X$.
 :::
 
 ::: {.callout-tip collapse="true"}

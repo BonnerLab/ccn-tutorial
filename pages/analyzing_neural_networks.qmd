@@ -498,7 +498,7 @@ We train the network for 5 *epochs* (passes over the training set). We measure t
 # | label: train-model
 # | code-summary: Train the model
 
-train_model(model, train_loader, val_loader, num_epochs=5)
+_ = train_model(model, train_loader, val_loader, num_epochs=5)
 ```
 
 ## Analyzing a trained network
