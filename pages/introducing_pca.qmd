@@ -413,17 +413,6 @@ Finally, the original data matrix can be transformed by projecting it onto the e
 
 ![](/resources/projection.svg){width=80%}
 
-<!-- TODO ### Some terminology
-
-Ambient space
-: The neural representation of each stimulus $i \in {1, \dots, N}$ can be captured by a vector of activations $X_i \in \mathbb{R}^P$. This vector space is typically called the *ambient space* -- the space where the raw data lives.
-
-Loadings
-: The eigenvectors of the covariance matrix are often called *loadings*
-
-Scores
-:  -->
-
 ::: {.callout-note collapse="true"}
 # Viewing PCA as an optimization
 
