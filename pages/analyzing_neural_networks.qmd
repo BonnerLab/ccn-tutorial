@@ -1,7 +1,7 @@
 ---
 title: Analyzing and comparing deep neural networks
 subtitle: Comparing latent dimensions of representations and weights
-abstract: The covariance structures of neural network activations and weights are a key statistical property of their internal representations. In fact, they can even be used to align networks that are trained with different random initial conditions. In this notebook, we will explore how to compare activations and weights of neural networks, using two sample architectures -- a small multilayer perceptron (MLP) and a small convolutional neural network (CNN) -- trained on CIFAR-10.
+abstract: The covariance structures of neural network activations and weights are a key statistical property of their internal representations. In fact, they can even be used to align networks that are trained with different random initial conditions. In this notebook, we will explore how to compare activations and weights of neural networks using two sample architectures -- a small multilayer perceptron (MLP) and a small convolutional neural network (CNN) -- trained on CIFAR-10.
 ---
 
 ## Experimental setup
