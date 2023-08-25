@@ -202,7 +202,7 @@ view_individual_scatter(
 
 By visualizing the responses, we can see that each neuron is tuned to both color *and* size. 
 
-We can also use methods such as Representational Similarity Analysis (RSA)[@Kriegeskorte2008] to study the information content of the two neurons. In RSA, the dissimilarity between the response of two systems (here our two neurons) is obtained for each pair of stimuli and represented in a matrix of dissimilarities (a *representational dissimilarity matrix*, or RDM). Therefore, an RDM indicates the degree to which each pair of stimuli is distinguished by the two systems. 
+We can also use methods such as Representational Similarity Analysis (RSA)[@Kriegeskorte2008] to study the information content of the two neurons. In RSA, the dissimilarity between the response of a system to each pair of stimuli is obtained and represented in a matrix of dissimilarities (a *representational dissimilarity matrix*, or RDM). Therefore, an RDM indicates the degree to which each pair of stimuli is distinguished by a system. 
 
 
 ![](/resources/rsa.png)
