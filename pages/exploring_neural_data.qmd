@@ -1,7 +1,7 @@
 ---
 title: Exploring a neural dataset
 subtitle: Revealing the latent structure of fMRI responses to natural scenes
-abstract: Analyzing the Natural Scenes dataset reveals high-dimensional latent structure in neural responses.
+abstract: Analyzing a large-scale fMRI dataset containing neural responses to natural scenes reveals high-dimensional latent structure in neural responses described by a power-law covariance eigenspectrum.
 ---
 
 ::: {.content-visible when-format="html"}
@@ -13,6 +13,13 @@ Here's a [link to this notebook](https://colab.research.google.com/github/Bonner
 :::
 
 :::
+
+## The Natural Scenes fMRI Dataset
+![](/resources/nsd.png)
+
+The natural scenes dataset (NSD) is the largest fMRI dataset on human vision, with 7T fMRI responses (1.8 mm isotropic voxels) obtained from 8 adult participants. The experiment involved a continuous recognition task while participants observed natural scene images from the Microsoft Common Objects in Context (COCO) database (Lin et al., 2014).
+
+Let's load the dataset. This data contains neural responses to 700 images from ~15,000 voxels reliably modulated by the visual stimuli during the NSD experiment.
 
 {{< include _code/install_package.qmd >}}
 
@@ -63,13 +70,6 @@ from utilities.brain import (
 
 {{< include _code/initialize_rng.qmd >}}
 
-## The Natural Scenes fMRI Dataset (NSD)
-![](/resources/nsd.png)
-
-NSD is the largest fMRI dataset on human vision, with 7T fMRI responses (1.8mm isotropic voxels) obtained from 8 adult participants. The experiment involved a continuous recognition task while participants observed natural scene images from the Microsoft Common Objects in Context (COCO) database (Lin et al., 2014).
-
-Let's load the dataset. This data contains neural responses to 700 images from ~15,000 voxels reliably modulated by the visual stimuli during the NSD experiment.
-
 ```{python}
 # | code-summary: Load the dataset
 
@@ -81,10 +81,10 @@ display(data)
 ::: {.callout-note}
 # Some fMRI preprocessing details
 
-We utilized the NSD single-trial betas, preprocessed in 1.8 mm volumetric space and denoised using the GLMdenoise technique (version 3;"betas_fithrf_GLMdenoise_RR"). The betas were converted to Z-scores within each scanning session and averaged across repetitions for each stimulus.
+We utilized the NSD single-trial betas, preprocessed in 1.8 mm volumetric space and denoised using the GLMdenoise technique (version 3; "betas_fithrf_GLMdenoise_RR"). The betas were converted to Z-scores within each scanning session and averaged across repetitions for each stimulus.
 :::
 
-Here are some examples of stimuli that we analyzed.
+Here are some examples of stimuli seen by the participants.
 
 ```{python}
 # | label: view_stimuli
@@ -112,14 +112,14 @@ view_stimuli(stimuli)
 ```
 
 
-### The neural eigenspectrum
+### The neural covariance eigenspectrum
 
-Now we can apply PCA to the neural responses and plot the eigenspectrum of the data! 
+Now we can apply PCA to the neural responses and plot the eigenspectrum of their covariance!
 
 ```{python}
 # | code-summary: Visualize the eigenspectrum
 # | fig-align: center
-# | fig-cap: Neural eigenspectra with linear scaling
+# | fig-cap: Neural covariance eigenspectrum with linear scaling
 
 
 def view_eigenspectrum(pca: PCA, *, log: bool = False) -> None:
@@ -151,7 +151,7 @@ view_eigenspectrum(pca)
 ::: {.callout-tip collapse="true"}
 # Visualization of principal components
 
-There are some simple ways to visualize and interpret the principle components.
+There are some simple ways to visualize and interpret the principal components.
 
 ```{python}
 # | label: image_viewing_utilities
@@ -221,23 +221,21 @@ def view_images_at_poles(
 
 ```
 
-The first method is to plot the stimuli on a scatter plot, designating their X and Y coordinates to be their scores along two PCs of interest. This allows us to observe potential clustering of the stimuli.
+The first method is to plot the stimuli on a scatter plot, designating their X and Y coordinates to be their scores along two principal components of interest. This allows us to observe potential clustering of the stimuli.
 
 ```{python}
 # | code-summary: Project the neural data onto the first two principal components
-# | fig-column: page
 # | fig-align: center
 
 data_pca = pca.transform(data)
 view_images_as_scatterplot(data_pca[:, 0], data_pca[:, 1], stimuli=stimuli)
 ```
 
-Alternativley, we can focus on the stimuli with the highest or lowest scores along a given PC. It provides simple clues of what this PC might be sensitive to, which could be features ranging from low to high complexity level.
+Alternatively, we can focus on the stimuli with the highest or lowest scores along a given principal component. This provides simple clues of what this PC might be sensitive to, which could be visual features ranging from low to high complexity.
 
 ```{python}
 # | label: extreme_images_pcs
 # | code-summary: View images that have extreme scores on the PCs
-# | fig-column: page
 # | fig-align: center
 
 for rank in [1, 2, 3, 10, 50, 100]:
@@ -248,11 +246,10 @@ for rank in [1, 2, 3, 10, 50, 100]:
 ::: {.callout-important collapse="true"}
 # What about other methods?
 
-Interpreting PCs can be challenging especially when we rely solely on visual inspection. This difficulty arises, in part, because many natural features are non-negative. As a result, methods like nonnegative matrix factorization (NMF) often offer more interpretable dimensions than PCA.
+Interpreting PCs can be challenging especially when we rely solely on visual inspection. This difficulty arises in part because many natural features are non-negative. As a result, methods like nonnegative matrix factorization (NMF) often offer more interpretable dimensions than PCA.
 
 ```{python}
 # | code-summary: Compute NMF of neural responses
-# | fig-column: page
 # | fig-align: center
 
 scaler = MinMaxScaler()
@@ -268,35 +265,38 @@ Similarly, we can inspect the stimuli with highest or closest-to-zero values alo
 
 ```{python}
 # | code-summary: View images that have extreme scores on the dimensions
-# | fig-column: page
 # | fig-align: center
 
 for dim in range(2):
     view_images_at_poles(data_pca[:, dim], stimuli=stimuli, label=f"dim {dim+1}")
 ```
 
-<!-- What can we interpret here? -->
-<!-- if NMF can be done in a linear manner, should we stress that PCA is better for being a linear methods? -->
-
-Nonetheless, PCA has unique benefits that shouldn't be overlooked. For instance, PCA offers closed-form solutions and non-stochastic outcomes. They're also well characterized mathematically. Moreover, because PCA is essentially rotateing data to present it in a clearer perspective, it is able to preserve all the original information.
+Nonetheless, PCA has unique benefits that shouldn't be overlooked. For instance, PCA offers closed-form solutions and non-stochastic outcomes. They're also well characterized mathematically. Moreover, because PCA is essentially a simple rotation of the data, it preserves all the original information in the dataset.
 
 :::
 
-On this plot, it looks like that the first few PCs have substantial variance while the rest are negligable, which suggests a low-dimensional structure. However, when dealing with high-dimensional data that span several orders of magnitude, it's more insightful to use a logarithmic scale. We can examine many key statistical trends more clearly across the orders. So let's try visualizing the spectrum on a logarithmic scale for both axes:
+On this plot, it looks like that the first few PCs have substantial variance while the rest are negligible, which suggests a low-dimensional structure.
+
+However, when dealing with high-dimensional data that span several orders of magnitude, it's more insightful to visualize it on a logarithmic scale, which makes many key statistical trends more apparent. So let's try visualizing the spectrum on a logarithmic scale for both axes:
 
 ```{python}
 # | code-summary: Visualize the eigenspectrum on a logarithmic scale
 # | fig-align: center
-# | fig-cap: Neural eigenspectra with logarithmic scaling
+# | fig-cap: Neural covariance eigenspectrum with logarithmic scaling
 
 view_eigenspectrum(pca, log=True)
 ```
 
-On a log-log scale, the spectrum shows a trend similar to a linear relationship, suggesting that the eignenspectrum might be a power law distribution:
+On a log-log scale, the spectrum shows a trend that looks remarkably linear, suggesting that the eigenspectrum might obey a power-law distribution:
 
-$$\log{\lambda_\text{rank}} \approx \alpha \log{\left( \text{rank} \right)} + c \implies \lambda_\text{rank} \propto \left( \text{rank} \right)^\alpha$$
+$$
+\begin{align*}
+    \log{\lambda_\text{rank}} &\approx \alpha \log{\left( \text{rank} \right)} + c\\
+    \lambda_\text{rank} &\propto \left( \text{rank} \right)^\alpha
+\end{align*}
+$$
 
-There is information spanning across all ranks as we find no obvious cut-off point, this distributions. So the number of effect dimensions here is likely much higher than what we would speculate from the linear scale.
+There appears to be no obvious cut-off point in this power law, suggesting that there might be information across all ranks. The number of effective dimensions here is likely much higher than what we would have expected from simply viewing the eigenspectrum on a linear scale.
 
 ## Power laws
 
@@ -304,20 +304,18 @@ A power law is a relationship of the form $f(x) \propto x^{\alpha}$, where $\alp
 
 Power laws are ubiquitious in nature, arising in all sorts of systems:
 
-- word frequencies in natural language (Zipf's law)
-- wealth distribution (Pareto principle)
-- ferromagnetism (Ising model)
-
-<!-- but see Scale-free networks are rare -->
+- word frequencies in natural language ([Zipf's law](https://en.wikipedia.org/wiki/Zipf%27s_law))
+- wealth distribution ([Pareto principle](https://en.wikipedia.org/wiki/Pareto_principle))
+- ferromagnetic materials near the Curie temperature ([Ising model](https://en.wikipedia.org/wiki/Ising_model))
 
 Nevertheless, a power law relationshop will not be observed when the data
 
-- is random
-- has a characteristic scale
+- is random, or
+- when it has a characteristic scale.
 
 ### An analogy: word frequencies
 
-Zipf's law suggests a power law distribution of use frequency of English words.Let's compute the distribution of frequencies in a small corpus -- a collection of [IMDb movie reviews](https://pytorch.org/text/0.9.0/datasets.html#imdb).
+Zipf's law suggests a power-law distribution of use frequency of English words. Let's compute the distribution of frequencies in a small corpus -- a collection of [IMDb movie reviews](https://pytorch.org/text/0.9.0/datasets.html#imdb).
 
 ```{python}
 # | label: generate-word-frequencies
@@ -439,5 +437,4 @@ display(
 )
 ```
 
-This demonstrates that the high-rank, low-frequency words also carries meaningful information. Similarly, we will likely also lose information if we try to reconstruct neural data wiht just the high-variance PCs.
-
+This poor reconstruction demonstrates that the high-rank, low-frequency words also carry meaningful information -- in fact, most of it. Analogously, if we try to reconstruct neural data with just a few high-variance principal components -- which is exactly what typical dimensionality reduction methods do -- we will likely lose valuable information about the presented stimulus.

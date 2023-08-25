@@ -1,23 +1,10 @@
 ---
 title: Analyzing and comparing deep neural networks
 subtitle: Comparing latent dimensions of representations and weights
-abstract: TODO
+abstract: The covariance structures of neural network activations and weights are a key statistical property of their internal representations. In fact, they can even be used to align networks that are trained with different random initial conditions. In this notebook, we will explore how to compare activations and weights of neural networks, using two sample architectures -- a small multilayer perceptron (MLP) and a small convolutional neural network (CNN) -- trained on CIFAR-10.
 ---
 
-This notebook shows how to meaningfully compare activations and weights of two networks with different random initial conditions.
-It uses two architectures: a small MLP and a small CNN both trained on CIFAR-10.
-
-It allows one to reproduce some of the analysis of the rainbow paper in a toy setting:
-- Compute activation and weight covariance spectra
-- Show that a subset of low-rank eigenvectors (of weights/activations) contribute to the performance
-- Align two networks together
-- Show that two networks learn similar weight covariances after alignment
-- Generate a new network from the ensemble of networks with similar performance
-
-Note that the reduced size of the networks lead to low accuracies of the base models. Similarly, the precision of the "rainbow" analysis would be improved by considering wider networks.
-
-Also, contrary to learned scattering networks, the networks here learn spatial filters (which are not well-modeled with a Gaussian distribution), have a ReLU non-linearity rather than complex modulus (the asymmetry of ReLU implies that one should probably consider non-zero-mean weight distributions), and do not have batch normalization layers (which leads to reduced alignment and clipping performance).
-
+## Experimental setup
 
 {{< include _code/install_package.qmd >}}
 
@@ -425,13 +412,11 @@ def contract(tensor, matrix, axis):
 
 ```
 
-## Experimental setup
-
 ### Dataset
 
 The [CIFAR-10](https://www.cs.toronto.edu/~kriz/cifar.html) dataset contains 50,000 training and 10,000 validation images of resolution $32 \times 32$. They are divided in 10 classes:
 
-![samples from CIFAR-10](https://production-media.paperswithcode.com/datasets/4fdf2b82-2bc3-4f97-ba51-400322b228b1.png)
+![Sample images from CIFAR-10](/resources/cifar.png)
 
 The dataset is automatically downloaded and loaded in memory with [`torchvision`](https://pytorch.org/vision/stable/index.html) (see [the CIFAR10 class](https://pytorch.org/vision/stable/generated/torchvision.datasets.CIFAR10.html)). Here we do not perform any data augmentation for simplicity, and convert the images to grayscale for computational efficiency.
 
@@ -468,15 +453,17 @@ for i in range(5):
 
 We begin with a barebones feedforward network architecture with two hidden layers.
 
-![network_two_hidden_layers.svg](attachment:network_two_hidden_layers.svg)
+![A simple 2-layer perceptron](/resources/mlp.svg)
 
 It computes the function
 $$ f(x) = \theta \sigma(W_2 \sigma(W_1 x))$$
-with:
+
+where:
+
 - $x \in \mathbb R^d$ is an input image reshaped as a vector ($d = 32 \times 32$),
-- $W_1 \in \mathbb R^{n_1 \times d}$ the weights of the $n_1$ neurons in the first layer,
-- $W_2 \in \mathbb R^{n_2 \times n_1}$ the weights of the $n_2$ neurons in the second layer,
-- $\theta \in \mathbb R^{c \times n_2}$ the weights of the classifier, which predicts log-likelihoods for the $c = 10$ classes,
+- $W_1 \in \mathbb R^{n_1 \times d}$ are the weights of the $n_1$ neurons in the first layer,
+- $W_2 \in \mathbb R^{n_2 \times n_1}$ are the weights of the $n_2$ neurons in the second layer,
+- $\theta \in \mathbb R^{c \times n_2}$ are the weights of the classifier, which predicts log-likelihoods for the $c = 10$ classes,
 - $\sigma$ is a pointwise non-linearity (here a ReLU).
 
 ```{python}
@@ -495,7 +482,7 @@ print(model)
 
 We train the network for 5 *epochs* (passes over the training set). We measure the average accuracy (frequency at which the network correctly predicts the correct class). On a held-out validation set, it increases from 10%, which corresponds to a random guess, to about 43%.
 
-[Note: accuracies below 90% are generally considered low, with state-of-the-art networks reaching 99.5% accuracy. The accuracy can be increased by switching to a convolutional architecture (see below), increasing the width and depth of the network, adding data augmentation, training for a longer time, etc...]{.aside}
+[Note: accuracies below 90% are generally considered low, with state-of-the-art networks reaching 99.5% accuracy. The accuracy can be increased by switching to a convolutional architecture (see below), increasing the width and depth of the network, adding data augmentation, training for a longer time, etc.]{.aside}
 
 ```{python}
 # | label: train-model
@@ -508,7 +495,7 @@ train_model(model, train_loader, val_loader, num_epochs=5)
 
 ### Measuring the dimensionality of hidden representations
 
-At each layer, we can measure the dimensionality of the corresponding hidden representation with a PCA. We thus compute the covariance of the representation. Let $\varphi(x)$ denote the representation of the input $x$ at the given layer, we compute:
+At each layer, we can measure the dimensionality of the corresponding hidden representation with a PCA. We thus compute the covariance of the representation. Let $\varphi(x)$ denote the representation of the input $x$ at the given layer. Then, we compute its covariance:
 
 $$ \mathbb E_x\left[\varphi(x) \, \varphi(x)^\top\right]. $$
 
@@ -612,12 +599,12 @@ Let us focus on the first layer. The weight matrix $W_1$ of size $n_1 \times d$ 
 We can view these neurons as being samples from a continuous distribution, and then estimate statistical properties (moments) of this distribution. For instance, assuming a zero mean, we can compute the covariance of the neuron weights as:
 $$ C = \frac1{n_1} W_1^\top W_1 $$
 
-![neuron_population_cov_v2.svg](attachment:neuron_population_cov_v2.svg)
+![](/resources/weights_pca.svg){width=50%}
 
 The covariance reveals how the global geometry of the representation is modified by the neuron population. Indeed, the representation computed by the first layer is $\varphi_1(x) = \sigma(W_1 x)$. Focusing on the weight matrix $W_1$, we can decompose its effect with a singular value decomposition:
 $$ W_1 = U \Sigma V^\top.$$
 
-<img src="attachment:weight_svd.svg" alt="SVD" style="width: 800px;"/>
+![](/resources/weights_svd.svg){width=100%}
 
 Recall that the right singular vectors $V$ are also the eigenvectors of the covariance $C$, while the singular values $\Sigma$ are directly related to the eigenvalues of the covariance $C$.
 
@@ -831,9 +818,11 @@ This is akin to a linear regression, but additionally imposes that $A$ is orthog
 The optimal alignment $A$ can be computed explicitly from an SVD of the cross-covariance matrix:
 $$ A = U V^\top \quad\text{with}\quad \mathbb E_x[\psi(x)\varphi(x)^\top] = U\Sigma V^\top$$
 
-![image.png](attachment:image.png)
+::: {.column-page-right}
+![](/resources/cross-covariance-svd.svg){width=100%}
+:::
 
-![image-2.png](attachment:image-2.png)
+![](/resources/activation_alignment.png){width=80%}
 
 The magnitude of the singular values $\Sigma$ indicate the amount of variance that is explained by the alignment $A$. Indeed, the unexplained variance (the residual error) can be written as:
 $$ \mathbb E_x[\|A\varphi(x) - \psi(x)\|^2] = \mathbb E_x[\|\varphi(x)\|^2] + \mathbb E_x[\|\psi(x)\|^2] - 2 \,\mathrm{tr}\ \Sigma $$
@@ -888,7 +877,7 @@ Similarly, suppose that $u$ and $v$ are now weight eigenvectors respectively for
 $$ \langle u, \varphi(x) \rangle = \langle Au, A\varphi(x) \rangle \approx \langle Au, \psi(x) \rangle, $$
 which again means that we should compare $Au$ with $v$.
 
-![image.png](attachment:image.png)
+![](/resources/weight_alignment.png){width=100%}
 
 ```{python}
 # | label: visualize-aligned-eigenvectors
@@ -947,13 +936,12 @@ After alignment, top eigenvectors strongly correlate across random initializatio
 
 ### Generating a new network without training
 
-### Generating a new network without training
-
 Do the covariances really encode all the information needed to explain the performance of the network?
 
 We can check by generating *new, random weights* which have the same covariance as that of a trained network. This is done by drawing the weights of each neuron independently from a Gaussian distribution. *Note: the generated network should be aligned to the original network in order to use the same weight covariances.*
 
 The generation is iterative, layer by layer:
+
 - Draw samples from $\mathcal N\left(0, \frac 1{n_1} W_1^{\rm T} W_1\right)$ for the weights $W_1'$ of the first layer
 - Compute the alignment $A_1$ so that $A_1 \sigma(W_1'x) \approx \sigma(W_1 x)$
 - Draw samples from $\mathcal N\left(0, \frac 1{n_2} (W_2 A_1)^{\rm T} (W_2 A_1)\right)$ for the weights $W_2'$ of the second layer
@@ -981,7 +969,7 @@ Without any training, the generated network recovers a good fraction of the perf
 
 We now consider a CNN, composed of two $5 \times 5$ convolutional layers and a fully-connected classifier.
 
-![cnn_two_hidden_layers.svg](attachment:cnn_two_hidden_layers.svg)
+![](/resources/cnn.svg)
 
 ```{python}
 # | label: initialize-cnn
@@ -1037,4 +1025,8 @@ print(
 
 About two thirds of the performance of the trained network is captured in its covariances. Generating CNN weights with Gaussian distributions does not work as well because the spatial filters are not well-approximated by a Gaussian (due to selectivity in orientation and frequency).
 
-The accuracy of the generation procedure can be improved by switching to an architecture which predefines the spatial filters, so that they are not learned nor randomly generated. This is achieved by *learned* scattering networks, which use wavelet spatial filters and learned weights along channels. See [https://arxiv.org/abs/2110.05283](https://arxiv.org/abs/2110.05283).
+The accuracy of the generation procedure can be improved by switching to an architecture which predefines the spatial filters, so that they are not learned nor randomly generated. This is achieved by *learned* scattering networks [@Guth2021], which use wavelet spatial filters and learned weights along channels.
+
+## Further reading
+
+The analyses described in this notebook are thoroughly characterized in @Guth2023.

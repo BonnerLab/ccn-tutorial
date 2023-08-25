@@ -1,7 +1,7 @@
 ---
 title: Dealing with noisy data
 subtitle: Cross-validated methods to separate high-dimensional signal from noise
-abstract: TODO
+abstract: Experimental data in neuroscience are often noisy -- they contain a mixture of stimulus-specific signal and stimulus-independent noise. While many dimensionality reduction methods separate signal from noise on the basis of variance, there is no fundamental reason why high-variance components correspond to signal while low-variance components correspond to noise. In this notebook, we'll explore a cross-validated method that allows us to detect stimulus-related signal regardless of its variance.
 ---
 
 ::: {.content-visible when-format="html"}
@@ -87,6 +87,14 @@ view_individual_scatter(
 )
 ```
 
+```{python}
+# | code-summary: Compute variances
+variances = np.round(data.var("stimulus").values, 3)
+print(f"total variance: {variances[0]}")
+print(f"stimulus-dependent signal variance: {variances[1]}")
+print(f"stimulus-independent noise variance: {variances[2]}")
+```
+
 When investigating a sensory system, we are typically interested in the former -- **we want to understand the robust, reproducible portion of the system's behavior in response to stimuli**. The remaining variance is often considered nuisance variance.
 
 ::: {.callout-note collapse="true"}
@@ -101,12 +109,10 @@ Arousal
 : The level of arousal of participants in an experiment modulates their neural responses. For example, if a participant drinks coffee in the morning before a long scanning session, we'd expect to measure different neural responses.
 
 Representational drift
-: Brain-computer interfaces -- e.g. where neural activity is used to actuate a mechanical system -- often need to be recalibrated frequently to account for short- to medium-term changes in the representational space.
+: The representations used by an animal could vary gradually over time. For example, several brain-computer interfaces -- e.g. where neural activity is used to actuate a mechanical system -- often need to be recalibrated frequently to account for short- to medium-term changes in the representational space.
 
 Measurement noise
-
-- e.g.scanner drift in fMRI
-- e.g. poor electrode scalp contact in EEG
+: Every empirical measurement of a neural signal is subject to errors in the experimental procedure that cause the measured response to be different from the "true" response. For example, this could be caused by scanner drift in fMRI, or poor electrode scalp contact in EEG.
 
 Stimulus-dependent signal
 : Finally, the source of variation we are usually most interested in is the *stimulus-specific signal* -- how the neural response changes with the stimulus. This is often called *neural tuning* -- e.g. neurons in the fusiform face area are described as "tuned for faces, but not houses".
@@ -226,7 +232,9 @@ Clearly, we need a different approach to using the spectrum to separate signal a
 
 In a whole-brain [calcium-imaging](https://en.wikipedia.org/wiki/Calcium_imaging) study, @Stringer2019 recorded the responses of 10,000 neurons in mouse primary visual cortex to 2,800 natural images.
 
-![TODO update with schematic showing viewing natural images](/resources/mouse.svg){width=20%}
+![A mouse](/resources/mouse.svg){width=20%}
+
+![Experimental setup for the calcium-imaging study -- Fig 1 in @Stringer2019](/resources/stringer-fig1.png)
 
 Armed with this large dataset, they set out to develop a method that could reliably estimate the covariance structure of these neural responses: *cross-validated PCA*.
 
@@ -484,27 +492,44 @@ Averaging within such bins allows us to detect signal even in a regime where the
 
 ## A universal power-law exponent
 
-### Universality across species
-
 The power-law exponent of the neural data appears very close to $-1$, as you can see from the slope of the cross-validated spectrum Interestingly, a power-law exponent of $-1$ appears with surprising regularity in neuroscience.
+
+### Mouse primary visual cortex
 
 @Stringer2019, who developed cross-validated PCA, discovered that mouse primary visual cortex responses obey a power-law with exponent $-1$ over several orders of magnitude.
 
-![TODO update with Stringer figure](/resources/mouse.svg){width=20%}
+![Similar eigenspectra in mouse visual cortex -- Fig 2 in @Stringer2019](/resources/stringer-fig2.png)
+
+### Zebrafish brain
 
 More recently, @Wang2023 reported a similar result from whole-brain calcium recordings in zebrafish during hunting and spontaneous behavior.
 
-![TODO update with zebrafish figure](/resources/zebrafish.svg){width=5%}
+![Similar eigenspectra in zebrafish whole-brain Ca^2+^-imaging -- Fig 1 in @Wang2023](/resources/wang-fig1.png)
+
+### Deep neural networks
+
+Interestingly, several recent results from the machine learning literature also corroborate this result!
+
+Specifically, @Agrawal2022 report that neural networks whose internal representations have a covariance spectrum that decays as a power law with index $-1$ perform better. This has made the power law index a statistic of interest for assessing model representation quality -- and perhaps a target of direct optimization.
+
+![Deep networks with similar covariance spectra perform better -- Fig 3 in @Agrawal2022](/resources/agrawal-fig3.png)
+
+In addition, @Kong2022 demonstrated that more adversarially robust neural networks are a better match for macaque V1 eigenspectra.
+
+![Deep networks with similar covariance spectra appear more adversarially robust -- Fig 6 in @Kong2022](/resources/kong-fig6.png)
+
+### Human visual cortex!
 
 In this notebook, we have demonstrated that a similar scale-invariant covariance structure underlies human visual representations of natural scenes too!
 
-### Deep neural network image representations
+```{python}
+# | code-summary: Plot the cross-validated covariance spectrum for human visual cortex
+# | fig-align: center
+with sns.axes_style("whitegrid"):
+    display(fig)
+```
 
-Interestingly, several recent results from the machine learning literature corroborate this result! Specifically, @Agrawal2022 report that neural networks whose internal representations have a covariance spectrum that decays as a power law with index $-1$ perform better.
-
-This has made the power law index a statistic of interest for assessing model representation quality -- and perhaps a target of direct optimization.
-
-::: {.callout-important collapse="true"}
+::: {.callout-important}
 # Is the power-law exponent of -1 universal?
 
 Do we observe the same power-law covariance spectra in other organisms? Could it be a universal statistical property of neural population codes?
@@ -512,13 +537,13 @@ Do we observe the same power-law covariance spectra in other organisms? Could it
 Check your data!
 :::
 
-::: {.callout-important collapse="true"}
+::: {.callout-important}
 # Is high-dimensional coding a hallmark of sensory systems?
 
-Do all sensory systems use a high-dimensional population code -- where an expressive representation of the outside world might allow rapid learning and generalization to various ethological tasks? Perhaps more *cognitive* systems might use low-dimensional representational formats to enable stable, invariant behaviors...
+Do all sensory systems use a high-dimensional population code -- where an expressive representation of the outside world might allow rapid learning and generalization to various ethological tasks? Perhaps more *cognitive* systems might use low-dimensional representational formats to enhance robustness and invariance to irrelevant features.
 :::
 
-::: {.callout-note collapse="true"}
+::: {.callout-tip collapse="true"}
 # What makes $\text{variance} \propto \text{rank}^{-1}$ special?
 
 A power-law index of $-1$ implies a special sort of scale-invariance. Consider the total variance captured by such a covariance eigenspectrum within a range of ranks $[\alpha, \beta]$:
@@ -534,7 +559,7 @@ This total variance only depends on the ratio $\beta / \alpha$ -- indicating tha
 This suggests that each decade is equally important and contributes as much to the representation, though the later decades have their variance spread out over many more dimensions.
 :::
 
-::: {.callout-note collapse="true"}
+::: {.callout-tip collapse="true"}
 # An optimality criterion for population codes?
 
 @Stringer2019 provide a possible explanation for why systems might tend toward a $-1$ covariance eigenspectrum.

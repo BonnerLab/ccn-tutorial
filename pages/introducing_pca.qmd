@@ -889,8 +889,8 @@ Before PCA, it's often recommended to preprocess the data by Z-scoring each of t
 
 $$Z = \dfrac{X - \mu}{\sigma}$$
 
-::: {.callout-important collapse="false"}
-# When should we standardize the data?
+::: {.callout-important collapse="true"}
+# When and why should we standardize the data?
 
 Often, PCA is applied to data where the features are fundamentally different from each other. For example, we might have a dataset where the features of interest are the prices of cars (in dollars) and their masses (in kilograms). Since these two features have different units, the variances of the features are not directly comparable -- there's no obvious way to numerically compare a variance of ($20,000)^2^ in price and a variance of (1,000 kg)^2^ in mass. Even if the features being compared are all the same, if they are in different units -- say euros, dollars, and cents -- the raw variances of the data matrix are meaningless.
 
@@ -902,6 +902,7 @@ Note, however, that this transformation reduces the information in the system --
 ## Further reading
 
 1. [This StackOverflow answer](https://stats.stackexchange.com/a/134283) is a great explanation for how [singular value decomposition ](reference.qmd#singular-value-decomposition) is related to principal component analysis.
+2. [This tutorial](https://doi.org/10.1080/00273171.2020.1743631) by @DelGiudice2020 on effective dimensionality provides a great overview of different notions of dimensionality and metrics to quantify it.
 
 [^definition-eigendecomposition]: The eigendecomposition of a symmetric matrix $X \in \mathbb{R}^{n \times n}$ involves rewriting it as the product of three matrices $X = V \Lambda V^\top$, where $V \in \mathbb{n \times n}$ is orthonormal and $\Lambda \in \mathbb{n \times n}$ is diagonal with non-negative entries.
 

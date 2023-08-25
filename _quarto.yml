@@ -54,7 +54,7 @@ website:
   back-to-top-navigation: true
 
 bibliography: references.bib
-citation-location: margin
+citation-location: document
 
 format:
   html:
