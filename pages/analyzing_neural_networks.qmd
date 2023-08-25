@@ -4,6 +4,16 @@ subtitle: Comparing latent dimensions of representations and weights
 abstract: The covariance structures of neural network activations and weights are a key statistical property of their internal representations. In fact, they can even be used to align networks that are trained with different random initial conditions. In this notebook, we will explore how to compare activations and weights of neural networks using two sample architectures -- a small multilayer perceptron (MLP) and a small convolutional neural network (CNN) -- trained on CIFAR-10.
 ---
 
+::: {.content-visible when-format="html"}
+
+::: {.callout-tip}
+# Run this notebook interactively!
+
+Here's a [link to this notebook](https://colab.research.google.com/github/BonnerLab/ccn-tutorial/blob/main/notebooks/analyzing_neural_networks.ipynb) on Google Colab.
+:::
+
+:::
+
 ## Experimental setup
 
 {{< include _code/install_package.qmd >}}
