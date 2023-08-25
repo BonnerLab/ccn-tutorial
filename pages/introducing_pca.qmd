@@ -223,7 +223,7 @@ Since we only have $P = 2$ neurons, we can visualize these data as a scatterplot
 
 ```{python}
 # | label: view_joint_scatter
-# | code-summary: visualize the joint response
+# | code-summary: Visualize the joint response
 # | fig-align: center
 
 
@@ -375,7 +375,7 @@ def animate_pca_transformation(
     return animation.to_html5_video()
 
 
-#display(HTML(animate_pca_transformation(data)))
+display(HTML(animate_pca_transformation(data)))
 
 ```
 
