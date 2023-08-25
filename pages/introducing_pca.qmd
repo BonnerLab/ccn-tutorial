@@ -525,6 +525,8 @@ with xr.set_options(display_expand_data=True):
     display(pca["eigenvector"])
 ```
 
+TODO plot the eigenvector directions on the joint scatter
+
 ### Interpreting the transformed data
 
 We can view the data projected onto each of the principal components.
@@ -579,8 +581,7 @@ for i_neuron in range(variances.sizes["neuron"]):
 print(f"total variance: {variances.sum().values}")
 ```
 
-
-We can plot the eigenvalues as a function of their rank to visualize the *eigensceptrum*. As we will see shortly, the eigenspectrum provides valuable insights about the laten dimensionality of the data. 
+We can plot the eigenvalues as a function of their rank to visualize the *eigenspectrum*. As we will see shortly, the eigenspectrum provides valuable insights about the latent dimensionality of the data. 
 
 ```{python}
 # | label: visualize_eigenspectrum
@@ -609,7 +610,7 @@ view_eigenspectrum(pca)
 
 ## Quantifying dimensionality
 
-In these data, the dimensionality is clear: there are two latent variables and both are evident in the principal components. However, in real data, we typically record from more than $P = 2$ neurons, therefore judging the dimensionality becomes tricky. To simulate such a scenario, let’s record from more neurons (say $P = 10$).
+In these data, the dimensionality is clear: there are two latent variables and both are evident in the principal components. However, in real data, we typically record from more than $P = 2$ neurons; therefore, judging the dimensionality becomes tricky. To simulate such a scenario, let’s record from more neurons (say $P = 10$).
 
 ```{python}
 # | label: simulate_more_neurons
@@ -637,7 +638,7 @@ big_data = simulate_multiple_neuron_responses(
 display(big_data)
 ```
 
-As before, we can visualize each the principal component and plot the eigenspectrum:
+As before, we can visualize each principal component and plot the eigenspectrum:
 
 
 ```{python}
@@ -666,7 +667,6 @@ view_eigenspectrum(big_pca)
 We know by design that this data was generated from *2* latent variables -- *color* and *size*. However, in real datasets with naturalistic stimuli, we often don't know what the latent variables are! It's common to use the eigenspectrum to estimate the latent dimensionality of the data. For instance, inspecting the eigenspectrum of our toy example tells us that the first two dimensions have much higher variance than the rest. We refer to these as the *effective dimensions*.
 
 In general, there are several approaches for estimating dimensionality based on the eigenspectrum:
-
 
 #### Rank of the covariance matrix
 
