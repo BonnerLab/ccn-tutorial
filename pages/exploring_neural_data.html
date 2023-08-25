@@ -200,7 +200,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <div>
       <div class="quarto-title-meta-heading">Modified</div>
       <div class="quarto-title-meta-contents">
-        <p class="date-modified">August 24, 2023</p>
+        <p class="date-modified">August 25, 2023</p>
       </div>
     </div>
       
@@ -209,7 +209,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <div>
     <div class="abstract">
       <div class="block-title">Summary</div>
-      Analyzing the Natural Scenes dataset reveals high-dimensional latent structure in neural responses.
+      Analyzing a large-scale fMRI dataset containing neural responses to natural scenes reveals high-dimensional latent structure in neural responses described by a power-law covariance eigenspectrum.
     </div>
   </div>
   
@@ -221,9 +221,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">Contents</h2>
    
   <ul>
-  <li><a href="#the-natural-scenes-fmri-dataset-nsd" id="toc-the-natural-scenes-fmri-dataset-nsd" class="nav-link active" data-scroll-target="#the-natural-scenes-fmri-dataset-nsd">The Natural Scenes fMRI Dataset (NSD)</a>
+  <li><a href="#the-natural-scenes-fmri-dataset" id="toc-the-natural-scenes-fmri-dataset" class="nav-link active" data-scroll-target="#the-natural-scenes-fmri-dataset">The Natural Scenes fMRI Dataset</a>
   <ul>
-  <li><a href="#the-neural-eigenspectrum" id="toc-the-neural-eigenspectrum" class="nav-link" data-scroll-target="#the-neural-eigenspectrum">The neural eigenspectrum</a></li>
+  <li><a href="#the-neural-covariance-eigenspectrum" id="toc-the-neural-covariance-eigenspectrum" class="nav-link" data-scroll-target="#the-neural-covariance-eigenspectrum">The neural covariance eigenspectrum</a></li>
   </ul></li>
   <li><a href="#power-laws" id="toc-power-laws" class="nav-link" data-scroll-target="#power-laws">Power laws</a>
   <ul>
@@ -251,14 +251,19 @@ Run this notebook interactively!
 <p>Here’s a <a href="https://colab.research.google.com/github/BonnerLab/ccn-tutorial/blob/main/notebooks/exploring_neural_data.ipynb">link to this notebook</a> on Google Colab.</p>
 </div>
 </div>
-<div id="install_package" class="cell" data-execution_count="1">
+<section id="the-natural-scenes-fmri-dataset" class="level2 page-columns page-full">
+<h2 class="anchored" data-anchor-id="the-natural-scenes-fmri-dataset">The Natural Scenes fMRI Dataset</h2>
+<p><img src="../resources/nsd.png" class="img-fluid"></p>
+<p>The natural scenes dataset (NSD) is the largest fMRI dataset on human vision, with 7T fMRI responses (1.8 mm isotropic voxels) obtained from 8 adult participants. The experiment involved a continuous recognition task while participants observed natural scene images from the Microsoft Common Objects in Context (COCO) database (Lin et al., 2014).</p>
+<p>Let’s load the dataset. This data contains neural responses to 700 images from ~15,000 voxels reliably modulated by the visual stimuli during the NSD experiment.</p>
+<div id="install_package" class="cell" data-execution_count="2">
 <details>
 <summary>Install all required dependencies</summary>
 <div class="sourceCode cell-code" id="install_package"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="install_package-1"><a href="#install_package-1" aria-hidden="true" tabindex="-1"></a><span class="co"># </span><span class="al">TODO</span><span class="co"> uncomment before final packaging</span></span>
 <span id="install_package-2"><a href="#install_package-2" aria-hidden="true" tabindex="-1"></a><span class="co"># %pip install git+https://github.com/BonnerLab/ccn-tutorial.git</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="import_libraries" class="cell" data-execution_count="2">
+<div id="import_libraries" class="cell" data-execution_count="3">
 <details>
 <summary>Import various libraries</summary>
 <div class="sourceCode cell-code" id="import_libraries"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="import_libraries-1"><a href="#import_libraries-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> collections <span class="im">import</span> Counter</span>
@@ -298,7 +303,7 @@ Run this notebook interactively!
 <span id="import_libraries-35"><a href="#import_libraries-35" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="set_visualization_defaults" class="cell" data-execution_count="3">
+<div id="set_visualization_defaults" class="cell" data-execution_count="4">
 <details>
 <summary>Set some visualization defaults</summary>
 <div class="sourceCode cell-code" id="set_visualization_defaults"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="set_visualization_defaults-1"><a href="#set_visualization_defaults-1" aria-hidden="true" tabindex="-1"></a><span class="op">%</span>matplotlib inline</span>
@@ -321,24 +326,19 @@ Run this notebook interactively!
 <span id="set_visualization_defaults-18"><a href="#set_visualization_defaults-18" aria-hidden="true" tabindex="-1"></a>warnings.filterwarnings(<span class="st">"ignore"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="initialize_rng" class="cell" data-execution_count="4">
+<div id="initialize_rng" class="cell" data-execution_count="5">
 <details>
 <summary>Initialize a deterministic random number generator</summary>
 <div class="sourceCode cell-code" id="initialize_rng"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="initialize_rng-1"><a href="#initialize_rng-1" aria-hidden="true" tabindex="-1"></a>random_state <span class="op">=</span> <span class="dv">0</span></span>
 <span id="initialize_rng-2"><a href="#initialize_rng-2" aria-hidden="true" tabindex="-1"></a>rng <span class="op">=</span> np.random.default_rng(seed<span class="op">=</span>random_state)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<section id="the-natural-scenes-fmri-dataset-nsd" class="level2 page-columns page-full">
-<h2 class="anchored" data-anchor-id="the-natural-scenes-fmri-dataset-nsd">The Natural Scenes fMRI Dataset (NSD)</h2>
-<p><img src="../resources/nsd.png" class="img-fluid"></p>
-<p>NSD is the largest fMRI dataset on human vision, with 7T fMRI responses (1.8mm isotropic voxels) obtained from 8 adult participants. The experiment involved a continuous recognition task while participants observed natural scene images from the Microsoft Common Objects in Context (COCO) database (Lin et al., 2014).</p>
-<p>Let’s load the dataset. This data contains neural responses to 700 images from ~15,000 voxels reliably modulated by the visual stimuli during the NSD experiment.</p>
-<div id="0be822b0" class="cell" data-execution_count="5">
+<div id="914e049d" class="cell" data-execution_count="6">
 <details>
 <summary>Load the dataset</summary>
-<div class="sourceCode cell-code" id="0be822b0"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="0be822b0-1"><a href="#0be822b0-1" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> average_data_across_repetitions(load_dataset(subject<span class="op">=</span><span class="dv">0</span>, roi<span class="op">=</span><span class="st">"general"</span>))</span>
-<span id="0be822b0-2"><a href="#0be822b0-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="0be822b0-3"><a href="#0be822b0-3" aria-hidden="true" tabindex="-1"></a>display(data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="914e049d"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="914e049d-1"><a href="#914e049d-1" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> average_data_across_repetitions(load_dataset(subject<span class="op">=</span><span class="dv">0</span>, roi<span class="op">=</span><span class="st">"general"</span>))</span>
+<span id="914e049d-2"><a href="#914e049d-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="914e049d-3"><a href="#914e049d-3" aria-hidden="true" tabindex="-1"></a>display(data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-display">
 <div><svg style="position: absolute; width: 0; height: 0; overflow: hidden">
@@ -716,7 +716,7 @@ Attributes: (3/8)
     resolution:      1pt8mm
     preprocessing:   fithrf_GLMdenoise_RR
     ...              ...
-    postprocessing:  averaged across first two repetitions</pre><div class="xr-wrap" style="display:none"><div class="xr-header"><div class="xr-obj-type">xarray.DataArray</div><div class="xr-array-name">'fMRI betas'</div><ul class="xr-dim-list"><li><span>presentation</span>: 700</li><li><span>neuroid</span>: 15724</li></ul></div><ul class="xr-sections"><li class="xr-section-item"><div class="xr-array-wrap"><input id="section-6915561f-d083-4d63-80f9-03647033471f" class="xr-array-in" type="checkbox"><label for="section-6915561f-d083-4d63-80f9-03647033471f" title="Show/hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-array-preview xr-preview"><span>0.4915 0.2473 0.08592 0.05828 ... -0.2126 -0.6315 -0.5751 -0.5354</span></div><div class="xr-array-data"><pre>array([[ 0.4915219 ,  0.24733381,  0.08592446, ..., -0.366651  ,
+    postprocessing:  averaged across first two repetitions</pre><div class="xr-wrap" style="display:none"><div class="xr-header"><div class="xr-obj-type">xarray.DataArray</div><div class="xr-array-name">'fMRI betas'</div><ul class="xr-dim-list"><li><span>presentation</span>: 700</li><li><span>neuroid</span>: 15724</li></ul></div><ul class="xr-sections"><li class="xr-section-item"><div class="xr-array-wrap"><input id="section-ef10fde0-bf60-49dc-98c7-203068f80fb6" class="xr-array-in" type="checkbox"><label for="section-ef10fde0-bf60-49dc-98c7-203068f80fb6" title="Show/hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-array-preview xr-preview"><span>0.4915 0.2473 0.08592 0.05828 ... -0.2126 -0.6315 -0.5751 -0.5354</span></div><div class="xr-array-data"><pre>array([[ 0.4915219 ,  0.24733381,  0.08592446, ..., -0.366651  ,
          0.30723202,  0.43520752],
        [ 0.1664538 , -0.10728736,  0.35630295, ...,  0.8608913 ,
          0.03464809,  0.11020081],
@@ -728,7 +728,7 @@ Attributes: (3/8)
        [-0.00340644, -1.0050421 ,  0.7278904 , ...,  0.580743  ,
         -0.50856245, -0.2727615 ],
        [-1.2668517 , -1.4769105 , -0.3562023 , ..., -0.63146234,
-        -0.575121  , -0.5354325 ]], dtype=float32)</pre></div></div></li><li class="xr-section-item"><input id="section-651f1da2-3fb8-4f0e-a988-746d6e4783b2" class="xr-section-summary-in" type="checkbox" checked=""><label for="section-651f1da2-3fb8-4f0e-a988-746d6e4783b2" class="xr-section-summary">Coordinates: <span>(4)</span></label><div class="xr-section-inline-details"></div><div class="xr-section-details"><ul class="xr-var-list"><li class="xr-var-item"><div class="xr-var-name"><span>x</span></div><div class="xr-var-dims">(neuroid)</div><div class="xr-var-dtype">uint8</div><div class="xr-var-preview xr-preview">12 12 12 12 12 ... 72 72 72 72 72</div><input id="attrs-179accb9-b866-45e8-b7ac-9866ca83d362" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-179accb9-b866-45e8-b7ac-9866ca83d362" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-0460a380-7a34-478d-a3ad-a8b4a23d9f62" class="xr-var-data-in" type="checkbox"><label for="data-0460a380-7a34-478d-a3ad-a8b4a23d9f62" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array([12, 12, 12, ..., 72, 72, 72], dtype=uint8)</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span>y</span></div><div class="xr-var-dims">(neuroid)</div><div class="xr-var-dtype">uint8</div><div class="xr-var-preview xr-preview">21 22 22 22 22 ... 29 30 30 30 31</div><input id="attrs-69f809b8-e51d-46e2-a094-2a36bd10e84a" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-69f809b8-e51d-46e2-a094-2a36bd10e84a" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-e8f6aa8e-db5a-4b14-8240-04f18bdbfc0c" class="xr-var-data-in" type="checkbox"><label for="data-e8f6aa8e-db5a-4b14-8240-04f18bdbfc0c" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array([21, 22, 22, ..., 30, 30, 31], dtype=uint8)</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span>z</span></div><div class="xr-var-dims">(neuroid)</div><div class="xr-var-dtype">uint8</div><div class="xr-var-preview xr-preview">47 45 46 47 48 ... 46 45 46 49 49</div><input id="attrs-35a3c8bf-0b04-4dbb-a673-5e8ec1469da0" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-35a3c8bf-0b04-4dbb-a673-5e8ec1469da0" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-e646555d-20fe-48ea-8a1e-cae0e68653ac" class="xr-var-data-in" type="checkbox"><label for="data-e646555d-20fe-48ea-8a1e-cae0e68653ac" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array([47, 45, 46, ..., 46, 49, 49], dtype=uint8)</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span>stimulus_id</span></div><div class="xr-var-dims">(presentation)</div><div class="xr-var-dtype">object</div><div class="xr-var-preview xr-preview">'image02950' ... 'image72948'</div><input id="attrs-bda019d0-528d-4667-8a0a-130e81ba28a4" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-bda019d0-528d-4667-8a0a-130e81ba28a4" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-123e0f53-ae3c-4e60-8f22-e7a75ccc86ab" class="xr-var-data-in" type="checkbox"><label for="data-123e0f53-ae3c-4e60-8f22-e7a75ccc86ab" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array(['image02950', 'image02990', 'image03049', 'image03077',
+        -0.575121  , -0.5354325 ]], dtype=float32)</pre></div></div></li><li class="xr-section-item"><input id="section-b4b5db5e-a6bb-4239-ba6c-1be3bf8c040d" class="xr-section-summary-in" type="checkbox" checked=""><label for="section-b4b5db5e-a6bb-4239-ba6c-1be3bf8c040d" class="xr-section-summary">Coordinates: <span>(4)</span></label><div class="xr-section-inline-details"></div><div class="xr-section-details"><ul class="xr-var-list"><li class="xr-var-item"><div class="xr-var-name"><span>x</span></div><div class="xr-var-dims">(neuroid)</div><div class="xr-var-dtype">uint8</div><div class="xr-var-preview xr-preview">12 12 12 12 12 ... 72 72 72 72 72</div><input id="attrs-b2959d1f-164f-417b-b97d-d3aa2f3aa495" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-b2959d1f-164f-417b-b97d-d3aa2f3aa495" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-62ea089a-c7f7-4c3b-8b3b-7d8afdf745b3" class="xr-var-data-in" type="checkbox"><label for="data-62ea089a-c7f7-4c3b-8b3b-7d8afdf745b3" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array([12, 12, 12, ..., 72, 72, 72], dtype=uint8)</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span>y</span></div><div class="xr-var-dims">(neuroid)</div><div class="xr-var-dtype">uint8</div><div class="xr-var-preview xr-preview">21 22 22 22 22 ... 29 30 30 30 31</div><input id="attrs-acf39b73-3bb8-4f7d-b910-6e70567de753" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-acf39b73-3bb8-4f7d-b910-6e70567de753" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-6c076c99-3cdc-4866-91f2-7f1634e51655" class="xr-var-data-in" type="checkbox"><label for="data-6c076c99-3cdc-4866-91f2-7f1634e51655" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array([21, 22, 22, ..., 30, 30, 31], dtype=uint8)</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span>z</span></div><div class="xr-var-dims">(neuroid)</div><div class="xr-var-dtype">uint8</div><div class="xr-var-preview xr-preview">47 45 46 47 48 ... 46 45 46 49 49</div><input id="attrs-38dce1a5-d70e-4adf-8eb4-4ed2164f6901" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-38dce1a5-d70e-4adf-8eb4-4ed2164f6901" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-bc0cd417-5bf0-4418-9b44-74a4ffb74555" class="xr-var-data-in" type="checkbox"><label for="data-bc0cd417-5bf0-4418-9b44-74a4ffb74555" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array([47, 45, 46, ..., 46, 49, 49], dtype=uint8)</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span>stimulus_id</span></div><div class="xr-var-dims">(presentation)</div><div class="xr-var-dtype">object</div><div class="xr-var-preview xr-preview">'image02950' ... 'image72948'</div><input id="attrs-2d2429b6-a69a-4a3e-a4ad-2b2d55c11ab2" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-2d2429b6-a69a-4a3e-a4ad-2b2d55c11ab2" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-3d824d93-9407-4968-bc09-77f0bbc6431e" class="xr-var-data-in" type="checkbox"><label for="data-3d824d93-9407-4968-bc09-77f0bbc6431e" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array(['image02950', 'image02990', 'image03049', 'image03077',
        'image03146', 'image03157', 'image03164', 'image03171',
        'image03181', 'image03386', 'image03434', 'image03449',
        'image03489', 'image03626', 'image03682', 'image03687',
@@ -768,7 +768,7 @@ Attributes: (3/8)
        'image71410', 'image71450', 'image71753', 'image71894',
        'image72015', 'image72080', 'image72209', 'image72312',
        'image72510', 'image72605', 'image72719', 'image72948'],
-      dtype=object)</pre></div></li></ul></div></li><li class="xr-section-item"><input id="section-e255fa8e-1fb4-4769-8376-cd2132f9b6fc" class="xr-section-summary-in" type="checkbox" disabled=""><label for="section-e255fa8e-1fb4-4769-8376-cd2132f9b6fc" class="xr-section-summary" title="Expand/collapse section">Indexes: <span>(0)</span></label><div class="xr-section-inline-details"></div><div class="xr-section-details"><ul class="xr-var-list"></ul></div></li><li class="xr-section-item"><input id="section-ab00fe87-36ee-4c80-8484-d505d2038456" class="xr-section-summary-in" type="checkbox" checked=""><label for="section-ab00fe87-36ee-4c80-8484-d505d2038456" class="xr-section-summary">Attributes: <span>(8)</span></label><div class="xr-section-inline-details"></div><div class="xr-section-details"><dl class="xr-attrs"><dt><span>resolution :</span></dt><dd>1pt8mm</dd><dt><span>preprocessing :</span></dt><dd>fithrf_GLMdenoise_RR</dd><dt><span>z_score :</span></dt><dd>True</dd><dt><span>roi :</span></dt><dd>general</dd><dt><span>subject :</span></dt><dd>0</dd><dt><span>brain shape :</span></dt><dd>[ 81 104  83]</dd><dt><span>citation :</span></dt><dd>Allen, E.J., St-Yves, G., Wu, Y. et al. A massive 7T fMRI dataset to bridge cognitive neuroscience and artificial intelligence. Nat Neurosci 25, 116-126 (2022). https://doi.org/10.1038/s41593-021-00962-x</dd><dt><span>postprocessing :</span></dt><dd>averaged across first two repetitions</dd></dl></div></li></ul></div></div>
+      dtype=object)</pre></div></li></ul></div></li><li class="xr-section-item"><input id="section-aa9410af-2300-408f-b433-bc0de8dad5b2" class="xr-section-summary-in" type="checkbox" disabled=""><label for="section-aa9410af-2300-408f-b433-bc0de8dad5b2" class="xr-section-summary" title="Expand/collapse section">Indexes: <span>(0)</span></label><div class="xr-section-inline-details"></div><div class="xr-section-details"><ul class="xr-var-list"></ul></div></li><li class="xr-section-item"><input id="section-70ea4cfa-0bf7-4f1a-8bb2-88e1be120df4" class="xr-section-summary-in" type="checkbox" checked=""><label for="section-70ea4cfa-0bf7-4f1a-8bb2-88e1be120df4" class="xr-section-summary">Attributes: <span>(8)</span></label><div class="xr-section-inline-details"></div><div class="xr-section-details"><dl class="xr-attrs"><dt><span>resolution :</span></dt><dd>1pt8mm</dd><dt><span>preprocessing :</span></dt><dd>fithrf_GLMdenoise_RR</dd><dt><span>z_score :</span></dt><dd>True</dd><dt><span>roi :</span></dt><dd>general</dd><dt><span>subject :</span></dt><dd>0</dd><dt><span>brain shape :</span></dt><dd>[ 81 104  83]</dd><dt><span>citation :</span></dt><dd>Allen, E.J., St-Yves, G., Wu, Y. et al. A massive 7T fMRI dataset to bridge cognitive neuroscience and artificial intelligence. Nat Neurosci 25, 116-126 (2022). https://doi.org/10.1038/s41593-021-00962-x</dd><dt><span>postprocessing :</span></dt><dd>averaged across first two repetitions</dd></dl></div></li></ul></div></div>
 </div>
 </div>
 <div class="callout callout-style-default callout-note callout-titled">
@@ -781,11 +781,11 @@ Some fMRI preprocessing details
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>We utilized the NSD single-trial betas, preprocessed in 1.8 mm volumetric space and denoised using the GLMdenoise technique (version 3;“betas_fithrf_GLMdenoise_RR”). The betas were converted to Z-scores within each scanning session and averaged across repetitions for each stimulus.</p>
+<p>We utilized the NSD single-trial betas, preprocessed in 1.8 mm volumetric space and denoised using the GLMdenoise technique (version 3; “betas_fithrf_GLMdenoise_RR”). The betas were converted to Z-scores within each scanning session and averaged across repetitions for each stimulus.</p>
 </div>
 </div>
-<p>Here are some examples of stimuli that we analyzed.</p>
-<div id="cell-view_stimuli" class="cell page-columns page-full" data-execution_count="6">
+<p>Here are some examples of stimuli seen by the participants.</p>
+<div id="cell-view_stimuli" class="cell page-columns page-full" data-execution_count="7">
 <details>
 <summary>Load the stimuli</summary>
 <div class="sourceCode cell-code" id="cell-view_stimuli"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cell-view_stimuli-1"><a href="#cell-view_stimuli-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> view_stimuli(stimuli: xr.DataArray, <span class="op">*</span>, n: <span class="bu">int</span> <span class="op">=</span> <span class="dv">10</span>) <span class="op">-&gt;</span> <span class="va">None</span>:</span>
@@ -813,47 +813,47 @@ Some fMRI preprocessing details
 </div>
 </div>
 </div>
-<section id="the-neural-eigenspectrum" class="level3 page-columns page-full">
-<h3 class="anchored" data-anchor-id="the-neural-eigenspectrum">The neural eigenspectrum</h3>
-<p>Now we can apply PCA to the neural responses and plot the eigenspectrum of the data!</p>
-<div id="aac3d600" class="cell" data-execution_count="7">
+<section id="the-neural-covariance-eigenspectrum" class="level3">
+<h3 class="anchored" data-anchor-id="the-neural-covariance-eigenspectrum">The neural covariance eigenspectrum</h3>
+<p>Now we can apply PCA to the neural responses and plot the eigenspectrum of their covariance!</p>
+<div id="3f65c763" class="cell" data-execution_count="8">
 <details>
 <summary>Visualize the eigenspectrum</summary>
-<div class="sourceCode cell-code" id="aac3d600"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="aac3d600-1"><a href="#aac3d600-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> view_eigenspectrum(pca: PCA, <span class="op">*</span>, log: <span class="bu">bool</span> <span class="op">=</span> <span class="va">False</span>) <span class="op">-&gt;</span> <span class="va">None</span>:</span>
-<span id="aac3d600-2"><a href="#aac3d600-2" aria-hidden="true" tabindex="-1"></a>    eigenvalues <span class="op">=</span> pd.DataFrame(pca.explained_variance_, columns<span class="op">=</span>[<span class="st">"eigenvalue"</span>]).assign(</span>
-<span id="aac3d600-3"><a href="#aac3d600-3" aria-hidden="true" tabindex="-1"></a>        rank<span class="op">=</span><span class="dv">1</span> <span class="op">+</span> np.arange(pca.n_components_)</span>
-<span id="aac3d600-4"><a href="#aac3d600-4" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="aac3d600-5"><a href="#aac3d600-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="aac3d600-6"><a href="#aac3d600-6" aria-hidden="true" tabindex="-1"></a>    fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">6</span>, <span class="dv">6</span>))</span>
-<span id="aac3d600-7"><a href="#aac3d600-7" aria-hidden="true" tabindex="-1"></a>    sns.lineplot(</span>
-<span id="aac3d600-8"><a href="#aac3d600-8" aria-hidden="true" tabindex="-1"></a>        ax<span class="op">=</span>ax,</span>
-<span id="aac3d600-9"><a href="#aac3d600-9" aria-hidden="true" tabindex="-1"></a>        data<span class="op">=</span>eigenvalues.loc[eigenvalues[<span class="st">"rank"</span>] <span class="op">&lt;</span> pca.n_components_],</span>
-<span id="aac3d600-10"><a href="#aac3d600-10" aria-hidden="true" tabindex="-1"></a>        x<span class="op">=</span><span class="st">"rank"</span>,</span>
-<span id="aac3d600-11"><a href="#aac3d600-11" aria-hidden="true" tabindex="-1"></a>        y<span class="op">=</span><span class="st">"eigenvalue"</span>,</span>
-<span id="aac3d600-12"><a href="#aac3d600-12" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="aac3d600-13"><a href="#aac3d600-13" aria-hidden="true" tabindex="-1"></a>    sns.despine(ax<span class="op">=</span>ax)</span>
-<span id="aac3d600-14"><a href="#aac3d600-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> log:</span>
-<span id="aac3d600-15"><a href="#aac3d600-15" aria-hidden="true" tabindex="-1"></a>        ax.set_xscale(<span class="st">"log"</span>)</span>
-<span id="aac3d600-16"><a href="#aac3d600-16" aria-hidden="true" tabindex="-1"></a>        ax.set_yscale(<span class="st">"log"</span>)</span>
-<span id="aac3d600-17"><a href="#aac3d600-17" aria-hidden="true" tabindex="-1"></a>        ax.set_ylim(bottom<span class="op">=</span><span class="dv">1</span>)</span>
-<span id="aac3d600-18"><a href="#aac3d600-18" aria-hidden="true" tabindex="-1"></a>    fig.show()</span>
-<span id="aac3d600-19"><a href="#aac3d600-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="aac3d600-20"><a href="#aac3d600-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="aac3d600-21"><a href="#aac3d600-21" aria-hidden="true" tabindex="-1"></a>pca <span class="op">=</span> PCA()</span>
-<span id="aac3d600-22"><a href="#aac3d600-22" aria-hidden="true" tabindex="-1"></a>pca.fit(data)</span>
-<span id="aac3d600-23"><a href="#aac3d600-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="aac3d600-24"><a href="#aac3d600-24" aria-hidden="true" tabindex="-1"></a>view_eigenspectrum(pca)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="3f65c763"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="3f65c763-1"><a href="#3f65c763-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> view_eigenspectrum(pca: PCA, <span class="op">*</span>, log: <span class="bu">bool</span> <span class="op">=</span> <span class="va">False</span>) <span class="op">-&gt;</span> <span class="va">None</span>:</span>
+<span id="3f65c763-2"><a href="#3f65c763-2" aria-hidden="true" tabindex="-1"></a>    eigenvalues <span class="op">=</span> pd.DataFrame(pca.explained_variance_, columns<span class="op">=</span>[<span class="st">"eigenvalue"</span>]).assign(</span>
+<span id="3f65c763-3"><a href="#3f65c763-3" aria-hidden="true" tabindex="-1"></a>        rank<span class="op">=</span><span class="dv">1</span> <span class="op">+</span> np.arange(pca.n_components_)</span>
+<span id="3f65c763-4"><a href="#3f65c763-4" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="3f65c763-5"><a href="#3f65c763-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="3f65c763-6"><a href="#3f65c763-6" aria-hidden="true" tabindex="-1"></a>    fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">6</span>, <span class="dv">6</span>))</span>
+<span id="3f65c763-7"><a href="#3f65c763-7" aria-hidden="true" tabindex="-1"></a>    sns.lineplot(</span>
+<span id="3f65c763-8"><a href="#3f65c763-8" aria-hidden="true" tabindex="-1"></a>        ax<span class="op">=</span>ax,</span>
+<span id="3f65c763-9"><a href="#3f65c763-9" aria-hidden="true" tabindex="-1"></a>        data<span class="op">=</span>eigenvalues.loc[eigenvalues[<span class="st">"rank"</span>] <span class="op">&lt;</span> pca.n_components_],</span>
+<span id="3f65c763-10"><a href="#3f65c763-10" aria-hidden="true" tabindex="-1"></a>        x<span class="op">=</span><span class="st">"rank"</span>,</span>
+<span id="3f65c763-11"><a href="#3f65c763-11" aria-hidden="true" tabindex="-1"></a>        y<span class="op">=</span><span class="st">"eigenvalue"</span>,</span>
+<span id="3f65c763-12"><a href="#3f65c763-12" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="3f65c763-13"><a href="#3f65c763-13" aria-hidden="true" tabindex="-1"></a>    sns.despine(ax<span class="op">=</span>ax)</span>
+<span id="3f65c763-14"><a href="#3f65c763-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> log:</span>
+<span id="3f65c763-15"><a href="#3f65c763-15" aria-hidden="true" tabindex="-1"></a>        ax.set_xscale(<span class="st">"log"</span>)</span>
+<span id="3f65c763-16"><a href="#3f65c763-16" aria-hidden="true" tabindex="-1"></a>        ax.set_yscale(<span class="st">"log"</span>)</span>
+<span id="3f65c763-17"><a href="#3f65c763-17" aria-hidden="true" tabindex="-1"></a>        ax.set_ylim(bottom<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="3f65c763-18"><a href="#3f65c763-18" aria-hidden="true" tabindex="-1"></a>    fig.show()</span>
+<span id="3f65c763-19"><a href="#3f65c763-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="3f65c763-20"><a href="#3f65c763-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="3f65c763-21"><a href="#3f65c763-21" aria-hidden="true" tabindex="-1"></a>pca <span class="op">=</span> PCA()</span>
+<span id="3f65c763-22"><a href="#3f65c763-22" aria-hidden="true" tabindex="-1"></a>pca.fit(data)</span>
+<span id="3f65c763-23"><a href="#3f65c763-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="3f65c763-24"><a href="#3f65c763-24" aria-hidden="true" tabindex="-1"></a>view_eigenspectrum(pca)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="exploring_neural_data_files/figure-html/cell-8-output-1.svg" class="img-fluid figure-img"></p>
-<figcaption class="figure-caption">Neural eigenspectra with linear scaling</figcaption>
+<figcaption class="figure-caption">Neural covariance eigenspectrum with linear scaling</figcaption>
 </figure>
 </div>
 </div>
 </div>
-<div class="callout callout-style-default callout-tip callout-titled page-columns page-full">
+<div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
@@ -863,10 +863,10 @@ Visualization of principal components
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-3" class="callout-3-contents callout-collapse collapse page-columns page-full">
-<div class="callout-body-container callout-body page-columns page-full">
-<p>There are some simple ways to visualize and interpret the principle components.</p>
-<div id="image_viewing_utilities" class="cell" data-execution_count="8">
+<div id="callout-3" class="callout-3-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>There are some simple ways to visualize and interpret the principal components.</p>
+<div id="image_viewing_utilities" class="cell" data-execution_count="9">
 <details>
 <summary>Utilities to view images</summary>
 <div class="sourceCode cell-code" id="image_viewing_utilities"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="image_viewing_utilities-1"><a href="#image_viewing_utilities-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> view_images_as_scatterplot(</span>
@@ -930,67 +930,67 @@ Visualization of principal components
 <span id="image_viewing_utilities-59"><a href="#image_viewing_utilities-59" aria-hidden="true" tabindex="-1"></a>    fig.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<p>The first method is to plot the stimuli on a scatter plot, designating their X and Y coordinates to be their scores along two PCs of interest. This allows us to observe potential clustering of the stimuli.</p>
-<div id="d75f2278" class="cell page-columns page-full" data-execution_count="9">
+<p>The first method is to plot the stimuli on a scatter plot, designating their X and Y coordinates to be their scores along two principal components of interest. This allows us to observe potential clustering of the stimuli.</p>
+<div id="bf3b58ce" class="cell" data-execution_count="10">
 <details>
 <summary>Project the neural data onto the first two principal components</summary>
-<div class="sourceCode cell-code" id="d75f2278"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="d75f2278-1"><a href="#d75f2278-1" aria-hidden="true" tabindex="-1"></a>data_pca <span class="op">=</span> pca.transform(data)</span>
-<span id="d75f2278-2"><a href="#d75f2278-2" aria-hidden="true" tabindex="-1"></a>view_images_as_scatterplot(data_pca[:, <span class="dv">0</span>], data_pca[:, <span class="dv">1</span>], stimuli<span class="op">=</span>stimuli)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="bf3b58ce"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="bf3b58ce-1"><a href="#bf3b58ce-1" aria-hidden="true" tabindex="-1"></a>data_pca <span class="op">=</span> pca.transform(data)</span>
+<span id="bf3b58ce-2"><a href="#bf3b58ce-2" aria-hidden="true" tabindex="-1"></a>view_images_as_scatterplot(data_pca[:, <span class="dv">0</span>], data_pca[:, <span class="dv">1</span>], stimuli<span class="op">=</span>stimuli)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output cell-output-display page-columns page-full">
-<div class="quarto-figure quarto-figure-center page-columns page-full">
-<figure class="figure page-columns page-full">
-<p class="page-columns page-full"><img src="exploring_neural_data_files/figure-html/cell-10-output-1.svg" class="img-fluid figure-img column-page"></p>
+<div class="cell-output cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="exploring_neural_data_files/figure-html/cell-10-output-1.svg" class="img-fluid figure-img"></p>
 </figure>
 </div>
 </div>
 </div>
-<p>Alternativley, we can focus on the stimuli with the highest or lowest scores along a given PC. It provides simple clues of what this PC might be sensitive to, which could be features ranging from low to high complexity level.</p>
-<div id="extreme_images_pcs" class="cell page-columns page-full" data-execution_count="10">
+<p>Alternatively, we can focus on the stimuli with the highest or lowest scores along a given principal component. This provides simple clues of what this PC might be sensitive to, which could be visual features ranging from low to high complexity.</p>
+<div id="extreme_images_pcs" class="cell" data-execution_count="11">
 <details>
 <summary>View images that have extreme scores on the PCs</summary>
 <div class="sourceCode cell-code" id="extreme_images_pcs"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="extreme_images_pcs-1"><a href="#extreme_images_pcs-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> rank <span class="kw">in</span> [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">10</span>, <span class="dv">50</span>, <span class="dv">100</span>]:</span>
 <span id="extreme_images_pcs-2"><a href="#extreme_images_pcs-2" aria-hidden="true" tabindex="-1"></a>    view_images_at_poles(data_pca[:, rank <span class="op">-</span> <span class="dv">1</span>], stimuli<span class="op">=</span>stimuli, label<span class="op">=</span><span class="ss">f"rank </span><span class="sc">{</span>rank<span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output cell-output-display page-columns page-full">
-<div id="extreme_images_pcs-1" class="quarto-figure quarto-figure-center anchored page-columns page-full">
-<figure class="figure page-columns page-full">
-<p class="page-columns page-full"><img src="exploring_neural_data_files/figure-html/extreme_images_pcs-output-1.svg" class="img-fluid figure-img column-page"></p>
+<div class="cell-output cell-output-display">
+<div id="extreme_images_pcs-1" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="exploring_neural_data_files/figure-html/extreme_images_pcs-output-1.svg" class="img-fluid figure-img"></p>
 </figure>
 </div>
 </div>
-<div class="cell-output cell-output-display page-columns page-full">
-<div id="extreme_images_pcs-2" class="quarto-figure quarto-figure-center anchored page-columns page-full">
-<figure class="figure page-columns page-full">
-<p class="page-columns page-full"><img src="exploring_neural_data_files/figure-html/extreme_images_pcs-output-2.svg" class="img-fluid figure-img column-page"></p>
+<div class="cell-output cell-output-display">
+<div id="extreme_images_pcs-2" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="exploring_neural_data_files/figure-html/extreme_images_pcs-output-2.svg" class="img-fluid figure-img"></p>
 </figure>
 </div>
 </div>
-<div class="cell-output cell-output-display page-columns page-full">
-<div id="extreme_images_pcs-3" class="quarto-figure quarto-figure-center anchored page-columns page-full">
-<figure class="figure page-columns page-full">
-<p class="page-columns page-full"><img src="exploring_neural_data_files/figure-html/extreme_images_pcs-output-3.svg" class="img-fluid figure-img column-page"></p>
+<div class="cell-output cell-output-display">
+<div id="extreme_images_pcs-3" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="exploring_neural_data_files/figure-html/extreme_images_pcs-output-3.svg" class="img-fluid figure-img"></p>
 </figure>
 </div>
 </div>
-<div class="cell-output cell-output-display page-columns page-full">
-<div id="extreme_images_pcs-4" class="quarto-figure quarto-figure-center anchored page-columns page-full">
-<figure class="figure page-columns page-full">
-<p class="page-columns page-full"><img src="exploring_neural_data_files/figure-html/extreme_images_pcs-output-4.svg" class="img-fluid figure-img column-page"></p>
+<div class="cell-output cell-output-display">
+<div id="extreme_images_pcs-4" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="exploring_neural_data_files/figure-html/extreme_images_pcs-output-4.svg" class="img-fluid figure-img"></p>
 </figure>
 </div>
 </div>
-<div class="cell-output cell-output-display page-columns page-full">
-<div id="extreme_images_pcs-5" class="quarto-figure quarto-figure-center anchored page-columns page-full">
-<figure class="figure page-columns page-full">
-<p class="page-columns page-full"><img src="exploring_neural_data_files/figure-html/extreme_images_pcs-output-5.svg" class="img-fluid figure-img column-page"></p>
+<div class="cell-output cell-output-display">
+<div id="extreme_images_pcs-5" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="exploring_neural_data_files/figure-html/extreme_images_pcs-output-5.svg" class="img-fluid figure-img"></p>
 </figure>
 </div>
 </div>
-<div class="cell-output cell-output-display page-columns page-full">
-<div id="extreme_images_pcs-6" class="quarto-figure quarto-figure-center anchored page-columns page-full">
-<figure class="figure page-columns page-full">
-<p class="page-columns page-full"><img src="exploring_neural_data_files/figure-html/extreme_images_pcs-output-6.svg" class="img-fluid figure-img column-page"></p>
+<div class="cell-output cell-output-display">
+<div id="extreme_images_pcs-6" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="exploring_neural_data_files/figure-html/extreme_images_pcs-output-6.svg" class="img-fluid figure-img"></p>
 </figure>
 </div>
 </div>
@@ -998,7 +998,7 @@ Visualization of principal components
 </div>
 </div>
 </div>
-<div class="callout callout-style-default callout-important callout-titled page-columns page-full">
+<div class="callout callout-style-default callout-important callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
@@ -1008,74 +1008,78 @@ What about other methods?
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-4" class="callout-4-contents callout-collapse collapse page-columns page-full">
-<div class="callout-body-container callout-body page-columns page-full">
-<p>Interpreting PCs can be challenging especially when we rely solely on visual inspection. This difficulty arises, in part, because many natural features are non-negative. As a result, methods like nonnegative matrix factorization (NMF) often offer more interpretable dimensions than PCA.</p>
-<div id="8efe279d" class="cell page-columns page-full" data-execution_count="11">
+<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Interpreting PCs can be challenging especially when we rely solely on visual inspection. This difficulty arises in part because many natural features are non-negative. As a result, methods like nonnegative matrix factorization (NMF) often offer more interpretable dimensions than PCA.</p>
+<div id="96bd3753" class="cell" data-execution_count="12">
 <details>
 <summary>Compute NMF of neural responses</summary>
-<div class="sourceCode cell-code" id="8efe279d"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="8efe279d-1"><a href="#8efe279d-1" aria-hidden="true" tabindex="-1"></a>scaler <span class="op">=</span> MinMaxScaler()</span>
-<span id="8efe279d-2"><a href="#8efe279d-2" aria-hidden="true" tabindex="-1"></a>scaler.fit(data)</span>
-<span id="8efe279d-3"><a href="#8efe279d-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="8efe279d-4"><a href="#8efe279d-4" aria-hidden="true" tabindex="-1"></a>nmf <span class="op">=</span> NMF(n_components<span class="op">=</span><span class="dv">2</span>, random_state<span class="op">=</span>random_state)</span>
-<span id="8efe279d-5"><a href="#8efe279d-5" aria-hidden="true" tabindex="-1"></a>data_nmf <span class="op">=</span> nmf.fit_transform(scaler.transform(data))</span>
-<span id="8efe279d-6"><a href="#8efe279d-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="8efe279d-7"><a href="#8efe279d-7" aria-hidden="true" tabindex="-1"></a>view_images_as_scatterplot(data_nmf[:, <span class="dv">0</span>], data_nmf[:, <span class="dv">1</span>], stimuli<span class="op">=</span>stimuli)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="96bd3753"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="96bd3753-1"><a href="#96bd3753-1" aria-hidden="true" tabindex="-1"></a>scaler <span class="op">=</span> MinMaxScaler()</span>
+<span id="96bd3753-2"><a href="#96bd3753-2" aria-hidden="true" tabindex="-1"></a>scaler.fit(data)</span>
+<span id="96bd3753-3"><a href="#96bd3753-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="96bd3753-4"><a href="#96bd3753-4" aria-hidden="true" tabindex="-1"></a>nmf <span class="op">=</span> NMF(n_components<span class="op">=</span><span class="dv">2</span>, random_state<span class="op">=</span>random_state)</span>
+<span id="96bd3753-5"><a href="#96bd3753-5" aria-hidden="true" tabindex="-1"></a>data_nmf <span class="op">=</span> nmf.fit_transform(scaler.transform(data))</span>
+<span id="96bd3753-6"><a href="#96bd3753-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="96bd3753-7"><a href="#96bd3753-7" aria-hidden="true" tabindex="-1"></a>view_images_as_scatterplot(data_nmf[:, <span class="dv">0</span>], data_nmf[:, <span class="dv">1</span>], stimuli<span class="op">=</span>stimuli)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output cell-output-display page-columns page-full">
-<div class="quarto-figure quarto-figure-center page-columns page-full">
-<figure class="figure page-columns page-full">
-<p class="page-columns page-full"><img src="exploring_neural_data_files/figure-html/cell-12-output-1.svg" class="img-fluid figure-img column-page"></p>
+<div class="cell-output cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="exploring_neural_data_files/figure-html/cell-12-output-1.svg" class="img-fluid figure-img"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>Similarly, we can inspect the stimuli with highest or closest-to-zero values along each dimension.</p>
-<div id="969a8d37" class="cell page-columns page-full" data-execution_count="12">
+<div id="45a8c1ea" class="cell" data-execution_count="13">
 <details>
 <summary>View images that have extreme scores on the dimensions</summary>
-<div class="sourceCode cell-code" id="969a8d37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="969a8d37-1"><a href="#969a8d37-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> dim <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">2</span>):</span>
-<span id="969a8d37-2"><a href="#969a8d37-2" aria-hidden="true" tabindex="-1"></a>    view_images_at_poles(data_pca[:, dim], stimuli<span class="op">=</span>stimuli, label<span class="op">=</span><span class="ss">f"dim </span><span class="sc">{</span>dim<span class="op">+</span><span class="dv">1</span><span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="45a8c1ea"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="45a8c1ea-1"><a href="#45a8c1ea-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> dim <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">2</span>):</span>
+<span id="45a8c1ea-2"><a href="#45a8c1ea-2" aria-hidden="true" tabindex="-1"></a>    view_images_at_poles(data_pca[:, dim], stimuli<span class="op">=</span>stimuli, label<span class="op">=</span><span class="ss">f"dim </span><span class="sc">{</span>dim<span class="op">+</span><span class="dv">1</span><span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output cell-output-display page-columns page-full">
-<div class="quarto-figure quarto-figure-center page-columns page-full">
-<figure class="figure page-columns page-full">
-<p class="page-columns page-full"><img src="exploring_neural_data_files/figure-html/cell-13-output-1.svg" class="img-fluid figure-img column-page"></p>
+<div class="cell-output cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="exploring_neural_data_files/figure-html/cell-13-output-1.svg" class="img-fluid figure-img"></p>
 </figure>
 </div>
 </div>
-<div class="cell-output cell-output-display page-columns page-full">
-<div class="quarto-figure quarto-figure-center page-columns page-full">
-<figure class="figure page-columns page-full">
-<p class="page-columns page-full"><img src="exploring_neural_data_files/figure-html/cell-13-output-2.svg" class="img-fluid figure-img column-page"></p>
+<div class="cell-output cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="exploring_neural_data_files/figure-html/cell-13-output-2.svg" class="img-fluid figure-img"></p>
 </figure>
 </div>
 </div>
 </div>
-<!-- What can we interpret here? -->
-<!-- if NMF can be done in a linear manner, should we stress that PCA is better for being a linear methods? -->
-<p>Nonetheless, PCA has unique benefits that shouldn’t be overlooked. For instance, PCA offers closed-form solutions and non-stochastic outcomes. They’re also well characterized mathematically. Moreover, because PCA is essentially rotateing data to present it in a clearer perspective, it is able to preserve all the original information.</p>
+<p>Nonetheless, PCA has unique benefits that shouldn’t be overlooked. For instance, PCA offers closed-form solutions and non-stochastic outcomes. They’re also well characterized mathematically. Moreover, because PCA is essentially a simple rotation of the data, it preserves all the original information in the dataset.</p>
 </div>
 </div>
 </div>
-<p>On this plot, it looks like that the first few PCs have substantial variance while the rest are negligable, which suggests a low-dimensional structure. However, when dealing with high-dimensional data that span several orders of magnitude, it’s more insightful to use a logarithmic scale. We can examine many key statistical trends more clearly across the orders. So let’s try visualizing the spectrum on a logarithmic scale for both axes:</p>
-<div id="3cd4de0a" class="cell" data-execution_count="13">
+<p>On this plot, it looks like that the first few PCs have substantial variance while the rest are negligible, which suggests a low-dimensional structure.</p>
+<p>However, when dealing with high-dimensional data that span several orders of magnitude, it’s more insightful to visualize it on a logarithmic scale, which makes many key statistical trends more apparent. So let’s try visualizing the spectrum on a logarithmic scale for both axes:</p>
+<div id="737daf8b" class="cell" data-execution_count="14">
 <details>
 <summary>Visualize the eigenspectrum on a logarithmic scale</summary>
-<div class="sourceCode cell-code" id="3cd4de0a"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="3cd4de0a-1"><a href="#3cd4de0a-1" aria-hidden="true" tabindex="-1"></a>view_eigenspectrum(pca, log<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="737daf8b"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="737daf8b-1"><a href="#737daf8b-1" aria-hidden="true" tabindex="-1"></a>view_eigenspectrum(pca, log<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="exploring_neural_data_files/figure-html/cell-14-output-1.svg" class="img-fluid figure-img"></p>
-<figcaption class="figure-caption">Neural eigenspectra with logarithmic scaling</figcaption>
+<figcaption class="figure-caption">Neural covariance eigenspectrum with logarithmic scaling</figcaption>
 </figure>
 </div>
 </div>
 </div>
-<p>On a log-log scale, the spectrum shows a trend similar to a linear relationship, suggesting that the eignenspectrum might be a power law distribution:</p>
-<p><span class="math display">\log{\lambda_\text{rank}} \approx \alpha \log{\left( \text{rank} \right)} + c \implies \lambda_\text{rank} \propto \left( \text{rank} \right)^\alpha</span></p>
-<p>There is information spanning across all ranks as we find no obvious cut-off point, this distributions. So the number of effect dimensions here is likely much higher than what we would speculate from the linear scale.</p>
+<p>On a log-log scale, the spectrum shows a trend that looks remarkably linear, suggesting that the eigenspectrum might obey a power-law distribution:</p>
+<p><span class="math display">
+\begin{align*}
+    \log{\lambda_\text{rank}} &amp;\approx \alpha \log{\left( \text{rank} \right)} + c\\
+    \lambda_\text{rank} &amp;\propto \left( \text{rank} \right)^\alpha
+\end{align*}
+</span></p>
+<p>There appears to be no obvious cut-off point in this power law, suggesting that there might be information across all ranks. The number of effective dimensions here is likely much higher than what we would have expected from simply viewing the eigenspectrum on a linear scale.</p>
 </section>
 </section>
 <section id="power-laws" class="level2">
@@ -1083,20 +1087,19 @@ What about other methods?
 <p>A power law is a relationship of the form <span class="math inline">f(x) \propto x^{\alpha}</span>, where <span class="math inline">\alpha</span> is termed the <em>index</em> of the power law, or the <em>power law exponent</em>. It suggests a <em>scale-free</em> structure because <span class="math inline">f(kx) \propto f(x)</span>.</p>
 <p>Power laws are ubiquitious in nature, arising in all sorts of systems:</p>
 <ul>
-<li>word frequencies in natural language (Zipf’s law)</li>
-<li>wealth distribution (Pareto principle)</li>
-<li>ferromagnetism (Ising model)</li>
+<li>word frequencies in natural language (<a href="https://en.wikipedia.org/wiki/Zipf%27s_law">Zipf’s law</a>)</li>
+<li>wealth distribution (<a href="https://en.wikipedia.org/wiki/Pareto_principle">Pareto principle</a>)</li>
+<li>ferromagnetic materials near the Curie temperature (<a href="https://en.wikipedia.org/wiki/Ising_model">Ising model</a>)</li>
 </ul>
-<!-- but see Scale-free networks are rare -->
 <p>Nevertheless, a power law relationshop will not be observed when the data</p>
 <ul>
-<li>is random</li>
-<li>has a characteristic scale</li>
+<li>is random, or</li>
+<li>when it has a characteristic scale.</li>
 </ul>
 <section id="an-analogy-word-frequencies" class="level3">
 <h3 class="anchored" data-anchor-id="an-analogy-word-frequencies">An analogy: word frequencies</h3>
-<p>Zipf’s law suggests a power law distribution of use frequency of English words.Let’s compute the distribution of frequencies in a small corpus – a collection of <a href="https://pytorch.org/text/0.9.0/datasets.html#imdb">IMDb movie reviews</a>.</p>
-<div id="generate-word-frequencies" class="cell" data-execution_count="14">
+<p>Zipf’s law suggests a power-law distribution of use frequency of English words. Let’s compute the distribution of frequencies in a small corpus – a collection of <a href="https://pytorch.org/text/0.9.0/datasets.html#imdb">IMDb movie reviews</a>.</p>
+<div id="generate-word-frequencies" class="cell" data-execution_count="15">
 <details>
 <summary>Generate word frequency distribution</summary>
 <div class="sourceCode cell-code" id="generate-word-frequencies"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="generate-word-frequencies-1"><a href="#generate-word-frequencies-1" aria-hidden="true" tabindex="-1"></a>dataset <span class="op">=</span> IMDB(split<span class="op">=</span><span class="st">"test"</span>)</span>
@@ -1108,7 +1111,7 @@ What about other methods?
 <span id="generate-word-frequencies-7"><a href="#generate-word-frequencies-7" aria-hidden="true" tabindex="-1"></a>    counter.update(tokenizer(text))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="cell-logarithmic-word-frequency" class="cell" data-execution_count="15">
+<div id="cell-logarithmic-word-frequency" class="cell" data-execution_count="16">
 <details>
 <summary>View word frequency distribution on a linear scale</summary>
 <div class="sourceCode cell-code" id="cell-logarithmic-word-frequency"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cell-logarithmic-word-frequency-1"><a href="#cell-logarithmic-word-frequency-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> view_word_frequency_distribution(counter: Counter, <span class="op">*</span>, log: <span class="bu">bool</span> <span class="op">=</span> <span class="va">False</span>) <span class="op">-&gt;</span> Figure:</span>
@@ -1144,7 +1147,7 @@ What about other methods?
 </div>
 </div>
 <p>If only the high-frequency words are meaningful to human language, then we should be able to reconstruct a movie review with these words only:</p>
-<div id="cell-text-original" class="cell" data-execution_count="16">
+<div id="cell-text-original" class="cell" data-execution_count="17">
 <details>
 <summary>Display an IMDb review</summary>
 <div class="sourceCode cell-code" id="cell-text-original"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cell-text-original-1"><a href="#cell-text-original-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> _, line <span class="kw">in</span> dataset:</span>
@@ -1198,7 +1201,7 @@ What about other methods?
 <blockquote class="blockquote">i love sci-fi and am willing to put up with a lot. Sci-fi movies/tv are usually underfunded, under-appreciated and misunderstood. I tried to like this, I really did, but it is to good tv sci-fi as babylon 5 is to star trek (the original). Silly prosthetics, cheap cardboard sets, stilted dialogues, cg that doesn't match the background, and painfully one-dimensional characters cannot be overcome with a'sci-fi'setting. (I'm sure there are those of you out there who think babylon 5 is good sci-fi tv. It's not. It's clichéd and uninspiring.) while us viewers might like emotion and character development, sci-fi is a genre that does not take itself seriously (cf. Star trek). It may treat important issues, yet not as a serious philosophy. It's really difficult to care about the characters here as they are not simply foolish, just missing a spark of life. Their actions and reactions are wooden and predictable, often painful to watch. The makers of earth know it's rubbish as they have to always say gene roddenberry's earth... Otherwise people would not continue watching. Roddenberry's ashes must be turning in their orbit as this dull, cheap, poorly edited (watching it without advert breaks really brings this home) trudging trabant of a show lumbers into space. Spoiler. So, kill off a main character. And then bring him back as another actor. Jeeez! Dallas all over again.</blockquote>
 </div>
 </div>
-<div id="cell-text-reconstruction" class="cell" data-execution_count="17">
+<div id="cell-text-reconstruction" class="cell" data-execution_count="18">
 <details>
 <summary>Reconstruct the review using the top 200 words</summary>
 <div class="sourceCode cell-code" id="cell-text-reconstruction"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cell-text-reconstruction-1"><a href="#cell-text-reconstruction-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Review reconstructed using top 200 words"</span>)</span>
@@ -1227,7 +1230,7 @@ What about other methods?
 <blockquote class="blockquote">i love and to up with a lot. Are, and. I to like this, I really did, but it is to good as is to (the).,,, that doesn't the, and characters be with a''. (I'm there are those of you out there who think is good. It's not. It's and.) while us like and character, is a that does not take (.). It, not as a. It's really to about the characters here as they are not, just a of life. Their and are and, to watch. The of know it's as they have to say's... People would not watching.'s be in their as this,, (watching it really this) of a show into.. So, off a character. And then him back as another.! All over again.</blockquote>
 </div>
 </div>
-<p>This demonstrates that the high-rank, low-frequency words also carries meaningful information. Similarly, we will likely also lose information if we try to reconstruct neural data wiht just the high-variance PCs.</p>
+<p>This poor reconstruction demonstrates that the high-rank, low-frequency words also carry meaningful information – in fact, most of it. Analogously, if we try to reconstruct neural data with just a few high-variance principal components – which is exactly what typical dimensionality reduction methods do – we will likely lose valuable information about the presented stimulus.</p>
 
 
 </section>
