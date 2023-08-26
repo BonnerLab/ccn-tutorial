@@ -4915,13 +4915,13 @@ AQAAAABMYXZmNTkuMjcuMTAw
 \end{align*}
 </span></p>
 <p>To do this, we start by computing the covariance of our data matrix, where <span class="math inline">X</span> is centered (i.e.&nbsp;<span class="math inline">X - \overline{X}</span>)</p>
-<p><img src="../resources/autocovariance.svg" class="img-fluid" style="width:100.0%"></p>
+<p><img src="https://github.com/BonnerLab/ccn-tutorial/blob/main/resources/autocovariance.svg?raw=true" class="img-fluid" style="width:100.0%"></p>
 <p>Next, we compute the eigendecomposition of the covariance:</p>
 <div class="page-columns page-full"><p></p><div class="no-row-height column-margin column-container"><span class="">The computational steps we take to diagonalize the covariance are slightly different, as is described later in the notebook.</span></div></div>
-<p><img src="../resources/eigendecomposition.svg" class="img-fluid" style="width:100.0%"></p>
+<p><img src="https://github.com/BonnerLab/ccn-tutorial/blob/main/resources/eigendecomposition.svg?raw=true" class="img-fluid" style="width:100.0%"></p>
 <p>The columns of <span class="math inline">V</span> are <em>eigenvectors</em> that specify the directions of variance while the corresponding diagonal elements of <span class="math inline">\Lambda</span> are <em>eigenvalues</em> that specify the amount of variance along the eigenvector<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>.</p>
 <p>Finally, the original data matrix can be transformed by projecting it onto the eigenvectors: <span class="math inline">\widetilde{X} = \left(X - \overline{X}\right) V</span>.</p>
-<p><img src="../resources/projection.svg" class="img-fluid" style="width:80.0%"></p>
+<p><img src="https://github.com/BonnerLab/ccn-tutorial/blob/main/resources/projection.svg?raw=true" class="img-fluid" style="width:80.0%"></p>
 </section>
 <section id="a-computational-recipe" class="level3">
 <h3 class="anchored" data-anchor-id="a-computational-recipe">A computational recipe</h3>

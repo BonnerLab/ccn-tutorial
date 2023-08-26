@@ -571,10 +571,10 @@ An incorrect assumption: signal = high-variance, noise = low-variance
 <section id="cross-validated-pca" class="level2 page-columns page-full">
 <h2 class="anchored" data-anchor-id="cross-validated-pca">Cross-validated PCA</h2>
 <p>In a whole-brain <a href="https://en.wikipedia.org/wiki/Calcium_imaging">calcium-imaging</a> study, <span class="citation" data-cites="Stringer2019">Stringer et al. (<a href="#ref-Stringer2019" role="doc-biblioref">2019</a>)</span> recorded the responses of 10,000 neurons in mouse primary visual cortex to 2,800 natural images.</p>
-<p><img src="../resources/mouse.svg" class="img-fluid" style="width:20.0%"></p>
+<p><img src="https://github.com/BonnerLab/ccn-tutorial/blob/main/resources/mouse.svg?raw=true" class="img-fluid" style="width:20.0%"></p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="../resources/stringer-fig1.png" class="img-fluid figure-img"></p>
+<p><img src="https://github.com/BonnerLab/ccn-tutorial/blob/main/resources/stringer-fig1.png?raw=true" class="img-fluid figure-img"></p>
 <figcaption class="figure-caption">Experimental setup for the calcium-imaging study – Fig 1 in <span class="citation" data-cites="Stringer2019">Stringer et al. (<a href="#ref-Stringer2019" role="doc-biblioref">2019</a>)</span></figcaption>
 </figure>
 </div>
@@ -583,7 +583,7 @@ An incorrect assumption: signal = high-variance, noise = low-variance
 <p>Specifically, if there were <span class="math inline">N</span> unique stimuli – each seen twice – the data matrix <span class="math inline">X \in \mathbb{R}^{2N \times P}</span> is split into two matrices <span class="math inline">X_\text{train} \in \mathbb{R}^{N \times P}</span> and <span class="math inline">X_\text{test} \in \mathbb{R}^{N \times P}</span>, where the rows of <span class="math inline">X_\text{train}</span> and <span class="math inline">X_\text{test}</span> correspond to the same stimuli.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="../resources/x_train_x_test.svg" class="img-fluid figure-img" style="width:80.0%"></p>
+<p><img src="https://github.com/BonnerLab/ccn-tutorial/blob/main/resources/x_train_x_test.svg?raw=true" class="img-fluid figure-img" style="width:80.0%"></p>
 </figure>
 </div>
 <section id="step-1-compute-eigenvectors-on-the-training-set" class="level3 page-columns page-full">
@@ -598,7 +598,7 @@ An incorrect assumption: signal = high-variance, noise = low-variance
 \end{align*}
 </span></p>
 <div class="column-page-right">
-<p><img src="../resources/autocovariance-eigendecomposition.svg" class="img-fluid" style="width:100.0%"></p>
+<p><img src="https://github.com/BonnerLab/ccn-tutorial/blob/main/resources/autocovariance-eigendecomposition.svg?raw=true" class="img-fluid" style="width:100.0%"></p>
 </div>
 </section>
 <section id="step-2-compute-cross-validated-eigenvalues" class="level3 page-columns page-full">
@@ -613,7 +613,7 @@ An incorrect assumption: signal = high-variance, noise = low-variance
 \end{align*}
 </span></p>
 <div class="column-page-right">
-<p><img src="../resources/cv_pca.svg" class="img-fluid" style="width:100.0%"></p>
+<p><img src="https://github.com/BonnerLab/ccn-tutorial/blob/main/resources/cv_pca.svg?raw=true" class="img-fluid" style="width:100.0%"></p>
 </div>
 <p>These cross-validated eigenvalues represent the covariance reliably shared across two presentations of the visual stimulus – the “stable” part of the visual representation of a natural image.</p>
 <div class="callout callout-style-default callout-warning callout-titled">
@@ -1299,7 +1299,7 @@ An optimality criterion for population codes?
 <p><span class="citation" data-cites="Stringer2019">Stringer et al. (<a href="#ref-Stringer2019" role="doc-biblioref">2019</a>)</span>, who developed cross-validated PCA, discovered that mouse primary visual cortex responses obey a power-law with exponent <span class="math inline">-1</span> over several orders of magnitude.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="../resources/stringer-fig2.png" class="img-fluid figure-img"></p>
+<p><img src="https://github.com/BonnerLab/ccn-tutorial/blob/main/resources/stringer-fig2.png?raw=true" class="img-fluid figure-img"></p>
 <figcaption class="figure-caption">Similar eigenspectra in mouse visual cortex – Fig 2 in <span class="citation" data-cites="Stringer2019">Stringer et al. (<a href="#ref-Stringer2019" role="doc-biblioref">2019</a>)</span></figcaption>
 </figure>
 </div>
@@ -1309,7 +1309,7 @@ An optimality criterion for population codes?
 <p>More recently, <span class="citation" data-cites="Wang2023">Wang et al. (<a href="#ref-Wang2023" role="doc-biblioref">2023</a>)</span> reported a similar result from whole-brain calcium recordings in zebrafish during hunting and spontaneous behavior.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="../resources/wang-fig1.png" class="img-fluid figure-img"></p>
+<p><img src="https://github.com/BonnerLab/ccn-tutorial/blob/main/resources/wang-fig1.png?raw=true" class="img-fluid figure-img"></p>
 <figcaption class="figure-caption">Similar eigenspectra in zebrafish whole-brain Ca<sup>2+</sup>-imaging – Fig 1 in <span class="citation" data-cites="Wang2023">Wang et al. (<a href="#ref-Wang2023" role="doc-biblioref">2023</a>)</span></figcaption>
 </figure>
 </div>
@@ -1320,14 +1320,14 @@ An optimality criterion for population codes?
 <p>Specifically, <span class="citation" data-cites="Agrawal2022">Agrawal et al. (<a href="#ref-Agrawal2022" role="doc-biblioref">2022</a>)</span> report that neural networks whose internal representations have a covariance spectrum that decays as a power law with index <span class="math inline">-1</span> perform better. This has made the power law index a statistic of interest for assessing model representation quality – and perhaps a target of direct optimization.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="../resources/agrawal-fig3.png" class="img-fluid figure-img"></p>
+<p><img src="https://github.com/BonnerLab/ccn-tutorial/blob/main/resources/agrawal-fig3.png?raw=true" class="img-fluid figure-img"></p>
 <figcaption class="figure-caption">Deep networks with similar covariance spectra perform better – Fig 3 in <span class="citation" data-cites="Agrawal2022">Agrawal et al. (<a href="#ref-Agrawal2022" role="doc-biblioref">2022</a>)</span></figcaption>
 </figure>
 </div>
 <p>In addition, <span class="citation" data-cites="Kong2022">Kong et al. (<a href="#ref-Kong2022" role="doc-biblioref">2022</a>)</span> demonstrated that more adversarially robust neural networks are a better match for macaque V1 eigenspectra.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="../resources/kong-fig6.png" class="img-fluid figure-img"></p>
+<p><img src="https://github.com/BonnerLab/ccn-tutorial/blob/main/resources/kong-fig6.png?raw=true" class="img-fluid figure-img"></p>
 <figcaption class="figure-caption">Deep networks with similar covariance spectra appear more adversarially robust – Fig 6 in <span class="citation" data-cites="Kong2022">Kong et al. (<a href="#ref-Kong2022" role="doc-biblioref">2022</a>)</span></figcaption>
 </figure>
 </div>
