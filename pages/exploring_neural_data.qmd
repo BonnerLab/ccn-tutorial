@@ -277,7 +277,7 @@ Nonetheless, PCA has unique benefits that shouldn't be overlooked. For instance,
 
 On this plot, it looks like that the first few PCs have substantial variance while the rest are negligible, which suggests a low-dimensional structure.
 
-However, when dealing with high-dimensional data that span several orders of magnitude, it's more insightful to visualize it on a logarithmic scale, which makes many key statistical trends more apparent. So let's try visualizing the spectrum on a logarithmic scale for both axes:
+However, when dealing with high-dimensional data that span several orders of magnitude, it's more insightful to visualize it on a logarithmic scale, which makes many key statistical trends more apparent. Let's try visualizing the spectrum on a logarithmic scale for both axes:
 
 ```{python}
 # | code-summary: Visualize the eigenspectrum on a logarithmic scale
@@ -308,7 +308,7 @@ Power laws are ubiquitious in nature, arising in all sorts of systems:
 - wealth distribution ([Pareto principle](https://en.wikipedia.org/wiki/Pareto_principle))
 - ferromagnetic materials near the Curie temperature ([Ising model](https://en.wikipedia.org/wiki/Ising_model))
 
-Nevertheless, a power law relationshop will not be observed when the data
+Nevertheless, a power law relationship will not be observed when the data
 
 - is random, or
 - when it has a characteristic scale.
@@ -415,9 +415,9 @@ display(HTML(f"<blockquote>{postprocess(' '.join(tokens))}</blockquote>"))
 
 ```{python}
 # | label: text-reconstruction
-# | code-summary: Reconstruct the review using the top 200 words
+# | code-summary: Regenerate the review using the top 200 words
 
-print("Review reconstructed using top 200 words")
+print("Review regenerated using only the top 200 words")
 display(
     HTML(
         (

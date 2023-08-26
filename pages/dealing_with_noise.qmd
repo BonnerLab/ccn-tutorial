@@ -70,7 +70,7 @@ stimuli = create_stimuli(n=1000, rng=rng)
 neurons = {
     "neuron response": Neuron(beta_color=3, beta_size=-2, std=1, mean=7),
     "stimulus-dependent signal": Neuron(beta_color=3, beta_size=-2, std=0, mean=7),
-    "stimulus-independent noise": Neuron(beta_color=0, beta_size=0, std=1, mean=7),
+    "stimulus-independent noise": Neuron(beta_color=0, beta_size=0, std=1, mean=0),
 }
 
 data = simulate_multiple_neuron_responses(
@@ -216,19 +216,10 @@ view_eigenspectrum(random_matrix, log=True)
 Even random matrices have systematic covariance structure that result in non-zero eigenvalues at all ranks. How can we know that a region of our spectrum is driven by signal and not noise?
 :::
 
-## Decomposing a covariance eigenspectrum
-
-One of the most common denoising procedures is variance-dependent dimensionality reduction: retaining only the first few high-variance principal components of the data. The implicit assumption here is that high-variance dimensions correspond to **signal** in the system, while low-variance dimensions represent **noise**. In this section, we'll investigate this assumption and demonstrate that this isn't always true!
-
-TODO add figure showing two ways to decompose a covariance eigenspectrum into signal and noise
-
-For example, consider a *very realistic* scenario where a participant gets bored performing our experiment inside an fMRI scanner and starts yodeling to entertain themselves. The highest variance components in the measured neural response would likely be motion artifacts and not whatever signal we were interested in measuring. A high-quality data preprocessing pipeline would help mitigate such extreme components of variance -- but cannot remove them entirely!
-
-In fact, as we saw when we inspected the first couple of latent dimensions in our toy example, the principal components didn't correspond directly to the latent variables generating the data; rather, they were a mixture of stimulus-dependent variance and nuisance variance.
-
-This suggests that using principal component analysis as a dimensionality reduction tool by setting an arbitrary variance threshold is likely too stringent a criterion: there is possible low-variance signal along the many neglected dimensions in the tail!
-
-Clearly, we need a different approach to using the spectrum to separate signal and noise.
+::: {.callout-warning}
+# An incorrect assumption: signal = high-variance, noise = low-variance
+One of the most common denoising procedures is variance-dependent dimensionality reduction: retaining only the first few high-variance principal components of the data. The implicit assumption here is that high-variance dimensions correspond to *signal* in the system, while low-variance dimensions represent *noise*. In this section, we'll investigate this assumption and demonstrate that this isn't always true!
+:::
 
 ## Cross-validated PCA
 
@@ -289,10 +280,6 @@ These cross-validated eigenvalues represent the covariance reliably shared acros
 These cross-validated "eigenvalues" need not be positive: if there is no shared covariance between the two systems along a particular eigenvector, the expected value of the eigenvalue is $0$. This makes interpretation simple: if there is reliable variance along a dimension, its cross-validated eigenvalue will be significantly above zero.
 :::
 
-### Some geometric intuition
-
-TODO add figure showing two sets of data, showing reliable covariance in one dimension but not the other
-
 ### A computational recipe
 
 ```{python}
@@ -326,7 +313,7 @@ class CrossValidatedPCA:
 
 ## Investigating neural data
 
-Let's apply CV-PCA to our fMRI data to see what it looks like!
+Let's apply cross-validated PCA to our fMRI data to see what it looks like!
 
 ```{python}
 # | code-summary: Load the dataset
@@ -492,9 +479,40 @@ Here, we've averaged the spectrum in local bins that expand exponentially in siz
 
 Averaging within such bins allows us to detect signal even in a regime where the cross-validated spectrum oscillates wildly near zero and also visualize the power law more cleanly.
 
+::: {.callout-tip}
+# The power law extends further with more data!
+Note that the power-law scaling doesn't saturate at the tail of the spectrum, suggesting that with even larger datasets with more stimuli, we might find reliable stimulus-specific variance along even more dimensions! In fact, if we use a larger version of this dataset -- including all 10,000 images seen by a single participant -- we do indeed see continued power law scaling.
+:::
+
 ## A universal power-law exponent
 
 The power-law exponent of the neural data appears very close to $-1$, as you can see from the slope of the cross-validated spectrum Interestingly, a power-law exponent of $-1$ appears with surprising regularity in neuroscience.
+
+::: {.callout-tip collapse="true"}
+# What makes $\text{variance} \propto \text{rank}^{-1}$ special?
+
+A power-law index of $-1$ implies a special sort of scale-invariance. Consider the total variance captured by such a covariance eigenspectrum within a range of ranks $[\alpha, \beta]$:
+
+$$
+\begin{align*}
+    \int_\alpha^\beta x^{-1} dx &= \ln{\left\lvert\frac{\beta}{\alpha}\right\rvert}
+\end{align*}
+$$
+
+This total variance only depends on the ratio $\beta / \alpha$ -- indicating that a power law with a $-1$ slope has equal variance in each decade: i.e., the total variance from rank $1$ to rank $10$ is equal to the total variance from rank $100$ to rank $1000$.
+
+This suggests that each decade is equally important and contributes as much to the representation, though the later decades have their variance spread out over many more dimensions.
+:::
+
+::: {.callout-tip collapse="true"}
+# An optimality criterion for population codes?
+
+@Stringer2019 provide a possible explanation for why systems might tend toward a $-1$ covariance eigenspectrum.
+
+For sufficiently high-dimensional data, if a spectrum decays any slower than $-1$, the representational manifold becomes non-smooth: small changes in the input might lead to large changes in the representational space -- clearly an undesirable property for stable perception and cognition.
+
+In contrast, if a spectrum decays significantly faster than $-1$, it loses some expressivity by not utilizing all the dimensions it has available.
+:::
 
 ### Mouse primary visual cortex
 
@@ -531,50 +549,12 @@ with sns.axes_style("whitegrid"):
     display(fig)
 ```
 
-::: {.callout-important}
-# Is the power-law exponent of -1 universal?
-
-Do we observe the same power-law covariance spectra in other organisms? Could it be a universal statistical property of neural population codes?
-
-Check your data!
-:::
-
-::: {.callout-important}
-# Is high-dimensional coding a hallmark of sensory systems?
-
-Do all sensory systems use a high-dimensional population code -- where an expressive representation of the outside world might allow rapid learning and generalization to various ethological tasks? Perhaps more *cognitive* systems might use low-dimensional representational formats to enhance robustness and invariance to irrelevant features.
-:::
-
-::: {.callout-tip collapse="true"}
-# What makes $\text{variance} \propto \text{rank}^{-1}$ special?
-
-A power-law index of $-1$ implies a special sort of scale-invariance. Consider the total variance captured by such a covariance eigenspectrum within a range of ranks $[\alpha, \beta]$:
-
-$$
-\begin{align*}
-    \int_\alpha^\beta x^{-1} dx &= \ln{\left\lvert\frac{\beta}{\alpha}\right\rvert}
-\end{align*}
-$$
-
-This total variance only depends on the ratio $\beta / \alpha$ -- indicating that a power law with a $-1$ slope has equal variance in each decade: i.e., the total variance from rank $1$ to rank $10$ is equal to the total variance from rank $100$ to rank $1000$.
-
-This suggests that each decade is equally important and contributes as much to the representation, though the later decades have their variance spread out over many more dimensions.
-:::
-
-::: {.callout-tip collapse="true"}
-# An optimality criterion for population codes?
-
-@Stringer2019 provide a possible explanation for why systems might tend toward a $-1$ covariance eigenspectrum.
-
-For sufficiently high-dimensional data, if a spectrum decays any slower than $-1$, the representational manifold becomes non-smooth: small changes in the input might lead to large changes in the representational space -- clearly an undesirable property for stable perception and cognition.
-
-In contrast, if a spectrum decays significantly faster than $-1$, it loses some expressivity by not utilizing all the dimensions it has available.
-:::
-
 ## Summary
 
-Our simple demonstrations in this notebook suggest a profound difference in the way we should think about population coding.
+In this notebook, we described a cross-validated approach to isolate stimulus-specific variance and used it to demonstrate the high-dimensional latent structure of neural population responses. Understanding such a high-dimensional code must involve studying reliable information along *all* dimensions.
 
-Neural data is *not* reducible to a small number of interpretable, high-variance dimensions. Much like a text cannot be understood using only the most frequent words, understanding a population code must involve studying reliable information along all dimensions.
+::: {.callout-important}
+# Is the power-law exponent of -1 universal? Check your data!
 
-Moreover, neural data is high-dimensional to an extent previously unappreciated. In fact, the power-law scaling observed doesn't saturate at the tail of the spectrum, suggesting that with even larger datasets with more stimuli, we might find reliable stimulus-specific variance along even more dimensions!
+Do we observe the same power-law covariance spectra in other organisms? Could it be a universal statistical property of neural population codes? Do all sensory systems use a high-dimensional population code -- where an expressive representation of the outside world might allow rapid learning and generalization to various ethological tasks? Perhaps more *cognitive* systems might use low-dimensional representational formats to enhance robustness and invariance to irrelevant features.
+:::

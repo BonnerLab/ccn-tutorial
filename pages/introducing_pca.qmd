@@ -31,6 +31,7 @@ from typing import NamedTuple
 import numpy as np
 import pandas as pd
 import xarray as xr
+from scipy.spatial.distance import pdist, squareform
 import seaborn as sns
 from matplotlib import pyplot as plt
 from matplotlib.figure import Figure
@@ -171,10 +172,13 @@ display(data)
 
 ## Understanding the neural code
 
-How is this information encoded in the population activity? Is there a neuron that is sensitive to color and another that is sensitive to size?
+In this toy example, we know the ground truth of the neurons' responses -- how exactly it depends on the stimulus features. Unfortunately, in real experiments, we don't have this luxury and need to derive the neural coding strategy from the data. Let's now pretend that this toy example is real data, where we don't know the ground truth.
 
-One way to understand this is by studying the neurons directly. Let's start by visualizing the response of each neuron to our stimuli. Note that the below plots are 1-dimensional scatterplots; the spread along the vertical axis is just for visualization purposes.
+How is information about the stimulus encoded in the population activity? Is there a neuron that is sensitive to color and another that is sensitive to size?
 
+One way to understand this is by studying the neurons directly. Let's start by visualizing the response of each neuron to our stimuli.
+
+[These plots are 1-dimensional scatterplots and the spread along the vertical axis is just for visualization purposes.]{.aside}
 
 ```{python}
 # | add-from: ../src/utilities/toy_example.py
@@ -184,7 +188,6 @@ One way to understand this is by studying the neurons directly. Let's start by v
 # | end-line: 129
 #
 ```
-
 
 ```{python}
 # | label: visualize_neuron_responses
@@ -200,26 +203,80 @@ view_individual_scatter(
 
 ```
 
-By visualizing the responses, we can see that each neuron is tuned to both color *and* size. 
+By visualizing the responses, we can see that each neuron is tuned to both color *and* size.
 
-We can also use methods such as Representational Similarity Analysis (RSA)[@Kriegeskorte2008] to study the information content of the two neurons. In RSA, the dissimilarity between the response of a system to each pair of stimuli is obtained and represented in a matrix of dissimilarities (a *representational dissimilarity matrix*, or RDM). Therefore, an RDM indicates the degree to which each pair of stimuli is distinguished by the neurons. 
+We can also use methods such as Representational Similarity Analysis [@Kriegeskorte2008] to study the information content of the two neurons. In RSA, we compute the pairwise dissimilarities between the representations of the stimuli and organize them into a *representational dissimilarity matrix*, or RDM.
+
+The entries of an RDM indicate the degree to which each pair of stimuli is distinguished by the neurons and the RDM as a whole measures the overall population geometry of the system.
+
+```{python}
+# | label: display-rdm
+# | code-summary: Compute and display the representational dissimilarity matrix
+# | fig-align: center
+
+def display_rdm(data: xr.DataArray) -> np.ndarray:
+    data_ = data.copy()
+    data_["color bin"] = (
+        "stimulus",
+        np.digitize(data_["color"].values, bins=np.linspace(0, 1, 10)),
+    )
+    data_["size bin"] = (
+        "stimulus",
+        np.digitize(data_["size"].values, bins=np.linspace(0, 1, 10)),
+    )
+    data_ = data_.sortby(["color bin", "size bin"])
+    rdm = squareform(pdist(data_.values))
+
+    fig, axes = plt.subplots(
+        figsize=(8, 8),
+        nrows=2,
+        ncols=2,
+        height_ratios=[1, 20],
+        width_ratios=[1, 20],
+        sharex=True,
+        sharey=True,
+    )
+    axes[0, 1].scatter(
+        np.arange(data_.sizes["stimulus"]),
+        np.zeros(data_.sizes["stimulus"]),
+        c=data_["color"].values,
+        s=data_["size"].values * 100,
+    )
+    axes[0, 1].axis("off")
+
+    axes[1, 0].scatter(
+        np.zeros(data_.sizes["stimulus"]),
+        np.arange(data_.sizes["stimulus"]),
+        c=data_["color"].values,
+        s=data_["size"].values * 100,
+    )
+
+    axes[1, 1].imshow(rdm, cmap="viridis")
+    axes[1, 1].set_aspect("equal", "box")
+
+    for ax in axes.flat:
+        ax.axis("off")
+
+    fig.tight_layout(w_pad=0, h_pad=0)
+    plt.close(fig)
+    return fig
 
 
-![](/resources/rsa.png)
+display_rdm(data)
+
+```
+
+This RDM reveals that this population of $P = 2$ neurons distinguishes the stimulus dots based on their color and size -- as expected!
 
 What if we want to study the underlying structure of this code? Is there another view of the population code that might be more informative?
-
-
 
 ## Studying the latent dimensions
 
 Instead of directly studying the neurons, we can focus on the underlying factors that capture the structure and variance in the data. 
 
-
 ### Some geometric intuition
 
 Since we only have $P = 2$ neurons, we can visualize these data as a scatterplot, which makes their [covariance](reference.qmd#covariance) apparent. 
-
 
 ```{python}
 # | label: view_joint_scatter
@@ -274,7 +331,11 @@ view_joint_scatter(
 )
 ```
 
-We can use the covariance to change the way we view the data. Run the animation below for demonstration.
+We can use the covariance to change the way we view the data.
+
+::: {.callout-tip}
+Click on the animation above to visualize the PCA transformation!
+:::
 
 ```{python}
 # | label: visualize_pca_animation
@@ -379,12 +440,7 @@ display(HTML(animate_pca_transformation(data)))
 
 ```
 
-::: {.callout-tip}
-Click on the animation above to visualize the PCA transformation!
-:::
-
 As seen in the animation, we can transform our data to view the directions of maximum variance. These directions are the principal components of our data. 
-
 
 ### The mathematical definition
 
@@ -400,10 +456,11 @@ $$
 
 To do this, we start by computing the covariance of our data matrix, where $X$ is centered (i.e. $X - \overline{X}$)
 
-
 ![](/resources/autocovariance.svg){width=100%}
 
-Next , we compute the the eigendecomposition of the covariance (though the computational steps we take to get there are slightly different, as shown later)
+Next, we compute the eigendecomposition of the covariance:
+
+[The computational steps we take to diagonalize the covariance are slightly different, as is described later in the notebook.]{.aside}
 
 ![](/resources/eigendecomposition.svg){width=100%}
 
@@ -413,20 +470,7 @@ Finally, the original data matrix can be transformed by projecting it onto the e
 
 ![](/resources/projection.svg){width=80%}
 
-::: {.callout-note collapse="true"}
-# Viewing PCA as an optimization
-
-PCA can be used to project data into a lower-dimensional space (i.e. $p \le f$) in a way that best preserves the geometry of the data. Specifically, computing a PCA decomposition of $X$ yields a matrix $V \in \mathbb{R}^{f \times p}$ such that $V = \argmin_{V \in \mathbb{U_{f \times p}}} \sum_{i=1}^n \left|| x_i - VV^\top x_i \right||_2$, where $||\cdot||_2$ denotes the $L_2$-norm and $\mathbb{U_{f \times p}}$ denotes the set of orthonormal matrices with shape $f \times p$.
-:::
-
 ### A computational recipe
-
-
-1. Center the data matrix.
-2. Compute its singular value decomposition[^definition-singular-value-decomposition].
-3. The right singular vectors $V$ of the data matrix are the eigenvectors of its covariance.
-4. The singular values $\Sigma$ of the data matrix are related to the eigenvalues $\Lambda$ of its covariance as $\Lambda = \Sigma^2 / (N - 1)$
-5. To project data from the ambient space to the latent space, we must subtract the mean computed in Step 1, and multiply the data by the eigenvectors.
 
 ```{python}
 # | label: recipe-pca
@@ -456,6 +500,11 @@ class PCA:
 
 
 ```
+1. Center the data matrix.
+2. Compute its singular value decomposition[^definition-singular-value-decomposition].
+3. The right singular vectors $V$ of the data matrix are the eigenvectors of its covariance.
+4. The singular values $\Sigma$ of the data matrix are related to the eigenvalues $\Lambda$ of its covariance as $\Lambda = \Sigma^2 / (N - 1)$
+5. To project data from the ambient space to the latent space, we must subtract the mean computed in Step 1, and multiply the data by the eigenvectors.
 
 ::: {.callout-tip collapse="true"}
 ### Why do we compute PCA this way instead of $\text{eig}(\text{cov}(X))$?
@@ -477,7 +526,7 @@ Check out [truncated SVD](https://scikit-learn.org/stable/modules/generated/skle
 
 ## Transforming the dataset
 
-Let's now project our data into its principal components and analyse it in this space.
+Let's now project our data onto its principal components and analyze it in this space.
 
 ```{python}
 # | label: transforming-the-dataset
@@ -516,16 +565,42 @@ display(pca["score"])
 
 ### Inspecting the eigenvectors
 
-The eigenvectors represent the directions of maximum variance in our data.
+The eigenvectors represent the directions of variance in our data, sorted in descending order of variance.
 
 ```{python}
 # | code-summary: Display the eigenvectors
+# | fig-align: center
 
 with xr.set_options(display_expand_data=True):
     display(pca["eigenvector"])
-```
 
-TODO plot the eigenvector directions on the joint scatter
+
+fig = view_joint_scatter(
+    data,
+    coord="neuron responses",
+    dim="neuron",
+    template_func=lambda x: f"neuron {x} response",
+)
+
+ax = fig.get_axes()[0]
+ax.axline(
+    data.mean("stimulus").values,
+    slope=-pca["eigenvector"].values[0, 1] / pca["eigenvector"].values[0, 0],
+    c="k",
+    lw=3,
+    label="PC 1",
+)
+ax.axline(
+    data.mean("stimulus").values,
+    slope=-pca["eigenvector"].values[1, 1] / pca["eigenvector"].values[1, 0],
+    c="gray",
+    lw=2,
+    label="PC 2",
+)
+ax.legend()
+display(fig)
+
+```
 
 ### Interpreting the transformed data
 
@@ -555,7 +630,7 @@ Note that these components do *not* directly correspond to either of the latent 
 
 ### Inspecting the eigenspectrum
 
-The eigenvalues show the variance along each eigenvector. The sum of the eigenvalues is therefore equal to the total variance. 
+The eigenvalues show the variance along each eigenvector. The total variance along all the eigenvectors is the sum of the eigenvalues.
 
 ```{python}
 # | label: eigenvalues
@@ -569,7 +644,8 @@ for i_neuron in range(eigenvalues.sizes["component"]):
     )
 print(f"total variance: {eigenvalues.sum().values}")
 ```
-We can also see that this is equal to the total variance in the original data.
+
+We can also see that this is equal to the total variance in the original data, since the PCA transformation corresponds to a simple rotation.
 
 ```{python}
 # | label: variance
@@ -581,7 +657,7 @@ for i_neuron in range(variances.sizes["neuron"]):
 print(f"total variance: {variances.sum().values}")
 ```
 
-We can plot the eigenvalues as a function of their rank to visualize the *eigenspectrum*. As we will see shortly, the eigenspectrum provides valuable insights about the latent dimensionality of the data. 
+We can plot the eigenvalues as a function of their rank to visualize the *eigenspectrum*. As we will see shortly, the eigenspectrum provides valuable insights about the latent dimensionality of the data.
 
 ```{python}
 # | label: visualize_eigenspectrum
@@ -640,7 +716,6 @@ display(big_data)
 
 As before, we can visualize each principal component and plot the eigenspectrum:
 
-
 ```{python}
 # | label: view_principal_components_big
 # | code-summary: Visualize principal component scores
@@ -673,54 +748,53 @@ In general, there are several approaches for estimating dimensionality based on 
 The *rank* of the covariance matrix -- equal to the number of *nonzero* eigenvalues -- would be the latent dimensionality in the ideal setting where the data has zero noise. In real data, the rank is typically equal to the ambient dimensionality (which here is the number of neurons we record from), since there is typically some variance along every dimension.
 
 ```{python}
-# | code-summary: Set a threshold of zero on the variance
+# | code-summary: Count the number of nonzero eigenvalues
 
 print(f"rank = {(big_pca.eigenvalue > 0).sum().values}")
 
 
-def view_thresholded_eigenspectrum(
-    pca: PCA, *, threshold: int | float
-) -> Figure:
+def view_thresholded_eigenspectrum(pca: PCA, *, threshold: int | float) -> Figure:
     fig = view_eigenspectrum(pca)
     ax = fig.get_axes()[0]
 
-    ax.axhline(threshold, ls="--", c="gray")
     xlim = ax.get_xlim()
     ylim = ax.get_ylim()
 
-    ax.fill_between(x=xlim, y1=ylim[-1], y2=threshold, color="green", alpha=0.1)
-    ax.fill_between(x=xlim, y1=ylim[0], y2=threshold, color="red", alpha=0.1)
+    ax_twin = ax.twinx()
+    ax_twin.set_ylabel("proportion of variance")
+    ax_twin.axhline(threshold, ls="--", c="gray")
+    ax_twin.yaxis.set_major_formatter(ticker.PercentFormatter(1))
 
+    total_variance = pca["eigenvalue"].sum().values
+    ylim /= total_variance
+    ax_twin.set_ylim(ylim)
+
+    ax_twin.fill_between(x=xlim, y1=ylim[-1], y2=threshold, color="green", alpha=0.1)
+    ax_twin.fill_between(x=xlim, y1=ylim[0], y2=threshold, color="red", alpha=0.1)
+
+    sns.despine(ax=ax_twin, offset=20, left=True, bottom=True, right=False, top=True)
     return fig
 
 
 view_thresholded_eigenspectrum(big_pca, threshold=0)
 ```
 
-#### Setting an arbitrary variance threshold
-
-Though not typically used today, another approach is to set an arbitrary threshold on the variance (historically recommended as $1$ for normalized data); only dimensions with variance above that threshold are considered useful.
-
-```{python}
-# | code-summary: Set an arbitrary positive threshold on the variance
-
-view_thresholded_eigenspectrum(big_pca, threshold=150)
-```
-
 #### Setting an arbitrary *cumulative* variance threshold
 
-A very commonly used method is to set a threshold based on the cumulative variance of the data: the number of dimensions required to exceed, say $80\%$ of the variance, is taken as the latent dimensionality.
+A very commonly used method is to set a threshold based on the cumulative variance of the data: the number of dimensions required to exceed, say $90\%$ of the variance, is taken as the latent dimensionality.
 
 ```{python}
 # | code-summary: Set an arbitrary threshold on the cumulative variance
 
 
 def view_cumulative_eigenspectrum(
-    pca: xr.DataArray, *, threshold: float = 0.8
+    pca: xr.DataArray, *, threshold: float = 0.9
 ) -> Figure:
     fig, ax = plt.subplots(figsize=(pca.sizes["component"], 5))
 
     data = pca["eigenvalue"].copy()
+    total_variance = data.sum().values
+
     data["eigenvalue"] = data.cumsum()
     data = data.rename({"eigenvalue": "cumulative variance"})
     data["cumulative proportion of variance"] = (
@@ -735,13 +809,15 @@ def view_cumulative_eigenspectrum(
         marker="s",
     )
     ax.set_xticks(pca["rank"].values)
+    xlim = ax.get_xlim()
+    ylim = ax.get_ylim()
+    ylim /= total_variance
 
     ax_twin = ax.twinx()
     ax_twin.set_ylabel("cumulative proportion of variance")
+    ax_twin.set_ylim(ylim)
 
     ax_twin.axhline(threshold, ls="--", c="gray")
-    xlim = ax_twin.get_xlim()
-    ylim = ax_twin.get_ylim()
 
     ax_twin.fill_between(x=xlim, y1=ylim[-1], y2=threshold, color="red", alpha=0.1)
     ax_twin.fill_between(x=xlim, y1=ylim[0], y2=threshold, color="green", alpha=0.1)
@@ -757,11 +833,12 @@ def view_cumulative_eigenspectrum(
 
 
 view_cumulative_eigenspectrum(big_pca)
+
 ```
 
-#### Eyeballing the "knee" of the spectrum
+#### Eyeballing the knee of the spectrum
 
-When the number of latent dimensions is low, eigenspectra often have a sharp discontinuity (the "knee"), where a small number of dimensions have high-variance and the remainder have much have lower variance. The latent dimensionality is then taken to be the number of dimensions above this threshold determined by eye.
+When the number of latent dimensions is low, eigenspectra often have a sharp discontinuity (the ["knee"](https://en.wikipedia.org/wiki/Knee_of_a_curve), or "elbow"), where a small number of dimensions have high-variance and the remainder have much have lower variance. The latent dimensionality is then taken to be the number of dimensions above this threshold determined by eye.
 
 ```{python}
 # | code-summary: Plot the apparent knee of the spectrum
@@ -792,7 +869,7 @@ def view_eigenspectrum_knee(pca: PCA, *, knee: int) -> Figure:
 
 view_eigenspectrum_knee(big_pca, knee=3)
 ```
-So far, all of the techniques discussed depend on a paramter that needs to be decided by the researcher. For instance, a cumulative threshold of 80% is an arbitrary choice, and if we decided to choose 90% instead, we would get a different number of dimensions. This is why sometimes a parameter-free estimate is preferred. 
+So far, all of the techniques discussed depend on a paramter that needs to be decided by the researcher. For instance, a cumulative threshold of 90% is an arbitrary choice, and if we decided to choose 95% instead, we would get a different number of dimensions. This is why sometimes a parameter-free estimate is preferred.
 
 #### Computing a summary statistic over the entire spectrum
 
@@ -866,7 +943,7 @@ view_effective_dimensionality_examples(big_pca)
 
 - PCA is a useful tool for studying the neural code and estimating the latent dimensionality of representations.
 - However, PCA focuses on how much variance is present along each dimension, and not the usefulness of the dimensions. 
-- Here we used a toy example with idealized data, where the high variance dimensions are meaninful and the low variance ones are noise. 
+- Here we used a toy example with idealized data, where the high variance dimensions are meaningful and the low variance ones are noise. 
 - This may not always be the case, we could instead have high variance noise dimensions, and low variance meaningful dimensions.
 - Later in the tutorial, we will discuss more powerful techniques that can handle such problems. But before that, let's analyze a real neuroscience dataset. 
 

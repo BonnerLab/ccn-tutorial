@@ -91,7 +91,6 @@ format:
     title-block-banner: true
   ipynb:
     code-annotations: none
-  # pdf: default
 
 execute:
   enabled: true

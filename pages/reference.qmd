@@ -1,7 +1,6 @@
 ---
 title: Reference
-subtitle: All the linear algebra you'll (probably) ever need!
-abstract: "All the content here is oversimplified and is not comprehensive: its purpose is to serve as a quick reference to unfamiliar or once-studied concepts discussed in the tutorial."
+subtitle: Some linear algebra that we reference in this tutorial
 ---
 
 ## The basics
@@ -27,12 +26,9 @@ Examples:
 - A 3-vector: $\begin{bmatrix}2\\-4.5\\\pi\end{bmatrix}$
 - An $n$-vector: $\begin{bmatrix}3\\\vdots\\-1\end{bmatrix}$ (it has $n$ elements, trust me)
 
-- A row vector 
+## Orthonormal matrix
 
-### Matrix
-
-An $m \times n$ matrix is a collection of 
-
+A matrix $A \in \mathbb{R}^{m \times n}$ is *orthonormal* if $A^\top A = I_n$. In other words, all the columns of the matrix are orthogonal and have unit length.
 
 ## Matrix decompositions
 
@@ -56,7 +52,7 @@ The eigendecomposition of a symmetric matrix $X \in \mathbb{R}^{n \times n}$ inv
 
 Given a data matrix $X \in \mathbb{R}^{n \times f}$ containing neural responses to $n$ stimuli from $f$ neurons, the *auto-covariance* of $X$ (or simply its *covariance*) is defined as:
 
-$\text{cov}(X) = \left(\dfrac{1}{n - 1}\right) (X - \overline{X})^\top (X - \overline{X})$
+$$\text{cov}(X) = \left(\dfrac{1}{n - 1}\right) (X - \overline{X})^\top (X - \overline{X})$$
 
 This is an $f \times f$ matrix where the $(i, j)$-th element measures how much neuron $i$ covaries with neuron $j$. If the covariance is positive, they tend to have similar activation: a stimulus that activates one neuron will tend to activate the other. If the covariance is negative, the neurons will have dissimilar activation: a stimulus that activates one neuron will likely decrease the activity of the other.
 
@@ -64,6 +60,4 @@ This is an $f \times f$ matrix where the $(i, j)$-th element measures how much n
 
 Given two data matrices $X \in \mathbb{R}^{n \times f_X}$ and $Y \in \mathbb{R}^{n \times f_Y}$ containing neural responses to $n$ stimuli from $f_X$  and $f_Y$ neurons respectively, the *cross-covariance* of $X$ and $Y$ is defined as:
 
-$\text{cov}(X, Y) = \left(\dfrac{1}{n - 1}\right) (X - \overline{X})^\top (Y - \overline{Y})$
-
-## Correlation
+$$\text{cov}(X, Y) = \left(\dfrac{1}{n - 1}\right) (X - \overline{X})^\top (Y - \overline{Y})$$

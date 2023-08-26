@@ -38,16 +38,10 @@ Here,
 ![](/resources/cross-covariance-svd.svg){width=100%}
 :::
 
-::: {.callout-note}
+::: {.callout-note collapse="true"}
 # A note on terminology
 
 The cross-decomposition method we describe here is more specifically known as [Partial Least Squares Singular Value Decomposition (PLS-SVD)](https://scikit-learn.org/stable/modules/generated/sklearn.cross_decomposition.PLSSVD.html). We simplify it to "cross-decomposition" since we will be developing a cross-validated version of the typical estimators.
-:::
-
-::: {.callout-note}
-# What happens when $X$ = $Y$?
-
-Note that if $X = Y$, cross-decomposition reduces to PCA:
 :::
 
 {{< include _code/install_package.qmd >}}
@@ -155,31 +149,39 @@ class PLSSVD:
 
 ## Comparing brains
 
-In the same way that we can **cross-validated PCA** to estimate the shared variance across presentations of the same stimuli *within* a participant, we can use **cross-decomposition** to estimate the shared variance in the neural representations of the same stimuli *across* participants.
+In the same way that we can *cross-validated PCA* to estimate the shared variance across presentations of the same stimuli *within* a participant, we can use *cross-decomposition* to estimate the shared variance in the neural representations of the same stimuli *across* participants.
 
-We have two data matrices $X \in \mathbb{R}^{N \times P_X}$ and $Y \in \mathbb{R}^{N \times P_Y}$ from two participants. We could directly compute the singular values of their cross-covariance, which would be a direct estimate of the shared variance between these two representations.
+We have two data matrices $X \in \mathbb{R}^{N \times P_X}$ and $Y \in \mathbb{R}^{N \times P_Y}$ from two participants, containing neural responses to the same $N$ stimuli. Note that the number of neurons or voxels in the two subjects ($P_X$ and $P_Y$) can be different -- we don't need to assume any sort of anatomical alignment between brains.
 
-However, we run into the same issue as before: the singular values of a matrix are always positive and we won't be able to use the magnitude of the singular value to assess the reliability of the variance along that dimension.
+In cross-validated PCA, we measured stimulus-specific variance based on cross-trial generalization. Here, even if we don't have different repetitions of the same stimulus, we could use an analogous cross-validation approach. Instead of testing generalization across different *presentations* of the stimuli, we can evaluate the reliable shared variance between the two systems across *stimuli*.
 
-Instead, we can use a cross-validated approach similar to CV-PCA, except that instead of testing generalization across different *presentations* of the stimuli, we can evaluate the reliable shared variance between the two representations across *stimuli*.
+Specifically, we can divide the images into two: a training split and a test split. We can compute singular vectors on the training split, and evalute *test* singular values on the test split:
 
-Specifically, we can divide the images into two: a training split and a test split. We can compute singular vectors on the training split, and evalute *test* singular values on the test split, analogous to the CV-PCA procedure:
-
-::: {.column-page}
-![](/resources/pls_svd.svg){width=100%}
-:::
+### Step 1 -- Compute singular vectors on a training set
 
 $$
 \begin{align*}
     \text{cov}(X_\text{train}, Y_\text{train})
     &= X_\text{train}^\top Y_\text{train} / (n - 1)\\
-    &= U \Sigma V^\top\\
-    \\
-    \Sigma_\text{cross-validated}
-    &= \text{cov}(X_\text{train} U, Y_\text{test} V)\\
-    &= \left( X_\text{train} U \right) ^\top \left( Y_\text{test} V \right) / (n - 1)
+    &= U \Sigma V^\top
 \end{align*}
 $$
+
+### Step 2 -- Compute cross-validated singular values on the test set
+
+$$
+\begin{align*}
+\Sigma_\text{cross-validated}
+    &= \text{cov}(X_\text{test} U, Y_\text{test} V)\\
+    &= \left( X_\text{test} U \right) ^\top \left( Y_\text{test} V \right) / (n - 1)
+\end{align*}
+$$
+
+::: {.column-page}
+![](/resources/pls_svd.svg){width=100%}
+:::
+
+### Applying it to neural data
 
 ```{python}
 # | code-summary: Load the datasets
@@ -254,6 +256,7 @@ sns.lineplot(
     y="cross-validated singular value",
     marker="o",
     dashes=False,
+    palette=["orange"],
     ls="None",
     err_style="bars",
     estimator="mean",
@@ -324,6 +327,7 @@ with sns.axes_style("whitegrid"):
         data=data,
         x="rank",
         y="cross-validated singular value",
+        palette=["orange", "blue"],
         hue="comparison",
         hue_order=["cross-individual", "within-individual"],
         style="comparison",
