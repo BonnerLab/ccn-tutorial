@@ -145,7 +145,7 @@ ul.task-list li input[type="checkbox"] {
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
       <div class="quarto-title-block"><div><h1 class="title">Reference</h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source" data-quarto-source-url="https://github.com/BonnerLab/ccn-tutorial/blob/main/pages/reference.qmd"><i class="bi"></i> Code</button></div></div>
-            <p class="subtitle lead">All the linear algebra you’ll (probably) ever need!</p>
+            <p class="subtitle lead">Some linear algebra that we reference in this tutorial</p>
                       </div>
   </div>
     
@@ -163,18 +163,12 @@ ul.task-list li input[type="checkbox"] {
       <div>
       <div class="quarto-title-meta-heading">Modified</div>
       <div class="quarto-title-meta-contents">
-        <p class="date-modified">August 25, 2023</p>
+        <p class="date-modified">August 26, 2023</p>
       </div>
     </div>
       
     </div>
     
-  <div>
-    <div class="abstract">
-      <div class="block-title">Summary</div>
-      All the content here is oversimplified and is not comprehensive: its purpose is to serve as a quick reference to unfamiliar or once-studied concepts discussed in the tutorial.
-    </div>
-  </div>
   
   </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
@@ -188,8 +182,8 @@ ul.task-list li input[type="checkbox"] {
   <ul>
   <li><a href="#scalar" id="toc-scalar" class="nav-link" data-scroll-target="#scalar">Scalar</a></li>
   <li><a href="#vector" id="toc-vector" class="nav-link" data-scroll-target="#vector">Vector</a></li>
-  <li><a href="#matrix" id="toc-matrix" class="nav-link" data-scroll-target="#matrix">Matrix</a></li>
   </ul></li>
+  <li><a href="#orthonormal-matrix" id="toc-orthonormal-matrix" class="nav-link" data-scroll-target="#orthonormal-matrix">Orthonormal matrix</a></li>
   <li><a href="#matrix-decompositions" id="toc-matrix-decompositions" class="nav-link" data-scroll-target="#matrix-decompositions">Matrix decompositions</a>
   <ul>
   <li><a href="#singular-value-decomposition" id="toc-singular-value-decomposition" class="nav-link" data-scroll-target="#singular-value-decomposition">Singular value decomposition</a></li>
@@ -200,7 +194,6 @@ ul.task-list li input[type="checkbox"] {
   <li><a href="#auto-covariance" id="toc-auto-covariance" class="nav-link" data-scroll-target="#auto-covariance">Auto-covariance</a></li>
   <li><a href="#cross-covariance" id="toc-cross-covariance" class="nav-link" data-scroll-target="#cross-covariance">Cross-covariance</a></li>
   </ul></li>
-  <li><a href="#correlation" id="toc-correlation" class="nav-link" data-scroll-target="#correlation">Correlation</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/BonnerLab/ccn-tutorial/edit/main/pages/reference.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/BonnerLab/ccn-tutorial/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div><div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="reference.ipynb" download="reference.ipynb"><i class="bi bi-journal-code"></i>Jupyter</a></li></ul></div></nav>
     </div>
@@ -228,16 +221,15 @@ ul.task-list li input[type="checkbox"] {
 <p>An <span class="math inline">n</span>-vector is a collection of <span class="math inline">n</span> real numbers.</p>
 <p>Examples:</p>
 <ul>
-<li><p>A 1-vector: <span class="math inline">\begin{bmatrix}5\end{bmatrix}</span></p></li>
-<li><p>A 3-vector: <span class="math inline">\begin{bmatrix}2\\-4.5\\\pi\end{bmatrix}</span></p></li>
-<li><p>An <span class="math inline">n</span>-vector: <span class="math inline">\begin{bmatrix}3\\\vdots\\-1\end{bmatrix}</span> (it has <span class="math inline">n</span> elements, trust me)</p></li>
-<li><p>A row vector</p></li>
+<li>A 1-vector: <span class="math inline">\begin{bmatrix}5\end{bmatrix}</span></li>
+<li>A 3-vector: <span class="math inline">\begin{bmatrix}2\\-4.5\\\pi\end{bmatrix}</span></li>
+<li>An <span class="math inline">n</span>-vector: <span class="math inline">\begin{bmatrix}3\\\vdots\\-1\end{bmatrix}</span> (it has <span class="math inline">n</span> elements, trust me)</li>
 </ul>
 </section>
-<section id="matrix" class="level3">
-<h3 class="anchored" data-anchor-id="matrix">Matrix</h3>
-<p>An <span class="math inline">m \times n</span> matrix is a collection of</p>
 </section>
+<section id="orthonormal-matrix" class="level2">
+<h2 class="anchored" data-anchor-id="orthonormal-matrix">Orthonormal matrix</h2>
+<p>A matrix <span class="math inline">A \in \mathbb{R}^{m \times n}</span> is <em>orthonormal</em> if <span class="math inline">A^\top A = I_n</span>. In other words, all the columns of the matrix are orthogonal and have unit length.</p>
 </section>
 <section id="matrix-decompositions" class="level2">
 <h2 class="anchored" data-anchor-id="matrix-decompositions">Matrix decompositions</h2>
@@ -263,19 +255,16 @@ ul.task-list li input[type="checkbox"] {
 <section id="auto-covariance" class="level3">
 <h3 class="anchored" data-anchor-id="auto-covariance">Auto-covariance</h3>
 <p>Given a data matrix <span class="math inline">X \in \mathbb{R}^{n \times f}</span> containing neural responses to <span class="math inline">n</span> stimuli from <span class="math inline">f</span> neurons, the <em>auto-covariance</em> of <span class="math inline">X</span> (or simply its <em>covariance</em>) is defined as:</p>
-<p><span class="math inline">\text{cov}(X) = \left(\dfrac{1}{n - 1}\right) (X - \overline{X})^\top (X - \overline{X})</span></p>
+<p><span class="math display">\text{cov}(X) = \left(\dfrac{1}{n - 1}\right) (X - \overline{X})^\top (X - \overline{X})</span></p>
 <p>This is an <span class="math inline">f \times f</span> matrix where the <span class="math inline">(i, j)</span>-th element measures how much neuron <span class="math inline">i</span> covaries with neuron <span class="math inline">j</span>. If the covariance is positive, they tend to have similar activation: a stimulus that activates one neuron will tend to activate the other. If the covariance is negative, the neurons will have dissimilar activation: a stimulus that activates one neuron will likely decrease the activity of the other.</p>
 </section>
 <section id="cross-covariance" class="level3">
 <h3 class="anchored" data-anchor-id="cross-covariance">Cross-covariance</h3>
 <p>Given two data matrices <span class="math inline">X \in \mathbb{R}^{n \times f_X}</span> and <span class="math inline">Y \in \mathbb{R}^{n \times f_Y}</span> containing neural responses to <span class="math inline">n</span> stimuli from <span class="math inline">f_X</span> and <span class="math inline">f_Y</span> neurons respectively, the <em>cross-covariance</em> of <span class="math inline">X</span> and <span class="math inline">Y</span> is defined as:</p>
-<p><span class="math inline">\text{cov}(X, Y) = \left(\dfrac{1}{n - 1}\right) (X - \overline{X})^\top (Y - \overline{Y})</span></p>
-</section>
-</section>
-<section id="correlation" class="level2">
-<h2 class="anchored" data-anchor-id="correlation">Correlation</h2>
+<p><span class="math display">\text{cov}(X, Y) = \left(\dfrac{1}{n - 1}\right) (X - \overline{X})^\top (Y - \overline{Y})</span></p>
 
 
+</section>
 </section>
 
 <a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a></main> <!-- /main -->
