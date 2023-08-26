@@ -420,7 +420,7 @@ def contract(tensor, matrix, axis):
 
 The [CIFAR-10](https://www.cs.toronto.edu/~kriz/cifar.html) dataset contains 50,000 training and 10,000 validation images of resolution $32 \times 32$. They are divided in 10 classes:
 
-![Sample images from CIFAR-10](/resources/cifar.png)
+![Sample images from CIFAR-10](https://github.com/BonnerLab/ccn-tutorial/blob/main/resources/cifar.png?raw=true)
 
 The dataset is automatically downloaded and loaded in memory with [`torchvision`](https://pytorch.org/vision/stable/index.html) (see [the CIFAR10 class](https://pytorch.org/vision/stable/generated/torchvision.datasets.CIFAR10.html)). Here we do not perform any data augmentation for simplicity, and convert the images to grayscale for computational efficiency.
 

@@ -11,7 +11,8 @@ project:
     - scripts/move_jupyter_notebooks.py
     - scripts/standardize_jupyter_notebook_cell_ids.py
     - jupyter nbconvert --clear-output --inplace notebooks/*.ipynb
-
+  resources:
+    - "resources/*"
 filters:
   - black-formatter
   - add-code-files
