@@ -286,48 +286,36 @@ A note on terminology
 </div>
 </div>
 </div>
-<div id="install_package" class="cell" data-execution_count="1">
+<div id="install_package" class="cell" data-execution_count="2">
 <details>
 <summary>Install all required dependencies</summary>
 <div class="sourceCode cell-code" id="install_package"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="install_package-1"><a href="#install_package-1" aria-hidden="true" tabindex="-1"></a><span class="co"># </span><span class="al">TODO</span><span class="co"> uncomment before final packaging</span></span>
 <span id="install_package-2"><a href="#install_package-2" aria-hidden="true" tabindex="-1"></a><span class="co"># %pip install git+https://github.com/BonnerLab/ccn-tutorial.git</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="imports" class="cell" data-execution_count="2">
+<div id="imports" class="cell" data-execution_count="3">
 <details>
 <summary>Import various libraries</summary>
-<div class="sourceCode cell-code" id="imports"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="imports-1"><a href="#imports-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> collections.abc <span class="im">import</span> Sequence</span>
-<span id="imports-2"><a href="#imports-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> warnings</span>
-<span id="imports-3"><a href="#imports-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="imports-4"><a href="#imports-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
-<span id="imports-5"><a href="#imports-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="imports-6"><a href="#imports-6" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> xarray <span class="im">as</span> xr</span>
-<span id="imports-7"><a href="#imports-7" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch</span>
-<span id="imports-8"><a href="#imports-8" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> torchdata.datapipes.<span class="bu">map</span> <span class="im">import</span> SequenceWrapper</span>
-<span id="imports-9"><a href="#imports-9" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> torchvision.models <span class="im">import</span> alexnet, AlexNet_Weights</span>
-<span id="imports-10"><a href="#imports-10" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.decomposition <span class="im">import</span> TruncatedSVD, PCA</span>
-<span id="imports-11"><a href="#imports-11" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> PIL <span class="im">import</span> Image</span>
-<span id="imports-12"><a href="#imports-12" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
-<span id="imports-13"><a href="#imports-13" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> matplotlib.figure <span class="im">import</span> Figure</span>
-<span id="imports-14"><a href="#imports-14" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> matplotlib <span class="im">import</span> pyplot <span class="im">as</span> plt</span>
-<span id="imports-15"><a href="#imports-15" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> matplotlib_inline.backend_inline <span class="im">import</span> set_matplotlib_formats</span>
-<span id="imports-16"><a href="#imports-16" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> IPython.display <span class="im">import</span> display</span>
-<span id="imports-17"><a href="#imports-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="imports-18"><a href="#imports-18" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> utilities.brain <span class="im">import</span> (</span>
-<span id="imports-19"><a href="#imports-19" aria-hidden="true" tabindex="-1"></a>    load_dataset,</span>
-<span id="imports-20"><a href="#imports-20" aria-hidden="true" tabindex="-1"></a>    average_data_across_repetitions,</span>
-<span id="imports-21"><a href="#imports-21" aria-hidden="true" tabindex="-1"></a>    load_stimuli,</span>
-<span id="imports-22"><a href="#imports-22" aria-hidden="true" tabindex="-1"></a>    plot_brain_map,</span>
-<span id="imports-23"><a href="#imports-23" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="imports-24"><a href="#imports-24" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> utilities.computation <span class="im">import</span> svd, assign_logarithmic_bins</span>
-<span id="imports-25"><a href="#imports-25" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> utilities.model <span class="im">import</span> (</span>
-<span id="imports-26"><a href="#imports-26" aria-hidden="true" tabindex="-1"></a>    extract_features,</span>
-<span id="imports-27"><a href="#imports-27" aria-hidden="true" tabindex="-1"></a>    SparseRandomProjection,</span>
-<span id="imports-28"><a href="#imports-28" aria-hidden="true" tabindex="-1"></a>    create_image_datapipe,</span>
-<span id="imports-29"><a href="#imports-29" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="imports"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="imports-1"><a href="#imports-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> warnings</span>
+<span id="imports-2"><a href="#imports-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="imports-3"><a href="#imports-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="imports-4"><a href="#imports-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="imports-5"><a href="#imports-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> xarray <span class="im">as</span> xr</span>
+<span id="imports-6"><a href="#imports-6" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch</span>
+<span id="imports-7"><a href="#imports-7" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
+<span id="imports-8"><a href="#imports-8" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> matplotlib <span class="im">import</span> pyplot <span class="im">as</span> plt</span>
+<span id="imports-9"><a href="#imports-9" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> matplotlib_inline.backend_inline <span class="im">import</span> set_matplotlib_formats</span>
+<span id="imports-10"><a href="#imports-10" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> IPython.display <span class="im">import</span> display</span>
+<span id="imports-11"><a href="#imports-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="imports-12"><a href="#imports-12" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> utilities.brain <span class="im">import</span> (</span>
+<span id="imports-13"><a href="#imports-13" aria-hidden="true" tabindex="-1"></a>    load_dataset,</span>
+<span id="imports-14"><a href="#imports-14" aria-hidden="true" tabindex="-1"></a>    average_data_across_repetitions,</span>
+<span id="imports-15"><a href="#imports-15" aria-hidden="true" tabindex="-1"></a>    load_stimuli,</span>
+<span id="imports-16"><a href="#imports-16" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="imports-17"><a href="#imports-17" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> utilities.computation <span class="im">import</span> svd, assign_logarithmic_bins</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="set_visualization_defaults" class="cell" data-execution_count="3">
+<div id="set_visualization_defaults" class="cell" data-execution_count="4">
 <details>
 <summary>Set some visualization defaults</summary>
 <div class="sourceCode cell-code" id="set_visualization_defaults"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="set_visualization_defaults-1"><a href="#set_visualization_defaults-1" aria-hidden="true" tabindex="-1"></a><span class="op">%</span>matplotlib inline</span>
@@ -350,14 +338,14 @@ A note on terminology
 <span id="set_visualization_defaults-18"><a href="#set_visualization_defaults-18" aria-hidden="true" tabindex="-1"></a>warnings.filterwarnings(<span class="st">"ignore"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="initialize_rng" class="cell" data-execution_count="4">
+<div id="initialize_rng" class="cell" data-execution_count="5">
 <details>
 <summary>Initialize a deterministic random number generator</summary>
 <div class="sourceCode cell-code" id="initialize_rng"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="initialize_rng-1"><a href="#initialize_rng-1" aria-hidden="true" tabindex="-1"></a>random_state <span class="op">=</span> <span class="dv">0</span></span>
 <span id="initialize_rng-2"><a href="#initialize_rng-2" aria-hidden="true" tabindex="-1"></a>rng <span class="op">=</span> np.random.default_rng(seed<span class="op">=</span>random_state)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="recipe-plssvd" class="cell" data-execution_count="5">
+<div id="recipe-plssvd" class="cell" data-execution_count="6">
 <details open="">
 <summary>A computational recipe for PLS-SVD</summary>
 <div class="sourceCode cell-code" id="recipe-plssvd"><pre class="sourceCode python code-annotation-code code-with-copy code-annotated"><code class="sourceCode python"><span id="recipe-plssvd-1"><a href="#recipe-plssvd-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> PLSSVD:</span>
@@ -459,18 +447,18 @@ A note on terminology
 </section>
 <section id="applying-it-to-neural-data" class="level3">
 <h3 class="anchored" data-anchor-id="applying-it-to-neural-data">Applying it to neural data</h3>
-<div id="6a1f0ec5" class="cell" data-execution_count="6">
+<div id="29d67a2a" class="cell" data-execution_count="7">
 <details>
 <summary>Load the datasets</summary>
-<div class="sourceCode cell-code" id="6a1f0ec5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="6a1f0ec5-1"><a href="#6a1f0ec5-1" aria-hidden="true" tabindex="-1"></a>subject_1 <span class="op">=</span> average_data_across_repetitions(</span>
-<span id="6a1f0ec5-2"><a href="#6a1f0ec5-2" aria-hidden="true" tabindex="-1"></a>    load_dataset(subject<span class="op">=</span><span class="dv">0</span>, roi<span class="op">=</span><span class="st">"general"</span>)</span>
-<span id="6a1f0ec5-3"><a href="#6a1f0ec5-3" aria-hidden="true" tabindex="-1"></a>).sortby(<span class="st">"stimulus_id"</span>)</span>
-<span id="6a1f0ec5-4"><a href="#6a1f0ec5-4" aria-hidden="true" tabindex="-1"></a>subject_2 <span class="op">=</span> average_data_across_repetitions(load_dataset(subject<span class="op">=</span><span class="dv">1</span>, roi<span class="op">=</span><span class="st">"general"</span>))</span>
-<span id="6a1f0ec5-5"><a href="#6a1f0ec5-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="6a1f0ec5-6"><a href="#6a1f0ec5-6" aria-hidden="true" tabindex="-1"></a>stimuli <span class="op">=</span> load_stimuli()[<span class="st">"stimulus_id"</span>].values</span>
-<span id="6a1f0ec5-7"><a href="#6a1f0ec5-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="6a1f0ec5-8"><a href="#6a1f0ec5-8" aria-hidden="true" tabindex="-1"></a>display(subject_1)</span>
-<span id="6a1f0ec5-9"><a href="#6a1f0ec5-9" aria-hidden="true" tabindex="-1"></a>display(subject_2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="29d67a2a"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="29d67a2a-1"><a href="#29d67a2a-1" aria-hidden="true" tabindex="-1"></a>subject_1 <span class="op">=</span> average_data_across_repetitions(</span>
+<span id="29d67a2a-2"><a href="#29d67a2a-2" aria-hidden="true" tabindex="-1"></a>    load_dataset(subject<span class="op">=</span><span class="dv">0</span>, roi<span class="op">=</span><span class="st">"general"</span>)</span>
+<span id="29d67a2a-3"><a href="#29d67a2a-3" aria-hidden="true" tabindex="-1"></a>).sortby(<span class="st">"stimulus_id"</span>)</span>
+<span id="29d67a2a-4"><a href="#29d67a2a-4" aria-hidden="true" tabindex="-1"></a>subject_2 <span class="op">=</span> average_data_across_repetitions(load_dataset(subject<span class="op">=</span><span class="dv">1</span>, roi<span class="op">=</span><span class="st">"general"</span>))</span>
+<span id="29d67a2a-5"><a href="#29d67a2a-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="29d67a2a-6"><a href="#29d67a2a-6" aria-hidden="true" tabindex="-1"></a>stimuli <span class="op">=</span> load_stimuli()[<span class="st">"stimulus_id"</span>].values</span>
+<span id="29d67a2a-7"><a href="#29d67a2a-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="29d67a2a-8"><a href="#29d67a2a-8" aria-hidden="true" tabindex="-1"></a>display(subject_1)</span>
+<span id="29d67a2a-9"><a href="#29d67a2a-9" aria-hidden="true" tabindex="-1"></a>display(subject_2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-display">
 <div><svg style="position: absolute; width: 0; height: 0; overflow: hidden">
@@ -848,7 +836,7 @@ Attributes: (3/8)
     resolution:      1pt8mm
     preprocessing:   fithrf_GLMdenoise_RR
     ...              ...
-    postprocessing:  averaged across first two repetitions</pre><div class="xr-wrap" style="display:none"><div class="xr-header"><div class="xr-obj-type">xarray.DataArray</div><div class="xr-array-name">'fMRI betas'</div><ul class="xr-dim-list"><li><span>presentation</span>: 700</li><li><span>neuroid</span>: 15724</li></ul></div><ul class="xr-sections"><li class="xr-section-item"><div class="xr-array-wrap"><input id="section-629c8951-f875-430a-a2f1-89f4d9f4f576" class="xr-array-in" type="checkbox"><label for="section-629c8951-f875-430a-a2f1-89f4d9f4f576" title="Show/hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-array-preview xr-preview"><span>0.4915 0.2473 0.08592 0.05828 ... -0.2126 -0.6315 -0.5751 -0.5354</span></div><div class="xr-array-data"><pre>array([[ 0.4915219 ,  0.24733381,  0.08592446, ..., -0.366651  ,
+    postprocessing:  averaged across first two repetitions</pre><div class="xr-wrap" style="display:none"><div class="xr-header"><div class="xr-obj-type">xarray.DataArray</div><div class="xr-array-name">'fMRI betas'</div><ul class="xr-dim-list"><li><span>presentation</span>: 700</li><li><span>neuroid</span>: 15724</li></ul></div><ul class="xr-sections"><li class="xr-section-item"><div class="xr-array-wrap"><input id="section-cdc6b2e3-c4ef-4af3-ac1d-b7789bc58f18" class="xr-array-in" type="checkbox"><label for="section-cdc6b2e3-c4ef-4af3-ac1d-b7789bc58f18" title="Show/hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-array-preview xr-preview"><span>0.4915 0.2473 0.08592 0.05828 ... -0.2126 -0.6315 -0.5751 -0.5354</span></div><div class="xr-array-data"><pre>array([[ 0.4915219 ,  0.24733381,  0.08592446, ..., -0.366651  ,
          0.30723202,  0.43520752],
        [ 0.1664538 , -0.10728736,  0.35630295, ...,  0.8608913 ,
          0.03464809,  0.11020081],
@@ -860,7 +848,7 @@ Attributes: (3/8)
        [-0.00340644, -1.0050421 ,  0.7278904 , ...,  0.580743  ,
         -0.50856245, -0.2727615 ],
        [-1.2668517 , -1.4769105 , -0.3562023 , ..., -0.63146234,
-        -0.575121  , -0.5354325 ]], dtype=float32)</pre></div></div></li><li class="xr-section-item"><input id="section-fdd9517d-333f-4700-9a26-52da74adadb4" class="xr-section-summary-in" type="checkbox" checked=""><label for="section-fdd9517d-333f-4700-9a26-52da74adadb4" class="xr-section-summary">Coordinates: <span>(4)</span></label><div class="xr-section-inline-details"></div><div class="xr-section-details"><ul class="xr-var-list"><li class="xr-var-item"><div class="xr-var-name"><span>x</span></div><div class="xr-var-dims">(neuroid)</div><div class="xr-var-dtype">uint8</div><div class="xr-var-preview xr-preview">12 12 12 12 12 ... 72 72 72 72 72</div><input id="attrs-f7ac6e21-1de4-4ba0-9c42-be4d38a41c7c" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-f7ac6e21-1de4-4ba0-9c42-be4d38a41c7c" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-3678bf77-d4b6-4b37-9d27-ecb7d10c3316" class="xr-var-data-in" type="checkbox"><label for="data-3678bf77-d4b6-4b37-9d27-ecb7d10c3316" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array([12, 12, 12, ..., 72, 72, 72], dtype=uint8)</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span>y</span></div><div class="xr-var-dims">(neuroid)</div><div class="xr-var-dtype">uint8</div><div class="xr-var-preview xr-preview">21 22 22 22 22 ... 29 30 30 30 31</div><input id="attrs-2148b092-8d4c-41ac-a029-f9572f06b489" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-2148b092-8d4c-41ac-a029-f9572f06b489" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-fb9f5172-132d-4528-8d92-c94b0e736382" class="xr-var-data-in" type="checkbox"><label for="data-fb9f5172-132d-4528-8d92-c94b0e736382" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array([21, 22, 22, ..., 30, 30, 31], dtype=uint8)</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span>z</span></div><div class="xr-var-dims">(neuroid)</div><div class="xr-var-dtype">uint8</div><div class="xr-var-preview xr-preview">47 45 46 47 48 ... 46 45 46 49 49</div><input id="attrs-cc869216-1456-41c9-a415-5d4f3f7b149a" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-cc869216-1456-41c9-a415-5d4f3f7b149a" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-627745c1-1eff-4ff8-88f9-2defd0ab2c4b" class="xr-var-data-in" type="checkbox"><label for="data-627745c1-1eff-4ff8-88f9-2defd0ab2c4b" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array([47, 45, 46, ..., 46, 49, 49], dtype=uint8)</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span>stimulus_id</span></div><div class="xr-var-dims">(presentation)</div><div class="xr-var-dtype">object</div><div class="xr-var-preview xr-preview">'image02950' ... 'image72948'</div><input id="attrs-0902b5a9-1de2-41e4-94f5-2cdde44cbb19" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-0902b5a9-1de2-41e4-94f5-2cdde44cbb19" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-60985f1d-bda1-4109-990c-eab490952f85" class="xr-var-data-in" type="checkbox"><label for="data-60985f1d-bda1-4109-990c-eab490952f85" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array(['image02950', 'image02990', 'image03049', 'image03077',
+        -0.575121  , -0.5354325 ]], dtype=float32)</pre></div></div></li><li class="xr-section-item"><input id="section-e085a059-ecef-4ba4-a6a2-251a31db18c6" class="xr-section-summary-in" type="checkbox" checked=""><label for="section-e085a059-ecef-4ba4-a6a2-251a31db18c6" class="xr-section-summary">Coordinates: <span>(4)</span></label><div class="xr-section-inline-details"></div><div class="xr-section-details"><ul class="xr-var-list"><li class="xr-var-item"><div class="xr-var-name"><span>x</span></div><div class="xr-var-dims">(neuroid)</div><div class="xr-var-dtype">uint8</div><div class="xr-var-preview xr-preview">12 12 12 12 12 ... 72 72 72 72 72</div><input id="attrs-b1c109f5-5e85-43e6-9738-b50bfc6bce5b" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-b1c109f5-5e85-43e6-9738-b50bfc6bce5b" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-fe2adfee-860a-4a6e-bdd3-b1b58c7e8160" class="xr-var-data-in" type="checkbox"><label for="data-fe2adfee-860a-4a6e-bdd3-b1b58c7e8160" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array([12, 12, 12, ..., 72, 72, 72], dtype=uint8)</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span>y</span></div><div class="xr-var-dims">(neuroid)</div><div class="xr-var-dtype">uint8</div><div class="xr-var-preview xr-preview">21 22 22 22 22 ... 29 30 30 30 31</div><input id="attrs-f0793df3-a020-40af-9c4b-cdeeb433a517" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-f0793df3-a020-40af-9c4b-cdeeb433a517" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-d0a40296-6ed1-4fd5-a263-79e69025613a" class="xr-var-data-in" type="checkbox"><label for="data-d0a40296-6ed1-4fd5-a263-79e69025613a" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array([21, 22, 22, ..., 30, 30, 31], dtype=uint8)</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span>z</span></div><div class="xr-var-dims">(neuroid)</div><div class="xr-var-dtype">uint8</div><div class="xr-var-preview xr-preview">47 45 46 47 48 ... 46 45 46 49 49</div><input id="attrs-421f08f1-a1dd-4ee7-97d0-3bbf25ee32b8" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-421f08f1-a1dd-4ee7-97d0-3bbf25ee32b8" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-e88ca159-3aa3-4a04-a76b-ea14020526dc" class="xr-var-data-in" type="checkbox"><label for="data-e88ca159-3aa3-4a04-a76b-ea14020526dc" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array([47, 45, 46, ..., 46, 49, 49], dtype=uint8)</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span>stimulus_id</span></div><div class="xr-var-dims">(presentation)</div><div class="xr-var-dtype">object</div><div class="xr-var-preview xr-preview">'image02950' ... 'image72948'</div><input id="attrs-118e5643-358e-4bd9-9b3b-a7fa58117015" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-118e5643-358e-4bd9-9b3b-a7fa58117015" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-7b915365-0ae3-4aee-aa2c-92a8d7c73c81" class="xr-var-data-in" type="checkbox"><label for="data-7b915365-0ae3-4aee-aa2c-92a8d7c73c81" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array(['image02950', 'image02990', 'image03049', 'image03077',
        'image03146', 'image03157', 'image03164', 'image03171',
        'image03181', 'image03386', 'image03434', 'image03449',
        'image03489', 'image03626', 'image03682', 'image03687',
@@ -900,7 +888,7 @@ Attributes: (3/8)
        'image71410', 'image71450', 'image71753', 'image71894',
        'image72015', 'image72080', 'image72209', 'image72312',
        'image72510', 'image72605', 'image72719', 'image72948'],
-      dtype=object)</pre></div></li></ul></div></li><li class="xr-section-item"><input id="section-5f9abf48-1fae-44b6-a0c7-fb29c5b8796e" class="xr-section-summary-in" type="checkbox" disabled=""><label for="section-5f9abf48-1fae-44b6-a0c7-fb29c5b8796e" class="xr-section-summary" title="Expand/collapse section">Indexes: <span>(0)</span></label><div class="xr-section-inline-details"></div><div class="xr-section-details"><ul class="xr-var-list"></ul></div></li><li class="xr-section-item"><input id="section-d08187f3-53ab-405f-95cf-63bf1c0779b1" class="xr-section-summary-in" type="checkbox" checked=""><label for="section-d08187f3-53ab-405f-95cf-63bf1c0779b1" class="xr-section-summary">Attributes: <span>(8)</span></label><div class="xr-section-inline-details"></div><div class="xr-section-details"><dl class="xr-attrs"><dt><span>resolution :</span></dt><dd>1pt8mm</dd><dt><span>preprocessing :</span></dt><dd>fithrf_GLMdenoise_RR</dd><dt><span>z_score :</span></dt><dd>True</dd><dt><span>roi :</span></dt><dd>general</dd><dt><span>subject :</span></dt><dd>0</dd><dt><span>brain shape :</span></dt><dd>[ 81 104  83]</dd><dt><span>citation :</span></dt><dd>Allen, E.J., St-Yves, G., Wu, Y. et al. A massive 7T fMRI dataset to bridge cognitive neuroscience and artificial intelligence. Nat Neurosci 25, 116-126 (2022). https://doi.org/10.1038/s41593-021-00962-x</dd><dt><span>postprocessing :</span></dt><dd>averaged across first two repetitions</dd></dl></div></li></ul></div></div>
+      dtype=object)</pre></div></li></ul></div></li><li class="xr-section-item"><input id="section-2d9e4e33-e57f-40bb-9db8-8a584f7c4512" class="xr-section-summary-in" type="checkbox" disabled=""><label for="section-2d9e4e33-e57f-40bb-9db8-8a584f7c4512" class="xr-section-summary" title="Expand/collapse section">Indexes: <span>(0)</span></label><div class="xr-section-inline-details"></div><div class="xr-section-details"><ul class="xr-var-list"></ul></div></li><li class="xr-section-item"><input id="section-76c427e7-e2a2-45bd-868c-65a2ee2b1dbf" class="xr-section-summary-in" type="checkbox" checked=""><label for="section-76c427e7-e2a2-45bd-868c-65a2ee2b1dbf" class="xr-section-summary">Attributes: <span>(8)</span></label><div class="xr-section-inline-details"></div><div class="xr-section-details"><dl class="xr-attrs"><dt><span>resolution :</span></dt><dd>1pt8mm</dd><dt><span>preprocessing :</span></dt><dd>fithrf_GLMdenoise_RR</dd><dt><span>z_score :</span></dt><dd>True</dd><dt><span>roi :</span></dt><dd>general</dd><dt><span>subject :</span></dt><dd>0</dd><dt><span>brain shape :</span></dt><dd>[ 81 104  83]</dd><dt><span>citation :</span></dt><dd>Allen, E.J., St-Yves, G., Wu, Y. et al. A massive 7T fMRI dataset to bridge cognitive neuroscience and artificial intelligence. Nat Neurosci 25, 116-126 (2022). https://doi.org/10.1038/s41593-021-00962-x</dd><dt><span>postprocessing :</span></dt><dd>averaged across first two repetitions</dd></dl></div></li></ul></div></div>
 </div>
 <div class="cell-output cell-output-display">
 <div><svg style="position: absolute; width: 0; height: 0; overflow: hidden">
@@ -1278,7 +1266,7 @@ Attributes: (3/8)
     resolution:      1pt8mm
     preprocessing:   fithrf_GLMdenoise_RR
     ...              ...
-    postprocessing:  averaged across first two repetitions</pre><div class="xr-wrap" style="display:none"><div class="xr-header"><div class="xr-obj-type">xarray.DataArray</div><div class="xr-array-name">'fMRI betas'</div><ul class="xr-dim-list"><li><span>presentation</span>: 700</li><li><span>neuroid</span>: 14278</li></ul></div><ul class="xr-sections"><li class="xr-section-item"><div class="xr-array-wrap"><input id="section-988bd592-73b4-4331-af12-3646b2436b25" class="xr-array-in" type="checkbox"><label for="section-988bd592-73b4-4331-af12-3646b2436b25" title="Show/hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-array-preview xr-preview"><span>-0.8554 0.0399 0.09591 -0.4694 ... -1.052 -0.6467 -0.6164 -0.8053</span></div><div class="xr-array-data"><pre>array([[-0.85538554,  0.03990293,  0.09591419, ..., -1.6162797 ,
+    postprocessing:  averaged across first two repetitions</pre><div class="xr-wrap" style="display:none"><div class="xr-header"><div class="xr-obj-type">xarray.DataArray</div><div class="xr-array-name">'fMRI betas'</div><ul class="xr-dim-list"><li><span>presentation</span>: 700</li><li><span>neuroid</span>: 14278</li></ul></div><ul class="xr-sections"><li class="xr-section-item"><div class="xr-array-wrap"><input id="section-b6b4612f-3a3e-40a6-a2f3-ce05ee95f5b0" class="xr-array-in" type="checkbox"><label for="section-b6b4612f-3a3e-40a6-a2f3-ce05ee95f5b0" title="Show/hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-array-preview xr-preview"><span>-0.8554 0.0399 0.09591 -0.4694 ... -1.052 -0.6467 -0.6164 -0.8053</span></div><div class="xr-array-data"><pre>array([[-0.85538554,  0.03990293,  0.09591419, ..., -1.6162797 ,
         -1.1637473 , -0.22345664],
        [-1.1291182 , -0.24890876,  0.27723873, ...,  0.8381426 ,
          1.2138667 ,  0.9067359 ],
@@ -1290,7 +1278,7 @@ Attributes: (3/8)
        [ 0.61964816, -0.6503349 , -0.42204803, ..., -0.73787045,
         -1.0440085 , -1.0924375 ],
        [-0.690616  ,  0.61802167, -1.1264803 , ..., -0.6467064 ,
-        -0.61641246, -0.8052834 ]], dtype=float32)</pre></div></div></li><li class="xr-section-item"><input id="section-574cd869-4890-40c9-8919-5764891e4873" class="xr-section-summary-in" type="checkbox" checked=""><label for="section-574cd869-4890-40c9-8919-5764891e4873" class="xr-section-summary">Coordinates: <span>(4)</span></label><div class="xr-section-inline-details"></div><div class="xr-section-details"><ul class="xr-var-list"><li class="xr-var-item"><div class="xr-var-name"><span>x</span></div><div class="xr-var-dims">(neuroid)</div><div class="xr-var-dtype">uint8</div><div class="xr-var-preview xr-preview">11 11 11 11 12 ... 71 71 71 71 71</div><input id="attrs-f9824dd1-cd9a-4502-8e99-e2d71d37f470" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-f9824dd1-cd9a-4502-8e99-e2d71d37f470" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-b59436a3-0745-4176-a4e5-2092d664d1e1" class="xr-var-data-in" type="checkbox"><label for="data-b59436a3-0745-4176-a4e5-2092d664d1e1" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array([11, 11, 11, ..., 71, 71, 71], dtype=uint8)</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span>y</span></div><div class="xr-var-dims">(neuroid)</div><div class="xr-var-dtype">uint8</div><div class="xr-var-preview xr-preview">23 25 25 26 22 ... 29 29 30 30 30</div><input id="attrs-a85d2e0d-7cbf-464f-8174-b3fc084d977c" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-a85d2e0d-7cbf-464f-8174-b3fc084d977c" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-d12545d1-fecc-4e94-9499-f013993efbaa" class="xr-var-data-in" type="checkbox"><label for="data-d12545d1-fecc-4e94-9499-f013993efbaa" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array([23, 25, 25, ..., 30, 30, 30], dtype=uint8)</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span>z</span></div><div class="xr-var-dims">(neuroid)</div><div class="xr-var-dtype">uint8</div><div class="xr-var-preview xr-preview">37 32 33 38 36 ... 40 41 40 41 42</div><input id="attrs-c02e1de0-8b0a-45e2-a536-8fbc08a45c45" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-c02e1de0-8b0a-45e2-a536-8fbc08a45c45" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-01b5b42f-f4de-49e3-9e9a-7a5418fa0470" class="xr-var-data-in" type="checkbox"><label for="data-01b5b42f-f4de-49e3-9e9a-7a5418fa0470" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array([37, 32, 33, ..., 40, 41, 42], dtype=uint8)</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span>stimulus_id</span></div><div class="xr-var-dims">(presentation)</div><div class="xr-var-dtype">object</div><div class="xr-var-preview xr-preview">'image02950' ... 'image72948'</div><input id="attrs-bf0dd822-87b3-4ca0-ac0b-6748b6cca2cc" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-bf0dd822-87b3-4ca0-ac0b-6748b6cca2cc" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-3bc471d5-aa68-44ce-ad06-51fe4b42db44" class="xr-var-data-in" type="checkbox"><label for="data-3bc471d5-aa68-44ce-ad06-51fe4b42db44" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array(['image02950', 'image02990', 'image03049', 'image03077',
+        -0.61641246, -0.8052834 ]], dtype=float32)</pre></div></div></li><li class="xr-section-item"><input id="section-23dd5954-8d0e-420c-a35d-d1f56d1972e7" class="xr-section-summary-in" type="checkbox" checked=""><label for="section-23dd5954-8d0e-420c-a35d-d1f56d1972e7" class="xr-section-summary">Coordinates: <span>(4)</span></label><div class="xr-section-inline-details"></div><div class="xr-section-details"><ul class="xr-var-list"><li class="xr-var-item"><div class="xr-var-name"><span>x</span></div><div class="xr-var-dims">(neuroid)</div><div class="xr-var-dtype">uint8</div><div class="xr-var-preview xr-preview">11 11 11 11 12 ... 71 71 71 71 71</div><input id="attrs-3326042c-e82f-49cf-ba8e-2559902f990a" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-3326042c-e82f-49cf-ba8e-2559902f990a" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-2928ea63-759b-4be9-9fd5-6e053aa0e533" class="xr-var-data-in" type="checkbox"><label for="data-2928ea63-759b-4be9-9fd5-6e053aa0e533" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array([11, 11, 11, ..., 71, 71, 71], dtype=uint8)</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span>y</span></div><div class="xr-var-dims">(neuroid)</div><div class="xr-var-dtype">uint8</div><div class="xr-var-preview xr-preview">23 25 25 26 22 ... 29 29 30 30 30</div><input id="attrs-f2d059d7-516c-412a-a6f0-57ab0d24a15f" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-f2d059d7-516c-412a-a6f0-57ab0d24a15f" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-0c1b02e4-78df-4a0c-b793-fb7506e380e4" class="xr-var-data-in" type="checkbox"><label for="data-0c1b02e4-78df-4a0c-b793-fb7506e380e4" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array([23, 25, 25, ..., 30, 30, 30], dtype=uint8)</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span>z</span></div><div class="xr-var-dims">(neuroid)</div><div class="xr-var-dtype">uint8</div><div class="xr-var-preview xr-preview">37 32 33 38 36 ... 40 41 40 41 42</div><input id="attrs-88f9699f-2fda-4a61-b491-1db6a6b2aac0" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-88f9699f-2fda-4a61-b491-1db6a6b2aac0" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-4a02226d-560e-47ac-9c80-b85e4cd8223d" class="xr-var-data-in" type="checkbox"><label for="data-4a02226d-560e-47ac-9c80-b85e4cd8223d" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array([37, 32, 33, ..., 40, 41, 42], dtype=uint8)</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span>stimulus_id</span></div><div class="xr-var-dims">(presentation)</div><div class="xr-var-dtype">object</div><div class="xr-var-preview xr-preview">'image02950' ... 'image72948'</div><input id="attrs-58c627df-0484-4887-b6d9-4b188cc1fcbe" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-58c627df-0484-4887-b6d9-4b188cc1fcbe" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-457485ba-2b29-4aac-a2ef-d1d6410d1eff" class="xr-var-data-in" type="checkbox"><label for="data-457485ba-2b29-4aac-a2ef-d1d6410d1eff" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array(['image02950', 'image02990', 'image03049', 'image03077',
        'image03146', 'image03157', 'image03164', 'image03171',
        'image03181', 'image03386', 'image03434', 'image03449',
        'image03489', 'image03626', 'image03682', 'image03687',
@@ -1330,78 +1318,78 @@ Attributes: (3/8)
        'image71410', 'image71450', 'image71753', 'image71894',
        'image72015', 'image72080', 'image72209', 'image72312',
        'image72510', 'image72605', 'image72719', 'image72948'],
-      dtype=object)</pre></div></li></ul></div></li><li class="xr-section-item"><input id="section-a9d14212-942d-4658-8f55-8de349a25a79" class="xr-section-summary-in" type="checkbox" disabled=""><label for="section-a9d14212-942d-4658-8f55-8de349a25a79" class="xr-section-summary" title="Expand/collapse section">Indexes: <span>(0)</span></label><div class="xr-section-inline-details"></div><div class="xr-section-details"><ul class="xr-var-list"></ul></div></li><li class="xr-section-item"><input id="section-0ee4c90b-747b-4b55-87e9-0ecdf266d31f" class="xr-section-summary-in" type="checkbox" checked=""><label for="section-0ee4c90b-747b-4b55-87e9-0ecdf266d31f" class="xr-section-summary">Attributes: <span>(8)</span></label><div class="xr-section-inline-details"></div><div class="xr-section-details"><dl class="xr-attrs"><dt><span>resolution :</span></dt><dd>1pt8mm</dd><dt><span>preprocessing :</span></dt><dd>fithrf_GLMdenoise_RR</dd><dt><span>z_score :</span></dt><dd>True</dd><dt><span>roi :</span></dt><dd>general</dd><dt><span>subject :</span></dt><dd>1</dd><dt><span>brain shape :</span></dt><dd>[ 82 106  84]</dd><dt><span>citation :</span></dt><dd>Allen, E.J., St-Yves, G., Wu, Y. et al. A massive 7T fMRI dataset to bridge cognitive neuroscience and artificial intelligence. Nat Neurosci 25, 116-126 (2022). https://doi.org/10.1038/s41593-021-00962-x</dd><dt><span>postprocessing :</span></dt><dd>averaged across first two repetitions</dd></dl></div></li></ul></div></div>
+      dtype=object)</pre></div></li></ul></div></li><li class="xr-section-item"><input id="section-3dc7c65a-7eac-4ab0-b7d7-158316551a28" class="xr-section-summary-in" type="checkbox" disabled=""><label for="section-3dc7c65a-7eac-4ab0-b7d7-158316551a28" class="xr-section-summary" title="Expand/collapse section">Indexes: <span>(0)</span></label><div class="xr-section-inline-details"></div><div class="xr-section-details"><ul class="xr-var-list"></ul></div></li><li class="xr-section-item"><input id="section-7edce796-7eb4-416c-8b25-cf32fbdb1067" class="xr-section-summary-in" type="checkbox" checked=""><label for="section-7edce796-7eb4-416c-8b25-cf32fbdb1067" class="xr-section-summary">Attributes: <span>(8)</span></label><div class="xr-section-inline-details"></div><div class="xr-section-details"><dl class="xr-attrs"><dt><span>resolution :</span></dt><dd>1pt8mm</dd><dt><span>preprocessing :</span></dt><dd>fithrf_GLMdenoise_RR</dd><dt><span>z_score :</span></dt><dd>True</dd><dt><span>roi :</span></dt><dd>general</dd><dt><span>subject :</span></dt><dd>1</dd><dt><span>brain shape :</span></dt><dd>[ 82 106  84]</dd><dt><span>citation :</span></dt><dd>Allen, E.J., St-Yves, G., Wu, Y. et al. A massive 7T fMRI dataset to bridge cognitive neuroscience and artificial intelligence. Nat Neurosci 25, 116-126 (2022). https://doi.org/10.1038/s41593-021-00962-x</dd><dt><span>postprocessing :</span></dt><dd>averaged across first two repetitions</dd></dl></div></li></ul></div></div>
 </div>
 </div>
-<div id="f171472e" class="cell" data-execution_count="7">
+<div id="22119fde" class="cell" data-execution_count="8">
 <details>
 <summary>Compute the cross-participant spectrum</summary>
-<div class="sourceCode cell-code" id="f171472e"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="f171472e-1"><a href="#f171472e-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> compute_cross_participant_spectrum(</span>
-<span id="f171472e-2"><a href="#f171472e-2" aria-hidden="true" tabindex="-1"></a>    x: xr.DataArray,</span>
-<span id="f171472e-3"><a href="#f171472e-3" aria-hidden="true" tabindex="-1"></a>    y: xr.DataArray,</span>
-<span id="f171472e-4"><a href="#f171472e-4" aria-hidden="true" tabindex="-1"></a>    <span class="op">/</span>,</span>
-<span id="f171472e-5"><a href="#f171472e-5" aria-hidden="true" tabindex="-1"></a>    train_fraction: <span class="bu">float</span> <span class="op">=</span> <span class="dv">7</span> <span class="op">/</span> <span class="dv">8</span>,</span>
-<span id="f171472e-6"><a href="#f171472e-6" aria-hidden="true" tabindex="-1"></a>) <span class="op">-&gt;</span> np.ndarray:</span>
-<span id="f171472e-7"><a href="#f171472e-7" aria-hidden="true" tabindex="-1"></a>    stimuli <span class="op">=</span> x[<span class="st">"stimulus_id"</span>].values</span>
-<span id="f171472e-8"><a href="#f171472e-8" aria-hidden="true" tabindex="-1"></a>    n_train <span class="op">=</span> <span class="bu">int</span>(train_fraction <span class="op">*</span> <span class="bu">len</span>(stimuli))</span>
-<span id="f171472e-9"><a href="#f171472e-9" aria-hidden="true" tabindex="-1"></a>    stimuli <span class="op">=</span> rng.permutation(stimuli)[:n_train]</span>
-<span id="f171472e-10"><a href="#f171472e-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="f171472e-11"><a href="#f171472e-11" aria-hidden="true" tabindex="-1"></a>    train_indices <span class="op">=</span> np.isin(x[<span class="st">"stimulus_id"</span>].values, stimuli)</span>
-<span id="f171472e-12"><a href="#f171472e-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="f171472e-13"><a href="#f171472e-13" aria-hidden="true" tabindex="-1"></a>    x_train <span class="op">=</span> x.isel({<span class="st">"presentation"</span>: train_indices})</span>
-<span id="f171472e-14"><a href="#f171472e-14" aria-hidden="true" tabindex="-1"></a>    y_train <span class="op">=</span> y.isel({<span class="st">"presentation"</span>: train_indices})</span>
-<span id="f171472e-15"><a href="#f171472e-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="f171472e-16"><a href="#f171472e-16" aria-hidden="true" tabindex="-1"></a>    x_test <span class="op">=</span> x.isel({<span class="st">"presentation"</span>: <span class="op">~</span>train_indices})</span>
-<span id="f171472e-17"><a href="#f171472e-17" aria-hidden="true" tabindex="-1"></a>    y_test <span class="op">=</span> y.isel({<span class="st">"presentation"</span>: <span class="op">~</span>train_indices})</span>
-<span id="f171472e-18"><a href="#f171472e-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="f171472e-19"><a href="#f171472e-19" aria-hidden="true" tabindex="-1"></a>    scorer <span class="op">=</span> PLSSVD()</span>
-<span id="f171472e-20"><a href="#f171472e-20" aria-hidden="true" tabindex="-1"></a>    scorer.fit(x_train.values, y_train.values)</span>
-<span id="f171472e-21"><a href="#f171472e-21" aria-hidden="true" tabindex="-1"></a>    x_test_transformed <span class="op">=</span> scorer.transform(x_test.values, direction<span class="op">=</span><span class="st">"left"</span>)</span>
-<span id="f171472e-22"><a href="#f171472e-22" aria-hidden="true" tabindex="-1"></a>    y_test_transformed <span class="op">=</span> scorer.transform(y_test.values, direction<span class="op">=</span><span class="st">"right"</span>)</span>
-<span id="f171472e-23"><a href="#f171472e-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="f171472e-24"><a href="#f171472e-24" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> np.diag(</span>
-<span id="f171472e-25"><a href="#f171472e-25" aria-hidden="true" tabindex="-1"></a>        np.cov(</span>
-<span id="f171472e-26"><a href="#f171472e-26" aria-hidden="true" tabindex="-1"></a>            x_test_transformed,</span>
-<span id="f171472e-27"><a href="#f171472e-27" aria-hidden="true" tabindex="-1"></a>            y_test_transformed,</span>
-<span id="f171472e-28"><a href="#f171472e-28" aria-hidden="true" tabindex="-1"></a>            rowvar<span class="op">=</span><span class="va">False</span>,</span>
-<span id="f171472e-29"><a href="#f171472e-29" aria-hidden="true" tabindex="-1"></a>        )[:n_train, n_train:]</span>
-<span id="f171472e-30"><a href="#f171472e-30" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="f171472e-31"><a href="#f171472e-31" aria-hidden="true" tabindex="-1"></a></span>
-<span id="f171472e-32"><a href="#f171472e-32" aria-hidden="true" tabindex="-1"></a></span>
-<span id="f171472e-33"><a href="#f171472e-33" aria-hidden="true" tabindex="-1"></a>cross_participant_spectrum <span class="op">=</span> compute_cross_participant_spectrum(subject_1, subject_2)</span>
-<span id="f171472e-34"><a href="#f171472e-34" aria-hidden="true" tabindex="-1"></a></span>
-<span id="f171472e-35"><a href="#f171472e-35" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> pd.DataFrame(</span>
-<span id="f171472e-36"><a href="#f171472e-36" aria-hidden="true" tabindex="-1"></a>    {</span>
-<span id="f171472e-37"><a href="#f171472e-37" aria-hidden="true" tabindex="-1"></a>        <span class="st">"cross-validated singular value"</span>: cross_participant_spectrum,</span>
-<span id="f171472e-38"><a href="#f171472e-38" aria-hidden="true" tabindex="-1"></a>        <span class="st">"rank"</span>: assign_logarithmic_bins(</span>
-<span id="f171472e-39"><a href="#f171472e-39" aria-hidden="true" tabindex="-1"></a>            <span class="dv">1</span> <span class="op">+</span> np.arange(<span class="bu">len</span>(cross_participant_spectrum)),</span>
-<span id="f171472e-40"><a href="#f171472e-40" aria-hidden="true" tabindex="-1"></a>            min_<span class="op">=</span><span class="dv">1</span>,</span>
-<span id="f171472e-41"><a href="#f171472e-41" aria-hidden="true" tabindex="-1"></a>            max_<span class="op">=</span><span class="dv">10_000</span>,</span>
-<span id="f171472e-42"><a href="#f171472e-42" aria-hidden="true" tabindex="-1"></a>            points_per_bin<span class="op">=</span><span class="dv">5</span>,</span>
-<span id="f171472e-43"><a href="#f171472e-43" aria-hidden="true" tabindex="-1"></a>        ),</span>
-<span id="f171472e-44"><a href="#f171472e-44" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="f171472e-45"><a href="#f171472e-45" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="f171472e-46"><a href="#f171472e-46" aria-hidden="true" tabindex="-1"></a></span>
-<span id="f171472e-47"><a href="#f171472e-47" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots()</span>
-<span id="f171472e-48"><a href="#f171472e-48" aria-hidden="true" tabindex="-1"></a>sns.lineplot(</span>
-<span id="f171472e-49"><a href="#f171472e-49" aria-hidden="true" tabindex="-1"></a>    ax<span class="op">=</span>ax,</span>
-<span id="f171472e-50"><a href="#f171472e-50" aria-hidden="true" tabindex="-1"></a>    data<span class="op">=</span>data.assign(arbitrary<span class="op">=</span><span class="dv">0</span>),</span>
-<span id="f171472e-51"><a href="#f171472e-51" aria-hidden="true" tabindex="-1"></a>    x<span class="op">=</span><span class="st">"rank"</span>,</span>
-<span id="f171472e-52"><a href="#f171472e-52" aria-hidden="true" tabindex="-1"></a>    y<span class="op">=</span><span class="st">"cross-validated singular value"</span>,</span>
-<span id="f171472e-53"><a href="#f171472e-53" aria-hidden="true" tabindex="-1"></a>    marker<span class="op">=</span><span class="st">"o"</span>,</span>
-<span id="f171472e-54"><a href="#f171472e-54" aria-hidden="true" tabindex="-1"></a>    dashes<span class="op">=</span><span class="va">False</span>,</span>
-<span id="f171472e-55"><a href="#f171472e-55" aria-hidden="true" tabindex="-1"></a>    hue<span class="op">=</span><span class="st">"arbitrary"</span>,</span>
-<span id="f171472e-56"><a href="#f171472e-56" aria-hidden="true" tabindex="-1"></a>    palette<span class="op">=</span>[<span class="st">"#cf6016"</span>],</span>
-<span id="f171472e-57"><a href="#f171472e-57" aria-hidden="true" tabindex="-1"></a>    ls<span class="op">=</span><span class="st">"None"</span>,</span>
-<span id="f171472e-58"><a href="#f171472e-58" aria-hidden="true" tabindex="-1"></a>    err_style<span class="op">=</span><span class="st">"bars"</span>,</span>
-<span id="f171472e-59"><a href="#f171472e-59" aria-hidden="true" tabindex="-1"></a>    estimator<span class="op">=</span><span class="st">"mean"</span>,</span>
-<span id="f171472e-60"><a href="#f171472e-60" aria-hidden="true" tabindex="-1"></a>    errorbar<span class="op">=</span><span class="st">"sd"</span>,</span>
-<span id="f171472e-61"><a href="#f171472e-61" aria-hidden="true" tabindex="-1"></a>    legend<span class="op">=</span><span class="va">False</span>,</span>
-<span id="f171472e-62"><a href="#f171472e-62" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="f171472e-63"><a href="#f171472e-63" aria-hidden="true" tabindex="-1"></a>ax.set_xscale(<span class="st">"log"</span>)</span>
-<span id="f171472e-64"><a href="#f171472e-64" aria-hidden="true" tabindex="-1"></a>ax.set_yscale(<span class="st">"log"</span>)</span>
-<span id="f171472e-65"><a href="#f171472e-65" aria-hidden="true" tabindex="-1"></a>ax.set_aspect(<span class="st">"equal"</span>, <span class="st">"box"</span>)</span>
-<span id="f171472e-66"><a href="#f171472e-66" aria-hidden="true" tabindex="-1"></a>sns.despine(ax<span class="op">=</span>ax, offset<span class="op">=</span><span class="dv">20</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="22119fde"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="22119fde-1"><a href="#22119fde-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> compute_cross_participant_spectrum(</span>
+<span id="22119fde-2"><a href="#22119fde-2" aria-hidden="true" tabindex="-1"></a>    x: xr.DataArray,</span>
+<span id="22119fde-3"><a href="#22119fde-3" aria-hidden="true" tabindex="-1"></a>    y: xr.DataArray,</span>
+<span id="22119fde-4"><a href="#22119fde-4" aria-hidden="true" tabindex="-1"></a>    <span class="op">/</span>,</span>
+<span id="22119fde-5"><a href="#22119fde-5" aria-hidden="true" tabindex="-1"></a>    train_fraction: <span class="bu">float</span> <span class="op">=</span> <span class="dv">7</span> <span class="op">/</span> <span class="dv">8</span>,</span>
+<span id="22119fde-6"><a href="#22119fde-6" aria-hidden="true" tabindex="-1"></a>) <span class="op">-&gt;</span> np.ndarray:</span>
+<span id="22119fde-7"><a href="#22119fde-7" aria-hidden="true" tabindex="-1"></a>    stimuli <span class="op">=</span> x[<span class="st">"stimulus_id"</span>].values</span>
+<span id="22119fde-8"><a href="#22119fde-8" aria-hidden="true" tabindex="-1"></a>    n_train <span class="op">=</span> <span class="bu">int</span>(train_fraction <span class="op">*</span> <span class="bu">len</span>(stimuli))</span>
+<span id="22119fde-9"><a href="#22119fde-9" aria-hidden="true" tabindex="-1"></a>    stimuli <span class="op">=</span> rng.permutation(stimuli)[:n_train]</span>
+<span id="22119fde-10"><a href="#22119fde-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="22119fde-11"><a href="#22119fde-11" aria-hidden="true" tabindex="-1"></a>    train_indices <span class="op">=</span> np.isin(x[<span class="st">"stimulus_id"</span>].values, stimuli)</span>
+<span id="22119fde-12"><a href="#22119fde-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="22119fde-13"><a href="#22119fde-13" aria-hidden="true" tabindex="-1"></a>    x_train <span class="op">=</span> x.isel({<span class="st">"presentation"</span>: train_indices})</span>
+<span id="22119fde-14"><a href="#22119fde-14" aria-hidden="true" tabindex="-1"></a>    y_train <span class="op">=</span> y.isel({<span class="st">"presentation"</span>: train_indices})</span>
+<span id="22119fde-15"><a href="#22119fde-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="22119fde-16"><a href="#22119fde-16" aria-hidden="true" tabindex="-1"></a>    x_test <span class="op">=</span> x.isel({<span class="st">"presentation"</span>: <span class="op">~</span>train_indices})</span>
+<span id="22119fde-17"><a href="#22119fde-17" aria-hidden="true" tabindex="-1"></a>    y_test <span class="op">=</span> y.isel({<span class="st">"presentation"</span>: <span class="op">~</span>train_indices})</span>
+<span id="22119fde-18"><a href="#22119fde-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="22119fde-19"><a href="#22119fde-19" aria-hidden="true" tabindex="-1"></a>    scorer <span class="op">=</span> PLSSVD()</span>
+<span id="22119fde-20"><a href="#22119fde-20" aria-hidden="true" tabindex="-1"></a>    scorer.fit(x_train.values, y_train.values)</span>
+<span id="22119fde-21"><a href="#22119fde-21" aria-hidden="true" tabindex="-1"></a>    x_test_transformed <span class="op">=</span> scorer.transform(x_test.values, direction<span class="op">=</span><span class="st">"left"</span>)</span>
+<span id="22119fde-22"><a href="#22119fde-22" aria-hidden="true" tabindex="-1"></a>    y_test_transformed <span class="op">=</span> scorer.transform(y_test.values, direction<span class="op">=</span><span class="st">"right"</span>)</span>
+<span id="22119fde-23"><a href="#22119fde-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="22119fde-24"><a href="#22119fde-24" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> np.diag(</span>
+<span id="22119fde-25"><a href="#22119fde-25" aria-hidden="true" tabindex="-1"></a>        np.cov(</span>
+<span id="22119fde-26"><a href="#22119fde-26" aria-hidden="true" tabindex="-1"></a>            x_test_transformed,</span>
+<span id="22119fde-27"><a href="#22119fde-27" aria-hidden="true" tabindex="-1"></a>            y_test_transformed,</span>
+<span id="22119fde-28"><a href="#22119fde-28" aria-hidden="true" tabindex="-1"></a>            rowvar<span class="op">=</span><span class="va">False</span>,</span>
+<span id="22119fde-29"><a href="#22119fde-29" aria-hidden="true" tabindex="-1"></a>        )[:n_train, n_train:]</span>
+<span id="22119fde-30"><a href="#22119fde-30" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="22119fde-31"><a href="#22119fde-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="22119fde-32"><a href="#22119fde-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="22119fde-33"><a href="#22119fde-33" aria-hidden="true" tabindex="-1"></a>cross_participant_spectrum <span class="op">=</span> compute_cross_participant_spectrum(subject_1, subject_2)</span>
+<span id="22119fde-34"><a href="#22119fde-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="22119fde-35"><a href="#22119fde-35" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> pd.DataFrame(</span>
+<span id="22119fde-36"><a href="#22119fde-36" aria-hidden="true" tabindex="-1"></a>    {</span>
+<span id="22119fde-37"><a href="#22119fde-37" aria-hidden="true" tabindex="-1"></a>        <span class="st">"cross-validated singular value"</span>: cross_participant_spectrum,</span>
+<span id="22119fde-38"><a href="#22119fde-38" aria-hidden="true" tabindex="-1"></a>        <span class="st">"rank"</span>: assign_logarithmic_bins(</span>
+<span id="22119fde-39"><a href="#22119fde-39" aria-hidden="true" tabindex="-1"></a>            <span class="dv">1</span> <span class="op">+</span> np.arange(<span class="bu">len</span>(cross_participant_spectrum)),</span>
+<span id="22119fde-40"><a href="#22119fde-40" aria-hidden="true" tabindex="-1"></a>            min_<span class="op">=</span><span class="dv">1</span>,</span>
+<span id="22119fde-41"><a href="#22119fde-41" aria-hidden="true" tabindex="-1"></a>            max_<span class="op">=</span><span class="dv">10_000</span>,</span>
+<span id="22119fde-42"><a href="#22119fde-42" aria-hidden="true" tabindex="-1"></a>            points_per_bin<span class="op">=</span><span class="dv">5</span>,</span>
+<span id="22119fde-43"><a href="#22119fde-43" aria-hidden="true" tabindex="-1"></a>        ),</span>
+<span id="22119fde-44"><a href="#22119fde-44" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="22119fde-45"><a href="#22119fde-45" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="22119fde-46"><a href="#22119fde-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="22119fde-47"><a href="#22119fde-47" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots()</span>
+<span id="22119fde-48"><a href="#22119fde-48" aria-hidden="true" tabindex="-1"></a>sns.lineplot(</span>
+<span id="22119fde-49"><a href="#22119fde-49" aria-hidden="true" tabindex="-1"></a>    ax<span class="op">=</span>ax,</span>
+<span id="22119fde-50"><a href="#22119fde-50" aria-hidden="true" tabindex="-1"></a>    data<span class="op">=</span>data.assign(arbitrary<span class="op">=</span><span class="dv">0</span>),</span>
+<span id="22119fde-51"><a href="#22119fde-51" aria-hidden="true" tabindex="-1"></a>    x<span class="op">=</span><span class="st">"rank"</span>,</span>
+<span id="22119fde-52"><a href="#22119fde-52" aria-hidden="true" tabindex="-1"></a>    y<span class="op">=</span><span class="st">"cross-validated singular value"</span>,</span>
+<span id="22119fde-53"><a href="#22119fde-53" aria-hidden="true" tabindex="-1"></a>    marker<span class="op">=</span><span class="st">"o"</span>,</span>
+<span id="22119fde-54"><a href="#22119fde-54" aria-hidden="true" tabindex="-1"></a>    dashes<span class="op">=</span><span class="va">False</span>,</span>
+<span id="22119fde-55"><a href="#22119fde-55" aria-hidden="true" tabindex="-1"></a>    hue<span class="op">=</span><span class="st">"arbitrary"</span>,</span>
+<span id="22119fde-56"><a href="#22119fde-56" aria-hidden="true" tabindex="-1"></a>    palette<span class="op">=</span>[<span class="st">"#cf6016"</span>],</span>
+<span id="22119fde-57"><a href="#22119fde-57" aria-hidden="true" tabindex="-1"></a>    ls<span class="op">=</span><span class="st">"None"</span>,</span>
+<span id="22119fde-58"><a href="#22119fde-58" aria-hidden="true" tabindex="-1"></a>    err_style<span class="op">=</span><span class="st">"bars"</span>,</span>
+<span id="22119fde-59"><a href="#22119fde-59" aria-hidden="true" tabindex="-1"></a>    estimator<span class="op">=</span><span class="st">"mean"</span>,</span>
+<span id="22119fde-60"><a href="#22119fde-60" aria-hidden="true" tabindex="-1"></a>    errorbar<span class="op">=</span><span class="st">"sd"</span>,</span>
+<span id="22119fde-61"><a href="#22119fde-61" aria-hidden="true" tabindex="-1"></a>    legend<span class="op">=</span><span class="va">False</span>,</span>
+<span id="22119fde-62"><a href="#22119fde-62" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="22119fde-63"><a href="#22119fde-63" aria-hidden="true" tabindex="-1"></a>ax.set_xscale(<span class="st">"log"</span>)</span>
+<span id="22119fde-64"><a href="#22119fde-64" aria-hidden="true" tabindex="-1"></a>ax.set_yscale(<span class="st">"log"</span>)</span>
+<span id="22119fde-65"><a href="#22119fde-65" aria-hidden="true" tabindex="-1"></a>ax.set_aspect(<span class="st">"equal"</span>, <span class="st">"box"</span>)</span>
+<span id="22119fde-66"><a href="#22119fde-66" aria-hidden="true" tabindex="-1"></a>sns.despine(ax<span class="op">=</span>ax, offset<span class="op">=</span><span class="dv">20</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-display">
 <div class="quarto-figure quarto-figure-center">
@@ -1411,83 +1399,83 @@ Attributes: (3/8)
 </div>
 </div>
 </div>
-<div id="abb1869f" class="cell" data-execution_count="8">
+<div id="b615ec53" class="cell" data-execution_count="9">
 <details>
 <summary>Plot both the within- and cross-participant spectra</summary>
-<div class="sourceCode cell-code" id="abb1869f"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="abb1869f-1"><a href="#abb1869f-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> compute_within_participant_spectrum(data: xr.DataArray) <span class="op">-&gt;</span> np.ndarray:</span>
-<span id="abb1869f-2"><a href="#abb1869f-2" aria-hidden="true" tabindex="-1"></a>    x_train <span class="op">=</span> data.isel({<span class="st">"presentation"</span>: data[<span class="st">"rep_id"</span>] <span class="op">==</span> <span class="dv">0</span>}).sortby(<span class="st">"stimulus_id"</span>)</span>
-<span id="abb1869f-3"><a href="#abb1869f-3" aria-hidden="true" tabindex="-1"></a>    y_train <span class="op">=</span> data.isel({<span class="st">"presentation"</span>: data[<span class="st">"rep_id"</span>] <span class="op">==</span> <span class="dv">0</span>}).sortby(<span class="st">"stimulus_id"</span>)</span>
-<span id="abb1869f-4"><a href="#abb1869f-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="abb1869f-5"><a href="#abb1869f-5" aria-hidden="true" tabindex="-1"></a>    x_test <span class="op">=</span> data.isel({<span class="st">"presentation"</span>: data[<span class="st">"rep_id"</span>] <span class="op">==</span> <span class="dv">0</span>}).sortby(<span class="st">"stimulus_id"</span>)</span>
-<span id="abb1869f-6"><a href="#abb1869f-6" aria-hidden="true" tabindex="-1"></a>    y_test <span class="op">=</span> data.isel({<span class="st">"presentation"</span>: data[<span class="st">"rep_id"</span>] <span class="op">==</span> <span class="dv">1</span>}).sortby(<span class="st">"stimulus_id"</span>)</span>
-<span id="abb1869f-7"><a href="#abb1869f-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="abb1869f-8"><a href="#abb1869f-8" aria-hidden="true" tabindex="-1"></a>    scorer <span class="op">=</span> PLSSVD()</span>
-<span id="abb1869f-9"><a href="#abb1869f-9" aria-hidden="true" tabindex="-1"></a>    scorer.fit(x_train.values, x_train.values)</span>
-<span id="abb1869f-10"><a href="#abb1869f-10" aria-hidden="true" tabindex="-1"></a>    x_test_transformed <span class="op">=</span> scorer.transform(x_test.values, direction<span class="op">=</span><span class="st">"left"</span>)</span>
-<span id="abb1869f-11"><a href="#abb1869f-11" aria-hidden="true" tabindex="-1"></a>    y_test_transformed <span class="op">=</span> scorer.transform(y_test.values, direction<span class="op">=</span><span class="st">"right"</span>)</span>
-<span id="abb1869f-12"><a href="#abb1869f-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="abb1869f-13"><a href="#abb1869f-13" aria-hidden="true" tabindex="-1"></a>    n_components <span class="op">=</span> x_test_transformed.shape[<span class="op">-</span><span class="dv">1</span>]</span>
-<span id="abb1869f-14"><a href="#abb1869f-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="abb1869f-15"><a href="#abb1869f-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> np.diag(</span>
-<span id="abb1869f-16"><a href="#abb1869f-16" aria-hidden="true" tabindex="-1"></a>        np.cov(</span>
-<span id="abb1869f-17"><a href="#abb1869f-17" aria-hidden="true" tabindex="-1"></a>            x_test_transformed,</span>
-<span id="abb1869f-18"><a href="#abb1869f-18" aria-hidden="true" tabindex="-1"></a>            y_test_transformed,</span>
-<span id="abb1869f-19"><a href="#abb1869f-19" aria-hidden="true" tabindex="-1"></a>            rowvar<span class="op">=</span><span class="va">False</span>,</span>
-<span id="abb1869f-20"><a href="#abb1869f-20" aria-hidden="true" tabindex="-1"></a>        )[:n_components, n_components:]</span>
-<span id="abb1869f-21"><a href="#abb1869f-21" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="abb1869f-22"><a href="#abb1869f-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="abb1869f-23"><a href="#abb1869f-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="abb1869f-24"><a href="#abb1869f-24" aria-hidden="true" tabindex="-1"></a>within_participant_spectrum <span class="op">=</span> compute_within_participant_spectrum(</span>
-<span id="abb1869f-25"><a href="#abb1869f-25" aria-hidden="true" tabindex="-1"></a>    load_dataset(subject<span class="op">=</span><span class="dv">0</span>, roi<span class="op">=</span><span class="st">"general"</span>)</span>
-<span id="abb1869f-26"><a href="#abb1869f-26" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="abb1869f-27"><a href="#abb1869f-27" aria-hidden="true" tabindex="-1"></a></span>
-<span id="abb1869f-28"><a href="#abb1869f-28" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> pd.concat(</span>
-<span id="abb1869f-29"><a href="#abb1869f-29" aria-hidden="true" tabindex="-1"></a>    [</span>
-<span id="abb1869f-30"><a href="#abb1869f-30" aria-hidden="true" tabindex="-1"></a>        data.assign(comparison<span class="op">=</span><span class="st">"cross-individual"</span>),</span>
-<span id="abb1869f-31"><a href="#abb1869f-31" aria-hidden="true" tabindex="-1"></a>        pd.DataFrame(</span>
-<span id="abb1869f-32"><a href="#abb1869f-32" aria-hidden="true" tabindex="-1"></a>            {</span>
-<span id="abb1869f-33"><a href="#abb1869f-33" aria-hidden="true" tabindex="-1"></a>                <span class="st">"cross-validated singular value"</span>: within_participant_spectrum,</span>
-<span id="abb1869f-34"><a href="#abb1869f-34" aria-hidden="true" tabindex="-1"></a>                <span class="st">"rank"</span>: assign_logarithmic_bins(</span>
-<span id="abb1869f-35"><a href="#abb1869f-35" aria-hidden="true" tabindex="-1"></a>                    <span class="dv">1</span> <span class="op">+</span> np.arange(<span class="bu">len</span>(within_participant_spectrum)),</span>
-<span id="abb1869f-36"><a href="#abb1869f-36" aria-hidden="true" tabindex="-1"></a>                    min_<span class="op">=</span><span class="dv">1</span>,</span>
-<span id="abb1869f-37"><a href="#abb1869f-37" aria-hidden="true" tabindex="-1"></a>                    max_<span class="op">=</span><span class="dv">10_000</span>,</span>
-<span id="abb1869f-38"><a href="#abb1869f-38" aria-hidden="true" tabindex="-1"></a>                    points_per_bin<span class="op">=</span><span class="dv">5</span>,</span>
-<span id="abb1869f-39"><a href="#abb1869f-39" aria-hidden="true" tabindex="-1"></a>                ),</span>
-<span id="abb1869f-40"><a href="#abb1869f-40" aria-hidden="true" tabindex="-1"></a>            }</span>
-<span id="abb1869f-41"><a href="#abb1869f-41" aria-hidden="true" tabindex="-1"></a>        ).assign(comparison<span class="op">=</span><span class="st">"within-individual"</span>),</span>
-<span id="abb1869f-42"><a href="#abb1869f-42" aria-hidden="true" tabindex="-1"></a>    ],</span>
-<span id="abb1869f-43"><a href="#abb1869f-43" aria-hidden="true" tabindex="-1"></a>    axis<span class="op">=</span><span class="dv">0</span>,</span>
-<span id="abb1869f-44"><a href="#abb1869f-44" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="abb1869f-45"><a href="#abb1869f-45" aria-hidden="true" tabindex="-1"></a></span>
-<span id="abb1869f-46"><a href="#abb1869f-46" aria-hidden="true" tabindex="-1"></a></span>
-<span id="abb1869f-47"><a href="#abb1869f-47" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> sns.axes_style(<span class="st">"whitegrid"</span>):</span>
-<span id="abb1869f-48"><a href="#abb1869f-48" aria-hidden="true" tabindex="-1"></a>    fig, ax <span class="op">=</span> plt.subplots()</span>
-<span id="abb1869f-49"><a href="#abb1869f-49" aria-hidden="true" tabindex="-1"></a></span>
-<span id="abb1869f-50"><a href="#abb1869f-50" aria-hidden="true" tabindex="-1"></a>    sns.lineplot(</span>
-<span id="abb1869f-51"><a href="#abb1869f-51" aria-hidden="true" tabindex="-1"></a>        ax<span class="op">=</span>ax,</span>
-<span id="abb1869f-52"><a href="#abb1869f-52" aria-hidden="true" tabindex="-1"></a>        data<span class="op">=</span>data,</span>
-<span id="abb1869f-53"><a href="#abb1869f-53" aria-hidden="true" tabindex="-1"></a>        x<span class="op">=</span><span class="st">"rank"</span>,</span>
-<span id="abb1869f-54"><a href="#abb1869f-54" aria-hidden="true" tabindex="-1"></a>        y<span class="op">=</span><span class="st">"cross-validated singular value"</span>,</span>
-<span id="abb1869f-55"><a href="#abb1869f-55" aria-hidden="true" tabindex="-1"></a>        palette<span class="op">=</span>[<span class="st">"#514587"</span>, <span class="st">"#cf6016"</span>],</span>
-<span id="abb1869f-56"><a href="#abb1869f-56" aria-hidden="true" tabindex="-1"></a>        hue<span class="op">=</span><span class="st">"comparison"</span>,</span>
-<span id="abb1869f-57"><a href="#abb1869f-57" aria-hidden="true" tabindex="-1"></a>        hue_order<span class="op">=</span>[<span class="st">"within-individual"</span>, <span class="st">"cross-individual"</span>],</span>
-<span id="abb1869f-58"><a href="#abb1869f-58" aria-hidden="true" tabindex="-1"></a>        style<span class="op">=</span><span class="st">"comparison"</span>,</span>
-<span id="abb1869f-59"><a href="#abb1869f-59" aria-hidden="true" tabindex="-1"></a>        style_order<span class="op">=</span>[<span class="st">"within-individual"</span>, <span class="st">"cross-individual"</span>],</span>
-<span id="abb1869f-60"><a href="#abb1869f-60" aria-hidden="true" tabindex="-1"></a>        markers<span class="op">=</span>[<span class="st">"o"</span>, <span class="st">"s"</span>],</span>
-<span id="abb1869f-61"><a href="#abb1869f-61" aria-hidden="true" tabindex="-1"></a>        dashes<span class="op">=</span><span class="va">False</span>,</span>
-<span id="abb1869f-62"><a href="#abb1869f-62" aria-hidden="true" tabindex="-1"></a>        ls<span class="op">=</span><span class="st">"None"</span>,</span>
-<span id="abb1869f-63"><a href="#abb1869f-63" aria-hidden="true" tabindex="-1"></a>        err_style<span class="op">=</span><span class="st">"bars"</span>,</span>
-<span id="abb1869f-64"><a href="#abb1869f-64" aria-hidden="true" tabindex="-1"></a>        estimator<span class="op">=</span><span class="st">"mean"</span>,</span>
-<span id="abb1869f-65"><a href="#abb1869f-65" aria-hidden="true" tabindex="-1"></a>        errorbar<span class="op">=</span><span class="st">"sd"</span>,</span>
-<span id="abb1869f-66"><a href="#abb1869f-66" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="abb1869f-67"><a href="#abb1869f-67" aria-hidden="true" tabindex="-1"></a>    ax.set_xscale(<span class="st">"log"</span>)</span>
-<span id="abb1869f-68"><a href="#abb1869f-68" aria-hidden="true" tabindex="-1"></a>    ax.set_yscale(<span class="st">"log"</span>)</span>
-<span id="abb1869f-69"><a href="#abb1869f-69" aria-hidden="true" tabindex="-1"></a>    ax.set_aspect(<span class="st">"equal"</span>, <span class="st">"box"</span>)</span>
-<span id="abb1869f-70"><a href="#abb1869f-70" aria-hidden="true" tabindex="-1"></a></span>
-<span id="abb1869f-71"><a href="#abb1869f-71" aria-hidden="true" tabindex="-1"></a>    ax.grid(<span class="va">True</span>, which<span class="op">=</span><span class="st">"minor"</span>, c<span class="op">=</span><span class="st">"whitesmoke"</span>)</span>
-<span id="abb1869f-72"><a href="#abb1869f-72" aria-hidden="true" tabindex="-1"></a>    ax.grid(<span class="va">True</span>, which<span class="op">=</span><span class="st">"major"</span>, c<span class="op">=</span><span class="st">"lightgray"</span>)</span>
-<span id="abb1869f-73"><a href="#abb1869f-73" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> loc <span class="kw">in</span> (<span class="st">"left"</span>, <span class="st">"bottom"</span>, <span class="st">"top"</span>, <span class="st">"right"</span>):</span>
-<span id="abb1869f-74"><a href="#abb1869f-74" aria-hidden="true" tabindex="-1"></a>        ax.spines[loc].set_visible(<span class="va">False</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="b615ec53"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="b615ec53-1"><a href="#b615ec53-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> compute_within_participant_spectrum(data: xr.DataArray) <span class="op">-&gt;</span> np.ndarray:</span>
+<span id="b615ec53-2"><a href="#b615ec53-2" aria-hidden="true" tabindex="-1"></a>    x_train <span class="op">=</span> data.isel({<span class="st">"presentation"</span>: data[<span class="st">"rep_id"</span>] <span class="op">==</span> <span class="dv">0</span>}).sortby(<span class="st">"stimulus_id"</span>)</span>
+<span id="b615ec53-3"><a href="#b615ec53-3" aria-hidden="true" tabindex="-1"></a>    y_train <span class="op">=</span> data.isel({<span class="st">"presentation"</span>: data[<span class="st">"rep_id"</span>] <span class="op">==</span> <span class="dv">0</span>}).sortby(<span class="st">"stimulus_id"</span>)</span>
+<span id="b615ec53-4"><a href="#b615ec53-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="b615ec53-5"><a href="#b615ec53-5" aria-hidden="true" tabindex="-1"></a>    x_test <span class="op">=</span> data.isel({<span class="st">"presentation"</span>: data[<span class="st">"rep_id"</span>] <span class="op">==</span> <span class="dv">0</span>}).sortby(<span class="st">"stimulus_id"</span>)</span>
+<span id="b615ec53-6"><a href="#b615ec53-6" aria-hidden="true" tabindex="-1"></a>    y_test <span class="op">=</span> data.isel({<span class="st">"presentation"</span>: data[<span class="st">"rep_id"</span>] <span class="op">==</span> <span class="dv">1</span>}).sortby(<span class="st">"stimulus_id"</span>)</span>
+<span id="b615ec53-7"><a href="#b615ec53-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="b615ec53-8"><a href="#b615ec53-8" aria-hidden="true" tabindex="-1"></a>    scorer <span class="op">=</span> PLSSVD()</span>
+<span id="b615ec53-9"><a href="#b615ec53-9" aria-hidden="true" tabindex="-1"></a>    scorer.fit(x_train.values, x_train.values)</span>
+<span id="b615ec53-10"><a href="#b615ec53-10" aria-hidden="true" tabindex="-1"></a>    x_test_transformed <span class="op">=</span> scorer.transform(x_test.values, direction<span class="op">=</span><span class="st">"left"</span>)</span>
+<span id="b615ec53-11"><a href="#b615ec53-11" aria-hidden="true" tabindex="-1"></a>    y_test_transformed <span class="op">=</span> scorer.transform(y_test.values, direction<span class="op">=</span><span class="st">"right"</span>)</span>
+<span id="b615ec53-12"><a href="#b615ec53-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="b615ec53-13"><a href="#b615ec53-13" aria-hidden="true" tabindex="-1"></a>    n_components <span class="op">=</span> x_test_transformed.shape[<span class="op">-</span><span class="dv">1</span>]</span>
+<span id="b615ec53-14"><a href="#b615ec53-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="b615ec53-15"><a href="#b615ec53-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> np.diag(</span>
+<span id="b615ec53-16"><a href="#b615ec53-16" aria-hidden="true" tabindex="-1"></a>        np.cov(</span>
+<span id="b615ec53-17"><a href="#b615ec53-17" aria-hidden="true" tabindex="-1"></a>            x_test_transformed,</span>
+<span id="b615ec53-18"><a href="#b615ec53-18" aria-hidden="true" tabindex="-1"></a>            y_test_transformed,</span>
+<span id="b615ec53-19"><a href="#b615ec53-19" aria-hidden="true" tabindex="-1"></a>            rowvar<span class="op">=</span><span class="va">False</span>,</span>
+<span id="b615ec53-20"><a href="#b615ec53-20" aria-hidden="true" tabindex="-1"></a>        )[:n_components, n_components:]</span>
+<span id="b615ec53-21"><a href="#b615ec53-21" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="b615ec53-22"><a href="#b615ec53-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="b615ec53-23"><a href="#b615ec53-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="b615ec53-24"><a href="#b615ec53-24" aria-hidden="true" tabindex="-1"></a>within_participant_spectrum <span class="op">=</span> compute_within_participant_spectrum(</span>
+<span id="b615ec53-25"><a href="#b615ec53-25" aria-hidden="true" tabindex="-1"></a>    load_dataset(subject<span class="op">=</span><span class="dv">0</span>, roi<span class="op">=</span><span class="st">"general"</span>)</span>
+<span id="b615ec53-26"><a href="#b615ec53-26" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="b615ec53-27"><a href="#b615ec53-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="b615ec53-28"><a href="#b615ec53-28" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> pd.concat(</span>
+<span id="b615ec53-29"><a href="#b615ec53-29" aria-hidden="true" tabindex="-1"></a>    [</span>
+<span id="b615ec53-30"><a href="#b615ec53-30" aria-hidden="true" tabindex="-1"></a>        data.assign(comparison<span class="op">=</span><span class="st">"cross-individual"</span>),</span>
+<span id="b615ec53-31"><a href="#b615ec53-31" aria-hidden="true" tabindex="-1"></a>        pd.DataFrame(</span>
+<span id="b615ec53-32"><a href="#b615ec53-32" aria-hidden="true" tabindex="-1"></a>            {</span>
+<span id="b615ec53-33"><a href="#b615ec53-33" aria-hidden="true" tabindex="-1"></a>                <span class="st">"cross-validated singular value"</span>: within_participant_spectrum,</span>
+<span id="b615ec53-34"><a href="#b615ec53-34" aria-hidden="true" tabindex="-1"></a>                <span class="st">"rank"</span>: assign_logarithmic_bins(</span>
+<span id="b615ec53-35"><a href="#b615ec53-35" aria-hidden="true" tabindex="-1"></a>                    <span class="dv">1</span> <span class="op">+</span> np.arange(<span class="bu">len</span>(within_participant_spectrum)),</span>
+<span id="b615ec53-36"><a href="#b615ec53-36" aria-hidden="true" tabindex="-1"></a>                    min_<span class="op">=</span><span class="dv">1</span>,</span>
+<span id="b615ec53-37"><a href="#b615ec53-37" aria-hidden="true" tabindex="-1"></a>                    max_<span class="op">=</span><span class="dv">10_000</span>,</span>
+<span id="b615ec53-38"><a href="#b615ec53-38" aria-hidden="true" tabindex="-1"></a>                    points_per_bin<span class="op">=</span><span class="dv">5</span>,</span>
+<span id="b615ec53-39"><a href="#b615ec53-39" aria-hidden="true" tabindex="-1"></a>                ),</span>
+<span id="b615ec53-40"><a href="#b615ec53-40" aria-hidden="true" tabindex="-1"></a>            }</span>
+<span id="b615ec53-41"><a href="#b615ec53-41" aria-hidden="true" tabindex="-1"></a>        ).assign(comparison<span class="op">=</span><span class="st">"within-individual"</span>),</span>
+<span id="b615ec53-42"><a href="#b615ec53-42" aria-hidden="true" tabindex="-1"></a>    ],</span>
+<span id="b615ec53-43"><a href="#b615ec53-43" aria-hidden="true" tabindex="-1"></a>    axis<span class="op">=</span><span class="dv">0</span>,</span>
+<span id="b615ec53-44"><a href="#b615ec53-44" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="b615ec53-45"><a href="#b615ec53-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="b615ec53-46"><a href="#b615ec53-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="b615ec53-47"><a href="#b615ec53-47" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> sns.axes_style(<span class="st">"whitegrid"</span>):</span>
+<span id="b615ec53-48"><a href="#b615ec53-48" aria-hidden="true" tabindex="-1"></a>    fig, ax <span class="op">=</span> plt.subplots()</span>
+<span id="b615ec53-49"><a href="#b615ec53-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="b615ec53-50"><a href="#b615ec53-50" aria-hidden="true" tabindex="-1"></a>    sns.lineplot(</span>
+<span id="b615ec53-51"><a href="#b615ec53-51" aria-hidden="true" tabindex="-1"></a>        ax<span class="op">=</span>ax,</span>
+<span id="b615ec53-52"><a href="#b615ec53-52" aria-hidden="true" tabindex="-1"></a>        data<span class="op">=</span>data,</span>
+<span id="b615ec53-53"><a href="#b615ec53-53" aria-hidden="true" tabindex="-1"></a>        x<span class="op">=</span><span class="st">"rank"</span>,</span>
+<span id="b615ec53-54"><a href="#b615ec53-54" aria-hidden="true" tabindex="-1"></a>        y<span class="op">=</span><span class="st">"cross-validated singular value"</span>,</span>
+<span id="b615ec53-55"><a href="#b615ec53-55" aria-hidden="true" tabindex="-1"></a>        palette<span class="op">=</span>[<span class="st">"#514587"</span>, <span class="st">"#cf6016"</span>],</span>
+<span id="b615ec53-56"><a href="#b615ec53-56" aria-hidden="true" tabindex="-1"></a>        hue<span class="op">=</span><span class="st">"comparison"</span>,</span>
+<span id="b615ec53-57"><a href="#b615ec53-57" aria-hidden="true" tabindex="-1"></a>        hue_order<span class="op">=</span>[<span class="st">"within-individual"</span>, <span class="st">"cross-individual"</span>],</span>
+<span id="b615ec53-58"><a href="#b615ec53-58" aria-hidden="true" tabindex="-1"></a>        style<span class="op">=</span><span class="st">"comparison"</span>,</span>
+<span id="b615ec53-59"><a href="#b615ec53-59" aria-hidden="true" tabindex="-1"></a>        style_order<span class="op">=</span>[<span class="st">"within-individual"</span>, <span class="st">"cross-individual"</span>],</span>
+<span id="b615ec53-60"><a href="#b615ec53-60" aria-hidden="true" tabindex="-1"></a>        markers<span class="op">=</span>[<span class="st">"o"</span>, <span class="st">"s"</span>],</span>
+<span id="b615ec53-61"><a href="#b615ec53-61" aria-hidden="true" tabindex="-1"></a>        dashes<span class="op">=</span><span class="va">False</span>,</span>
+<span id="b615ec53-62"><a href="#b615ec53-62" aria-hidden="true" tabindex="-1"></a>        ls<span class="op">=</span><span class="st">"None"</span>,</span>
+<span id="b615ec53-63"><a href="#b615ec53-63" aria-hidden="true" tabindex="-1"></a>        err_style<span class="op">=</span><span class="st">"bars"</span>,</span>
+<span id="b615ec53-64"><a href="#b615ec53-64" aria-hidden="true" tabindex="-1"></a>        estimator<span class="op">=</span><span class="st">"mean"</span>,</span>
+<span id="b615ec53-65"><a href="#b615ec53-65" aria-hidden="true" tabindex="-1"></a>        errorbar<span class="op">=</span><span class="st">"sd"</span>,</span>
+<span id="b615ec53-66"><a href="#b615ec53-66" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="b615ec53-67"><a href="#b615ec53-67" aria-hidden="true" tabindex="-1"></a>    ax.set_xscale(<span class="st">"log"</span>)</span>
+<span id="b615ec53-68"><a href="#b615ec53-68" aria-hidden="true" tabindex="-1"></a>    ax.set_yscale(<span class="st">"log"</span>)</span>
+<span id="b615ec53-69"><a href="#b615ec53-69" aria-hidden="true" tabindex="-1"></a>    ax.set_aspect(<span class="st">"equal"</span>, <span class="st">"box"</span>)</span>
+<span id="b615ec53-70"><a href="#b615ec53-70" aria-hidden="true" tabindex="-1"></a></span>
+<span id="b615ec53-71"><a href="#b615ec53-71" aria-hidden="true" tabindex="-1"></a>    ax.grid(<span class="va">True</span>, which<span class="op">=</span><span class="st">"minor"</span>, c<span class="op">=</span><span class="st">"whitesmoke"</span>)</span>
+<span id="b615ec53-72"><a href="#b615ec53-72" aria-hidden="true" tabindex="-1"></a>    ax.grid(<span class="va">True</span>, which<span class="op">=</span><span class="st">"major"</span>, c<span class="op">=</span><span class="st">"lightgray"</span>)</span>
+<span id="b615ec53-73"><a href="#b615ec53-73" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> loc <span class="kw">in</span> (<span class="st">"left"</span>, <span class="st">"bottom"</span>, <span class="st">"top"</span>, <span class="st">"right"</span>):</span>
+<span id="b615ec53-74"><a href="#b615ec53-74" aria-hidden="true" tabindex="-1"></a>        ax.spines[loc].set_visible(<span class="va">False</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-display">
 <div class="quarto-figure quarto-figure-center">
