@@ -281,14 +281,14 @@ Run this notebook interactively!
 <section id="neural-data-is-noisy" class="level2">
 <h2 class="anchored" data-anchor-id="neural-data-is-noisy">Neural data is noisy</h2>
 <p>Unfortunately for us computational neuroscientists, <strong>experimental data is noisy</strong>. Let’s consider a neuron from the toy example we <a href="../pages/introducing_pca.html">discussed earlier</a>.</p>
-<div id="install_package" class="cell" data-execution_count="1">
+<div id="install_package" class="cell" data-execution_count="2">
 <details>
 <summary>Install all required dependencies</summary>
 <div class="sourceCode cell-code" id="install_package"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="install_package-1"><a href="#install_package-1" aria-hidden="true" tabindex="-1"></a><span class="co"># </span><span class="al">TODO</span><span class="co"> uncomment before final packaging</span></span>
 <span id="install_package-2"><a href="#install_package-2" aria-hidden="true" tabindex="-1"></a><span class="co"># %pip install git+https://github.com/BonnerLab/ccn-tutorial.git</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="imports" class="cell" data-execution_count="2">
+<div id="imports" class="cell" data-execution_count="3">
 <details>
 <summary>Import various libraries</summary>
 <div class="sourceCode cell-code" id="imports"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="imports-1"><a href="#imports-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> warnings</span>
@@ -314,7 +314,7 @@ Run this notebook interactively!
 <span id="imports-21"><a href="#imports-21" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="set_visualization_defaults" class="cell" data-execution_count="3">
+<div id="set_visualization_defaults" class="cell" data-execution_count="4">
 <details>
 <summary>Set some visualization defaults</summary>
 <div class="sourceCode cell-code" id="set_visualization_defaults"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="set_visualization_defaults-1"><a href="#set_visualization_defaults-1" aria-hidden="true" tabindex="-1"></a><span class="op">%</span>matplotlib inline</span>
@@ -337,7 +337,7 @@ Run this notebook interactively!
 <span id="set_visualization_defaults-18"><a href="#set_visualization_defaults-18" aria-hidden="true" tabindex="-1"></a>warnings.filterwarnings(<span class="st">"ignore"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="initialize_rng" class="cell" data-execution_count="4">
+<div id="initialize_rng" class="cell" data-execution_count="5">
 <details>
 <summary>Initialize a deterministic random number generator</summary>
 <div class="sourceCode cell-code" id="initialize_rng"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="initialize_rng-1"><a href="#initialize_rng-1" aria-hidden="true" tabindex="-1"></a>random_state <span class="op">=</span> <span class="dv">0</span></span>
@@ -349,7 +349,7 @@ Run this notebook interactively!
 <li><strong>stimulus-dependent signal</strong> – how much the neural response varies with the stimulus features <span class="math inline">\text{color}</span> and <span class="math inline">\text{size}</span>, and</li>
 <li><strong>stimulus-independent noise</strong> – sampled from the same Gaussian distribution irrespective of the stimulus.</li>
 </ul>
-<div id="7b7eb681" class="cell" data-execution_count="5">
+<div id="7b7eb681" class="cell" data-execution_count="6">
 <details>
 <summary>View signal/noise decomposition of an individual neuron’s responses</summary>
 <div class="sourceCode cell-code" id="7b7eb681"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="7b7eb681-1"><a href="#7b7eb681-1" aria-hidden="true" tabindex="-1"></a>stimuli <span class="op">=</span> create_stimuli(n<span class="op">=</span><span class="dv">1000</span>, rng<span class="op">=</span>rng)</span>
@@ -381,7 +381,7 @@ Run this notebook interactively!
 </div>
 </div>
 </div>
-<div id="1e2f4788" class="cell" data-execution_count="6">
+<div id="1e2f4788" class="cell" data-execution_count="7">
 <details>
 <summary>Compute variances</summary>
 <div class="sourceCode cell-code" id="1e2f4788"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="1e2f4788-1"><a href="#1e2f4788-1" aria-hidden="true" tabindex="-1"></a>variances <span class="op">=</span> np.<span class="bu">round</span>(data.var(<span class="st">"stimulus"</span>).values, <span class="dv">3</span>)</span>
@@ -452,7 +452,7 @@ What does noise look like?
 <section id="covariance-structure-of-random-matrices" class="level3">
 <h3 class="anchored" data-anchor-id="covariance-structure-of-random-matrices">Covariance structure of random matrices</h3>
 <p>Let’s consider a simple system: a random matrix <span class="math inline">X \in \mathbb{R}^{N \times P}</span>, with entries drawn independently from a fixed Gaussian distribution <span class="math inline">\mathcal{N}(0, \sigma^2)</span>.</p>
-<div id="dce03a11" class="cell" data-execution_count="7">
+<div id="dce03a11" class="cell" data-execution_count="8">
 <details>
 <summary>Create a random matrix</summary>
 <div class="sourceCode cell-code" id="dce03a11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="dce03a11-1"><a href="#dce03a11-1" aria-hidden="true" tabindex="-1"></a>n_stimuli <span class="op">=</span> <span class="dv">500</span></span>
@@ -487,7 +487,7 @@ What does noise look like?
 </div>
 </div>
 <p>We might expect that a random matrix ought to have no covariance structure, since all the entries were sampled independently. However, this isn’t the case! In fact, random matrices have well-defined covariance structure that is described by the <a href="https://en.wikipedia.org/wiki/Marchenko-Pastur_distribution">Marchenko-Pastur distribution</a>.</p>
-<div id="69e665d2" class="cell" data-execution_count="8">
+<div id="69e665d2" class="cell" data-execution_count="9">
 <details>
 <summary>Visualize the covariance eigenspectrum of the random matrix</summary>
 <div class="sourceCode cell-code" id="69e665d2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="69e665d2-1"><a href="#69e665d2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> view_eigenspectrum(data: np.ndarray, <span class="op">*</span>, log: <span class="bu">bool</span> <span class="op">=</span> <span class="va">False</span>) <span class="op">-&gt;</span> <span class="va">None</span>:</span>
@@ -536,7 +536,7 @@ What does noise look like?
 </div>
 </div>
 <p>Let’s view the spectrum on a logarithmic scale to see what it looks like.</p>
-<div id="59920b98" class="cell" data-execution_count="9">
+<div id="59920b98" class="cell" data-execution_count="10">
 <details>
 <summary>Re-plot the covariance eigenspectrum on a log-log scale</summary>
 <div class="sourceCode cell-code" id="59920b98"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="59920b98-1"><a href="#59920b98-1" aria-hidden="true" tabindex="-1"></a>view_eigenspectrum(random_matrix, log<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -632,7 +632,7 @@ Warning
 </section>
 <section id="a-computational-recipe" class="level3">
 <h3 class="anchored" data-anchor-id="a-computational-recipe">A computational recipe</h3>
-<div id="recipe-pca" class="cell" data-execution_count="10">
+<div id="recipe-pca" class="cell" data-execution_count="11">
 <details open="">
 <summary>A computational recipe for cross-validated PCA</summary>
 <div class="sourceCode cell-code" id="recipe-pca"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="recipe-pca-1"><a href="#recipe-pca-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> CrossValidatedPCA:</span>
@@ -661,7 +661,7 @@ Warning
 <section id="investigating-neural-data" class="level2">
 <h2 class="anchored" data-anchor-id="investigating-neural-data">Investigating neural data</h2>
 <p>Let’s apply cross-validated PCA to our fMRI data to see what it looks like!</p>
-<div id="20a0e03c" class="cell" data-execution_count="11">
+<div id="20a0e03c" class="cell" data-execution_count="12">
 <details>
 <summary>Load the dataset</summary>
 <div class="sourceCode cell-code" id="20a0e03c"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="20a0e03c-1"><a href="#20a0e03c-1" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> load_dataset(subject<span class="op">=</span><span class="dv">0</span>, roi<span class="op">=</span><span class="st">"general"</span>).load()</span>
@@ -1061,7 +1061,7 @@ Attributes: (3/7)
 </div>
 </div>
 <p>Note that the data contain fMRI responses to two repetitions of <span class="math inline">N = 700</span> images for a total of <span class="math inline">2N = 1400</span> presentations.</p>
-<div id="d4bef809" class="cell" data-execution_count="12">
+<div id="d4bef809" class="cell" data-execution_count="13">
 <details>
 <summary>Compute the cross-validated spectrum</summary>
 <div class="sourceCode cell-code" id="d4bef809"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="d4bef809-1"><a href="#d4bef809-1" aria-hidden="true" tabindex="-1"></a>data_repetition_1 <span class="op">=</span> data.isel({<span class="st">"presentation"</span>: data[<span class="st">"rep_id"</span>] <span class="op">==</span> <span class="dv">0</span>}).sortby(</span>
@@ -1075,7 +1075,7 @@ Attributes: (3/7)
 <span id="d4bef809-9"><a href="#d4bef809-9" aria-hidden="true" tabindex="-1"></a>cv_pca(data_repetition_1.values, data_repetition_2.values)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="f5892f5a" class="cell" data-execution_count="13">
+<div id="f5892f5a" class="cell" data-execution_count="14">
 <details>
 <summary>Plot the raw cross-validated spectrum</summary>
 <div class="sourceCode cell-code" id="f5892f5a"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="f5892f5a-1"><a href="#f5892f5a-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> plot_cross_validated_spectrum(</span>
@@ -1169,7 +1169,7 @@ Attributes: (3/7)
 </div>
 <p>We can see a typical spectrum that appears to have a knee somewhere around 10 dimensions, beyond which the variance quickly flattens out close to zero.</p>
 <p>Let’s re-plot this cross-validated covariance eigenspectrum on a logarithmic scale.</p>
-<div id="60a1f9b0" class="cell" data-execution_count="14">
+<div id="60a1f9b0" class="cell" data-execution_count="15">
 <details>
 <summary>Plot the cross-validated spectrum on a log-log scale</summary>
 <div class="sourceCode cell-code" id="60a1f9b0"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="60a1f9b0-1"><a href="#60a1f9b0-1" aria-hidden="true" tabindex="-1"></a>plot_cross_validated_spectrum(cv_pca, log<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -1184,7 +1184,7 @@ Attributes: (3/7)
 </div>
 <p>Here, we see that the apparent knee isn’t present – in fact, the spectrum appears to obey a power law at all ranks! Additionally, since these eigenvalues were obtained from a cross-validated analysis, we know that they represent stimulus-related variance that is consistent across different presentations of the same stimuli and not noise.</p>
 <p>To verify this, let’s plot the covariance spectrum of the training dataset, the one that we would obtain from regular principal components analysis.</p>
-<div id="adada56d" class="cell" data-execution_count="15">
+<div id="adada56d" class="cell" data-execution_count="16">
 <details>
 <summary>Plot both the original and the cross-validated spectrum</summary>
 <div class="sourceCode cell-code" id="adada56d"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="adada56d-1"><a href="#adada56d-1" aria-hidden="true" tabindex="-1"></a>plot_cross_validated_spectrum(cv_pca, log<span class="op">=</span><span class="va">True</span>, original<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -1212,7 +1212,7 @@ The neural population code is high-dimensional!
 </div>
 </div>
 <p>Finally, let’s re-plot the cross-validated spectrum in a cleaner fashion, where the trends of interest are more clearly visible.</p>
-<div id="0c764cc3" class="cell" data-execution_count="16">
+<div id="0c764cc3" class="cell" data-execution_count="17">
 <details>
 <summary>Bin the cross-validated spectrum</summary>
 <div class="sourceCode cell-code" id="0c764cc3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="0c764cc3-1"><a href="#0c764cc3-1" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> sns.axes_style(<span class="st">"whitegrid"</span>):</span>
@@ -1335,7 +1335,7 @@ An optimality criterion for population codes?
 <section id="human-visual-cortex" class="level3">
 <h3 class="anchored" data-anchor-id="human-visual-cortex">Human visual cortex!</h3>
 <p>In this notebook, we have demonstrated that a similar scale-invariant covariance structure underlies human visual representations of natural scenes too!</p>
-<div id="4bf61311" class="cell" data-execution_count="17">
+<div id="4bf61311" class="cell" data-execution_count="18">
 <details>
 <summary>Plot the cross-validated covariance spectrum for human visual cortex</summary>
 <div class="sourceCode cell-code" id="4bf61311"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="4bf61311-1"><a href="#4bf61311-1" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> sns.axes_style(<span class="st">"whitegrid"</span>):</span>

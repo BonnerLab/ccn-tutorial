@@ -296,14 +296,14 @@ Run this notebook interactively!
 <section id="a-simple-experiment" class="level2">
 <h2 class="anchored" data-anchor-id="a-simple-experiment">A simple experiment</h2>
 <p>Let’s perform an imaginary neuroscience experiment! We’ll record voltages from <span class="math inline">P = 2</span> neurons in visual cortex while the participant passively views <span class="math inline">N = 1000</span> dots of different <em>colors</em> and <em>sizes</em>.</p>
-<div id="install_package" class="cell" data-execution_count="1">
+<div id="install_package" class="cell" data-execution_count="2">
 <details>
 <summary>Install all required dependencies</summary>
 <div class="sourceCode cell-code" id="install_package"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="install_package-1"><a href="#install_package-1" aria-hidden="true" tabindex="-1"></a><span class="co"># </span><span class="al">TODO</span><span class="co"> uncomment before final packaging</span></span>
 <span id="install_package-2"><a href="#install_package-2" aria-hidden="true" tabindex="-1"></a><span class="co"># %pip install git+https://github.com/BonnerLab/ccn-tutorial.git</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="import_libraries" class="cell" data-execution_count="2">
+<div id="import_libraries" class="cell" data-execution_count="3">
 <details>
 <summary>Import various libraries</summary>
 <div class="sourceCode cell-code" id="import_libraries"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="import_libraries-1"><a href="#import_libraries-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> collections.abc <span class="im">import</span> Sequence, Callable</span>
@@ -323,7 +323,7 @@ Run this notebook interactively!
 <span id="import_libraries-15"><a href="#import_libraries-15" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> IPython.display <span class="im">import</span> display, HTML</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="import-utility-functions" class="cell" data-execution_count="3">
+<div id="import-utility-functions" class="cell" data-execution_count="4">
 <details>
 <summary>Import utility functions</summary>
 <div class="sourceCode cell-code" id="import-utility-functions"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="import-utility-functions-1"><a href="#import-utility-functions-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> utilities.toy_example <span class="im">import</span> (</span>
@@ -335,7 +335,7 @@ Run this notebook interactively!
 <span id="import-utility-functions-7"><a href="#import-utility-functions-7" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="set_visualization_defaults" class="cell" data-execution_count="4">
+<div id="set_visualization_defaults" class="cell" data-execution_count="5">
 <details>
 <summary>Set some visualization defaults</summary>
 <div class="sourceCode cell-code" id="set_visualization_defaults"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="set_visualization_defaults-1"><a href="#set_visualization_defaults-1" aria-hidden="true" tabindex="-1"></a><span class="op">%</span>matplotlib inline</span>
@@ -358,7 +358,7 @@ Run this notebook interactively!
 <span id="set_visualization_defaults-18"><a href="#set_visualization_defaults-18" aria-hidden="true" tabindex="-1"></a>warnings.filterwarnings(<span class="st">"ignore"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="initialize_rng" class="cell" data-execution_count="5">
+<div id="initialize_rng" class="cell" data-execution_count="6">
 <details>
 <summary>Initialize a deterministic random number generator</summary>
 <div class="sourceCode cell-code" id="initialize_rng"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="initialize_rng-1"><a href="#initialize_rng-1" aria-hidden="true" tabindex="-1"></a>random_state <span class="op">=</span> <span class="dv">0</span></span>
@@ -368,7 +368,7 @@ Run this notebook interactively!
 <section id="creating-the-stimuli" class="level3">
 <h3 class="anchored" data-anchor-id="creating-the-stimuli">Creating the stimuli</h3>
 <p>Let’s create <span class="math inline">N = 1000</span> dots of different <em>colors</em> and <em>sizes</em>. From the scatterplot, we can see that the two latent variables are <a href="../pages/reference.html#correlation">uncorrelated</a>.</p>
-<div id="56919f0d" class="cell" data-add-from="../src/utilities/toy_example.py" data-code-filename="(Function) Create stimulus dots of various colors and sizes" data-end-line="31" data-source-lang="python" data-start-line="21" data-execution_count="6">
+<div id="56919f0d" class="cell" data-add-from="../src/utilities/toy_example.py" data-code-filename="(Function) Create stimulus dots of various colors and sizes" data-end-line="31" data-source-lang="python" data-start-line="21" data-execution_count="7">
 <details open="">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="56919f0d" data-startfrom="21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python" style="counter-reset: source-line 20;"><span id="56919f0d-21"><a href="#56919f0d-21" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> create_stimuli(</span>
@@ -384,7 +384,7 @@ Run this notebook interactively!
 <span id="56919f0d-31"><a href="#56919f0d-31" aria-hidden="true" tabindex="-1"></a>    ).set_index(<span class="dv">1</span> <span class="op">+</span> np.arange(n))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="cell-create_the_stimuli" class="cell" data-execution_count="7">
+<div id="cell-create_the_stimuli" class="cell" data-execution_count="8">
 <details>
 <summary>Visualize the stimuli</summary>
 <div class="sourceCode cell-code" id="cell-create_the_stimuli"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cell-create_the_stimuli-1"><a href="#cell-create_the_stimuli-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> view_stimuli(data: pd.DataFrame) <span class="op">-&gt;</span> Figure:</span>
@@ -424,7 +424,7 @@ Run this notebook interactively!
 <p>Now, let’s simulate some neural data. We need to decide how the <span class="math inline">P = 2</span> neurons might respond to these <span class="math inline">N = 1000</span> stimulus dots. Each neuron could respond to either one or both of the latent features that define these stimuli – <span class="math inline">\text{color}</span> and <span class="math inline">\text{size}</span>. The neuron’s responses could also be subject to noise.</p>
 <p>Here, we model each neuron’s response <span class="math inline">r_\text{neuron}</span> as a simple linear combination of the two latent features with stimulus-independent Gaussian noise <span class="math inline">\epsilon</span>:</p>
 <p><span class="math inline">r_{\text{neuron}} \sim \beta_{\text{color}} \left( \text{color} \right) + \beta_{\text{size}} \left( \text{size} \right) + \epsilon</span>, where <span class="math inline">\epsilon \sim \mathcal{N}(\mu_{\text{neuron}}, \sigma_{\text{neuron}}^2)</span></p>
-<div id="48b897d0" class="cell" data-add-from="../src/utilities/toy_example.py" data-code-filename="(Definition) Parameters controlling neuron responses" data-end-line="18" data-source-lang="python" data-start-line="12" data-execution_count="8">
+<div id="48b897d0" class="cell" data-add-from="../src/utilities/toy_example.py" data-code-filename="(Definition) Parameters controlling neuron responses" data-end-line="18" data-source-lang="python" data-start-line="12" data-execution_count="9">
 <details open="">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="48b897d0" data-startfrom="12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python" style="counter-reset: source-line 11;"><span id="48b897d0-12"><a href="#48b897d0-12" aria-hidden="true" tabindex="-1"></a>Neuron <span class="op">=</span> NamedTuple(</span>
@@ -443,7 +443,7 @@ Run this notebook interactively!
 <li><span class="math inline">\mu_{\text{neuron}}</span> – the mean of the neuron’s responses</li>
 <li><span class="math inline">\sigma_{\text{neuron}}^2</span> – the stimulus-independent variance of the neuron’s responses</li>
 </ul>
-<div id="9749ad68" class="cell" data-add-from="../src/utilities/toy_example.py" data-code-filename="(Function) Simulate neuron responses" data-end-line="48" data-source-lang="python" data-start-line="34" data-execution_count="9">
+<div id="9749ad68" class="cell" data-add-from="../src/utilities/toy_example.py" data-code-filename="(Function) Simulate neuron responses" data-end-line="48" data-source-lang="python" data-start-line="34" data-execution_count="10">
 <details open="">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="9749ad68" data-startfrom="34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python" style="counter-reset: source-line 33;"><span id="9749ad68-34"><a href="#9749ad68-34" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> simulate_neuron_responses(</span>
@@ -463,7 +463,7 @@ Run this notebook interactively!
 <span id="9749ad68-48"><a href="#9749ad68-48" aria-hidden="true" tabindex="-1"></a>    )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="9369715a" class="cell" data-add-from="../src/utilities/toy_example.py" data-code-filename="(Function) Simulate multiple neurons' responses" data-end-line="85" data-source-lang="python" data-start-line="51" data-execution_count="10">
+<div id="9369715a" class="cell" data-add-from="../src/utilities/toy_example.py" data-code-filename="(Function) Simulate multiple neurons' responses" data-end-line="85" data-source-lang="python" data-start-line="51" data-execution_count="11">
 <details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="9369715a" data-startfrom="51"><pre class="sourceCode python code-with-copy"><code class="sourceCode python" style="counter-reset: source-line 50;"><span id="9369715a-51"><a href="#9369715a-51" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> simulate_multiple_neuron_responses(</span>
@@ -504,7 +504,7 @@ Run this notebook interactively!
 </details>
 </div>
 <p>This procedure produces a data matrix <span class="math inline">X \in \mathbb{R}^{N \times P}</span> containing the <span class="math inline">P = 2</span> neurons’ responses to the <span class="math inline">N = 1000</span> stimuli.</p>
-<div id="cell-simulate_the_neuron_responses" class="cell" data-execution_count="11">
+<div id="cell-simulate_the_neuron_responses" class="cell" data-execution_count="12">
 <details open="">
 <summary>Simulate the responses of two neurons to the stimuli</summary>
 <div class="sourceCode cell-code" id="cell-simulate_the_neuron_responses"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cell-simulate_the_neuron_responses-1"><a href="#cell-simulate_the_neuron_responses-1" aria-hidden="true" tabindex="-1"></a>neurons <span class="op">=</span> (</span>
@@ -990,7 +990,7 @@ Coordinates: (3/8)
 <p>How is information about the stimulus encoded in the population activity? Is there a neuron that is sensitive to color and another that is sensitive to size?</p>
 <p>One way to understand this is by studying the neurons directly. Let’s start by visualizing the response of each neuron to our stimuli.</p>
 <div class="page-columns page-full"><p></p><div class="no-row-height column-margin column-container"><span class="">These plots are 1-dimensional scatterplots and the spread along the vertical axis is just for visualization purposes.</span></div></div>
-<div id="a80ca7a3" class="cell" data-add-from="../src/utilities/toy_example.py" data-code-filename="(Function) Visualize individual scatter" data-end-line="129" data-source-lang="python" data-start-line="88" data-execution_count="12">
+<div id="a80ca7a3" class="cell" data-add-from="../src/utilities/toy_example.py" data-code-filename="(Function) Visualize individual scatter" data-end-line="129" data-source-lang="python" data-start-line="88" data-execution_count="13">
 <details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="a80ca7a3" data-startfrom="88"><pre class="sourceCode python code-with-copy"><code class="sourceCode python" style="counter-reset: source-line 87;"><span id="a80ca7a3-88"><a href="#a80ca7a3-88" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> view_individual_scatter(</span>
@@ -1037,7 +1037,7 @@ Coordinates: (3/8)
 <span id="a80ca7a3-129"><a href="#a80ca7a3-129" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> fig</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="cell-visualize_neuron_responses" class="cell" data-execution_count="13">
+<div id="cell-visualize_neuron_responses" class="cell" data-execution_count="14">
 <details>
 <summary>Visualize the individual neuron responses</summary>
 <div class="sourceCode cell-code" id="cell-visualize_neuron_responses"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cell-visualize_neuron_responses-1"><a href="#cell-visualize_neuron_responses-1" aria-hidden="true" tabindex="-1"></a>view_individual_scatter(</span>
@@ -1058,7 +1058,7 @@ Coordinates: (3/8)
 <p>By visualizing the responses, we can see that each neuron is tuned to both color <em>and</em> size.</p>
 <p>We can also use methods such as Representational Similarity Analysis <span class="citation" data-cites="Kriegeskorte2008">(<a href="#ref-Kriegeskorte2008" role="doc-biblioref">Kriegeskorte 2008</a>)</span> to study the information content of the two neurons. In RSA, we compute the pairwise dissimilarities between the representations of the stimuli and organize them into a <em>representational dissimilarity matrix</em>, or RDM.</p>
 <p>The entries of an RDM indicate the degree to which each pair of stimuli is distinguished by the neurons and the RDM as a whole measures the overall population geometry of the system.</p>
-<div id="cell-display-rdm" class="cell" data-execution_count="14">
+<div id="cell-display-rdm" class="cell" data-execution_count="15">
 <details>
 <summary>Compute and display the representational dissimilarity matrix</summary>
 <div class="sourceCode cell-code" id="cell-display-rdm"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cell-display-rdm-1"><a href="#cell-display-rdm-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> display_rdm(data: xr.DataArray) <span class="op">-&gt;</span> np.ndarray:</span>
@@ -1128,7 +1128,7 @@ Coordinates: (3/8)
 <section id="some-geometric-intuition" class="level3">
 <h3 class="anchored" data-anchor-id="some-geometric-intuition">Some geometric intuition</h3>
 <p>Since we only have <span class="math inline">P = 2</span> neurons, we can visualize these data as a scatterplot, which makes their <a href="../pages/reference.html#covariance">covariance</a> apparent.</p>
-<div id="cell-view_joint_scatter" class="cell" data-execution_count="15">
+<div id="cell-view_joint_scatter" class="cell" data-execution_count="16">
 <details>
 <summary>Visualize the joint response</summary>
 <div class="sourceCode cell-code" id="cell-view_joint_scatter"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cell-view_joint_scatter-1"><a href="#cell-view_joint_scatter-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> view_joint_scatter(</span>
@@ -1199,7 +1199,7 @@ Tip
 <p>Click on the animation above to visualize the PCA transformation!</p>
 </div>
 </div>
-<div id="cell-visualize_pca_animation" class="cell" data-execution_count="16">
+<div id="cell-visualize_pca_animation" class="cell" data-execution_count="17">
 <details>
 <summary>Animate the PCA transformation</summary>
 <div class="sourceCode cell-code" id="cell-visualize_pca_animation"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cell-visualize_pca_animation-1"><a href="#cell-visualize_pca_animation-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> animate_pca_transformation(</span>
@@ -4925,7 +4925,7 @@ AQAAAABMYXZmNTkuMjcuMTAw
 </section>
 <section id="a-computational-recipe" class="level3">
 <h3 class="anchored" data-anchor-id="a-computational-recipe">A computational recipe</h3>
-<div id="recipe-pca" class="cell" data-execution_count="17">
+<div id="recipe-pca" class="cell" data-execution_count="18">
 <details open="">
 <summary>A computational recipe for PCA</summary>
 <div class="sourceCode cell-code" id="recipe-pca"><pre class="sourceCode python code-annotation-code code-with-copy code-annotated"><code class="sourceCode python"><span id="recipe-pca-1"><a href="#recipe-pca-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> PCA:</span>
@@ -5013,7 +5013,7 @@ Only need the first few PCs?
 <section id="transforming-the-dataset" class="level2">
 <h2 class="anchored" data-anchor-id="transforming-the-dataset">Transforming the dataset</h2>
 <p>Let’s now project our data onto its principal components and analyze it in this space.</p>
-<div id="cell-transforming-the-dataset" class="cell" data-execution_count="18">
+<div id="cell-transforming-the-dataset" class="cell" data-execution_count="19">
 <details>
 <summary>Apply the PCA transformation</summary>
 <div class="sourceCode cell-code" id="cell-transforming-the-dataset"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cell-transforming-the-dataset-1"><a href="#cell-transforming-the-dataset-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> compute_pca(data: xr.DataArray) <span class="op">-&gt;</span> xr.Dataset:</span>
@@ -5510,7 +5510,7 @@ Dimensions without coordinates: component</pre><div class="xr-wrap" style="displ
 <section id="inspecting-the-eigenvectors" class="level3">
 <h3 class="anchored" data-anchor-id="inspecting-the-eigenvectors">Inspecting the eigenvectors</h3>
 <p>The eigenvectors represent the directions of variance in our data, sorted in descending order of variance.</p>
-<div id="bb39ad33" class="cell" data-execution_count="19">
+<div id="bb39ad33" class="cell" data-execution_count="20">
 <details>
 <summary>Display the eigenvectors</summary>
 <div class="sourceCode cell-code" id="bb39ad33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="bb39ad33-1"><a href="#bb39ad33-1" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> xr.set_options(display_expand_data<span class="op">=</span><span class="va">True</span>):</span>
@@ -5929,7 +5929,7 @@ Dimensions without coordinates: component</pre><div class="xr-wrap" style="displ
 <section id="interpreting-the-transformed-data" class="level3">
 <h3 class="anchored" data-anchor-id="interpreting-the-transformed-data">Interpreting the transformed data</h3>
 <p>We can view the data projected onto each of the principal components.</p>
-<div id="cell-view_principal_components" class="cell" data-execution_count="20">
+<div id="cell-view_principal_components" class="cell" data-execution_count="21">
 <details>
 <summary>Visualize principal component scores</summary>
 <div class="sourceCode cell-code" id="cell-view_principal_components"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cell-view_principal_components-1"><a href="#cell-view_principal_components-1" aria-hidden="true" tabindex="-1"></a>view_individual_scatter(</span>
@@ -5969,7 +5969,7 @@ Important
 <section id="inspecting-the-eigenspectrum" class="level3">
 <h3 class="anchored" data-anchor-id="inspecting-the-eigenspectrum">Inspecting the eigenspectrum</h3>
 <p>The eigenvalues show the variance along each eigenvector. The total variance along all the eigenvectors is the sum of the eigenvalues.</p>
-<div id="eigenvalues" class="cell" data-execution_count="21">
+<div id="eigenvalues" class="cell" data-execution_count="22">
 <details>
 <summary>Display eigenvalues</summary>
 <div class="sourceCode cell-code" id="eigenvalues"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="eigenvalues-1"><a href="#eigenvalues-1" aria-hidden="true" tabindex="-1"></a>eigenvalues <span class="op">=</span> pca[<span class="st">"eigenvalue"</span>].<span class="bu">round</span>(<span class="dv">3</span>)</span>
@@ -5987,7 +5987,7 @@ total variance: 52.444</code></pre>
 </div>
 </div>
 <p>We can also see that this is equal to the total variance in the original data, since the PCA transformation corresponds to a simple rotation.</p>
-<div id="variance" class="cell" data-execution_count="22">
+<div id="variance" class="cell" data-execution_count="23">
 <details>
 <summary>Compute total variance in the original data</summary>
 <div class="sourceCode cell-code" id="variance"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="variance-1"><a href="#variance-1" aria-hidden="true" tabindex="-1"></a>variances <span class="op">=</span> data.var(dim<span class="op">=</span><span class="st">"stimulus"</span>, ddof<span class="op">=</span><span class="dv">1</span>).<span class="bu">round</span>(<span class="dv">3</span>).rename(<span class="st">"neuron variances"</span>)</span>
@@ -6002,7 +6002,7 @@ total variance: 52.443</code></pre>
 </div>
 </div>
 <p>We can plot the eigenvalues as a function of their rank to visualize the <em>eigenspectrum</em>. As we will see shortly, the eigenspectrum provides valuable insights about the latent dimensionality of the data.</p>
-<div id="cell-visualize_eigenspectrum" class="cell" data-execution_count="23">
+<div id="cell-visualize_eigenspectrum" class="cell" data-execution_count="24">
 <details>
 <summary>View eigenspectrum</summary>
 <div class="sourceCode cell-code" id="cell-visualize_eigenspectrum"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cell-visualize_eigenspectrum-1"><a href="#cell-visualize_eigenspectrum-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> view_eigenspectrum(pca: xr.DataArray) <span class="op">-&gt;</span> Figure:</span>
@@ -6037,7 +6037,7 @@ total variance: 52.443</code></pre>
 <section id="quantifying-dimensionality" class="level2">
 <h2 class="anchored" data-anchor-id="quantifying-dimensionality">Quantifying dimensionality</h2>
 <p>In these data, the dimensionality is clear: there are two latent variables and both are evident in the principal components. However, in real data, we typically record from more than <span class="math inline">P = 2</span> neurons; therefore, judging the dimensionality becomes tricky. To simulate such a scenario, let’s record from more neurons (say <span class="math inline">P = 10</span>).</p>
-<div id="cell-simulate_more_neurons" class="cell" data-execution_count="24">
+<div id="cell-simulate_more_neurons" class="cell" data-execution_count="25">
 <details>
 <summary>Simulate responses from more neurons</summary>
 <div class="sourceCode cell-code" id="cell-simulate_more_neurons"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cell-simulate_more_neurons-1"><a href="#cell-simulate_more_neurons-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> _simulate_random_neuron(rng: np.random.Generator) <span class="op">-&gt;</span> Neuron:</span>
@@ -6528,7 +6528,7 @@ Coordinates: (3/8)
 </div>
 </div>
 <p>As before, we can visualize each principal component and plot the eigenspectrum:</p>
-<div id="cell-view_principal_components_big" class="cell" data-execution_count="25">
+<div id="cell-view_principal_components_big" class="cell" data-execution_count="26">
 <details>
 <summary>Visualize principal component scores</summary>
 <div class="sourceCode cell-code" id="cell-view_principal_components_big"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cell-view_principal_components_big-1"><a href="#cell-view_principal_components_big-1" aria-hidden="true" tabindex="-1"></a>big_pca <span class="op">=</span> compute_pca(big_data)</span>
@@ -6548,7 +6548,7 @@ Coordinates: (3/8)
 </div>
 </div>
 </div>
-<div id="cell-visualize_eigenspectrum_big" class="cell" data-execution_count="26">
+<div id="cell-visualize_eigenspectrum_big" class="cell" data-execution_count="27">
 <details>
 <summary>View eigenspectrum</summary>
 <div class="sourceCode cell-code" id="cell-visualize_eigenspectrum_big"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cell-visualize_eigenspectrum_big-1"><a href="#cell-visualize_eigenspectrum_big-1" aria-hidden="true" tabindex="-1"></a>view_eigenspectrum(big_pca)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -6566,7 +6566,7 @@ Coordinates: (3/8)
 <section id="rank-of-the-covariance-matrix" class="level4">
 <h4 class="anchored" data-anchor-id="rank-of-the-covariance-matrix">Rank of the covariance matrix</h4>
 <p>The <em>rank</em> of the covariance matrix – equal to the number of <em>nonzero</em> eigenvalues – would be the latent dimensionality in the ideal setting where the data has zero noise. In real data, the rank is typically equal to the ambient dimensionality (which here is the number of neurons we record from), since there is typically some variance along every dimension.</p>
-<div id="d4f6d2f9" class="cell" data-execution_count="27">
+<div id="d4f6d2f9" class="cell" data-execution_count="28">
 <details>
 <summary>Count the number of nonzero eigenvalues</summary>
 <div class="sourceCode cell-code" id="d4f6d2f9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="d4f6d2f9-1"><a href="#d4f6d2f9-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"rank = </span><span class="sc">{</span>(big_pca.eigenvalue <span class="op">&gt;</span> <span class="dv">0</span>)<span class="sc">.</span><span class="bu">sum</span>()<span class="sc">.</span>values<span class="sc">}</span><span class="ss">"</span>)</span>
@@ -6608,7 +6608,7 @@ Coordinates: (3/8)
 <section id="setting-an-arbitrary-cumulative-variance-threshold" class="level4">
 <h4 class="anchored" data-anchor-id="setting-an-arbitrary-cumulative-variance-threshold">Setting an arbitrary <em>cumulative</em> variance threshold</h4>
 <p>A very commonly used method is to set a threshold based on the cumulative variance of the data: the number of dimensions required to exceed, say <span class="math inline">90\%</span> of the variance, is taken as the latent dimensionality.</p>
-<div id="b954f962" class="cell" data-execution_count="28">
+<div id="b954f962" class="cell" data-execution_count="29">
 <details>
 <summary>Set an arbitrary threshold on the cumulative variance</summary>
 <div class="sourceCode cell-code" id="b954f962"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="b954f962-1"><a href="#b954f962-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> view_cumulative_eigenspectrum(</span>
@@ -6666,7 +6666,7 @@ Coordinates: (3/8)
 <section id="eyeballing-the-knee-of-the-spectrum" class="level4">
 <h4 class="anchored" data-anchor-id="eyeballing-the-knee-of-the-spectrum">Eyeballing the knee of the spectrum</h4>
 <p>When the number of latent dimensions is low, eigenspectra often have a sharp discontinuity (the <a href="https://en.wikipedia.org/wiki/Knee_of_a_curve">“knee”</a>, or “elbow”), where a small number of dimensions have high-variance and the remainder have much have lower variance. The latent dimensionality is then taken to be the number of dimensions above this threshold determined by eye.</p>
-<div id="7e212583" class="cell" data-execution_count="29">
+<div id="7e212583" class="cell" data-execution_count="30">
 <details>
 <summary>Plot the apparent knee of the spectrum</summary>
 <div class="sourceCode cell-code" id="7e212583"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="7e212583-1"><a href="#7e212583-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> view_eigenspectrum_knee(pca: PCA, <span class="op">*</span>, knee: <span class="bu">int</span>) <span class="op">-&gt;</span> Figure:</span>
@@ -6704,7 +6704,7 @@ Coordinates: (3/8)
 <h4 class="anchored" data-anchor-id="computing-a-summary-statistic-over-the-entire-spectrum">Computing a summary statistic over the entire spectrum</h4>
 <p>A metric such as <em>effective dimensionality</em> summarizes the spectrum using an entropy-like measure, taking into account variances along all the dimensions:</p>
 <p><span class="math display">d_\text{eff}(\lambda_1, \dots \lambda_n) = \dfrac{\left( \sum_{i=1}^n \lambda_i \right)^2}{\sum_{i=1}^n \lambda_i^2}</span></p>
-<div id="96f15f8a" class="cell" data-execution_count="30">
+<div id="96f15f8a" class="cell" data-execution_count="31">
 <details>
 <summary>Compute the effective dimensionality from the spectrum</summary>
 <div class="sourceCode cell-code" id="96f15f8a"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="96f15f8a-1"><a href="#96f15f8a-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> compute_effective_dimensionality(eigenspectrum: np.ndarray) <span class="op">-&gt;</span> <span class="bu">float</span>:</span>

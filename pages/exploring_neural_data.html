@@ -275,14 +275,14 @@ Run this notebook interactively!
 <p><img src="../resources/nsd.png" class="img-fluid"></p>
 <p>The natural scenes dataset (NSD) is the largest fMRI dataset on human vision, with 7T fMRI responses (1.8 mm isotropic voxels) obtained from 8 adult participants <span class="citation" data-cites="Allen2021">(<a href="#ref-Allen2021" role="doc-biblioref">Allen et al. 2021</a>)</span>. The experiment involved a continuous recognition task while participants observed natural scene images from the Microsoft Common Objects in Context (COCO) database <span class="citation" data-cites="Lin2014">(<a href="#ref-Lin2014" role="doc-biblioref">Lin et al. 2014</a>)</span>.</p>
 <p>Let’s load the dataset. This data contains neural responses to 700 images from ~15,000 voxels reliably modulated by the visual stimuli during the NSD experiment.</p>
-<div id="install_package" class="cell" data-execution_count="1">
+<div id="install_package" class="cell" data-execution_count="2">
 <details>
 <summary>Install all required dependencies</summary>
 <div class="sourceCode cell-code" id="install_package"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="install_package-1"><a href="#install_package-1" aria-hidden="true" tabindex="-1"></a><span class="co"># </span><span class="al">TODO</span><span class="co"> uncomment before final packaging</span></span>
 <span id="install_package-2"><a href="#install_package-2" aria-hidden="true" tabindex="-1"></a><span class="co"># %pip install git+https://github.com/BonnerLab/ccn-tutorial.git</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="import_libraries" class="cell" data-execution_count="2">
+<div id="import_libraries" class="cell" data-execution_count="3">
 <details>
 <summary>Import various libraries</summary>
 <div class="sourceCode cell-code" id="import_libraries"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="import_libraries-1"><a href="#import_libraries-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> collections <span class="im">import</span> Counter</span>
@@ -312,7 +312,7 @@ Run this notebook interactively!
 <span id="import_libraries-25"><a href="#import_libraries-25" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="set_visualization_defaults" class="cell" data-execution_count="3">
+<div id="set_visualization_defaults" class="cell" data-execution_count="4">
 <details>
 <summary>Set some visualization defaults</summary>
 <div class="sourceCode cell-code" id="set_visualization_defaults"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="set_visualization_defaults-1"><a href="#set_visualization_defaults-1" aria-hidden="true" tabindex="-1"></a><span class="op">%</span>matplotlib inline</span>
@@ -335,14 +335,14 @@ Run this notebook interactively!
 <span id="set_visualization_defaults-18"><a href="#set_visualization_defaults-18" aria-hidden="true" tabindex="-1"></a>warnings.filterwarnings(<span class="st">"ignore"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="initialize_rng" class="cell" data-execution_count="4">
+<div id="initialize_rng" class="cell" data-execution_count="5">
 <details>
 <summary>Initialize a deterministic random number generator</summary>
 <div class="sourceCode cell-code" id="initialize_rng"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="initialize_rng-1"><a href="#initialize_rng-1" aria-hidden="true" tabindex="-1"></a>random_state <span class="op">=</span> <span class="dv">0</span></span>
 <span id="initialize_rng-2"><a href="#initialize_rng-2" aria-hidden="true" tabindex="-1"></a>rng <span class="op">=</span> np.random.default_rng(seed<span class="op">=</span>random_state)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="c8ced41e" class="cell" data-execution_count="5">
+<div id="c8ced41e" class="cell" data-execution_count="6">
 <details>
 <summary>Load the dataset</summary>
 <div class="sourceCode cell-code" id="c8ced41e"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="c8ced41e-1"><a href="#c8ced41e-1" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> average_data_across_repetitions(load_dataset(subject<span class="op">=</span><span class="dv">0</span>, roi<span class="op">=</span><span class="st">"general"</span>))</span>
@@ -794,7 +794,7 @@ Some fMRI preprocessing details
 </div>
 </div>
 <p>Here are some examples of stimuli seen by the participants.</p>
-<div id="cell-view_stimuli" class="cell page-columns page-full" data-execution_count="6">
+<div id="cell-view_stimuli" class="cell page-columns page-full" data-execution_count="7">
 <details>
 <summary>Load the stimuli</summary>
 <div class="sourceCode cell-code" id="cell-view_stimuli"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cell-view_stimuli-1"><a href="#cell-view_stimuli-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> view_stimuli(stimuli: xr.DataArray, <span class="op">*</span>, n: <span class="bu">int</span> <span class="op">=</span> <span class="dv">10</span>) <span class="op">-&gt;</span> <span class="va">None</span>:</span>
@@ -825,7 +825,7 @@ Some fMRI preprocessing details
 <section id="the-neural-covariance-eigenspectrum" class="level3">
 <h3 class="anchored" data-anchor-id="the-neural-covariance-eigenspectrum">The neural covariance eigenspectrum</h3>
 <p>Now we can apply PCA to the neural responses and plot the eigenspectrum of their covariance!</p>
-<div id="81563a8a" class="cell" data-execution_count="7">
+<div id="81563a8a" class="cell" data-execution_count="8">
 <details>
 <summary>Visualize the eigenspectrum</summary>
 <div class="sourceCode cell-code" id="81563a8a"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="81563a8a-1"><a href="#81563a8a-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> view_eigenspectrum(pca: PCA, <span class="op">*</span>, log: <span class="bu">bool</span> <span class="op">=</span> <span class="va">False</span>) <span class="op">-&gt;</span> <span class="va">None</span>:</span>
@@ -875,7 +875,7 @@ Visualization of principal components
 <div id="callout-3" class="callout-3-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>There are some simple ways to visualize and interpret the principal components.</p>
-<div id="image_viewing_utilities" class="cell" data-execution_count="8">
+<div id="image_viewing_utilities" class="cell" data-execution_count="9">
 <details>
 <summary>Utilities to view images</summary>
 <div class="sourceCode cell-code" id="image_viewing_utilities"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="image_viewing_utilities-1"><a href="#image_viewing_utilities-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> view_images_as_scatterplot(</span>
@@ -940,7 +940,7 @@ Visualization of principal components
 </details>
 </div>
 <p>The first method is to plot the stimuli on a scatter plot, designating their X and Y coordinates to be their scores along two principal components of interest. This allows us to observe potential clustering of the stimuli.</p>
-<div id="56720cf4" class="cell" data-execution_count="9">
+<div id="56720cf4" class="cell" data-execution_count="10">
 <details>
 <summary>Project the neural data onto the first two principal components</summary>
 <div class="sourceCode cell-code" id="56720cf4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="56720cf4-1"><a href="#56720cf4-1" aria-hidden="true" tabindex="-1"></a>data_pca <span class="op">=</span> pca.transform(data)</span>
@@ -955,7 +955,7 @@ Visualization of principal components
 </div>
 </div>
 <p>Alternatively, we can focus on the stimuli with the highest or lowest scores along a given principal component. This provides simple clues of what this PC might be sensitive to, which could be visual features ranging from low to high complexity.</p>
-<div id="extreme_images_pcs" class="cell" data-execution_count="10">
+<div id="extreme_images_pcs" class="cell" data-execution_count="11">
 <details>
 <summary>View images that have extreme scores on the PCs</summary>
 <div class="sourceCode cell-code" id="extreme_images_pcs"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="extreme_images_pcs-1"><a href="#extreme_images_pcs-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> rank <span class="kw">in</span> [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">10</span>, <span class="dv">50</span>, <span class="dv">100</span>]:</span>
@@ -1020,7 +1020,7 @@ What about other methods?
 <div id="callout-4" class="callout-4-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>Interpreting PCs can be challenging especially when we rely solely on visual inspection. This difficulty arises in part because many natural features are non-negative. As a result, methods like nonnegative matrix factorization (NMF) often offer more interpretable dimensions than PCA.</p>
-<div id="404b4162" class="cell" data-execution_count="11">
+<div id="404b4162" class="cell" data-execution_count="12">
 <details>
 <summary>Compute NMF of neural responses</summary>
 <div class="sourceCode cell-code" id="404b4162"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="404b4162-1"><a href="#404b4162-1" aria-hidden="true" tabindex="-1"></a>scaler <span class="op">=</span> MinMaxScaler()</span>
@@ -1040,7 +1040,7 @@ What about other methods?
 </div>
 </div>
 <p>Similarly, we can inspect the stimuli with highest or closest-to-zero values along each dimension.</p>
-<div id="cfb3d9ff" class="cell" data-execution_count="12">
+<div id="cfb3d9ff" class="cell" data-execution_count="13">
 <details>
 <summary>View images that have extreme scores on the dimensions</summary>
 <div class="sourceCode cell-code" id="cfb3d9ff"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cfb3d9ff-1"><a href="#cfb3d9ff-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> dim <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">2</span>):</span>
@@ -1067,7 +1067,7 @@ What about other methods?
 </div>
 <p>On this plot, it looks like that the first few PCs have substantial variance while the rest are negligible, which suggests a low-dimensional structure.</p>
 <p>However, when dealing with high-dimensional data that span several orders of magnitude, it’s more insightful to visualize it on a logarithmic scale, which makes many key statistical trends more apparent. Let’s try visualizing the spectrum on a logarithmic scale for both axes:</p>
-<div id="ca3cc05b" class="cell" data-execution_count="13">
+<div id="ca3cc05b" class="cell" data-execution_count="14">
 <details>
 <summary>Visualize the eigenspectrum on a logarithmic scale</summary>
 <div class="sourceCode cell-code" id="ca3cc05b"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="ca3cc05b-1"><a href="#ca3cc05b-1" aria-hidden="true" tabindex="-1"></a>view_eigenspectrum(pca, log<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -1108,7 +1108,7 @@ What about other methods?
 <section id="an-analogy-word-frequencies" class="level3">
 <h3 class="anchored" data-anchor-id="an-analogy-word-frequencies">An analogy: word frequencies</h3>
 <p>Zipf’s law suggests a power-law distribution of use frequency of English words. Let’s compute the distribution of frequencies in a small corpus – a collection of <a href="https://pytorch.org/text/0.9.0/datasets.html#imdb">IMDb movie reviews</a>.</p>
-<div id="generate-word-frequencies" class="cell" data-execution_count="14">
+<div id="generate-word-frequencies" class="cell" data-execution_count="15">
 <details>
 <summary>Generate word frequency distribution</summary>
 <div class="sourceCode cell-code" id="generate-word-frequencies"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="generate-word-frequencies-1"><a href="#generate-word-frequencies-1" aria-hidden="true" tabindex="-1"></a>dataset <span class="op">=</span> IMDB(split<span class="op">=</span><span class="st">"test"</span>)</span>
@@ -1120,7 +1120,7 @@ What about other methods?
 <span id="generate-word-frequencies-7"><a href="#generate-word-frequencies-7" aria-hidden="true" tabindex="-1"></a>    counter.update(tokenizer(text))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="cell-logarithmic-word-frequency" class="cell" data-execution_count="15">
+<div id="cell-logarithmic-word-frequency" class="cell" data-execution_count="16">
 <details>
 <summary>View word frequency distribution on a linear scale</summary>
 <div class="sourceCode cell-code" id="cell-logarithmic-word-frequency"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cell-logarithmic-word-frequency-1"><a href="#cell-logarithmic-word-frequency-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> view_word_frequency_distribution(counter: Counter, <span class="op">*</span>, log: <span class="bu">bool</span> <span class="op">=</span> <span class="va">False</span>) <span class="op">-&gt;</span> Figure:</span>
@@ -1156,7 +1156,7 @@ What about other methods?
 </div>
 </div>
 <p>If only the high-frequency words are meaningful to human language, then we should be able to reconstruct a movie review with these words only:</p>
-<div id="cell-text-original" class="cell" data-execution_count="16">
+<div id="cell-text-original" class="cell" data-execution_count="17">
 <details>
 <summary>Display an IMDb review</summary>
 <div class="sourceCode cell-code" id="cell-text-original"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cell-text-original-1"><a href="#cell-text-original-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> _, line <span class="kw">in</span> dataset:</span>
@@ -1210,7 +1210,7 @@ What about other methods?
 <blockquote class="blockquote">i love sci-fi and am willing to put up with a lot. Sci-fi movies/tv are usually underfunded, under-appreciated and misunderstood. I tried to like this, I really did, but it is to good tv sci-fi as babylon 5 is to star trek (the original). Silly prosthetics, cheap cardboard sets, stilted dialogues, cg that doesn't match the background, and painfully one-dimensional characters cannot be overcome with a'sci-fi'setting. (I'm sure there are those of you out there who think babylon 5 is good sci-fi tv. It's not. It's clichéd and uninspiring.) while us viewers might like emotion and character development, sci-fi is a genre that does not take itself seriously (cf. Star trek). It may treat important issues, yet not as a serious philosophy. It's really difficult to care about the characters here as they are not simply foolish, just missing a spark of life. Their actions and reactions are wooden and predictable, often painful to watch. The makers of earth know it's rubbish as they have to always say gene roddenberry's earth... Otherwise people would not continue watching. Roddenberry's ashes must be turning in their orbit as this dull, cheap, poorly edited (watching it without advert breaks really brings this home) trudging trabant of a show lumbers into space. Spoiler. So, kill off a main character. And then bring him back as another actor. Jeeez! Dallas all over again.</blockquote>
 </div>
 </div>
-<div id="cell-text-reconstruction" class="cell" data-execution_count="17">
+<div id="cell-text-reconstruction" class="cell" data-execution_count="18">
 <details>
 <summary>Regenerate the review using the top 200 words</summary>
 <div class="sourceCode cell-code" id="cell-text-reconstruction"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cell-text-reconstruction-1"><a href="#cell-text-reconstruction-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Review regenerated using only the top 200 words"</span>)</span>
