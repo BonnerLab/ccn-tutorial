@@ -251,16 +251,18 @@ data = pd.DataFrame(
 fig, ax = plt.subplots()
 sns.lineplot(
     ax=ax,
-    data=data,
+    data=data.assign(arbitrary=0),
     x="rank",
     y="cross-validated singular value",
     marker="o",
     dashes=False,
-    palette=["orange"],
+    hue="arbitrary",
+    palette=["#cf6016"],
     ls="None",
     err_style="bars",
     estimator="mean",
     errorbar="sd",
+    legend=False,
 )
 ax.set_xscale("log")
 ax.set_yscale("log")
@@ -327,9 +329,9 @@ with sns.axes_style("whitegrid"):
         data=data,
         x="rank",
         y="cross-validated singular value",
-        palette=["orange", "blue"],
+        palette=["#514587", "#cf6016"],
         hue="comparison",
-        hue_order=["cross-individual", "within-individual"],
+        hue_order=["within-individual", "cross-individual"],
         style="comparison",
         style_order=["within-individual", "cross-individual"],
         markers=["o", "s"],
@@ -349,9 +351,10 @@ with sns.axes_style("whitegrid"):
         ax.spines[loc].set_visible(False)
 ```
 
-## Variations
+::: {.callout-tip collapse="true"}
+# Cross-decomposition is flexible -- it supports generalization across trials, images, and/or individuals!
 
-This cross-decomposition approach is quite flexible, allowing many possible levels of generalization.
+The cross-validated cross-decomposition approach we describe here allows many possible levels of generalization.
 
 Cross-trial generalization
 : At the most basic level, we can test the generalization of the latent dimensions across different trials -- repetitions of the same stimuli. This approach identifies stimulus-specific variance that generalizes over trial-specific noise -- and is what we used above for the within-participant comparison above (cross-validated PCA).
@@ -363,3 +366,4 @@ Cross-individual generalization
 : Finally, we could examine the variance shared between two different high-dimensional systems -- here, we compared neural responses from two different subjects.
 
 In fact, we could combine several of these to get very strict generalization criteria: we could even estimate the spectrum of variance that generalizes across trials, stimuli, and individuals.
+:::
