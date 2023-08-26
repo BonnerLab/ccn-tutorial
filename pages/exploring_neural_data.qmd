@@ -17,7 +17,7 @@ Here's a [link to this notebook](https://colab.research.google.com/github/Bonner
 ## The Natural Scenes fMRI Dataset
 ![](/resources/nsd.png)
 
-The natural scenes dataset (NSD) is the largest fMRI dataset on human vision, with 7T fMRI responses (1.8 mm isotropic voxels) obtained from 8 adult participants. The experiment involved a continuous recognition task while participants observed natural scene images from the Microsoft Common Objects in Context (COCO) database (Lin et al., 2014).
+The natural scenes dataset (NSD) is the largest fMRI dataset on human vision, with 7T fMRI responses (1.8 mm isotropic voxels) obtained from 8 adult participants [@Allen2021]. The experiment involved a continuous recognition task while participants observed natural scene images from the Microsoft Common Objects in Context (COCO) database [@Lin2014].
 
 Let's load the dataset. This data contains neural responses to 700 images from ~15,000 voxels reliably modulated by the visual stimuli during the NSD experiment.
 
@@ -29,33 +29,23 @@ Let's load the dataset. This data contains neural responses to 700 images from ~
 # | output: false
 
 from collections import Counter
-import copy
-from pathlib import Path
-import requests
-import typing
 import warnings
 
-from loguru import logger
 import numpy as np
 import pandas as pd
 import xarray as xr
 from torchtext.datasets import IMDB
 from torchtext.data.utils import get_tokenizer
-import nibabel as nib
-import nilearn.plotting
-from PIL import Image
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.decomposition import PCA, NMF
-from umap import UMAP
 
-from IPython.display import display, SVG, HTML
+from IPython.display import display, HTML
 from matplotlib.figure import Figure
 from mpl_toolkits.axes_grid1 import ImageGrid
 from matplotlib import pyplot as plt
 from matplotlib_inline.backend_inline import set_matplotlib_formats
 from matplotlib.offsetbox import OffsetImage, AnnotationBbox
 import seaborn as sns
-from wordcloud import WordCloud
 
 from utilities.brain import (
     load_dataset,

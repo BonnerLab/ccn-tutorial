@@ -50,19 +50,13 @@ The cross-decomposition method we describe here is more specifically known as [P
 # | label: imports
 # | code-summary: Import various libraries
 
-from collections.abc import Sequence
 import warnings
 
 import numpy as np
 import pandas as pd
 import xarray as xr
 import torch
-from torchdata.datapipes.map import SequenceWrapper
-from torchvision.models import alexnet, AlexNet_Weights
-from sklearn.decomposition import TruncatedSVD, PCA
-from PIL import Image
 import seaborn as sns
-from matplotlib.figure import Figure
 from matplotlib import pyplot as plt
 from matplotlib_inline.backend_inline import set_matplotlib_formats
 from IPython.display import display
@@ -71,14 +65,8 @@ from utilities.brain import (
     load_dataset,
     average_data_across_repetitions,
     load_stimuli,
-    plot_brain_map,
 )
 from utilities.computation import svd, assign_logarithmic_bins
-from utilities.model import (
-    extract_features,
-    SparseRandomProjection,
-    create_image_datapipe,
-)
 
 ```
 

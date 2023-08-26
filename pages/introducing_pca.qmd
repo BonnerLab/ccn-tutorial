@@ -38,7 +38,6 @@ from matplotlib.figure import Figure
 import matplotlib.ticker as ticker
 from matplotlib.animation import FuncAnimation
 from matplotlib_inline.backend_inline import set_matplotlib_formats
-import ipywidgets as widgets
 from IPython.display import display, HTML
 ```
 
