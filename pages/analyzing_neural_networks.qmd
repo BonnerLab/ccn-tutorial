@@ -827,7 +827,7 @@ plt.tight_layout()
 plt.show()
 ```
 
-### Using aligned networks to compare activation eigenvectors
+### Using aligned networks to compare weight eigenvectors
 
 Similarly, suppose that $u$ and $v$ are now weight eigenvectors respectively for the first and second network. The weight eigenvector $u$ applies on the representation $\varphi(x)$, computing $\langle u, \varphi(x) \rangle$, while the weight eigenvector $v$ applies on the the representation $\psi(x)$, computing $\langle v, \psi(x) \rangle$. We then have
 
@@ -835,7 +835,7 @@ $$ \langle u, \varphi(x) \rangle = \langle Au, A\varphi(x) \rangle \approx \lang
 
 which again means that we should compare $Au$ with $v$.
 
-![](https://github.com/BonnerLab/ccn-tutorial/blob/main/resources/activation_alignment.png?raw=true){width=100%}
+![](https://github.com/BonnerLab/ccn-tutorial/blob/main/resources/weight_alignment.png?raw=true){width=100%}
 
 ```{python}
 # | code-summary: Compare eigenvalues and eigenvectors of the weight covariances of both networks
