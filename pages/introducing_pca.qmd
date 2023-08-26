@@ -455,19 +455,19 @@ $$
 
 To do this, we start by computing the covariance of our data matrix, where $X$ is centered (i.e. $X - \overline{X}$)
 
-![](/resources/autocovariance.svg){width=100%}
+![](https://github.com/BonnerLab/ccn-tutorial/blob/main/resources/autocovariance.svg?raw=true){width=100%}
 
 Next, we compute the eigendecomposition of the covariance:
 
 [The computational steps we take to diagonalize the covariance are slightly different, as is described later in the notebook.]{.aside}
 
-![](/resources/eigendecomposition.svg){width=100%}
+![](https://github.com/BonnerLab/ccn-tutorial/blob/main/resources/eigendecomposition.svg?raw=true){width=100%}
 
 The columns of $V$ are *eigenvectors* that specify the directions of variance while the corresponding diagonal elements of $\Lambda$ are *eigenvalues* that specify the amount of variance along the eigenvector[^proof-eigenvalue-covariance].
 
 Finally, the original data matrix can be transformed by projecting it onto the eigenvectors: $\widetilde{X} = \left(X - \overline{X}\right) V$.
 
-![](/resources/projection.svg){width=80%}
+![](https://github.com/BonnerLab/ccn-tutorial/blob/main/resources/projection.svg?raw=true){width=80%}
 
 ### A computational recipe
 

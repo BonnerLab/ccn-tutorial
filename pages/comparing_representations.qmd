@@ -35,7 +35,7 @@ Here,
 - the singular values $\Sigma$ define the amount of variance shared by the two systems along the latent dimensions.
 
 ::: {.column-page}
-![](/resources/cross-covariance-svd.svg){width=100%}
+![](https://github.com/BonnerLab/ccn-tutorial/blob/main/resources/cross-covariance-svd.svg?raw=true){width=100%}
 :::
 
 ::: {.callout-note collapse="true"}
@@ -166,7 +166,7 @@ $$
 $$
 
 ::: {.column-page}
-![](/resources/pls_svd.svg){width=100%}
+![](https://github.com/BonnerLab/ccn-tutorial/blob/main/resources/pls_svd.svg?raw=true){width=100%}
 :::
 
 ### Applying it to neural data

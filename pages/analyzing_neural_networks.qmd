@@ -457,7 +457,7 @@ for i in range(5):
 
 We begin with a barebones feedforward network architecture with two hidden layers.
 
-![A simple 2-layer perceptron](/resources/mlp.svg)
+![A simple 2-layer perceptron](https://github.com/BonnerLab/ccn-tutorial/blob/main/resources/mlp.svg?raw=true)
 
 It computes the function
 $$ f(x) = \theta \sigma(W_2 \sigma(W_1 x))$$
@@ -603,12 +603,12 @@ Let us focus on the first layer. The weight matrix $W_1$ of size $n_1 \times d$ 
 We can view these neurons as being samples from a continuous distribution, and then estimate statistical properties (moments) of this distribution. For instance, assuming a zero mean, we can compute the covariance of the neuron weights as:
 $$ C = \frac{1}{n_1} W_1^\top W_1 $$
 
-![](/resources/weights_pca.svg){width=50%}
+![](https://github.com/BonnerLab/ccn-tutorial/blob/main/resources/weights_pca.svg?raw=true){width=50%}
 
 The covariance reveals how the global geometry of the representation is modified by the neuron population. Indeed, the representation computed by the first layer is $\varphi_1(x) = \sigma(W_1 x)$. Focusing on the weight matrix $W_1$, we can decompose its effect with a singular value decomposition:
 $$ W_1 = U \Sigma V^\top.$$
 
-![](/resources/weights_svd.svg){width=100%}
+![](https://github.com/BonnerLab/ccn-tutorial/blob/main/resources/weights_svd.svg?raw=true){width=100%}
 
 Recall that the right singular vectors $V$ are also the eigenvectors of the covariance $C$, while the singular values $\Sigma$ are directly related to the eigenvalues of the covariance $C$.
 
@@ -709,10 +709,10 @@ The optimal alignment $A$ can be computed explicitly from an SVD of the cross-co
 $$ A = U V^\top \quad\text{with}\quad \mathbb E_x[\psi(x)\varphi(x)^\top] = U\Sigma V^\top$$
 
 ::: {.column-page-right}
-![](/resources/cross-covariance-svd.svg){width=100%}
+![](https://github.com/BonnerLab/ccn-tutorial/blob/main/resources/cross-covariance-svd.svg?raw=true){width=100%}
 :::
 
-![](/resources/activation_alignment.png){width=100%}
+![](https://github.com/BonnerLab/ccn-tutorial/blob/main/resources/activation_alignment.png?raw=true){width=100%}
 
 The magnitude of the singular values $\Sigma$ indicate the amount of variance that is explained by the alignment $A$. Indeed, the unexplained variance (the residual error) can be written as:
 $$ \mathbb E_x[\|A\varphi(x) - \psi(x)\|^2] = \mathbb E_x[\|\varphi(x)\|^2] + \mathbb E_x[\|\psi(x)\|^2] - 2 \,\mathrm{tr}\ \Sigma $$
@@ -766,7 +766,7 @@ Let us now use the alignment matrix $A$ to meaningfully compare activation eigen
 
 Assume that we have an activation eigenvector $u$ for the first network, and another activation eigenvector $v$ for the second network, which may or may not encode the same latent dimension. How do we compare them? Because $A\varphi(x) \approx \psi(x)$, we should compare $Au$ with $v$.
 
-![](/resources/activation_alignment.png){width=100%}
+![](https://github.com/BonnerLab/ccn-tutorial/blob/main/resources/activation_alignment.png?raw=true){width=100%}
 
 We can then compare each eigenvector for the first network after alignment with each eigenvector for the second network by measuring the cosine of the angle between them. This is a matrix that we can visualize. In fact, this matrix computes the orthogonal change of basis from the (aligned) eigenvectors for the first network to the eigenvectors for the second network. If it is close to the identity, then the two sets of eigenvectors are almost the same. On the other hand, if the eigenvectors are really different, then no entry of this matrix will be close to unity.
 
@@ -835,7 +835,7 @@ $$ \langle u, \varphi(x) \rangle = \langle Au, A\varphi(x) \rangle \approx \lang
 
 which again means that we should compare $Au$ with $v$.
 
-![](/resources/activation_alignment.png){width=100%}
+![](https://github.com/BonnerLab/ccn-tutorial/blob/main/resources/activation_alignment.png?raw=true){width=100%}
 
 ```{python}
 # | code-summary: Compare eigenvalues and eigenvectors of the weight covariances of both networks
@@ -931,7 +931,7 @@ Without any training, the generated network recovers a good fraction of the perf
 
 We now consider a CNN, composed of two $5 \times 5$ convolutional layers and a fully-connected classifier.
 
-![](/resources/cnn.svg)
+![](https://github.com/BonnerLab/ccn-tutorial/blob/main/resources/cnn.svg?raw=true)
 
 ```{python}
 # | label: initialize-cnn

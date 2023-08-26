@@ -221,9 +221,9 @@ One of the most common denoising procedures is variance-dependent dimensionality
 
 In a whole-brain [calcium-imaging](https://en.wikipedia.org/wiki/Calcium_imaging) study, @Stringer2019 recorded the responses of 10,000 neurons in mouse primary visual cortex to 2,800 natural images.
 
-![](/resources/mouse.svg){width=20%}
+![](https://github.com/BonnerLab/ccn-tutorial/blob/main/resources/mouse.svg?raw=true){width=20%}
 
-![Experimental setup for the calcium-imaging study -- Fig 1 in @Stringer2019](/resources/stringer-fig1.png)
+![Experimental setup for the calcium-imaging study -- Fig 1 in @Stringer2019](https://github.com/BonnerLab/ccn-tutorial/blob/main/resources/stringer-fig1.png?raw=true)
 
 Armed with this large dataset, they set out to develop a method that could reliably estimate the covariance structure of these neural responses: *cross-validated PCA*.
 
@@ -231,7 +231,7 @@ Since most neuroscience experiments collect multiple responses to the same stimu
 
 Specifically, if there were $N$ unique stimuli -- each seen twice -- the data matrix $X \in \mathbb{R}^{2N \times P}$ is split into two matrices $X_\text{train} \in \mathbb{R}^{N \times P}$ and $X_\text{test} \in \mathbb{R}^{N \times P}$, where the rows of $X_\text{train}$ and $X_\text{test}$ correspond to the same stimuli.
 
-![](/resources/x_train_x_test.svg){width=80% fig-align="center"}
+![](https://github.com/BonnerLab/ccn-tutorial/blob/main/resources/x_train_x_test.svg?raw=true){width=80% fig-align="center"}
 
 ### Step 1 -- Compute eigenvectors on the training set
 
@@ -248,7 +248,7 @@ $$
 $$
 
 ::: {.column-page-right}
-![](/resources/autocovariance-eigendecomposition.svg){width=100%}
+![](https://github.com/BonnerLab/ccn-tutorial/blob/main/resources/autocovariance-eigendecomposition.svg?raw=true){width=100%}
 :::
 
 ### Step 2 -- Compute cross-validated eigenvalues
@@ -266,7 +266,7 @@ $$
 $$
 
 ::: {.column-page-right}
-![](/resources/cv_pca.svg){width=100%}
+![](https://github.com/BonnerLab/ccn-tutorial/blob/main/resources/cv_pca.svg?raw=true){width=100%}
 :::
 
 These cross-validated eigenvalues represent the covariance reliably shared across two presentations of the visual stimulus -- the "stable" part of the visual representation of a natural image.
@@ -514,13 +514,13 @@ In contrast, if a spectrum decays significantly faster than $-1$, it loses some 
 
 @Stringer2019, who developed cross-validated PCA, discovered that mouse primary visual cortex responses obey a power-law with exponent $-1$ over several orders of magnitude.
 
-![Similar eigenspectra in mouse visual cortex -- Fig 2 in @Stringer2019](/resources/stringer-fig2.png)
+![Similar eigenspectra in mouse visual cortex -- Fig 2 in @Stringer2019](https://github.com/BonnerLab/ccn-tutorial/blob/main/resources/stringer-fig2.png?raw=true)
 
 ### Zebrafish brain
 
 More recently, @Wang2023 reported a similar result from whole-brain calcium recordings in zebrafish during hunting and spontaneous behavior.
 
-![Similar eigenspectra in zebrafish whole-brain Ca^2+^-imaging -- Fig 1 in @Wang2023](/resources/wang-fig1.png)
+![Similar eigenspectra in zebrafish whole-brain Ca^2+^-imaging -- Fig 1 in @Wang2023](https://github.com/BonnerLab/ccn-tutorial/blob/main/resources/wang-fig1.png?raw=true)
 
 ### Deep neural networks
 
@@ -528,11 +528,11 @@ Interestingly, several recent results from the machine learning literature also 
 
 Specifically, @Agrawal2022 report that neural networks whose internal representations have a covariance spectrum that decays as a power law with index $-1$ perform better. This has made the power law index a statistic of interest for assessing model representation quality -- and perhaps a target of direct optimization.
 
-![Deep networks with similar covariance spectra perform better -- Fig 3 in @Agrawal2022](/resources/agrawal-fig3.png)
+![Deep networks with similar covariance spectra perform better -- Fig 3 in @Agrawal2022](https://github.com/BonnerLab/ccn-tutorial/blob/main/resources/agrawal-fig3.png?raw=true)
 
 In addition, @Kong2022 demonstrated that more adversarially robust neural networks are a better match for macaque V1 eigenspectra.
 
-![Deep networks with similar covariance spectra appear more adversarially robust -- Fig 6 in @Kong2022](/resources/kong-fig6.png)
+![Deep networks with similar covariance spectra appear more adversarially robust -- Fig 6 in @Kong2022](https://github.com/BonnerLab/ccn-tutorial/blob/main/resources/kong-fig6.png?raw=true)
 
 ### Human visual cortex!
 
