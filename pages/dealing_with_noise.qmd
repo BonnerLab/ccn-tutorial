@@ -31,6 +31,7 @@ import pandas as pd
 import xarray as xr
 from sklearn.decomposition import PCA
 import seaborn as sns
+from matplotlib.colors import SymLogNorm
 from matplotlib.figure import Figure
 from matplotlib import pyplot as plt
 from matplotlib_inline.backend_inline import set_matplotlib_formats
